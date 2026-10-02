@@ -1,4 +1,4 @@
-import { CATEGORIES, type Question } from './quiz-data'
+import { CATEGORIES, MIXED_QUESTIONS, type Question } from './quiz-data'
 
 export const MIXED_ID = 'aralash'
 export const MIXED_COUNT = 10
