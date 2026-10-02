@@ -1,3 +1,13 @@
+// ============================================================
+// MENEJERLIK BY NURMUHAMMAD
+// Professional educational data structure
+// 10 MODULES / 34 TOPICS / TEST SYSTEM
+// ============================================================
+
+// ============================================================
+// QUESTION
+// ============================================================
+
 export type Question = {
   id: string
   text: string
@@ -6,534 +16,480 @@ export type Question = {
   explanation: string
 }
 
-export type Category = {
+// ============================================================
+// TOPIC
+// ============================================================
+
+export type Topic = {
   id: string
   title: string
   description: string
   questions: Question[]
 }
 
-export const CATEGORIES: Category[] = [
+// ============================================================
+// MODULE
+// ============================================================
+
+export type Category = {
+  id: string
+  title: string
+  description: string
+  topics: Topic[]
+  questions: Question[]
+}
+
+// ============================================================
+// MODULE 1
+// UMUMIY TA'LIM MUASSASASINI BOSHQARISH
+// ============================================================
+
+const MODUL_1_TOPICS: Topic[] = [
   {
-    id: 'asoslar',
-    title: 'Menejment asoslari',
-    description: 'Maktab boshqaruvi va menejment asoslari',
-    questions: [
-      {
-        id: 'asoslar1',
-        text: 'Boshqaruvning asosiy maqsadi nima?',
-        options: [
-          'Tashkilot faoliyatini samarali tashkil etish',
-          'Faqat nazorat qilish',
-          'Faqat hujjat yuritish',
-          'Faqat topshiriq berish',
-        ],
-        answer: 0,
-        explanation: 'Boshqaruvning asosiy maqsadi mavjud resurslardan samarali foydalanib natijaga erishishdir.',
-      },
-      {
-        id: 'asoslar2',
-        text: 'Strategik rejalashtirish nimaga xizmat qiladi?',
-        options: [
-          'Uzoq muddatli maqsadlarni belgilashga',
-          'Faqat kundalik vazifalarni bajarishga',
-          'Faqat hisobot tayyorlashga',
-          'Faqat nazoratga',
-        ],
-        answer: 0,
-        explanation: 'Strategik rejalashtirish tashkilotning uzoq muddatli rivojlanish yo‘nalishini belgilaydi.',
-      },
-      {
-        id: 'asoslar3',
-        text: 'Boshqaruv qarori nima?',
-        options: [
-          'Muqobil variantlardan maqsadga muvofiq birini tanlash',
-          'Oddiy topshiriq',
-          'Faqat hisobot',
-          'Faqat nazorat',
-        ],
-        answer: 0,
-        explanation: 'Boshqaruv qarori muammoni hal qilish uchun mavjud variantlardan birini tanlashdir.',
-      },
-      {
-        id: 'asoslar4',
-        text: 'Monitoringning asosiy vazifasi nima?',
-        options: [
-          'Jarayon va natijalarni muntazam kuzatish',
-          'Faqat xato izlash',
-          'Faqat hujjatlarni tekshirish',
-          'Faqat hisobot yozish',
-        ],
-        answer: 0,
-        explanation: 'Monitoring jarayonning borishi va natijalarini muntazam kuzatishga xizmat qiladi.',
-      },
-      {
-        id: 'asoslar5',
-        text: 'Ma’lumotlarga asoslangan boshqaruv nimani anglatadi?',
-        options: [
-          'Qarorlarni ishonchli ma’lumotlar asosida qabul qilish',
-          'Faqat tajribaga tayanish',
-          'Faqat fikrga tayanish',
-          'Faqat topshiriqqa tayanish',
-        ],
-        answer: 0,
-        explanation: 'Data-driven management qarorlarni dalillar va ma’lumotlar asosida qabul qilishni nazarda tutadi.',
-      },
-      {
-        id: 'asoslar6',
-        text: 'Maktab rivojlanish rejasining muhim elementi qaysi?',
-        options: [
-          'Aniq maqsad va o‘lchanadigan natija',
-          'Faqat umumiy fikr',
-          'Faqat tadbirlar ro‘yxati',
-          'Faqat hisobot',
-        ],
-        answer: 0,
-        explanation: 'Rivojlanish rejasida maqsadlar aniq va o‘lchanadigan bo‘lishi kerak.',
-      },
-      {
-        id: 'asoslar7',
-        text: 'Nazoratning samarali shakli qanday bo‘ladi?',
-        options: [
-          'Natijaga yo‘naltirilgan va muntazam',
-          'Faqat jazolovchi',
-          'Faqat bir martalik',
-          'Faqat og‘zaki',
-        ],
-        answer: 0,
-        explanation: 'Samarali nazorat jarayonni takomillashtirishga xizmat qilishi kerak.',
-      },
-      {
-        id: 'asoslar8',
-        text: 'Rahbarning asosiy vazifalaridan biri qaysi?',
-        options: [
-          'Jamoani umumiy maqsad sari yo‘naltirish',
-          'Barcha ishni o‘zi bajarish',
-          'Faqat buyruq berish',
-          'Faqat hisobot talab qilish',
-        ],
-        answer: 0,
-        explanation: 'Rahbar jamoani umumiy maqsad sari yo‘naltiradi va faoliyatni muvofiqlashtiradi.',
-      },
-    ],
+    id: 'm1t1',
+    title: "Umumiy ta'lim muassasasini boshqarish",
+    description:
+      "Umumiy ta'lim muassasasini boshqarishning mazmuni, tamoyillari va asosiy funksiyalari.",
+    questions: [],
   },
 
   {
-    id: 'liderlik',
-    title: 'Liderlik',
-    description: 'Samarali rahbarlik va jamoa bilan ishlash',
-    questions: [
-      {
-        id: 'liderlik1',
-        text: 'Samarali liderning muhim xususiyati qaysi?',
-        options: [
-          'Jamoani ruhlantirish',
-          'Faqat buyruq berish',
-          'Faqat nazorat qilish',
-          'Mas’uliyatni boshqalarga yuklash',
-        ],
-        answer: 0,
-        explanation: 'Samarali lider jamoani maqsad sari ruhlantira oladi.',
-      },
-      {
-        id: 'liderlik2',
-        text: 'Jamoada ishonchni shakllantirishning muhim vositasi nima?',
-        options: [
-          'Ochiq va adolatli muloqot',
-          'Qattiq nazorat',
-          'Jazolash',
-          'Mas’uliyatni kamaytirish',
-        ],
-        answer: 0,
-        explanation: 'Ochiq, adolatli va hurmatga asoslangan muloqot ishonchni mustahkamlaydi.',
-      },
-      {
-        id: 'liderlik3',
-        text: 'Delegatsiya nima?',
-        options: [
-          'Vazifalarni vakolat bilan birga topshirish',
-          'Barcha ishni rahbar bajarishi',
-          'Mas’uliyatni bekor qilish',
-          'Nazoratni to‘xtatish',
-        ],
-        answer: 0,
-        explanation: 'Delegatsiya vazifani tegishli vakolat bilan boshqa xodimga topshirishdir.',
-      },
-      {
-        id: 'liderlik4',
-        text: 'Konfliktni boshqarishda birinchi navbatda nima muhim?',
-        options: [
-          'Muammoning sababini aniqlash',
-          'Darhol jazolash',
-          'Tomonlardan birini ayblash',
-          'Muammoni yashirish',
-        ],
-        answer: 0,
-        explanation: 'Konfliktni to‘g‘ri boshqarish uchun avvalo uning sabablarini aniqlash kerak.',
-      },
-      {
-        id: 'liderlik5',
-        text: 'Rahbarning shaxsiy namunasi nimaga ta’sir qiladi?',
-        options: [
-          'Jamoa madaniyatiga',
-          'Faqat hujjatlarga',
-          'Faqat moliyaga',
-          'Faqat jadvalga',
-        ],
-        answer: 0,
-        explanation: 'Rahbarning xulqi jamoa madaniyati va xodimlarning xatti-harakatlariga ta’sir qiladi.',
-      },
-      {
-        id: 'liderlik6',
-        text: 'Motivatsiyaning maqsadi nima?',
-        options: [
-          'Xodimlarni faol va mas’uliyatli ishlashga undash',
-          'Faqat nazoratni kuchaytirish',
-          'Faqat jazolash',
-          'Faqat hisobot olish',
-        ],
-        answer: 0,
-        explanation: 'Motivatsiya xodimlarning ichki va tashqi rag‘batlarini qo‘llab-quvvatlaydi.',
-      },
-      {
-        id: 'liderlik7',
-        text: 'Jamoaviy qaror qabul qilishning afzalligi nimada?',
-        options: [
-          'Turli fikr va tajribalarni hisobga olish',
-          'Qarorni kechiktirish',
-          'Mas’uliyatni yo‘qotish',
-          'Nazoratni bekor qilish',
-        ],
-        answer: 0,
-        explanation: 'Jamoaviy qaror turli nuqtayi nazarlarni hisobga olish imkonini beradi.',
-      },
-      {
-        id: 'liderlik8',
-        text: 'Emotsional intellekt rahbarga nima beradi?',
-        options: [
-          'O‘z va boshqalarning hissiyotlarini anglash va boshqarish',
-          'Faqat tez qaror qilish',
-          'Faqat buyruq berish',
-          'Faqat nazorat qilish',
-        ],
-        answer: 0,
-        explanation: 'Emotsional intellekt rahbarning o‘z hissiyotlari va boshqalarning holatini to‘g‘ri boshqarishiga yordam beradi.',
-      },
-    ],
+    id: 'm1t2',
+    title: 'Strategik menejment',
+    description:
+      "Strategik rejalashtirish, maqsad belgilash, rivojlanish strategiyasi va natijalarni boshqarish.",
+    questions: [],
   },
 
   {
-    id: 'marketing',
-    title: 'Maktab marketingi',
-    description: 'PR, kommunikatsiya va manfaatdor tomonlar bilan ishlash',
-    questions: [
-      {
-        id: 'marketing1',
-        text: 'Maktab PR faoliyatining asosiy maqsadi nima?',
-        options: [
-          'Maktab faoliyati haqida ishonchli axborot berish',
-          'Faqat reklama qilish',
-          'Faqat rasm joylash',
-          'Faqat tadbir o‘tkazish',
-        ],
-        answer: 0,
-        explanation: 'Maktab PR faoliyati ishonchli kommunikatsiya va ijobiy hamkorlikni rivojlantirishga xizmat qiladi.',
-      },
-      {
-        id: 'marketing2',
-        text: 'Maktabning manfaatdor tomonlari kimlar?',
-        options: [
-          'O‘quvchi, ota-ona, pedagog va hamkorlar',
-          'Faqat direktor',
-          'Faqat o‘qituvchilar',
-          'Faqat ota-onalar',
-        ],
-        answer: 0,
-        explanation: 'Maktab faoliyatida bir nechta manfaatdor tomonlar mavjud.',
-      },
-      {
-        id: 'marketing3',
-        text: 'Media savodxonlikning muhim jihati nima?',
-        options: [
-          'Axborot manbasini tekshirish',
-          'Har qanday xabarga ishonish',
-          'Xabarni tekshirmasdan tarqatish',
-          'Faqat ijtimoiy tarmoqqa kirish',
-        ],
-        answer: 0,
-        explanation: 'Media savodxonlik axborotni tanqidiy baholash va manbasini tekshirishni talab qiladi.',
-      },
-      {
-        id: 'marketing4',
-        text: 'Ota-onalar bilan samarali hamkorlik nimaga asoslanadi?',
-        options: [
-          'Ochiq va muntazam muloqotga',
-          'Faqat yig‘ilishga',
-          'Faqat talabga',
-          'Faqat nazoratga',
-        ],
-        answer: 0,
-        explanation: 'Ota-onalar bilan hamkorlik ochiq va muntazam kommunikatsiyaga asoslanadi.',
-      },
-      {
-        id: 'marketing5',
-        text: 'Maktab imijining muhim omili nima?',
-        options: [
-          'Amaliy natijalar va ishonchli kommunikatsiya',
-          'Faqat bannerlar',
-          'Faqat reklama',
-          'Faqat logotip',
-        ],
-        answer: 0,
-        explanation: 'Maktab imiji real natijalar va ular haqida to‘g‘ri kommunikatsiya orqali shakllanadi.',
-      },
-      {
-        id: 'marketing6',
-        text: 'Ijtimoiy tarmoqlarda rasmiy axborot qanday bo‘lishi kerak?',
-        options: [
-          'Aniq, tekshirilgan va mas’uliyatli',
-          'Tekshirilmagan',
-          'Shaxsiy fikrlarga asoslangan',
-          'Mish-mishlarga asoslangan',
-        ],
-        answer: 0,
-        explanation: 'Rasmiy axborot ishonchli va tekshirilgan bo‘lishi kerak.',
-      },
-      {
-        id: 'marketing7',
-        text: 'Maktab hamkorlik tarmog‘iga kimlar kirishi mumkin?',
-        options: [
-          'Mahalla, hokimiyat, ota-ona va tashkilotlar',
-          'Faqat o‘qituvchilar',
-          'Faqat o‘quvchilar',
-          'Faqat direktor',
-        ],
-        answer: 0,
-        explanation: 'Maktab rivojida turli mahalliy hamkorlar muhim rol o‘ynaydi.',
-      },
-      {
-        id: 'marketing8',
-        text: 'PR samaradorligini qanday baholash mumkin?',
-        options: [
-          'Aniq ko‘rsatkichlar va natijalar orqali',
-          'Faqat postlar soni bilan',
-          'Faqat bannerlar soni bilan',
-          'Faqat obunachilar soni bilan',
-        ],
-        answer: 0,
-        explanation: 'PR samaradorligi aniq maqsad va natijalar asosida baholanadi.',
-      },
-    ],
+    id: 'm1t3',
+    title: 'Boshqaruv psixologiyasi',
+    description:
+      "Rahbar psixologiyasi, jamoa bilan munosabat, motivatsiya va kommunikatsiya.",
+    questions: [],
   },
 
   {
-    id: 'moliya',
-    title: 'Moliyaviy boshqaruv',
-    description: 'Maktab moliyasi, rejalashtirish va nazorat',
-    questions: [
-      {
-        id: 'moliya1',
-        text: 'Moliyaviy rejalashtirishning maqsadi nima?',
-        options: [
-          'Mablag‘lardan samarali foydalanishni rejalashtirish',
-          'Faqat xarajat qilish',
-          'Faqat hisobot yozish',
-          'Faqat mablag‘ yig‘ish',
-        ],
-        answer: 0,
-        explanation: 'Moliyaviy rejalashtirish mablag‘lardan maqsadli va samarali foydalanishga yordam beradi.',
-      },
-      {
-        id: 'moliya2',
-        text: 'Budjet nazoratining asosiy vazifasi nima?',
-        options: [
-          'Mablag‘larning maqsadli sarflanishini kuzatish',
-          'Faqat xarajatlarni oshirish',
-          'Faqat daromadni hisoblash',
-          'Faqat hujjatlarni saqlash',
-        ],
-        answer: 0,
-        explanation: 'Budjet nazorati mablag‘lardan belgilangan maqsadda foydalanilishini nazorat qiladi.',
-      },
-      {
-        id: 'moliya3',
-        text: 'Xarid jarayonida muhim tamoyil qaysi?',
-        options: [
-          'Shaffoflik va asoslangan tanlov',
-          'Faqat tezlik',
-          'Faqat arzonlik',
-          'Faqat rahbar qarori',
-        ],
-        answer: 0,
-        explanation: 'Xarid jarayoni shaffof va asoslangan bo‘lishi kerak.',
-      },
-      {
-        id: 'moliya4',
-        text: 'Ichki audit nimaga xizmat qiladi?',
-        options: [
-          'Xatar va xatolarni aniqlashga',
-          'Faqat jazolashga',
-          'Faqat hujjat yig‘ishga',
-          'Faqat hisobotga',
-        ],
-        answer: 0,
-        explanation: 'Ichki audit xatarlarni aniqlash va boshqaruvni yaxshilashga xizmat qiladi.',
-      },
-      {
-        id: 'moliya5',
-        text: 'Maktabda budjetdan tashqari mablag‘lar bilan ishlashda nima muhim?',
-        options: [
-          'Qonuniylik va hujjatlashtirish',
-          'Faqat tezlik',
-          'Faqat mablag‘ miqdori',
-          'Faqat rahbar qarori',
-        ],
-        answer: 0,
-        explanation: 'Budjetdan tashqari mablag‘lar qonuniy va hujjatlashtirilgan tarzda boshqarilishi kerak.',
-      },
-      {
-        id: 'moliya6',
-        text: 'Moliyaviy qarorlar nimaga asoslanishi kerak?',
-        options: [
-          'Ma’lumot va aniq ehtiyojlarga',
-          'Faqat taxminga',
-          'Faqat odatga',
-          'Faqat shaxsiy fikrga',
-        ],
-        answer: 0,
-        explanation: 'Moliyaviy qarorlar ehtiyoj va mavjud ma’lumotlar asosida qabul qilinadi.',
-      },
-      {
-        id: 'moliya7',
-        text: 'Xarajatlar samaradorligi nimani anglatadi?',
-        options: [
-          'Sarflangan mablag‘ va olingan natija nisbatini baholash',
-          'Faqat mablag‘ni tejash',
-          'Faqat xarajatni ko‘paytirish',
-          'Faqat hisobot yozish',
-        ],
-        answer: 0,
-        explanation: 'Samaradorlik resurs sarfi bilan erishilgan natija o‘rtasidagi bog‘liqlikni ko‘rsatadi.',
-      },
-      {
-        id: 'moliya8',
-        text: 'Moliyaviy xavfni kamaytirishning muhim vositasi nima?',
-        options: [
-          'Rejalashtirish va ichki nazorat',
-          'Nazoratni bekor qilish',
-          'Faqat tez xarid',
-          'Faqat hisobot',
-        ],
-        answer: 0,
-        explanation: 'Rejalashtirish va ichki nazorat moliyaviy xatarlarni kamaytirishga yordam beradi.',
-      },
-    ],
+    id: 'm1t4',
+    title: 'Korrupsiyaviy xavf-xatarlarni oldini olish',
+    description:
+      "Korrupsiyaviy xavflarni aniqlash, baholash, oldini olish va boshqarish.",
+    questions: [],
   },
 
   {
-    id: 'kadrlar',
-    title: 'Kadrlar boshqaruvi',
-    description: 'Xodimlar bilan ishlash va HR boshqaruvi',
-    questions: [
-      {
-        id: 'kadrlar1',
-        text: 'Kadrlar boshqaruvining asosiy maqsadi nima?',
-        options: [
-          'Xodimlar salohiyatidan samarali foydalanish',
-          'Faqat hujjat yuritish',
-          'Faqat nazorat',
-          'Faqat ishga qabul qilish',
-        ],
-        answer: 0,
-        explanation: 'HR boshqaruvi inson resurslaridan samarali foydalanishni ta’minlaydi.',
-      },
-      {
-        id: 'kadrlar2',
-        text: 'Yangi xodimni moslashtirish jarayoni nima deyiladi?',
-        options: [
-          'Adaptatsiya',
-          'Audit',
-          'Monitoring',
-          'Marketing',
-        ],
-        answer: 0,
-        explanation: 'Yangi xodimning tashkilotga moslashuvi adaptatsiya deb ataladi.',
-      },
-      {
-        id: 'kadrlar3',
-        text: 'Xodim faoliyatini baholashda nima muhim?',
-        options: [
-          'Aniq va tushunarli mezonlar',
-          'Faqat rahbar fikri',
-          'Faqat xatolar',
-          'Faqat ish staji',
-        ],
-        answer: 0,
-        explanation: 'Baholash aniq va oldindan ma’lum mezonlarga asoslanishi kerak.',
-      },
-      {
-        id: 'kadrlar4',
-        text: 'Kasbiy rivojlanishning asosiy maqsadi nima?',
-        options: [
-          'Xodim kompetensiyasini rivojlantirish',
-          'Faqat sertifikat olish',
-          'Faqat hisobot qilish',
-          'Faqat lavozim oshirish',
-        ],
-        answer: 0,
-        explanation: 'Kasbiy rivojlanish xodimning bilim, ko‘nikma va kompetensiyalarini rivojlantiradi.',
-      },
-      {
-        id: 'kadrlar5',
-        text: 'Mehnat hujjatlarida nima muhim?',
-        options: [
-          'Qonuniylik va to‘g‘ri rasmiylashtirish',
-          'Faqat tezlik',
-          'Faqat hujjat soni',
-          'Faqat imzo',
-        ],
-        answer: 0,
-        explanation: 'Mehnat hujjatlari amaldagi qonunchilikka muvofiq yuritilishi kerak.',
-      },
-      {
-        id: 'kadrlar6',
-        text: 'Xodim motivatsiyasini oshirishga nima yordam beradi?',
-        options: [
-          'E’tirof, rivojlanish imkoniyati va adolatli baholash',
-          'Faqat jazolash',
-          'Faqat nazorat',
-          'Faqat topshiriq',
-        ],
-        answer: 0,
-        explanation: 'Adolatli baholash, e’tirof va rivojlanish imkoniyatlari motivatsiyani oshiradi.',
-      },
-      {
-        id: 'kadrlar7',
-        text: 'Kadrlar rejalashtirish nimaga xizmat qiladi?',
-        options: [
-          'Kelajakdagi xodimlar ehtiyojini oldindan aniqlash',
-          'Faqat hujjat saqlash',
-          'Faqat ishga qabul qilish',
-          'Faqat ishdan bo‘shatish',
-        ],
-        answer: 0,
-        explanation: 'Kadrlar rejalashtirish tashkilotning kelajakdagi inson resurslariga ehtiyojini aniqlaydi.',
-      },
-      {
-        id: 'kadrlar8',
-        text: 'HR tizimining samaradorligini nima oshiradi?',
-        options: [
-          'Aniq jarayonlar, hujjatlar va monitoring',
-          'Faqat nazorat',
-          'Faqat buyruqlar',
-          'Faqat suhbat',
-        ],
-        answer: 0,
-        explanation: 'Aniq jarayonlar va muntazam monitoring HR boshqaruvini tizimlashtiradi.',
-      },
-    ],
+    id: 'm1t5',
+    title: 'Boshqaruv qarorlari',
+    description:
+      "Muammoni aniqlash, muqobil variantlarni baholash va samarali boshqaruv qarorlarini qabul qilish.",
+    questions: [],
+  },
+
+  {
+    id: 'm1t6',
+    title: 'Maktab imijini shakllantirish',
+    description:
+      "Maktabning ijobiy imiji, kommunikatsiya, PR va jamoatchilik bilan aloqalarni rivojlantirish.",
+    questions: [],
   },
 ]
+
+// ============================================================
+// MODULE 2
+// TA'LIM MUASSASASINI RIVOJLANTIRISH
+// ============================================================
+
+const MODUL_2_TOPICS: Topic[] = [
+  {
+    id: 'm2t1',
+    title: "Ta'lim sifatini boshqarish",
+    description:
+      "Ta'lim sifatini monitoring qilish, tahlil qilish va takomillashtirish.",
+    questions: [],
+  },
+
+  {
+    id: 'm2t2',
+    title: "O'quvchilarning ta'lim dasturlarini o'zlashtirishi",
+    description:
+      "O'quvchilarning bilim, ko'nikma va kompetensiyalarini rivojlantirish hamda o'zlashtirishini monitoring qilish.",
+    questions: [],
+  },
+
+  {
+    id: 'm2t3',
+    title: "O'quvchilarni kasbga yo'naltirish va kasb tanlash",
+    description:
+      "O'quvchilarning qiziqishlari, qobiliyatlari va kelajak kasbini tanlashiga ko'maklashish.",
+    questions: [],
+  },
+
+  {
+    id: 'm2t4',
+    title: "Ta'lim sifatini baholash",
+    description:
+      "Ta'lim natijalarini baholash mezonlari, indikatorlar va tahlil usullari.",
+    questions: [],
+  },
+
+  {
+    id: 'm2t5',
+    title: "Bola xavfsizligi va farovonligini ta'minlash",
+    description:
+      "Ta'lim muhitida bolalar xavfsizligi, huquqlari va farovonligini ta'minlash.",
+    questions: [],
+  },
+]
+
+// ============================================================
+// MODULE 3
+// ZAMONAVIY RAHBAR XUSUSIYATLARI VA BOSHQARUV KOMPETENTLIGI
+// ============================================================
+
+const MODUL_3_TOPICS: Topic[] = [
+  {
+    id: 'm3t1',
+    title: 'Zamonaviy rahbar xususiyatlari va boshqaruv kompetentligi',
+    description:
+      "Zamonaviy rahbarning kasbiy, boshqaruv va shaxsiy kompetensiyalari.",
+    questions: [],
+  },
+
+  {
+    id: 'm3t2',
+    title: "Rahbarning boshqaruv va shaxsiy samaradorligini rivojlantirish",
+    description:
+      "Vaqtni boshqarish, ustuvorliklarni belgilash, delegatsiya va shaxsiy samaradorlik.",
+    questions: [],
+  },
+
+  {
+    id: 'm3t3',
+    title: "Pedagog xodimlarni kasbiy rivojlantirish va ish samaradorligini oshirish",
+    description:
+      "Pedagoglarning kasbiy rivojlanishi, motivatsiyasi va faoliyat samaradorligini oshirish.",
+    questions: [],
+  },
+]
+
+// ============================================================
+// MODULE 4
+// INSON RESURSLARINI BOSHQARISH
+// ============================================================
+
+const MODUL_4_TOPICS: Topic[] = [
+  {
+    id: 'm4t1',
+    title: 'Inson resurslarini boshqarish strategiyasi',
+    description:
+      "Inson resurslarini rejalashtirish, rivojlantirish va boshqarish strategiyasi.",
+    questions: [],
+  },
+
+  {
+    id: 'm4t2',
+    title: "Ta'lim muassasalarida mehnat munosabatlari va mehnat qonunchiligi",
+    description:
+      "Mehnat munosabatlari, xodim va ish beruvchi huquq hamda majburiyatlari.",
+    questions: [],
+  },
+
+  {
+    id: 'm4t3',
+    title: "Umumiy o'rta ta'lim tizimida kadrlarga oid hujjatlarning yuritilishi",
+    description:
+      "Kadrlar bilan bog'liq hujjatlarni to'g'ri va tizimli yuritish.",
+    questions: [],
+  },
+
+  {
+    id: 'm4t4',
+    title: "Inson resurslari faoliyatini baholash",
+    description:
+      "Xodimlar faoliyatini baholash mezonlari, indikatorlar va natijadorlik.",
+    questions: [],
+  },
+]
+
+// ============================================================
+// MODULE 5
+// ISH YURITISH VA HISOBOT
+// ============================================================
+
+const MODUL_5_TOPICS: Topic[] = [
+  {
+    id: 'm5t1',
+    title: 'Boshqaruv normativ-huquqiy hujjatlar bilan ishlash',
+    description:
+      "Normativ-huquqiy hujjatlarni izlash, o'rganish, tahlil qilish va amaliyotga tatbiq etish.",
+    questions: [],
+  },
+
+  {
+    id: 'm5t2',
+    title: "Maktablarda ish yuritish hujjatlari bilan ishlash va hisobdorlik",
+    description:
+      "Maktab hujjatlarini yuritish, saqlash, hisobdorlik va nazorat jarayonlari.",
+    questions: [],
+  },
+]
+
+// ============================================================
+// MODULE 6
+// JAMOATCHILIK VA OTA-ONALAR BILAN ISHLASH
+// ============================================================
+
+const MODUL_6_TOPICS: Topic[] = [
+  {
+    id: 'm6t1',
+    title: "Maktabning ota-onalar va jamoatchilik bilan hamkorligi",
+    description:
+      "Ota-onalar, mahalla va jamoatchilik bilan samarali hamkorlik tizimini tashkil etish.",
+    questions: [],
+  },
+
+  {
+    id: 'm6t2',
+    title: "Maktabning davlat va jamoat tashkilotlari bilan hamkorligi",
+    description:
+      "Davlat va jamoat tashkilotlari bilan hamkorlikning samarali mexanizmlari.",
+    questions: [],
+  },
+
+  {
+    id: 'm6t3',
+    title: 'Boshqaruv va media savodxonlik',
+    description:
+      "Axborotni tahlil qilish, media xavfsizligi va rahbarning kommunikatsion savodxonligi.",
+    questions: [],
+  },
+]
+
+// ============================================================
+// MODULE 7
+// BOSHQARUVDA RAQAMLI KOMPETENTLIK
+// ============================================================
+
+const MODUL_7_TOPICS: Topic[] = [
+  {
+    id: 'm7t1',
+    title: 'Boshqaruvda raqamli kompetentlik',
+    description:
+      "Raqamli texnologiyalardan boshqaruv, monitoring va tahlilda foydalanish.",
+    questions: [],
+  },
+
+  {
+    id: "m7t2",
+    title: "Sun'iy intellekt tizimlaridan foydalanish",
+    description:
+      "Sun'iy intellekt vositalaridan ta'lim va boshqaruv jarayonlarida samarali va mas'uliyatli foydalanish.",
+    questions: [],
+  },
+]
+
+// ============================================================
+// MODULE 8
+// TA'LIMDA LIDERLIK VA O'ZGARISHLARNI BOSHQARISH
+// ============================================================
+
+const MODUL_8_TOPICS: Topic[] = [
+  {
+    id: 'm8t1',
+    title: "O'zgarish sharoitida qiyinchiliklarni boshqarish",
+    description:
+      "O'zgarishlar jarayonida yuzaga keladigan qarshilik, muammo va qiyinchiliklarni boshqarish.",
+    questions: [],
+  },
+
+  {
+    id: 'm8t2',
+    title: "Jamoada sog'lom muhitni tashkil etish va ahil jamoani shakllantirish",
+    description:
+      "Jamoada sog'lom psixologik muhit, ishonch, hamkorlik va ahillikni rivojlantirish.",
+    questions: [],
+  },
+
+  {
+    id: 'm8t3',
+    title: "Ta'lim muassasasida risk va xavf-xatarlarni boshqarish",
+    description:
+      "Ta'lim muassasasidagi xavflarni aniqlash, baholash, oldini olish va boshqarish.",
+    questions: [],
+  },
+]
+
+// ============================================================
+// MODULE 9
+// INKLYUZIV TA'LIMNI TASHKIL ETISH
+// ============================================================
+
+const MODUL_9_TOPICS: Topic[] = [
+  {
+    id: 'm9t1',
+    title: "Inklyuziv ta'limning mazmun-mohiyati va ahamiyati",
+    description:
+      "Inklyuziv ta'limning mazmuni, asosiy tamoyillari va ta'limdagi ahamiyati.",
+    questions: [],
+  },
+
+  {
+    id: 'm9t2',
+    title: "Inklyuziv ta'limni tashkil etish mexanizmi",
+    description:
+      "Inklyuziv ta'limni tashkil etish, qo'llab-quvvatlash va individual yondashuv mexanizmlari.",
+    questions: [],
+  },
+
+  {
+    id: 'm9t3',
+    title: 'Gospital ta’lim',
+    description:
+      "Davolanish jarayonidagi bolalarning ta'lim olish imkoniyatlarini tashkil etish.",
+    questions: [],
+  },
+]
+
+// ============================================================
+// MODULE 10
+// MOLIYAVIY MUNOSABATLAR
+// ============================================================
+
+const MODUL_10_TOPICS: Topic[] = [
+  {
+    id: 'm10t1',
+    title: "Ta'lim muassasasining moliyaviy faoliyatini tashkil etish",
+    description:
+      "Maktab moliyaviy faoliyatini rejalashtirish, tashkil etish va nazorat qilish.",
+    questions: [],
+  },
+
+  {
+    id: 'm10t2',
+    title: "Xodimlar mehnatiga haq to'lash va tarifikatsiyalarini me'yor asosida tuzish amaliyoti",
+    description:
+      "Xodimlar mehnatiga haq to'lash va tarifikatsiya jarayonlarini me'yoriy asosda tashkil etish.",
+    questions: [],
+  },
+
+  {
+    id: 'm10t3',
+    title: "Budjetdan tashqari mablag'larni topish va samarali tasarruf etish",
+    description:
+      "Budjetdan tashqari mablag'larni jalb qilish, rejalashtirish va samarali foydalanish.",
+    questions: [],
+  },
+
+  {
+    id: 'm10t4',
+    title: "Umumiy o'rta ta'lim maktablarida ta'lim xizmatlari",
+    description:
+      "Umumiy o'rta ta'lim maktablarida ta'lim xizmatlarini tashkil etish va rivojlantirish.",
+    questions: [],
+  },
+]
+
+// ============================================================
+// ALL MODULES
+// ============================================================
+
+export const CATEGORIES: Category[] = [
+  {
+    id: 'modul1',
+    title: '1-MODUL. Umumiy ta’lim muassasasini boshqarish',
+    description:
+      'Maktab boshqaruvi, strategik menejment, boshqaruv psixologiyasi va qarorlar.',
+    topics: MODUL_1_TOPICS,
+    questions: MODUL_1_TOPICS.flatMap((topic) => topic.questions),
+  },
+
+  {
+    id: 'modul2',
+    title: '2-MODUL. Ta’lim muassasasini rivojlantirish',
+    description:
+      'Ta’lim sifati, o‘quvchilar rivoji, kasbga yo‘naltirish va bola xavfsizligi.',
+    topics: MODUL_2_TOPICS,
+    questions: MODUL_2_TOPICS.flatMap((topic) => topic.questions),
+  },
+
+  {
+    id: 'modul3',
+    title:
+      '3-MODUL. Zamonaviy rahbar xususiyatlari va boshqaruv kompetentligi',
+    description:
+      'Zamonaviy rahbar kompetensiyalari, shaxsiy samaradorlik va pedagoglarni rivojlantirish.',
+    topics: MODUL_3_TOPICS,
+    questions: MODUL_3_TOPICS.flatMap((topic) => topic.questions),
+  },
+
+  {
+    id: 'modul4',
+    title: '4-MODUL. Inson resurslarini boshqarish',
+    description:
+      'Inson resurslari, mehnat munosabatlari, kadrlar hujjatlari va xodimlar faoliyatini baholash.',
+    topics: MODUL_4_TOPICS,
+    questions: MODUL_4_TOPICS.flatMap((topic) => topic.questions),
+  },
+
+  {
+    id: 'modul5',
+    title: '5-MODUL. Ish yuritish va hisobot',
+    description:
+      'Normativ-huquqiy hujjatlar, ish yuritish va hisobdorlik.',
+    topics: MODUL_5_TOPICS,
+    questions: MODUL_5_TOPICS.flatMap((topic) => topic.questions),
+  },
+
+  {
+    id: 'modul6',
+    title: '6-MODUL. Jamoatchilik va ota-onalar bilan ishlash',
+    description:
+      'Ota-onalar, jamoatchilik, davlat tashkilotlari va media bilan hamkorlik.',
+    topics: MODUL_6_TOPICS,
+    questions: MODUL_6_TOPICS.flatMap((topic) => topic.questions),
+  },
+
+  {
+    id: 'modul7',
+    title: '7-MODUL. Boshqaruvda raqamli kompetentlik',
+    description:
+      'Raqamli kompetentlik va sun’iy intellekt tizimlaridan foydalanish.',
+    topics: MODUL_7_TOPICS,
+    questions: MODUL_7_TOPICS.flatMap((topic) => topic.questions),
+  },
+
+  {
+    id: 'modul8',
+    title:
+      '8-MODUL. Ta’limda liderlik va o‘zgarishlarni boshqarish',
+    description:
+      'O‘zgarishlarni boshqarish, jamoa muhiti va xavf-xatarlarni boshqarish.',
+    topics: MODUL_8_TOPICS,
+    questions: MODUL_8_TOPICS.flatMap((topic) => topic.questions),
+  },
+
+  {
+    id: 'modul9',
+    title: '9-MODUL. Inklyuziv ta’limni tashkil etish',
+    description:
+      'Inklyuziv va gospital ta’limni tashkil etish.',
+    topics: MODUL_9_TOPICS,
+    questions: MODUL_9_TOPICS.flatMap((topic) => topic.questions),
+  },
+
+  {
+    id: 'modul10',
+    title: '10-MODUL. Moliyaviy munosabatlar',
+    description:
+      'Ta’lim muassasasining moliyaviy faoliyati va ta’lim xizmatlari.',
+    topics: MODUL_10_TOPICS,
+    questions: MODUL_10_TOPICS.flatMap((topic) => topic.questions),
+  },
+]
+
+// ============================================================
+// MIXED / ATTESTATION QUESTIONS
+// ============================================================
 
 export const MIXED_QUESTIONS: Question[] = [
   {
@@ -546,8 +502,10 @@ export const MIXED_QUESTIONS: Question[] = [
       'Faqat qat’iy buyruqbozlik',
     ],
     answer: 0,
-    explanation: 'Rahbarning shaxsiy namunasi, adolatli qarorlar va sog‘lom munosabatlar jamoa muhitini mustahkamlaydi.',
+    explanation:
+      'Rahbarning shaxsiy namunasi, adolatli qarorlar va sog‘lom munosabatlar jamoa muhitini mustahkamlaydi.',
   },
+
   {
     id: 'mix2',
     text: 'Maktabda yangi yondashuv joriy etildi, lekin u bir martalik tadbir sifatida ko‘rildi va natija barqarorlashmadi. Qaysi tahlil aniqroq?',
@@ -558,22 +516,38 @@ export const MIXED_QUESTIONS: Question[] = [
       'O‘zgarish hodisa sifatida olinib, jarayon tabiati yetarli ushlanmagan',
     ],
     answer: 3,
-    explanation: 'Barqaror natija uchun o‘zgarish bir martalik hodisa emas, balki uzluksiz jarayon sifatida boshqarilishi kerak.',
+    explanation:
+      'Barqaror natija uchun o‘zgarish bir martalik hodisa emas, balki uzluksiz jarayon sifatida boshqarilishi kerak.',
   },
+
   {
     id: 'mix3',
-    text: '307-maktabda kadrlar hujjatlari tizimliligini ta’minlash uchun qaysi harakatlar eng to‘g‘ri? (2 ta javob)',
-    options: ['2, 4', '1, 3', '1, 3, 5', '2, 3, 6'],
-    answer: 1,
-    explanation: 'Mehnat va shaxsiy tarkib hujjatlarini tizimli qayd etish hamda xodimlarni lokal hujjatlar bilan tanishtirish muhim.',
+    text: 'Kadrlar hujjatlari tizimliligini ta’minlash uchun qaysi harakatlar eng to‘g‘ri?',
+    options: [
+      'Mehnat va shaxsiy tarkib hujjatlarini tizimli qayd etish',
+      'Faqat og‘zaki kelishuvlardan foydalanish',
+      'Hujjatlarni tartibsiz saqlash',
+      'Faqat rahbar xotirasiga tayanish',
+    ],
+    answer: 0,
+    explanation:
+      'Kadrlar hujjatlarini tizimli yuritish va saqlash boshqaruvning muhim qismidir.',
   },
+
   {
     id: 'mix4',
     text: 'Rahbar turli variantlarni ko‘rib chiqib bittasini tanladi va uni amalga oshirish harakatlar ketma-ketligini belgiladi. Bu nima?',
-    options: ['Boshqaruv jarayoni', 'Tashkiliy faoliyat', 'Boshqaruv qarori', 'Strategik rejalash'],
+    options: [
+      'Boshqaruv jarayoni',
+      'Tashkiliy faoliyat',
+      'Boshqaruv qarori',
+      'Strategik rejalash',
+    ],
     answer: 2,
-    explanation: 'Muqobil variantlardan birini tanlash va uni amalga oshirish yo‘lini belgilash boshqaruv qaroridir.',
+    explanation:
+      'Muqobil variantlardan birini tanlash va uni amalga oshirish yo‘lini belgilash boshqaruv qaroridir.',
   },
+
   {
     id: 'mix5',
     text: 'Maktabda nizolar deyarli barcha bo‘limlarda ishonchsizlik, qo‘pollik va mas’uliyatni boshqalarga yuklash ko‘rinishida namoyon bo‘lmoqda. Qaysi xulosa aniqroq?',
@@ -584,251 +558,135 @@ export const MIXED_QUESTIONS: Question[] = [
       'Bu faqat tashkiliy nazorat sustligini bildiradi',
     ],
     answer: 0,
-    explanation: 'Keng tarqalgan salbiy muhit keyinchalik ayrim shaxslarga qaratilgan bosim va nosog‘lom munosabatlarga olib kelishi mumkin.',
+    explanation:
+      'Keng tarqalgan salbiy muhit keyinchalik ayrim shaxslarga qaratilgan bosim va nosog‘lom munosabatlarga olib kelishi mumkin.',
   },
+
   {
     id: 'mix6',
-    text: '872-maktabda SI vositalari boshqaruvda qo‘llandi. Tezlik foydali, lekin fakt aniqligi, moslik va maxfiylik muammolari mavjud. Qaysi yondashuvlar maqbul?',
-    options: ['2, 5', '1, 3', '1, 2, 5, 6', '2, 4, 5'],
-    answer: 0,
-    explanation: 'Aniq prompt, fakt va mantiqni tekshirish, maxfiy ma’lumotlarni himoya qilish hamda yakuniy qarorni inson qabul qilishi zarur.',
+    text: 'Sun’iy intellekt vositalaridan boshqaruvda foydalanishda qaysi yondashuvlar maqbul?',
+    options: [
+      'Natijani tekshirmasdan qabul qilish',
+      'Aniq topshiriq berish, faktlarni tekshirish va maxfiylikni ta’minlash',
+      'Barcha qarorlarni SIga topshirish',
+      'Maxfiy ma’lumotlarni ochiq tizimlarga kiritish',
+    ],
+    answer: 1,
+    explanation:
+      'SI vositalaridan foydalanishda natijani tekshirish, aniq topshiriq berish va maxfiy ma’lumotlarni himoya qilish muhim.',
   },
+
   {
     id: 'mix7',
-    text: '17 yoshli o‘qituvchining yillik mehnat ta’tili davomiyligi qaysi turga kiradi?',
+    text: 'Voyaga yetmagan xodimlarning mehnat huquqlarida qanday kafolatlar mavjud?',
     options: [
-      'Har yilgi asosiy uzaytirilgan ta’til',
-      'Har yilgi qo‘shimcha ta’til',
-      'Har yilgi asosiy eng kam ta’til',
-      'Har yilgi ijtimoiy ta’til',
+      'Faqat ish haqi bo‘yicha kafolat',
+      'Mehnat sharoitlari va ta’til bo‘yicha alohida kafolatlar',
+      'Hech qanday alohida kafolat mavjud emas',
+      'Faqat ishga qabul qilish bo‘yicha kafolat',
     ],
-    answer: 0,
-    explanation: 'Voyaga yetmagan xodimlar uchun qonunchilikda uzaytirilgan asosiy yillik mehnat ta’tili nazarda tutiladi.',
+    answer: 1,
+    explanation:
+      'Voyaga yetmagan xodimlar uchun mehnat qonunchiligida alohida kafolatlar nazarda tutiladi.',
   },
+
   {
     id: 'mix8',
     text: 'Maktabda indikatorlar mavjud, lekin ular faqat hisobot uchun ishlatiladi va qarorlar indikatorlarga tayanmaydi. Muammo nimada?',
-    options: ['Indikatorlar noto‘g‘ri tuzilgan', 'Resurslar yetarli emas', 'Monitoring tizimining formalligi', 'Dars sifati past'],
+    options: [
+      'Indikatorlar noto‘g‘ri tuzilgan',
+      'Resurslar yetarli emas',
+      'Monitoring tizimining formalligi',
+      'Dars sifati past',
+    ],
     answer: 2,
-    explanation: 'Indikatorlar qaror qabul qilishga xizmat qilmasa, monitoring formallashib qoladi.',
+    explanation:
+      'Indikatorlar qaror qabul qilishga xizmat qilmasa, monitoring formallashib qoladi.',
   },
+
   {
     id: 'mix9',
     text: 'Sog‘lom ish muhiti va ahil jamoa uchun direktorning qaysi choralari mos?',
-    options: ['B, D, E', 'A, C, D', 'A, D, F', 'A, C, F'],
-    answer: 1,
-    explanation: 'Anonim diagnostika, ochiq muloqot qoidalari va yangi xodimlarni moslashtirish sog‘lom muhitni qo‘llab-quvvatlaydi.',
+    options: [
+      'Ochiq muloqot, adolatli munosabat va yangi xodimlarni moslashtirish',
+      'Faqat jazolash',
+      'Faqat qattiq nazorat',
+      'Muammolarni yashirish',
+    ],
+    answer: 0,
+    explanation:
+      'Ochiq muloqot, adolatli munosabat va moslashtirish sog‘lom jamoa muhitini qo‘llab-quvvatlaydi.',
   },
+
   {
     id: 'mix10',
     text: '“Tizimlilik” tamoyilining amaliy mazmuni nimada?',
     options: [
-      'Muammoni faqat mas’ul shaxsning intizomiy xatosi sifatida ko‘rish',
-      'Muammoni individual xato emas, jarayon va boshqaruv mexanizmlaridagi uzilishlar bilan tahlil qilish',
+      'Muammoni faqat shaxsiy xato sifatida ko‘rish',
+      'Muammoni jarayon va boshqaruv mexanizmlari bilan birgalikda tahlil qilish',
       'Har qanday vaziyatda favqulodda rejimga o‘tish',
       'Faqat tezkor yechimlarni qo‘llash',
     ],
     answer: 1,
-    explanation: 'Tizimli yondashuv muammoning sabablarini jarayon va boshqaruv mexanizmlari darajasida ko‘rib chiqadi.',
-  },
-  {
-    id: 'mix11',
-    text: 'Mediasavodxonlik maktab rahbariga qanday foyda beradi? (2+)',
-    options: ['2, 3, 4', '1, 2, 3', '2, 3, 4, 5', '1, 2, 3, 4'],
-    answer: 3,
-    explanation: 'Mediasavodxonlik noto‘g‘ri qarorlarning oldini olish, manipulyatsiyadan himoyalanish, ishonch va axborot tarqatish tizimini yaxshilashga yordam beradi.',
-  },
-  {
-    id: 'mix12',
-    text: 'Elektron ta’limiy va pedagogik hujjatlar umumiy ish yuritish hujjatlari sifatida ko‘rilmoqda. Hisobdorlikda noaniqlik yuzaga kelgan. Nima e’tibordan chetda qolgan?',
-    options: [
-      'Ayrim elektron hujjatlar qat’iy hisobga olinishi kerakligi',
-      'Barcha hujjatlarni bir xil shaklda rasmiylashtirish',
-      'Barcha hujjatlarning hisob darajasi bir xil ekanligi',
-      'Saqlash muddatlarini umuman belgilamaslik',
-    ],
-    answer: 0,
-    explanation: 'Elektron hujjatlarning huquqiy maqomi va hisobga olish talablari hujjat turiga qarab farqlanishi mumkin.',
-  },
-  {
-    id: 'mix13',
-    text: 'Prevention (oldini olish) tamoyiliga qaysi harakatlar mos?',
-    options: ['A, C, E', 'A, B, C', 'B, C, D', 'A, C, D'],
-    answer: 0,
-    explanation: 'Muammolarni oldindan aniqlash, muqobil rejalarni tayyorlash va xavflarni prognoz qilish profilaktik boshqaruvga kiradi.',
-  },
-  {
-    id: 'mix14',
-    text: 'Maktabda bir nechta budjetdan tashqari mablag‘ manbalari mavjud. Xarajatlar foydali bo‘lsa-da, buyruq, shartnoma va hisoblar alohida yuritilmayapti. Qaysi talab zaif?',
-    options: ['Alohida rejalashtirish', 'Alohida taqsimlash', 'Alohida nazorat', 'Alohida rasmiylashtirish'],
-    answer: 3,
-    explanation: 'Turli moliyaviy manbalar bo‘yicha hujjatlashtirish va rasmiylashtirishning aniqligi muhim.',
-  },
-  {
-    id: 'mix15',
-    text: '451-maktabda normativ-huquqiy hujjatlar bilan ishlashda ichki hujjatlar yuqori turuvchi normalar bilan doim ham izchil bog‘lanmagan. Qaysi harakatlar eng to‘g‘ri?',
-    options: ['2, 4, 5', '1, 4, 6', '2, 3, 4, 6', '1, 2, 3, 5'],
-    answer: 0,
-    explanation: 'Amaldagi huquqiy hujjatlarni o‘rganish, xodimlarga tushuntirish va ichki hujjatlarni huquqiy normalar bilan uyg‘unlashtirish zarur.',
-  },
-  {
-    id: 'mix16',
-    text: 'Attestatsiya baholash natijalari keyingi akkreditatsiya qarorini qabul qilishda ishlatilmoqda. Bu nimani anglatadi?',
-    options: ['Mustaqillik', 'Shaffoflik', 'Bog‘liqlik', 'Davriylik'],
-    answer: 2,
-    explanation: 'Bir jarayon natijalarining boshqa boshqaruv qaroriga ta’sir qilishi ular o‘rtasidagi bog‘liqlikni ko‘rsatadi.',
-  },
-  {
-    id: 'mix17',
-    text: 'O‘zlashtirishi past o‘quvchi bilan ishlaydigan o‘qituvchi uchun qaysi sifatlar muhim?',
-    options: ['B, C, D', 'A, C, D', 'C, D, E', 'A, B, E'],
-    answer: 3,
-    explanation: 'Hissiy barqarorlik, natija darhol chiqmasligiga tayyorlik va dars uslubini moslashtirish muhim.',
-  },
-  {
-    id: 'mix18',
-    text: 'Maktab direktori uchun moliyaviy rejalashtirishning asosiy boshqaruv afzalligi nimada?',
-    options: [
-      'Maktab ehtiyojlarini ustuvorliklar asosida tizimlashtirish',
-      'Xarajatlarni aniq ta’lim natijalari bilan bog‘lash va asoslangan boshqaruv qarorlarini qabul qilish imkonini berish',
-      'Moliyaviy jarayonlarni rejalashtirish – ijro – tahlil sikli asosida boshqarish',
-      'Mablag‘larni taqsimlashni oldindan prognoz qilish va nazorat qilish',
-    ],
-    answer: 1,
-    explanation: 'Moliyaviy rejalashtirish xarajatlarni ta’lim natijalari bilan bog‘lash va asoslangan qarorlar qabul qilish imkonini beradi.',
-  },
-  {
-    id: 'mix19',
-    text: 'Xarid jarayoni tez amalga oshirilmoqda, lekin texnik talablar noaniq va tanlash hamda qabul qilish vazifalari ajratilmagan. Qaysi qoida zaiflashgan?',
-    options: [
-      'Tashabbus va moslik nazoratdan ustun',
-      'Budjet ijrodan ustun',
-      'Tezlikdan ko‘ra rollar va tekshiruvning aniqligi muhim',
-      'Hujjatlar natija va qulaylikdan kamroq muhim',
-    ],
-    answer: 2,
-    explanation: 'Xarid jarayonida vazifalar va tekshiruv mexanizmlarining aniq ajratilishi muhim.',
-  },
-  {
-    id: 'mix20',
-    text: 'Yangi tartib qabul qilindi, ammo xodimlar uni turlicha amalga oshirmoqda. Bu yondashuv va moslashuv haqida qanday xulosani anglatadi?',
-    options: [
-      'Moslashuvchanlik resursga qarab farqlanadi',
-      'Moslashuvchanlik muddatga qarab farqlanadi',
-      'Moslashuvchanlik natijaga qarab farqlanadi',
-      'Moslashuvchanlik bitta shaklda emas, jarayonga nisbatan turlicha namoyon bo‘ladi',
-    ],
-    answer: 3,
-    explanation: 'Moslashuvchanlik yagona shaklda bo‘lmaydi; u jarayon, sharoit va amalga oshirish usuliga qarab turlicha namoyon bo‘ladi.',
-  },
-  {
-    id: 'mix21',
-    text: 'Kadrlar tizimi tashkil etilmoqda va ishni huquqiy asosdan boshlash aytildi. Birinchi to‘g‘ri qadam qaysi?',
-    options: [
-      'Mas’ul xodimlarni tayinlash',
-      'Majburiy hujjatlar ro‘yxatini tuzish',
-      'Ichki lokal hujjatlarni ishlab chiqish',
-      'Normativ asosni Mehnat kodeksi bilan muvofiqlashtirish',
-    ],
-    answer: 3,
-    explanation: 'Kadrlar boshqaruvining huquqiy asosini amaldagi mehnat qonunchiligi bilan muvofiqlashtirishdan boshlash zarur.',
-  },
-  {
-    id: 'mix22',
-    text: 'Moliyaviy boshqaruvda ichki auditning strategik vazifasi nimadan iborat?',
-    options: [
-      'Hisobotlar va axborot almashinuvidagi tizimlilikni kamaytirish',
-      'Mas’ul xodimlar faoliyatini tizimli monitoring qilishni kamaytirish',
-      'Xatolarni erta aniqlash hamda moliyaviy va korrupsion xavflarni kamaytirish',
-      'Xarajatlarni rejalashtirishga yordam berish va mablag‘lardan foydalanish samaradorligini tahlil qilish',
-    ],
-    answer: 3,
-    explanation: 'Ichki audit moliyaviy jarayonlarni tahlil qilish va mablag‘lardan foydalanish samaradorligini baholashga xizmat qiladi.',
-  },
-  {
-    id: 'mix23',
-    text: '741-maktabda ijtimoiy tarmoqlar va mediasavodxonlik bilan bog‘liq ishlar olib borilmoqda. Qaysi yondashuvlar eng maqbul?',
-    options: ['2, 3, 6', '2, 3, 4, 6', '1, 3, 5', '1, 3, 4, 5'],
-    answer: 0,
-    explanation: 'Manbani tekshirish, rasmiy axborot tarqatish qoidalarini belgilash va shaxsiy ma’lumotlarni himoya qilish muhim.',
-  },
-  {
-    id: 'mix24',
-    text: '243-sonli qaror doirasida bepul maktab formasi oluvchi o‘quvchilarni aniqlashda qaysi yondashuv moliyaviy va boshqaruv xavfini kamaytiradi?',
-    options: [
-      'Mahalla tavsiyasi va rasmiy bayonnoma',
-      '“Ijtimoiy himoya yagona reyestri” va rasmiy bayonnoma',
-      'Ota-onalarning yozma arizalari va bayonnoma',
-      'Maktabning ichki ro‘yxatlari',
-    ],
-    answer: 1,
-    explanation: 'Rasmiy ma’lumotlar bazasi va hujjatlashtirilgan tartibdan foydalanish boshqaruv xatarlarini kamaytiradi.',
-  },
-  {
-    id: 'mix25',
-    text: 'Axborot gigiyenasi tamoyilini joriy etish direktor faoliyatida qaysi muammoni kamaytiradi?',
-    options: [
-      'Kommunikatsiya chastotasini kamaytiradi',
-      'Rasmiy va norasmiy yozishmalar oqimini tartibga soladi',
-      'Raqamli bildirishnomalardan chalg‘ishni kamaytiradi',
-      'Uzoq kelishuv bosqichlarini butunlay yo‘q qiladi',
-    ],
-    answer: 2,
-    explanation: 'Axborot gigiyenasi keraksiz raqamli bildirishnomalar va ortiqcha axborot oqimidan chalg‘ishni kamaytirishga yordam beradi.',
-  },
-  {
-    id: 'mix26',
-    text: 'Singapur tajribasida maktab direktori tayyorgarligi qanday xususiyatlarga ega?',
-    options: ['B, C, D', 'A, C, D', 'A, B, C', 'A, B, D'],
-    answer: 1,
-    explanation: 'Rahbarlik salohiyatini oldindan baholash, maxsus tayyorgarlik bosqichi va natijalar uchun yuqori shaxsiy mas’uliyat muhim jihatlardir.',
-  },
-  {
-    id: 'mix27',
-    text: 'O‘quvchi davolanish vaqtida ta’limini davom ettirmoqda. Darslar odatdagi maktab yuklamasida berilgani sababli charchoq va o‘zlashtirish pasaydi. Qaysi farq e’tibordan chetda qolgan?',
-    options: [
-      'Ta’lim yuklamasining sog‘liq holatiga bog‘liqligi',
-      'Baholashning rivojlantiruvchi xususiyati',
-      'Guruhda o‘qitish',
-      'Davolash muhitining ta’limga ta’siri',
-    ],
-    answer: 0,
-    explanation: 'Ta’lim yuklamasi o‘quvchining sog‘lig‘i va individual holatiga moslashtirilishi kerak.',
-  },
-  {
-    id: 'mix28',
-    text: 'To‘liqsiz ish vaqtining huquqiy tabiati qaysi javobda to‘g‘ri berilgan?',
-    options: [
-      'Faqat muddatli mehnat shartnomalarida qo‘llanadi',
-      'Faqat ayrim toifadagi xodimlar uchun majburiy',
-      'Ish vaqtining qisqartirilgan davomiyligining maxsus shakli',
-      'Mehnat shartnomasi taraflarining kelishuviga asosan ish vaqtining davomiyligi yoki shaklini belgilash',
-    ],
-    answer: 3,
-    explanation: 'To‘liqsiz ish vaqti mehnat shartnomasi taraflarining kelishuvi asosida belgilanadigan ish rejimidir.',
-  },
-  {
-    id: 'mix29',
-    text: 'Quyidagi omillardan qaysilari muammo sabablariga bevosita bog‘liq?',
-    options: ['B, C, D', 'A, B, C', 'A, B, D', 'Faqat A'],
-    answer: 2,
-    explanation: 'Axborotning kechikishi, ta’lim sifati va tasdiqlanmagan axborot tarqalishi muammoning bevosita sabablariga taalluqli omillardir.',
-  },
-  {
-    id: 'mix30',
-    text: 'Kasbiy rivojlanish tizimida strategik rejalashtirishning ajralib turuvchi xususiyati nimada?',
-    options: [
-      'Faqat qisqa muddatli ehtiyojlarga e’tibor qaratish',
-      'Metodik ishni tashkiliy faoliyatdan alohida olib borish',
-      'Pedagoglarning kasbiy rivojlanishini maktabning umumiy rivojlanish strategiyasi bilan uyg‘unlashtirish',
-      'O‘qituvchi ehtiyojlarini faqat kundalik faoliyat bilan bog‘lash',
-    ],
-    answer: 2,
-    explanation: 'Strategik rejalashtirish kasbiy rivojlanishni tashkilotning umumiy rivojlanish maqsadlari bilan bog‘laydi.',
+    explanation:
+      'Tizimli yondashuv muammoning sabablarini jarayon va boshqaruv mexanizmlari darajasida ko‘rib chiqadi.',
   },
 ]
 
-export const TOTAL_QUESTIONS = CATEGORIES.reduce(
-  (sum, c) => sum + c.questions.length,
+// ============================================================
+// STATISTICS
+// ============================================================
+
+export const TOTAL_MODULES = CATEGORIES.length
+
+export const TOTAL_TOPICS = CATEGORIES.reduce(
+  (sum, category) => sum + category.topics.length,
   0
 )
+
+export const TOTAL_QUESTIONS = CATEGORIES.reduce(
+  (sum, category) => sum + category.questions.length,
+  0
+)
+
+export const TOTAL_MIXED_QUESTIONS = MIXED_QUESTIONS.length
+
+// ============================================================
+// HELPER FUNCTIONS
+// ============================================================
+
+export function getModuleById(moduleId: string): Category | undefined {
+  return CATEGORIES.find((module) => module.id === moduleId)
+}
+
+export function getTopicById(topicId: string): Topic | undefined {
+  for (const module of CATEGORIES) {
+    const topic = module.topics.find((item) => item.id === topicId)
+
+    if (topic) {
+      return topic
+    }
+  }
+
+  return undefined
+}
+
+export function getModuleQuestions(moduleId: string): Question[] {
+  const module = getModuleById(moduleId)
+
+  if (!module) {
+    return []
+  }
+
+  return module.topics.flatMap((topic) => topic.questions)
+}
+
+export function getTopicQuestions(topicId: string): Question[] {
+  const topic = getTopicById(topicId)
+
+  if (!topic) {
+    return []
+  }
+
+  return topic.questions
+}
