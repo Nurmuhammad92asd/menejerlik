@@ -195,7 +195,45 @@ export function MenejerlikApp() {
     level: QuizLevel,
   ) {
     if (!navigation.topicId) {
-      return
+    const [isFullscreen, setIsFullscreen] = useState(false)
+
+useEffect(() => {
+  const tg = (window as any).Telegram?.WebApp
+
+  if (!tg) return
+
+  tg.ready()
+  tg.expand()
+
+  try {
+    if (tg.requestFullscreen) {
+      tg.requestFullscreen()
+      setIsFullscreen(true)
+    }
+  } catch {}
+}, [])
+
+function toggleFullscreen() {
+  const tg = (window as any).Telegram?.WebApp
+
+  if (!tg) return
+
+  try {
+    if (isFullscreen) {
+      if (tg.exitFullscreen) {
+        tg.exitFullscreen()
+      }
+      setIsFullscreen(false)
+    } else {
+      if (tg.requestFullscreen) {
+        tg.requestFullscreen()
+      } else {
+        tg.expand()
+      }
+      setIsFullscreen(true)
+    }
+  } catch {}
+}  return
     }
 
     startQuiz(
@@ -441,7 +479,17 @@ export function MenejerlikApp() {
    */
 
   return (
-    <main className="mx-auto min-h-dvh w-full max-w-md px-4 pb-8 pt-5">
+    <main className="relative mx-auto min-h-dvh w-full max-w-md px-4 pb-8 pt-5">
+
+  {isTelegram && (
+    <button
+      type="button"
+      onClick={toggleFullscreen}
+      className="fixed right-4 top-4 z-50 flex size-11 items-center justify-center rounded-2xl border bg-background/90 text-lg shadow-lg backdrop-blur-md active:scale-95"
+    >
+      {isFullscreen ? '↙️' : '⛶'}
+    </button>
+  )}
 
       {/* =================================================
           HOME
