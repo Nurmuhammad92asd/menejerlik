@@ -1,7 +1,7 @@
 import { CATEGORIES, MIXED_QUESTIONS, type Question } from './quiz-data'
 
 export const MIXED_ID = 'aralash'
-export const MIXED_COUNT = 10
+export const MIXED_COUNT = 30
 
 export type QuizSession = {
   categoryId: string
@@ -48,11 +48,10 @@ export function getCategoryTitle(id: string) {
 }
 
 export function createSession(categoryId: string): QuizSession {
-  const pool =
-    categoryId === MIXED_ID
-      ? shuffle(CATEGORIES.flatMap((c) => c.questions)).slice(0, MIXED_COUNT)
-      : shuffle(CATEGORIES.find((c) => c.id === categoryId)?.questions ?? [])
-
+const pool =
+  categoryId === MIXED_ID
+    ? shuffle(MIXED_QUESTIONS).slice(0, MIXED_COUNT)
+    : shuffle(CATEGORIES.find((c) => c.id === categoryId)?.questions ?? [])
   return {
     categoryId,
     title: getCategoryTitle(categoryId),
