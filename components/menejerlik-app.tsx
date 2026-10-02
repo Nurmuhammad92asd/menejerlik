@@ -23,6 +23,7 @@ import {
 } from '@/lib/quiz-data'
 
 import { useHistory } from '@/hooks/use-history'
+
 import {
   useBackButton,
   useTelegram,
@@ -78,6 +79,133 @@ export function MenejerlikApp() {
 
   const [result, setResult] =
     useState<QuizResult | null>(null)
+
+  /*
+   * =====================================================
+   * TELEGRAM FULLSCREEN
+   * =====================================================
+   */
+
+  const [isFullscreen, setIsFullscreen] =
+    useState(false)
+
+  useEffect(() => {
+    if (!isTelegram) {
+      return
+    }
+
+    const tg =
+      (window as any).Telegram?.WebApp
+
+    if (!tg) {
+      return
+    }
+
+    try {
+      tg.ready()
+
+      /*
+       * Telegram Mini App oynasini
+       * maksimal darajada ochish
+       */
+      if (tg.expand) {
+        tg.expand()
+      }
+
+      /*
+       * Yangi Telegram versiyalarida
+       * haqiqiy fullscreen
+       */
+      if (
+        typeof tg.requestFullscreen ===
+        'function'
+      ) {
+        tg.requestFullscreen()
+        setIsFullscreen(true)
+      }
+    } catch (error) {
+      console.log(
+        'Fullscreen error:',
+        error,
+      )
+    }
+  }, [isTelegram])
+
+  function toggleFullscreen() {
+    const tg =
+      (window as any).Telegram?.WebApp
+
+    if (!tg) {
+      return
+    }
+
+    try {
+      if (isFullscreen) {
+        if (
+          typeof tg.exitFullscreen ===
+          'function'
+        ) {
+          tg.exitFullscreen()
+        }
+
+        setIsFullscreen(false)
+        return
+      }
+
+      if (
+        typeof tg.requestFullscreen ===
+        'function'
+      ) {
+        tg.requestFullscreen()
+        setIsFullscreen(true)
+      } else if (
+        typeof tg.expand ===
+        'function'
+      ) {
+        tg.expand()
+        setIsFullscreen(true)
+      }
+    } catch (error) {
+      console.log(
+        'Fullscreen toggle error:',
+        error,
+      )
+    }
+  }
+
+  /*
+   * Telegram fullscreen holati
+   * o‘zgarganda UI ni yangilash
+   */
+
+  useEffect(() => {
+    const tg =
+      (window as any).Telegram?.WebApp
+
+    if (!tg) {
+      return
+    }
+
+    const handleFullscreenChanged = () => {
+      setIsFullscreen(
+        Boolean(
+          tg.isFullscreen,
+        ),
+      )
+    }
+
+    tg.onEvent?.(
+      'fullscreenChanged',
+      handleFullscreenChanged,
+    )
+
+    return () => {
+      tg.offEvent?.(
+        'fullscreenChanged',
+        handleFullscreenChanged,
+      )
+    }
+  }, [])
 
   /*
    * =====================================================
@@ -195,45 +323,7 @@ export function MenejerlikApp() {
     level: QuizLevel,
   ) {
     if (!navigation.topicId) {
-    const [isFullscreen, setIsFullscreen] = useState(false)
-
-useEffect(() => {
-  const tg = (window as any).Telegram?.WebApp
-
-  if (!tg) return
-
-  tg.ready()
-  tg.expand()
-
-  try {
-    if (tg.requestFullscreen) {
-      tg.requestFullscreen()
-      setIsFullscreen(true)
-    }
-  } catch {}
-}, [])
-
-function toggleFullscreen() {
-  const tg = (window as any).Telegram?.WebApp
-
-  if (!tg) return
-
-  try {
-    if (isFullscreen) {
-      if (tg.exitFullscreen) {
-        tg.exitFullscreen()
-      }
-      setIsFullscreen(false)
-    } else {
-      if (tg.requestFullscreen) {
-        tg.requestFullscreen()
-      } else {
-        tg.expand()
-      }
-      setIsFullscreen(true)
-    }
-  } catch {}
-}  return
+      return
     }
 
     startQuiz(
@@ -426,7 +516,9 @@ function toggleFullscreen() {
   }
 
   /*
-   * Telegram native back button
+   * =====================================================
+   * TELEGRAM BACK BUTTON
+   * =====================================================
    */
 
   useBackButton(
@@ -435,7 +527,9 @@ function toggleFullscreen() {
   )
 
   /*
-   * Close confirmation
+   * =====================================================
+   * CLOSE CONFIRMATION
+   * =====================================================
    */
 
   useEffect(() => {
@@ -479,17 +573,65 @@ function toggleFullscreen() {
    */
 
   return (
-    <main className="relative mx-auto min-h-dvh w-full max-w-md px-4 pb-8 pt-5">
-
-  {isTelegram && (
-    <button
-      type="button"
-      onClick={toggleFullscreen}
-      className="fixed right-4 top-4 z-50 flex size-11 items-center justify-center rounded-2xl border bg-background/90 text-lg shadow-lg backdrop-blur-md active:scale-95"
+    <main
+      className="
+        relative
+        mx-auto
+        min-h-dvh
+        w-full
+        max-w-md
+        px-4
+        pb-8
+        pt-5
+      "
     >
-      {isFullscreen ? '↙️' : '⛶'}
-    </button>
-  )}
+
+      {/* =================================================
+          TELEGRAM FULLSCREEN BUTTON
+      ================================================= */}
+
+      {isTelegram && (
+        <button
+          type="button"
+          onClick={
+            toggleFullscreen
+          }
+          aria-label={
+            isFullscreen
+              ? 'Kichik ekran'
+              : 'To‘liq ekran'
+          }
+          title={
+            isFullscreen
+              ? 'Kichik ekran'
+              : 'To‘liq ekran'
+          }
+          className="
+            fixed
+            right-4
+            top-4
+            z-[100]
+            flex
+            size-11
+            items-center
+            justify-center
+            rounded-2xl
+            border
+            border-border/60
+            bg-background/90
+            text-lg
+            shadow-lg
+            backdrop-blur-xl
+            transition-all
+            hover:scale-105
+            active:scale-95
+          "
+        >
+          {isFullscreen
+            ? '↙️'
+            : '⛶'}
+        </button>
+      )}
 
       {/* =================================================
           HOME
@@ -664,8 +806,6 @@ function EducationScreen({
 
       <div className="grid gap-4">
 
-        {/* BOG‘CHA */}
-
         <button
           type="button"
           onClick={() =>
@@ -707,8 +847,6 @@ function EducationScreen({
           </div>
 
         </button>
-
-        {/* MAKTAB */}
 
         <button
           type="button"
@@ -1018,19 +1156,19 @@ function TopicScreen({
                   <div className="mt-3 flex gap-1.5">
 
                     <Badge>
-                      🟢 10
+                      🟢 {topic.levels.easy.length}
                     </Badge>
 
                     <Badge>
-                      🟡 10
+                      🟡 {topic.levels.medium.length}
                     </Badge>
 
                     <Badge>
-                      🔴 10
+                      🔴 {topic.levels.hard.length}
                     </Badge>
 
                     <Badge>
-                      🔵 10
+                      🔵 {topic.levels.case.length}
                     </Badge>
 
                   </div>
@@ -1224,8 +1362,9 @@ function LevelScreen({
       <div className="rounded-2xl bg-muted/50 p-4 text-center">
 
         <p className="text-xs leading-5 text-muted-foreground">
-          Har bir daraja 10 ta savoldan
-          iborat bo‘ladi.
+          Savollar soni tanlangan
+          darajadagi mavjud testlar
+          asosida belgilanadi.
         </p>
 
       </div>
