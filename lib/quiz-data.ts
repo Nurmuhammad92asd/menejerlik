@@ -359,4 +359,5 @@ export const MIXED_QUESTIONS: Question[] = [
     answer: 2,
     explanation: 'Strategik rejalashtirish kasbiy rivojlanishni tashkilotning umumiy rivojlanish maqsadlari bilan bog‘laydi.',
   },
-]
+]export const TOTAL_QUESTIONS = CATEGORIES.reduce((sum, c) => sum + c.questions.length, 0)
+
