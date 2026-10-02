@@ -1,145 +1,519 @@
 'use client'
 
-import { ChevronRight, GraduationCap, History } from 'lucide-react'
-import { CategoryIcon } from '@/components/category-icon'
+import {
+  ArrowRight,
+  BookOpen,
+  Brain,
+  ChevronRight,
+  GraduationCap,
+  History,
+  Sparkles,
+  Target,
+  Trophy,
+} from 'lucide-react'
+
 import type { Attempt } from '@/hooks/use-history'
-import { MIXED_COUNT, MIXED_ID, getCategoryTitle } from '@/lib/quiz'
-import { CATEGORIES, TOTAL_QUESTIONS } from '@/lib/quiz-data'
 import type { TelegramUser } from '@/lib/telegram'
 
 type Props = {
   user: TelegramUser | null
   history: Attempt[]
-  stats: { count: number; average: number; best: number }
+  stats: {
+    count: number
+    average: number
+    best: number
+  }
   bestByCategory: Record<string, number>
-  onStart: (categoryId: string) => void
+  onStart: () => void
 }
 
-export function HomeScreen({ user, history, stats, bestByCategory, onStart }: Props) {
+export function HomeScreen({
+  user,
+  history,
+  stats,
+  bestByCategory,
+  onStart,
+}: Props) {
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex items-center gap-3">
-        <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-          <GraduationCap className="size-6" aria-hidden="true" />
+    <div className="flex flex-col gap-5 pb-6">
+
+      {/* =====================================================
+          HEADER
+      ====================================================== */}
+
+      <header className="flex items-center justify-between pt-2">
+        <div className="flex items-center gap-3">
+
+          <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
+            <GraduationCap
+              className="size-6"
+              strokeWidth={2}
+            />
+          </div>
+
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+              Professional Education
+            </p>
+
+            <h1 className="text-xl font-bold tracking-tight">
+              MENEJERLIK
+            </h1>
+          </div>
         </div>
-        <div className="min-w-0">
-          <h1 className="text-xl font-semibold leading-tight tracking-tight text-balance">Menejerlik</h1>
-          <p className="text-sm text-muted-foreground">by Nurmuhammad</p>
+
+        <div className="flex size-10 items-center justify-center rounded-xl border bg-card">
+          <Sparkles
+            className="size-5 text-primary"
+            aria-hidden="true"
+          />
         </div>
       </header>
 
-      <section aria-labelledby="greeting" className="rounded-3xl bg-primary p-5 text-primary-foreground">
-        <h2 id="greeting" className="text-lg font-semibold text-pretty">
-          {user ? `Salom, ${user.first_name}!` : 'Xush kelibsiz!'}
-        </h2>
-        <p className="mt-1 text-sm leading-relaxed opacity-85 text-pretty">
-          {`${CATEGORIES.length} ta yo'nalish, ${TOTAL_QUESTIONS} ta savol. Bilimingizni sinang va natijangizni kuzating.`}
-        </p>
-        <dl className="mt-5 grid grid-cols-3 gap-2">
-          <Stat label="Testlar" value={String(stats.count)} />
-          <Stat label="O'rtacha" value={`${stats.average}%`} />
-          <Stat label="Eng yaxshi" value={`${stats.best}%`} />
-        </dl>
+      {/* =====================================================
+          HERO
+      ====================================================== */}
+
+      <section className="relative overflow-hidden rounded-[2rem] bg-primary p-6 text-primary-foreground shadow-lg">
+
+        {/* Decorative elements */}
+
+        <div className="pointer-events-none absolute -right-12 -top-12 size-36 rounded-full bg-white/10" />
+
+        <div className="pointer-events-none absolute -bottom-16 -left-10 size-40 rounded-full bg-white/5" />
+
+        <div className="relative">
+
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-3 py-1.5 text-xs font-medium backdrop-blur-sm">
+            <Sparkles className="size-3.5" />
+            <span>Ta'lim menejmenti platformasi</span>
+          </div>
+
+          <h2 className="max-w-[320px] text-2xl font-bold leading-tight tracking-tight">
+            {user
+              ? `Assalomu alaykum, ${user.first_name}!`
+              : 'Xush kelibsiz!'}
+          </h2>
+
+          <p className="mt-3 max-w-[330px] text-sm leading-6 text-primary-foreground/80">
+            Rahbarlik bilimlarini mustahkamlang,
+            boshqaruv kompetensiyalaringizni rivojlantiring
+            va real vaziyatlarda qaror qabul qilish
+            ko‘nikmalaringizni sinang.
+          </p>
+
+          <button
+            type="button"
+            onClick={onStart}
+            className="mt-6 flex w-full items-center justify-between rounded-2xl bg-primary-foreground px-4 py-3.5 text-left text-sm font-semibold text-primary shadow-sm transition-transform hover:-translate-y-0.5 active:translate-y-0"
+          >
+            <span className="flex items-center gap-2">
+              <BookOpen className="size-5" />
+              O‘rganishni boshlash
+            </span>
+
+            <ArrowRight className="size-5" />
+          </button>
+
+        </div>
       </section>
 
-      <section aria-labelledby="mixed" className="flex flex-col gap-3">
+      {/* =====================================================
+          CONCEPT
+      ====================================================== */}
+
+      <section className="rounded-3xl border bg-card p-5 shadow-sm">
+
+        <div className="flex items-start gap-4">
+
+          <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-secondary text-secondary-foreground">
+            <Brain className="size-5" />
+          </div>
+
+          <div className="min-w-0">
+
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
+              Menejerlik konsepsiyasi
+            </p>
+
+            <p className="mt-2 text-base font-semibold">
+              Bilim → Tahlil → Qaror → Natija
+            </p>
+
+            <p className="mt-1 text-sm leading-5 text-muted-foreground">
+              Nazariy bilimlarni amaliy boshqaruv
+              vaziyatlari bilan bog‘lab o‘rganing.
+            </p>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* =====================================================
+          EDUCATION DIRECTIONS
+      ====================================================== */}
+
+      <section className="flex flex-col gap-3">
+
+        <div className="flex items-end justify-between px-1">
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+              Yo‘nalishlar
+            </p>
+
+            <h2 className="mt-1 text-xl font-bold">
+              Ta’lim tizimini tanlang
+            </h2>
+          </div>
+
+          <Target className="size-5 text-primary" />
+
+        </div>
+
         <button
           type="button"
-          onClick={() => onStart(MIXED_ID)}
-          className="group flex items-center gap-4 rounded-2xl border border-dashed border-primary/40 bg-secondary p-4 text-left transition-colors hover:bg-accent focus-visible:outline-2"
+          onClick={onStart}
+          className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
         >
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <CategoryIcon id={MIXED_ID} />
-          </span>
-          <span className="min-w-0 flex-1">
-            <span id="mixed" className="block font-medium text-secondary-foreground">
-              Aralash test
-            </span>
-            <span className="block text-sm text-muted-foreground">{`Barcha mavzulardan ${MIXED_COUNT} ta tasodifiy savol`}</span>
-          </span>
-          <ChevronRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+          <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-primary/5" />
+
+          <div className="relative flex items-center gap-4">
+
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary text-2xl shadow-sm">
+              🧸
+            </div>
+
+            <div className="min-w-0 flex-1">
+
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold">
+                  BOG‘CHA
+                </h3>
+
+                <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold uppercase">
+                  Maktabgacha
+                </span>
+              </div>
+
+              <p className="mt-1 text-sm leading-5 text-muted-foreground">
+                Maktabgacha ta’lim tashkilotlarini
+                boshqarish va rivojlantirish.
+              </p>
+
+            </div>
+
+            <ChevronRight
+              className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1"
+              aria-hidden="true"
+            />
+
+          </div>
         </button>
+
+        <button
+          type="button"
+          onClick={onStart}
+          className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+        >
+          <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-primary/5" />
+
+          <div className="relative flex items-center gap-4">
+
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary text-2xl shadow-sm">
+              🏫
+            </div>
+
+            <div className="min-w-0 flex-1">
+
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold">
+                  MAKTAB
+                </h3>
+
+                <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold uppercase">
+                  Umumiy ta’lim
+                </span>
+              </div>
+
+              <p className="mt-1 text-sm leading-5 text-muted-foreground">
+                Umumiy o‘rta ta’lim maktablarini
+                boshqarish va rivojlantirish.
+              </p>
+
+            </div>
+
+            <ChevronRight
+              className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1"
+              aria-hidden="true"
+            />
+
+          </div>
+        </button>
+
       </section>
 
-      <section aria-labelledby="categories" className="flex flex-col gap-3">
-        <h2 id="categories" className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          {"Yo'nalishlar"}
-        </h2>
-        <ul className="flex flex-col gap-2">
-          {CATEGORIES.map((category) => {
-            const best = bestByCategory[category.id]
-            return (
-              <li key={category.id}>
-                <button
-                  type="button"
-                  onClick={() => onStart(category.id)}
-                  className="group flex w-full items-center gap-4 rounded-2xl border bg-card p-4 text-left text-card-foreground transition-colors hover:bg-muted focus-visible:outline-2"
-                >
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground">
-                    <CategoryIcon id={category.id} />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block font-medium">{category.title}</span>
-                    <span className="block truncate text-sm text-muted-foreground">
-                      {`${category.questions.length} savol · ${category.description}`}
-                    </span>
-                  </span>
-                  {best !== undefined ? (
-                    <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-semibold tabular-nums text-secondary-foreground">
-                      {`${best}%`}
-                    </span>
-                  ) : (
-                    <ChevronRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-                  )}
-                </button>
-              </li>
-            )
-          })}
-        </ul>
+      {/* =====================================================
+          STATISTICS
+      ====================================================== */}
+
+      <section className="grid grid-cols-3 gap-2">
+
+        <StatCard
+          icon={<BookOpen className="size-4" />}
+          label="Testlar"
+          value={String(stats.count)}
+        />
+
+        <StatCard
+          icon={<Target className="size-4" />}
+          label="O‘rtacha"
+          value={`${stats.average}%`}
+        />
+
+        <StatCard
+          icon={<Trophy className="size-4" />}
+          label="Rekord"
+          value={`${stats.best}%`}
+        />
+
       </section>
+
+      {/* =====================================================
+          LEARNING PRINCIPLES
+      ====================================================== */}
+
+      <section className="rounded-3xl border bg-muted/40 p-5">
+
+        <div className="mb-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+            Platforma imkoniyatlari
+          </p>
+
+          <h2 className="mt-1 text-lg font-bold">
+            Bilimingizni tizimli rivojlantiring
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+
+          <Feature
+            icon="📚"
+            title="Modullar"
+            text="Tizimli bilim"
+          />
+
+          <Feature
+            icon="🎯"
+            title="Darajalar"
+            text="4 xil murakkablik"
+          />
+
+          <Feature
+            icon="🧠"
+            title="Keyslar"
+            text="Amaliy vaziyatlar"
+          />
+
+          <Feature
+            icon="📊"
+            title="Natijalar"
+            text="O‘zgarishni kuzatish"
+          />
+
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          RECENT RESULTS
+      ====================================================== */}
 
       {history.length > 0 && (
-        <section aria-labelledby="history" className="flex flex-col gap-3">
-          <h2 id="history" className="flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
-            <History className="size-4" aria-hidden="true" />
-            {"So'nggi natijalar"}
-          </h2>
-          <ul className="divide-y rounded-2xl border bg-card">
+        <section className="flex flex-col gap-3">
+
+          <div className="flex items-center gap-2 px-1">
+
+            <History
+              className="size-4 text-primary"
+              aria-hidden="true"
+            />
+
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              So‘nggi natijalar
+            </h2>
+
+          </div>
+
+          <div className="overflow-hidden rounded-3xl border bg-card">
+
             {history.slice(0, 5).map((attempt) => {
-              const pct = Math.round((attempt.correct / attempt.total) * 100)
+
+              const percentage =
+                attempt.total > 0
+                  ? Math.round(
+                      (attempt.correct / attempt.total) * 100,
+                    )
+                  : 0
+
               return (
-                <li key={attempt.id} className="flex items-center gap-3 p-4">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">{getCategoryTitle(attempt.categoryId)}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(attempt.at).toLocaleDateString('uz-UZ', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                    </p>
+                <div
+                  key={attempt.id}
+                  className="flex items-center gap-3 border-b p-4 last:border-b-0"
+                >
+
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-secondary">
+                    <Brain className="size-4" />
                   </div>
-                  <span className="text-sm tabular-nums text-muted-foreground">{`${attempt.correct}/${attempt.total}`}</span>
-                  <span
-                    className={
-                      pct >= 70
-                        ? 'w-12 text-right text-sm font-semibold tabular-nums text-success'
-                        : 'w-12 text-right text-sm font-semibold tabular-nums text-destructive'
-                    }
-                  >
-                    {`${pct}%`}
-                  </span>
-                </li>
+
+                  <div className="min-w-0 flex-1">
+
+                    <p className="truncate text-sm font-semibold">
+                      Test natijasi
+                    </p>
+
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      {new Date(
+                        attempt.at,
+                      ).toLocaleDateString(
+                        'uz-UZ',
+                        {
+                          day: 'numeric',
+                          month: 'short',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        },
+                      )}
+                    </p>
+
+                  </div>
+
+                  <div className="text-right">
+
+                    <p className="text-sm font-bold tabular-nums">
+                      {percentage}%
+                    </p>
+
+                    <p className="text-xs text-muted-foreground">
+                      {attempt.correct}/{attempt.total}
+                    </p>
+
+                  </div>
+
+                </div>
               )
             })}
-          </ul>
+
+          </div>
+
         </section>
       )}
+
+      {/* =====================================================
+          AUTHOR / FOOTER
+      ====================================================== */}
+
+      <footer className="mt-2 rounded-3xl border bg-card px-5 py-6 text-center">
+
+        <div className="mx-auto flex size-10 items-center justify-center rounded-2xl bg-secondary">
+          <GraduationCap className="size-5 text-primary" />
+        </div>
+
+        <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          Menejerlik platformasi
+        </p>
+
+        <p className="mt-2 text-sm font-semibold">
+          Ta’lim menejmenti va rahbarlik
+          kompetensiyalarini rivojlantirish loyihasi
+        </p>
+
+        <div className="mx-auto my-4 h-px w-12 bg-border" />
+
+        <p className="text-xs leading-5 text-muted-foreground">
+          Muallif
+        </p>
+
+        <p className="mt-1 text-sm font-bold">
+          Talatbekov Nurmuhammad
+        </p>
+
+        <p className="mt-1 text-xs text-muted-foreground">
+          Abdulla Avloniy nomidagi pedagogik
+          mahorat milliy instituti magistranti
+        </p>
+
+        <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground/70">
+          Bilim · Tahlil · Qaror · Natija
+        </p>
+
+      </footer>
+
     </div>
   )
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+/* =========================================================
+   STAT CARD
+========================================================= */
+
+function StatCard({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode
+  label: string
+  value: string
+}) {
   return (
-    <div className="rounded-2xl bg-primary-foreground/12 px-3 py-2.5">
-      <dt className="text-xs opacity-80">{label}</dt>
-      <dd className="text-lg font-semibold tabular-nums">{value}</dd>
+    <div className="rounded-2xl border bg-card p-3 shadow-sm">
+
+      <div className="flex items-center gap-1.5 text-muted-foreground">
+        {icon}
+
+        <span className="text-[11px] font-medium">
+          {label}
+        </span>
+      </div>
+
+      <p className="mt-2 text-lg font-bold tabular-nums">
+        {value}
+      </p>
+
+    </div>
+  )
+}
+
+/* =========================================================
+   FEATURE CARD
+========================================================= */
+
+function Feature({
+  icon,
+  title,
+  text,
+}: {
+  icon: string
+  title: string
+  text: string
+}) {
+  return (
+    <div className="rounded-2xl border bg-card p-3">
+
+      <div className="text-xl">
+        {icon}
+      </div>
+
+      <p className="mt-2 text-sm font-semibold">
+        {title}
+      </p>
+
+      <p className="mt-0.5 text-xs text-muted-foreground">
+        {text}
+      </p>
+
     </div>
   )
 }
