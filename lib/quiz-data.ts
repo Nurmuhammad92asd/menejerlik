@@ -50,7 +50,589 @@ const MODUL_1_TOPICS: Topic[] = [
     title: "Umumiy ta'lim muassasasini boshqarish",
     description:
       "Umumiy ta'lim muassasasini boshqarishning mazmuni, tamoyillari va asosiy funksiyalari.",
-    questions: [],
+    questions: [{
+  id: 'm1t1',
+  title: 'Ta’lim tashkilotlarini akkreditatsiyadan o‘tkazish va TALIS',
+  description:
+    'Ta’lim tashkilotlarini akkreditatsiyadan o‘tkazish, akkreditatsiya bosqichlari, TALIS tadqiqoti va ta’lim boshqaruvini transformatsiya qilish yo‘nalishlari.',
+  questions: [
+    // =====================================================
+    // 🟢 OSON DARAJA — 10 TA
+    // =====================================================
+
+    {
+      id: 'm1t1_easy_01',
+      text: 'Ta’lim tashkilotlarini akkreditatsiyadan o‘tkazishning asosiy mazmuni nimadan iborat?',
+      options: [
+        'Faqat ta’lim tashkilotining moddiy bazasini tekshirishdan',
+        'Davlat ta’lim standartlari va talablariga muvofiqligini davlat tomonidan e’tirof etishdan',
+        'Faqat pedagoglarning malakasini aniqlashdan',
+        'Faqat o‘quvchilar bilimini nazorat qilishdan'
+      ],
+      answer: 1,
+      explanation:
+        'Akkreditatsiya ta’lim tashkilotining davlat ta’lim standartlari va davlat ta’lim talablariga muvofiqligini davlat tomonidan e’tirof etishni nazarda tutadi.'
+    },
+
+    {
+      id: 'm1t1_easy_02',
+      text: 'Yangi tashkil etilgan davlat umumiy o‘rta ta’lim tashkiloti qancha muddatga akkreditatsiyadan o‘tgan deb hisoblanadi?',
+      options: [
+        '5 yil',
+        '7 yil',
+        '10 yil',
+        '11 yil'
+      ],
+      answer: 3,
+      explanation:
+        'Materialga ko‘ra, yangi tashkil etilgan davlat umumiy o‘rta ta’lim tashkilotlari tashkil etilgan paytdan boshlab 11 yil muddatga akkreditatsiyadan o‘tgan deb hisoblanadi.'
+    },
+
+    {
+      id: 'm1t1_easy_03',
+      text: 'Nodavlat umumiy o‘rta ta’lim tashkiloti qachondan boshlab 11 yil muddatga akkreditatsiyadan o‘tgan deb hisoblanadi?',
+      options: [
+        'Birinchi o‘quv yili yakunlangandan so‘ng',
+        'Litsenziya berilgan paytdan boshlab',
+        'Birinchi bitiruvchilari chiqqandan so‘ng',
+        'Attestatsiya yakunlangandan so‘ng'
+      ],
+      answer: 1,
+      explanation:
+        'Nodavlat umumiy o‘rta ta’lim tashkiloti litsenziya berilgan paytdan boshlab 11 yil muddatga akkreditatsiyadan o‘tgan deb hisoblanadi.'
+    },
+
+    {
+      id: 'm1t1_easy_04',
+      text: 'TALIS qanday tadqiqot hisoblanadi?',
+      options: [
+        'O‘quvchilar uchun yakuniy imtihon',
+        'Maktablarni reytinglash imtihoni',
+        'O‘qituvchilar va maktab rahbarlarining anonim so‘rovnomasi',
+        'Faqat direktorlar uchun attestatsiya'
+      ],
+      answer: 2,
+      explanation:
+        'TALIS imtihon emas. U o‘qituvchilar va maktab rahbarlarining anonim so‘rovnomalari orqali ma’lumot to‘playdi.'
+    },
+
+    {
+      id: 'm1t1_easy_05',
+      text: 'TALIS tadqiqotining asosiy ishtirokchilari kimlar?',
+      options: [
+        'Faqat o‘quvchilar',
+        'O‘qituvchilar va maktab rahbarlari',
+        'Faqat ota-onalar',
+        'Faqat ta’lim boshqaruvi organlari'
+      ],
+      answer: 1,
+      explanation:
+        'TALIS standartlashtirilgan so‘rovnomalar orqali asosan o‘qituvchilar va maktab direktorlaridan ma’lumot to‘playdi.'
+    },
+
+    {
+      id: 'm1t1_easy_06',
+      text: 'TALISning asosiy maqsadlaridan biri nima?',
+      options: [
+        'O‘quvchilarni yakuniy imtihondan o‘tkazish',
+        'Eng samarali o‘quv jarayonini ta’minlovchi mexanizmlarni aniqlash',
+        'Maktablarni moliyaviy tekshirish',
+        'Direktorlarni lavozimidan ozod qilish'
+      ],
+      answer: 1,
+      explanation:
+        'TALISning maqsadlaridan biri samarali o‘quv jarayonini ta’minlovchi mexanizmlarni aniqlash va ishlab chiqishga yordam berishdir.'
+    },
+
+    {
+      id: 'm1t1_easy_07',
+      text: 'TALIS qanday ma’lumotlarni taqdim etadi?',
+      options: [
+        'Faqat milliy test natijalarini',
+        'Xalqaro miqyosda taqqoslanadigan axborotni',
+        'Faqat moliyaviy hisobotlarni',
+        'Faqat o‘quvchilar davomati haqidagi ma’lumotlarni'
+      ],
+      answer: 1,
+      explanation:
+        'TALIS ta’lim siyosatini ishlab chiqish va takomillashtirish uchun xalqaro miqyosda taqqoslanadigan axborot taqdim etadi.'
+    },
+
+    {
+      id: 'm1t1_easy_08',
+      text: 'Quyidagilardan qaysi biri O‘zbekistonda boshqaruvni transformatsiya qilish yo‘nalishlaridan biridir?',
+      options: [
+        'Pedagogik yetakchilikni cheklash',
+        'Samarali kadrlar zaxirasini yaratish',
+        'Jamoatchilik ishtirokini kamaytirish',
+        'Hisobdorlikni butunlay bekor qilish'
+      ],
+      answer: 1,
+      explanation:
+        'Samarali kadrlar zaxirasini yaratish strategik transformatsiya yo‘nalishlaridan biri sifatida ko‘rsatilgan.'
+    },
+
+    {
+      id: 'm1t1_easy_09',
+      text: 'TALIS ma’lumotlari asosan qaysi yo‘nalishlarni tahlil qilish imkonini beradi?',
+      options: [
+        'Rahbarlik amaliyotlari va maktab muhiti',
+        'Faqat o‘quvchilarning sport natijalari',
+        'Faqat maktab binosining holati',
+        'Faqat o‘quvchilarning oilaviy tarkibi'
+      ],
+      answer: 0,
+      explanation:
+        'TALISda boshqaruv samaradorligi rahbarlik amaliyotlari, maktab muhiti, xodimlar bilan ishlash va ish sharoitlari orqali ko‘rinadi.'
+    },
+
+    {
+      id: 'm1t1_easy_10',
+      text: 'TALISda ma’lumotlar qanday usulda to‘planadi?',
+      options: [
+        'Standartlashtirilgan so‘rovnomalar orqali',
+        'Faqat yozma imtihon orqali',
+        'Faqat dars kuzatuvi orqali',
+        'Faqat moliyaviy audit orqali'
+      ],
+      answer: 0,
+      explanation:
+        'TALIS o‘qituvchilar va maktab direktorlarining standartlashtirilgan so‘rovnomalari orqali ma’lumot to‘playdi.'
+    },
+
+    // =====================================================
+    // 🟡 O‘RTA DARAJA — 10 TA
+    // =====================================================
+
+    {
+      id: 'm1t1_medium_01',
+      text: 'Nodavlat umumiy o‘rta ta’lim tashkiloti bitiruvchilariga davlat namunasidagi hujjat berish huquqiga ega bo‘lishi uchun nima talab etiladi?',
+      options: [
+        'Faqat yangi o‘quv yilini boshlashi',
+        'Arizasiga muvofiq akkreditatsiyadan o‘tkazilishi',
+        'Faqat direktorning tavsiyasini olishi',
+        'Faqat barcha o‘qituvchilarni attestatsiyadan o‘tkazishi'
+      ],
+      answer: 1,
+      explanation:
+        'Materialda nodavlat ta’lim tashkiloti bitiruvchilariga davlat namunasidagi hujjat berish huquqi akkreditatsiyadan o‘tkazilgandan so‘ng berilishi ko‘rsatilgan.'
+    },
+
+    {
+      id: 'm1t1_medium_02',
+      text: 'Akkreditatsiya jarayonida attestatsiya natijalari tahlil qilingandan keyingi muhim bosqich qaysi?',
+      options: [
+        'O‘quvchilarni qayta ro‘yxatga olish',
+        'Akkreditatsiyadan o‘tkazish bo‘yicha qaror qabul qilish',
+        'Maktab direktorini almashtirish',
+        'Yangi o‘quv dasturini ishlab chiqish'
+      ],
+      answer: 1,
+      explanation:
+        'Attestatsiya natijalariga ko‘ra ta’lim tashkilotlarini akkreditatsiyadan o‘tkazish bo‘yicha qaror qabul qilinadi.'
+    },
+
+    {
+      id: 'm1t1_medium_03',
+      text: 'Attestatsiya jarayonida kamchiliklar aniqlansa, keyingi boshqaruv chorasi nima bo‘lishi kerak?',
+      options: [
+        'Kamchiliklarni e’tiborsiz qoldirish',
+        'Kamchiliklarni bartaraf etish chora-tadbirlarini belgilash',
+        'Faqat statistik hisobot tayyorlash',
+        'Tashkilot faoliyatini darhol to‘xtatish'
+      ],
+      answer: 1,
+      explanation:
+        'Aniqlangan kamchiliklarni bartaraf etish uchun tegishli chora-tadbirlar belgilanadi.'
+    },
+
+    {
+      id: 'm1t1_medium_04',
+      text: 'TALIS tadqiqotining o‘qituvchilar kasbiy rivojiga oid ahamiyati nimada?',
+      options: [
+        'O‘qituvchilarni imtihondan o‘tkazadi',
+        'Kasbiy rivojlanish va samarali o‘qitish sharoitlarini takomillashtirishga yordam beradi',
+        'O‘qituvchilarga avtomatik ravishda malaka toifasi beradi',
+        'O‘qituvchilarning ish haqini belgilaydi'
+      ],
+      answer: 1,
+      explanation:
+        'TALIS turli mamlakatlardagi o‘qituvchi va direktorlar haqidagi ma’lumotlarni tahlil qilib, kasbiy rivojlanish sharoitlarini takomillashtirishga yordam beradi.'
+    },
+
+    {
+      id: 'm1t1_medium_05',
+      text: 'Maktab rahbari TALIS natijalaridan foydalanishda eng avvalo nimaga e’tibor qaratishi maqsadga muvofiq?',
+      options: [
+        'Faqat o‘z maktabini boshqa maktablardan ustunligini ko‘rsatishga',
+        'Rahbarlik, maktab muhiti va xodimlar bilan ishlashdagi holatni tahlil qilishga',
+        'Faqat o‘qituvchilarni jazolashga',
+        'Natijalarni faqat reklama maqsadida ishlatishga'
+      ],
+      answer: 1,
+      explanation:
+        'TALIS ma’lumotlari boshqaruv amaliyotlari, maktab muhiti va xodimlar bilan ishlashni takomillashtirish uchun tahliliy asos bo‘la oladi.'
+    },
+
+    {
+      id: 'm1t1_medium_06',
+      text: '“Avtonomiya va hisobdorlikni muvozanatlash” tamoyili nimani anglatadi?',
+      options: [
+        'Rahbarga cheksiz vakolat berishni',
+        'Vakolat va mustaqillikni mas’uliyat hamda hisobdorlik bilan uyg‘unlashtirishni',
+        'Hisobdorlikni bekor qilishni',
+        'Barcha qarorlarni faqat yuqori tashkilot qabul qilishini'
+      ],
+      answer: 1,
+      explanation:
+        'Muvozanatli boshqaruv mustaqillik va vakolat bilan birga natija uchun mas’uliyat va hisobdorlikni ham nazarda tutadi.'
+    },
+
+    {
+      id: 'm1t1_medium_07',
+      text: 'TALIS ma’lumotlarining xalqaro taqqoslanishi qanday imkoniyat yaratadi?',
+      options: [
+        'Maktablarning barcha muammolarini avtomatik hal qiladi',
+        'Turli mamlakatlar tajribasini tahlil qilish va taqqoslash imkonini beradi',
+        'Barcha mamlakatlar uchun bir xil boshqaruv modelini majburiy qiladi',
+        'Direktorlarni avtomatik attestatsiyadan o‘tkazadi'
+      ],
+      answer: 1,
+      explanation:
+        'Xalqaro taqqoslanadigan ma’lumotlar turli ta’lim tizimlaridagi holat va amaliyotlarni qiyosiy tahlil qilish imkonini beradi.'
+    },
+
+    {
+      id: 'm1t1_medium_08',
+      text: 'Akkreditatsiya jarayonida chora-tadbirlar ijrosini nazorat qilishning asosiy maqsadi nima?',
+      options: [
+        'Faqat yangi hujjatlar sonini ko‘paytirish',
+        'Aniqlangan kamchiliklarni bartaraf etish bo‘yicha belgilangan ishlarning bajarilishini ta’minlash',
+        'Xodimlar sonini kamaytirish',
+        'Maktabning reklamasini kuchaytirish'
+      ],
+      answer: 1,
+      explanation:
+        'Nazorat belgilangan chora-tadbirlarning amalda bajarilishini ta’minlashga qaratiladi.'
+    },
+
+    {
+      id: 'm1t1_medium_09',
+      text: '“Pedagogik yetakchilikni ustuvor qilish” yondashuvi rahbar faoliyatida nimani kuchaytiradi?',
+      options: [
+        'Faqat ma’muriy nazoratni',
+        'Ta’lim-tarbiya jarayonini rivojlantirishga qaratilgan yetakchilikni',
+        'Faqat moliyaviy nazoratni',
+        'Faqat hujjatlarni ko‘paytirishni'
+      ],
+      answer: 1,
+      explanation:
+        'Pedagogik yetakchilik rahbarning ta’lim jarayoni sifati va pedagogik rivojlanishga yo‘naltirilgan faoliyatini kuchaytiradi.'
+    },
+
+    {
+      id: 'm1t1_medium_10',
+      text: 'Xavf-xatarlar tahliliga asoslangan ta’lim sifati monitoringining afzalligi nimada?',
+      options: [
+        'Barcha tashkilotlarni bir xil usulda tekshirishda',
+        'Xavf darajasi va aniqlangan muammolarga asoslangan monitoringni tashkil etishda',
+        'Faqat hujjatlarni tekshirishda',
+        'Monitoringni butunlay bekor qilishda'
+      ],
+      answer: 1,
+      explanation:
+        'Riskka asoslangan monitoring e’tiborni muammolar va xavf-xatarlar yuqori bo‘lgan yo‘nalishlarga qaratish imkonini beradi.'
+    },
+
+    // =====================================================
+    // 🔴 QIYIN DARAJA — 10 TA
+    // =====================================================
+
+    {
+      id: 'm1t1_hard_01',
+      text: 'Maktabda attestatsiya natijasida bir nechta kamchiliklar aniqlandi. Rahbar faqat kamchiliklar ro‘yxatini tuzish bilan cheklansa, qaysi muhim bosqich bajarilmay qoladi?',
+      options: [
+        'Tashkilotni qayta nomlash',
+        'Kamchiliklarni bartaraf etish chora-tadbirlarini belgilash va ijrosini nazorat qilish',
+        'O‘quvchilarni qayta taqsimlash',
+        'Yangi direktor tayinlash'
+      ],
+      answer: 1,
+      explanation:
+        'Akkreditatsiya jarayoni aniqlangan kamchiliklarni bartaraf etish bo‘yicha chora-tadbirlar va ularning ijrosini nazorat qilishni ham nazarda tutadi.'
+    },
+
+    {
+      id: 'm1t1_hard_02',
+      text: 'Rahbar TALIS natijalarini faqat o‘qituvchilarning individual faoliyatini baholash vositasi sifatida ishlatsa, qaysi imkoniyat e’tibordan chetda qoladi?',
+      options: [
+        'Maktab muhiti va boshqaruv amaliyotlarini tizimli tahlil qilish',
+        'O‘quvchilar sonini aniqlash',
+        'Maktab binosining maydonini hisoblash',
+        'Darsliklar sonini aniqlash'
+      ],
+      answer: 0,
+      explanation:
+        'TALIS ma’lumotlari faqat individual o‘qituvchini baholash emas, balki rahbarlik, maktab muhiti va ish sharoitlarini tahlil qilish uchun ham xizmat qiladi.'
+    },
+
+    {
+      id: 'm1t1_hard_03',
+      text: 'TALIS xalqaro taqqoslanadigan ma’lumotlarni taqdim etsa, maktab rahbari bundan qanday boshqaruv xulosasini chiqarishi mumkin?',
+      options: [
+        'Har bir mamlakatdagi usulni o‘zgartirmasdan ko‘chirish kerak',
+        'Xorijiy tajribani mahalliy sharoitga moslashtirish zarur',
+        'Mahalliy tajribaning ahamiyati yo‘q',
+        'Barcha maktablarda aynan bir xil boshqaruv usuli bo‘lishi shart'
+      ],
+      answer: 1,
+      explanation:
+        'Xalqaro tajribalarni o‘rganish muhim, biroq ularni mahalliy sharoitga moslashtirish strategik yo‘nalish sifatida ko‘rsatilgan.'
+    },
+
+    {
+      id: 'm1t1_hard_04',
+      text: '“Demokratik boshqaruv va jamoatchilik ishtiroki” yo‘nalishi maktab boshqaruvida qaysi yondashuvni kuchaytiradi?',
+      options: [
+        'Qarorlarni faqat rahbarning o‘zi qabul qilishini',
+        'Manfaatdor tomonlarning boshqaruv jarayonidagi ishtirokini',
+        'Jamoatchilik fikrini cheklashni',
+        'Hisobotlarni kamaytirishni'
+      ],
+      answer: 1,
+      explanation:
+        'Demokratik boshqaruv jamoatchilik va manfaatdor tomonlarning boshqaruv jarayonidagi ishtirokini kuchaytirishga qaratiladi.'
+    },
+
+    {
+      id: 'm1t1_hard_05',
+      text: 'TALIS natijalarini yangi o‘quv dasturlarini joriy etish bilan bog‘lashdan asosiy maqsad nima?',
+      options: [
+        'O‘qituvchilarga qo‘shimcha hisobot yuklash',
+        'Dasturlarni samarali joriy etish uchun o‘qituvchi va boshqaruv sharoitlarini aniqlash',
+        'O‘quvchilar sonini kamaytirish',
+        'Nazorat tadbirlarini ko‘paytirish'
+      ],
+      answer: 1,
+      explanation:
+        'TALIS natijalari yangi o‘quv dasturlari va standartlarini samarali joriy etish uchun boshqaruv va pedagogik sharoitlarni takomillashtirishga yordam berishi mumkin.'
+    },
+
+    {
+      id: 'm1t1_hard_06',
+      text: 'Akkreditatsiya jarayonida monitoringni risk tahliliga asoslashning mantiqiy ketma-ketligi qaysi javobda to‘g‘ri berilgan?',
+      options: [
+        'Riskni aniqlash → tahlil qilish → monitoringni yo‘naltirish',
+        'Monitoring → riskni yashirish → qaror qabul qilish',
+        'Hujjatlarni ko‘paytirish → monitoringni to‘xtatish → riskni baholash',
+        'Qaror → riskni aniqlash → monitoringni bekor qilish'
+      ],
+      answer: 0,
+      explanation:
+        'Riskka asoslangan yondashuvda avvalo xavf-xatarlar aniqlanadi va tahlil qilinadi, so‘ng monitoring tegishli yo‘nalishlarga qaratiladi.'
+    },
+
+    {
+      id: 'm1t1_hard_07',
+      text: 'Quyidagi qaysi holat “avtonomiya va hisobdorlikni muvozanatlash” tamoyiliga mos keladi?',
+      options: [
+        'Rahbar qarorlarni mustaqil qabul qiladi, lekin natijalar uchun hisob bermaydi',
+        'Rahbarga vakolat beriladi va u ushbu vakolatdan foydalanish natijalari uchun javob beradi',
+        'Barcha qarorlar yuqori tashkilot tomonidan qabul qilinadi',
+        'Rahbar faqat hujjatlarni imzolaydi'
+      ],
+      answer: 1,
+      explanation:
+        'Avtonomiya vakolat bilan birga natijalar uchun javobgarlik va hisobdorlikni ham talab qiladi.'
+    },
+
+    {
+      id: 'm1t1_hard_08',
+      text: 'TALIS ma’lumotlari ta’lim siyosatini takomillashtirishda qanday qiymatga ega?',
+      options: [
+        'Faqat statistik ma’lumot sifatida saqlanadi',
+        'Ta’limga ta’sir qiluvchi omillarni aniqlash va siyosiy qarorlar uchun daliliy asos yaratishga xizmat qiladi',
+        'Faqat o‘qituvchilarni jazolashga xizmat qiladi',
+        'Faqat maktablar reytingini tuzadi'
+      ],
+      answer: 1,
+      explanation:
+        'TALIS xalqaro taqqoslanadigan ma’lumotlar orqali ta’lim siyosatini ishlab chiqish va takomillashtirish uchun axborot beradi.'
+    },
+
+    {
+      id: 'm1t1_hard_09',
+      text: 'Akkreditatsiya jarayonining mantiqiy yakuniy yo‘nalishlaridan biri qaysi?',
+      options: [
+        'Xavf-xatarlar tahliliga asoslangan ta’lim sifati monitoringini davom ettirish',
+        'Barcha monitoringni bekor qilish',
+        'Faqat bir martalik tekshiruv bilan cheklanish',
+        'Faqat direktor faoliyatini baholash'
+      ],
+      answer: 0,
+      explanation:
+        'Materialda akkreditatsiya jarayonining yo‘nalishlaridan biri sifatida xavf-xatarlar tahliliga asoslangan ta’lim sifati monitoringi ko‘rsatilgan.'
+    },
+
+    {
+      id: 'm1t1_hard_10',
+      text: 'Quyidagi juftliklardan qaysi biri TALISning mazmuniga eng to‘liq mos keladi?',
+      options: [
+        'Imtihon — o‘quvchilar — yakuniy baho',
+        'So‘rovnoma — o‘qituvchilar va direktorlar — ta’lim muhiti va boshqaruv',
+        'Audit — direktorlar — moliyaviy nazorat',
+        'Attestatsiya — o‘quvchilar — davlat sertifikati'
+      ],
+      answer: 1,
+      explanation:
+        'TALIS standartlashtirilgan so‘rovnomalar orqali o‘qituvchilar va maktab rahbarlaridan boshqaruv va ta’lim muhiti haqida ma’lumot oladi.'
+    },
+
+    // =====================================================
+    // 🔵 KEYS — 10 TA
+    // =====================================================
+
+    {
+      id: 'm1t1_case_01',
+      text: 'KEYS: Maktab attestatsiyasida ta’lim sifatiga oid bir nechta kamchiliklar aniqlandi. Direktor “kamchiliklar ro‘yxati tuzildi, ish tugadi” deb hisoblamoqda. Siz rahbar sifatida qanday yondashuvni tanlaysiz?',
+      options: [
+        'Kamchiliklarni faqat hisobotda qayd etish',
+        'Kamchiliklarni bartaraf etish chora-tadbirlarini belgilab, ijrosini nazorat qilish',
+        'Kamchiliklarni keyingi attestatsiyagacha kutish',
+        'Mas’ul xodimlarni darhol almashtirish'
+      ],
+      answer: 1,
+      explanation:
+        'Samarali boshqaruv aniqlangan muammoni qayd etish bilan tugamaydi. Uni bartaraf etish rejasi va ijro nazorati ham tashkil etilishi kerak.'
+    },
+
+    {
+      id: 'm1t1_case_02',
+      text: 'KEYS: Maktab rahbari TALIS natijalarida o‘qituvchilarning ish sharoitlari bo‘yicha ayrim muammolar borligini ko‘rdi. U faqat o‘qituvchilarni ayblash o‘rniga maktab muhitini tahlil qilmoqchi. Qaysi harakat eng maqbul?',
+      options: [
+        'Muammoni faqat o‘qituvchilarning intizomi bilan izohlash',
+        'Rahbarlik amaliyoti, maktab muhiti va xodimlar bilan ishlash holatini kompleks tahlil qilish',
+        'TALIS natijalarini butunlay inkor etish',
+        'Faqat o‘quvchilar baholarini tekshirish'
+      ],
+      answer: 1,
+      explanation:
+        'TALIS ma’lumotlari boshqaruv, maktab muhiti va xodimlar bilan ishlashni kompleks ko‘rib chiqish uchun imkon beradi.'
+    },
+
+    {
+      id: 'm1t1_case_03',
+      text: 'KEYS: Nodavlat maktab litsenziya oldi. Direktor barcha bitiruvchilarga darhol davlat namunasidagi hujjat berish huquqiga ega ekanini ta’kidlamoqda. Ushbu vaziyatda qaysi yondashuv to‘g‘ri?',
+      options: [
+        'Litsenziyaning o‘zi barcha holatda yetarli',
+        'Davlat namunasidagi hujjat berish huquqi uchun akkreditatsiya talabi hisobga olinishi kerak',
+        'Faqat ota-onalar roziligi yetarli',
+        'Faqat direktorning buyrug‘i yetarli'
+      ],
+      answer: 1,
+      explanation:
+        'Materialga ko‘ra, nodavlat ta’lim tashkiloti bitiruvchilariga davlat namunasidagi hujjat berish huquqi akkreditatsiyadan o‘tkazilgandan so‘ng beriladi.'
+    },
+
+    {
+      id: 'm1t1_case_04',
+      text: 'KEYS: Maktab rahbari xorijiy ta’lim tizimidagi muvaffaqiyatli boshqaruv modelini to‘liq ko‘chirishni taklif qildi. Boshqaruvni transformatsiya qilish nuqtayi nazaridan qanday yondashuv maqsadga muvofiq?',
+      options: [
+        'Modelni hech qanday o‘zgartirishsiz ko‘chirish',
+        'Xalqaro tajribani o‘rganib, mahalliy sharoitga moslashtirish',
+        'Xalqaro tajribadan umuman foydalanmaslik',
+        'Faqat nomini o‘zgartirib joriy qilish'
+      ],
+      answer: 1,
+      explanation:
+        'Strategik yo‘nalishlardan biri xalqaro tajribalarni o‘rganish va ularni mahalliy sharoitga moslashtirishdir.'
+    },
+
+    {
+      id: 'm1t1_case_05',
+      text: 'KEYS: Maktabda rahbar barcha qarorlarni o‘zi qabul qiladi va hech kim bilan maslahatlashmaydi. Natijada jamoada qarorlarning bajarilishiga qiziqish pasaymoqda. Qaysi strategik yo‘nalish ushbu muammoni hal qilishga yordam beradi?',
+      options: [
+        'Demokratik boshqaruv va jamoatchilik ishtirokini kuchaytirish',
+        'Hisobdorlikni kamaytirish',
+        'Jamoa fikrini cheklash',
+        'Barcha qarorlarni yuqori tashkilotga topshirish'
+      ],
+      answer: 0,
+      explanation:
+        'Demokratik boshqaruv va jamoatchilik ishtiroki manfaatdor tomonlarning boshqaruv jarayoniga jalb qilinishini kuchaytiradi.'
+    },
+
+    {
+      id: 'm1t1_case_06',
+      text: 'KEYS: Maktabda o‘quv natijalari pasaygan. Direktor buni faqat o‘quvchilarning mas’uliyatsizligi bilan izohlamoqda. Rahbarlik nuqtayi nazaridan qanday yondashuv kuchliroq?',
+      options: [
+        'Faqat o‘quvchilarni jazolash',
+        'Ta’lim jarayoni, pedagogik sharoit, maktab muhiti va boshqaruv amaliyotlarini kompleks tahlil qilish',
+        'Faqat ota-onalarni chaqirish',
+        'Muammoni keyingi yilgacha kutish'
+      ],
+      answer: 1,
+      explanation:
+        'Samarali boshqaruv muammoni birgina omil bilan izohlashdan ko‘ra, unga ta’sir qiluvchi omillarni kompleks tahlil qilishni talab qiladi.'
+    },
+
+    {
+      id: 'm1t1_case_07',
+      text: 'KEYS: Attestatsiyada aniqlangan kamchiliklar bo‘yicha maktab aniq chora-tadbirlar rejasini tuzdi, biroq uning bajarilishi tekshirilmayapti. Qaysi bosqich yetishmayapti?',
+      options: [
+        'Litsenziya olish',
+        'Chora-tadbirlar ijrosini nazorat qilish',
+        'TALIS so‘rovnomasini bekor qilish',
+        'Maktab nomini o‘zgartirish'
+      ],
+      answer: 1,
+      explanation:
+        'Belgilangan chora-tadbirlar ijrosini nazorat qilish akkreditatsiya jarayonidagi muhim bosqichlardan biridir.'
+    },
+
+    {
+      id: 'm1t1_case_08',
+      text: 'KEYS: Rahbar maktabdagi barcha muammolarni bir xil darajada tekshirish uchun har oy bir xil monitoring o‘tkazishni rejalashtirdi. Riskka asoslangan monitoring nuqtayi nazaridan nima o‘zgarishi kerak?',
+      options: [
+        'Monitoringni butunlay to‘xtatish',
+        'Monitoringni aniqlangan xavf-xatarlar va muammolar darajasiga qarab yo‘naltirish',
+        'Faqat hujjatlarni tekshirish',
+        'Faqat direktor faoliyatini kuzatish'
+      ],
+      answer: 1,
+      explanation:
+        'Riskka asoslangan monitoringda asosiy e’tibor xavf-xatarlar va muammolar yuqori bo‘lgan yo‘nalishlarga qaratiladi.'
+    },
+
+    {
+      id: 'm1t1_case_09',
+      text: 'KEYS: Maktab rahbari TALIS natijalaridan foydalangan holda o‘qituvchilarning kasbiy rivojlanish ehtiyojlarini aniqlamoqchi. Qaysi natija bunga ko‘proq xizmat qiladi?',
+      options: [
+        'O‘qituvchilar va direktorlarning kasbiy faoliyati hamda ish sharoitlari haqidagi ma’lumotlar',
+        'Faqat o‘quvchilar soni',
+        'Faqat maktab binosining maydoni',
+        'Faqat darsliklar soni'
+      ],
+      answer: 0,
+      explanation:
+        'TALIS o‘qituvchi va direktorlarning kasbiy faoliyati, ish sharoitlari va ta’lim muhitiga oid ma’lumotlarni taqdim etadi.'
+    },
+
+    {
+      id: 'm1t1_case_10',
+      text: 'KEYS: Maktab rahbari yangi boshqaruv tizimini joriy qilmoqda. U rahbarlarga ko‘proq mustaqillik berish bilan birga natijalar uchun javobgarlikni ham saqlab qolmoqchi. Bu qaysi strategik tamoyilga mos?',
+      options: [
+        'Avtonomiyani hisobdorlikdan ajratish',
+        'Avtonomiya va hisobdorlikni muvozanatlash',
+        'Hisobdorlikni bekor qilish',
+        'Faqat markazlashgan boshqaruvga o‘tish'
+      ],
+      answer: 1,
+      explanation:
+        'Vakolat va mustaqillikni natija uchun javobgarlik hamda hisobdorlik bilan uyg‘unlashtirish ushbu tamoyilning mazmunidir.'
+    }
+  ]
+}],
   },
 
   {
