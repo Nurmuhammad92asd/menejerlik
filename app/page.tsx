@@ -1,5 +1,9 @@
 import { MenejerlikApp } from '@/components/menejerlik-app'
 
 export default function Page() {
-  return <MenejerlikApp />
+  return (
+    <main className="min-h-screen">
+      <MenejerlikApp />
+    </main>
+  )
 }
