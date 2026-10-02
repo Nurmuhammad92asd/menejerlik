@@ -1,20 +1,38 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import { HomeScreen } from '@/components/home-screen'
 import { QuizScreen } from '@/components/quiz-screen'
 import { ResultScreen } from '@/components/result-screen'
-import { useHistory } from '@/hooks/use-history'
-import { useBackButton, useTelegram } from '@/hooks/use-telegram'
+
 import {
-  createSession,
+  createTopicSession,
   type AnswerRecord,
+  type QuizLevel,
   type QuizResult,
   type QuizSession,
 } from '@/lib/quiz'
+
+import {
+  CATEGORIES,
+  PRESCHOOL_CATEGORIES,
+  getModuleById,
+  getTopicById,
+  type Category,
+} from '@/lib/quiz-data'
+
+import { useHistory } from '@/hooks/use-history'
+import {
+  useBackButton,
+  useTelegram,
+} from '@/hooks/use-telegram'
+
 import { setClosingConfirmation } from '@/lib/telegram'
 
-type EducationType = 'preschool' | 'school'
+type EducationType =
+  | 'preschool'
+  | 'school'
 
 type Screen =
   | 'home'
@@ -29,14 +47,12 @@ type NavigationState = {
   educationType: EducationType | null
   moduleId: string | null
   topicId: string | null
-  level: 'easy' | 'medium' | 'hard' | 'case' | null
 }
 
 const INITIAL_NAVIGATION: NavigationState = {
   educationType: null,
   moduleId: null,
   topicId: null,
-  level: null,
 }
 
 export function MenejerlikApp() {
@@ -49,10 +65,13 @@ export function MenejerlikApp() {
     addAttempt,
   } = useHistory()
 
-  const [screen, setScreen] = useState<Screen>('home')
+  const [screen, setScreen] =
+    useState<Screen>('home')
 
   const [navigation, setNavigation] =
-    useState<NavigationState>(INITIAL_NAVIGATION)
+    useState<NavigationState>(
+      INITIAL_NAVIGATION,
+    )
 
   const [session, setSession] =
     useState<QuizSession | null>(null)
@@ -61,9 +80,9 @@ export function MenejerlikApp() {
     useState<QuizResult | null>(null)
 
   /*
-   * ----------------------------------------
-   * NAVIGATION HELPERS
-   * ----------------------------------------
+   * =====================================================
+   * BASIC HELPERS
+   * =====================================================
    */
 
   function scrollToTop() {
@@ -78,7 +97,9 @@ export function MenejerlikApp() {
 
     setScreen('home')
 
-    setNavigation(INITIAL_NAVIGATION)
+    setNavigation(
+      INITIAL_NAVIGATION,
+    )
 
     setSession(null)
 
@@ -86,13 +107,19 @@ export function MenejerlikApp() {
 
     scrollToTop()
   }
+
+  /*
+   * =====================================================
+   * EDUCATION TYPE
+   * =====================================================
+   */
 
   function openEducationSelection() {
-    setClosingConfirmation(false)
-
     setScreen('education')
 
-    setNavigation(INITIAL_NAVIGATION)
+    setNavigation(
+      INITIAL_NAVIGATION,
+    )
 
     setSession(null)
 
@@ -101,12 +128,13 @@ export function MenejerlikApp() {
     scrollToTop()
   }
 
-  function openEducation(type: EducationType) {
+  function selectEducation(
+    type: EducationType,
+  ) {
     setNavigation({
       educationType: type,
       moduleId: null,
       topicId: null,
-      level: null,
     })
 
     setScreen('modules')
@@ -114,60 +142,83 @@ export function MenejerlikApp() {
     scrollToTop()
   }
 
-  function openModule(moduleId: string) {
-    setNavigation((previous) => ({
-      ...previous,
-      moduleId,
-      topicId: null,
-      level: null,
-    }))
+  /*
+   * =====================================================
+   * MODULE
+   * =====================================================
+   */
+
+  function selectModule(
+    moduleId: string,
+  ) {
+    setNavigation(
+      (previous) => ({
+        ...previous,
+        moduleId,
+        topicId: null,
+      }),
+    )
 
     setScreen('topics')
 
     scrollToTop()
   }
 
-  function openTopic(topicId: string) {
-    setNavigation((previous) => ({
-      ...previous,
-      topicId,
-      level: null,
-    }))
+  /*
+   * =====================================================
+   * TOPIC
+   * =====================================================
+   */
+
+  function selectTopic(
+    topicId: string,
+  ) {
+    setNavigation(
+      (previous) => ({
+        ...previous,
+        topicId,
+      }),
+    )
 
     setScreen('levels')
 
     scrollToTop()
   }
 
-  function openLevel(
-    level: 'easy' | 'medium' | 'hard' | 'case',
+  /*
+   * =====================================================
+   * LEVEL
+   * =====================================================
+   */
+
+  function selectLevel(
+    level: QuizLevel,
   ) {
-    setNavigation((previous) => ({
-      ...previous,
-      level,
-    }))
-
-    /*
-     * Hozircha testni mavjud quiz tizimi
-     * orqali ishga tushiramiz.
-     *
-     * Topic/level bo‘yicha filtr keyingi
-     * data layer bilan ulanadi.
-     */
-
-    if (navigation.topicId) {
-      start(navigation.topicId)
+    if (!navigation.topicId) {
+      return
     }
+
+    startQuiz(
+      navigation.topicId,
+      level,
+    )
   }
 
   /*
-   * ----------------------------------------
-   * QUIZ
-   * ----------------------------------------
+   * =====================================================
+   * START QUIZ
+   * =====================================================
    */
 
-  function start(categoryId: string) {
-    const newSession = createSession(categoryId)
+  function startQuiz(
+    topicId: string,
+    level: QuizLevel,
+  ) {
+    const newSession =
+      createTopicSession(
+        topicId,
+        level,
+      )
 
     setSession(newSession)
 
@@ -180,28 +231,59 @@ export function MenejerlikApp() {
     scrollToTop()
   }
 
-  function finish(answers: AnswerRecord[]) {
-    if (!session) return
+  /*
+   * =====================================================
+   * FINISH QUIZ
+   * =====================================================
+   */
 
-    const correct = answers.filter(
-      (answer) =>
-        answer.selected === answer.question.answer,
-    ).length
+  function finish(
+    answers: AnswerRecord[],
+  ) {
+    if (!session) {
+      return
+    }
 
-    const durationSec = Math.round(
-      (Date.now() - session.startedAt) / 1000,
-    )
+    const correct =
+      answers.filter(
+        (answer) =>
+          answer.selected ===
+          answer.question.answer,
+      ).length
+
+    const durationSec =
+      Math.round(
+        (Date.now() -
+          session.startedAt) /
+          1000,
+      )
 
     const quizResult: QuizResult = {
-      categoryId: session.categoryId,
-      title: session.title,
+      categoryId:
+        session.categoryId,
+
+      topicId:
+        session.topicId,
+
+      level:
+        session.level,
+
+      title:
+        session.title,
+
       answers,
+
       correct,
-      total: answers.length,
+
+      total:
+        answers.length,
+
       durationSec,
     }
 
-    setResult(quizResult)
+    setResult(
+      quizResult,
+    )
 
     setScreen('result')
 
@@ -211,229 +293,312 @@ export function MenejerlikApp() {
 
     void addAttempt({
       id: `${Date.now()}`,
-      categoryId: session.categoryId,
+
+      categoryId:
+        session.categoryId,
+
       correct,
-      total: answers.length,
+
+      total:
+        answers.length,
+
       durationSec,
+
       at: Date.now(),
     })
   }
 
-  function retryQuiz() {
-    if (!result) return
+  /*
+   * =====================================================
+   * RETRY
+   * =====================================================
+   */
 
-    start(result.categoryId)
+  function retryQuiz() {
+    if (!result) {
+      return
+    }
+
+    startQuiz(
+      result.topicId,
+      result.level,
+    )
   }
 
   /*
-   * ----------------------------------------
+   * =====================================================
    * BACK NAVIGATION
-   * ----------------------------------------
+   * =====================================================
    */
 
   function goBack() {
-    if (screen === 'quiz') {
-      goHome()
-      return
-    }
+    switch (screen) {
+      case 'education':
+        goHome()
+        return
 
-    if (screen === 'result') {
-      goHome()
-      return
-    }
+      case 'modules':
+        setNavigation(
+          INITIAL_NAVIGATION,
+        )
 
-    if (screen === 'levels') {
-      setNavigation((previous) => ({
-        ...previous,
-        topicId: null,
-        level: null,
-      }))
+        setScreen('education')
 
-      setScreen('topics')
+        scrollToTop()
+        return
 
-      scrollToTop()
+      case 'topics':
+        setNavigation(
+          (previous) => ({
+            ...previous,
+            moduleId: null,
+            topicId: null,
+          }),
+        )
 
-      return
-    }
+        setScreen('modules')
 
-    if (screen === 'topics') {
-      setNavigation((previous) => ({
-        ...previous,
-        moduleId: null,
-        topicId: null,
-        level: null,
-      }))
+        scrollToTop()
+        return
 
-      setScreen('modules')
+      case 'levels':
+        setNavigation(
+          (previous) => ({
+            ...previous,
+            topicId: null,
+          }),
+        )
 
-      scrollToTop()
+        setScreen('topics')
 
-      return
-    }
+        scrollToTop()
+        return
 
-    if (screen === 'modules') {
-      setNavigation(INITIAL_NAVIGATION)
+      case 'quiz':
+        goHome()
+        return
 
-      setScreen('education')
+      case 'result':
+        goHome()
+        return
 
-      scrollToTop()
-
-      return
-    }
-
-    if (screen === 'education') {
-      goHome()
+      default:
+        goHome()
     }
   }
 
   /*
-   * Telegram Back Button
+   * Telegram native back button
    */
 
-  useBackButton(screen !== 'home', goBack)
+  useBackButton(
+    screen !== 'home',
+    goBack,
+  )
 
   /*
-   * Prevent accidental page close
-   * while a test is running.
+   * Close confirmation
    */
 
   useEffect(() => {
     if (screen !== 'quiz') {
-      setClosingConfirmation(false)
+      setClosingConfirmation(
+        false,
+      )
     }
   }, [screen])
 
   /*
-   * ----------------------------------------
+   * =====================================================
+   * ACTIVE DATA
+   * =====================================================
+   */
+
+  const activeCategories: Category[] =
+    navigation.educationType ===
+    'preschool'
+      ? PRESCHOOL_CATEGORIES
+      : CATEGORIES
+
+  const activeModule =
+    navigation.moduleId
+      ? getModuleById(
+          navigation.moduleId,
+        )
+      : undefined
+
+  const activeTopic =
+    navigation.topicId
+      ? getTopicById(
+          navigation.topicId,
+        )
+      : undefined
+
+  /*
+   * =====================================================
    * RENDER
-   * ----------------------------------------
+   * =====================================================
    */
 
   return (
     <main className="mx-auto min-h-dvh w-full max-w-md px-4 pb-8 pt-5">
+
+      {/* =================================================
+          HOME
+      ================================================= */}
+
       {screen === 'home' && (
         <HomeScreen
           user={user}
           history={history}
           stats={stats}
-          bestByCategory={bestByCategory}
-          onStart={openEducationSelection}
+          bestByCategory={
+            bestByCategory
+          }
+          onStart={
+            openEducationSelection
+          }
         />
       )}
 
-      {/*
-       * EDUCATION SELECTION
-       *
-       * Bu qism keyingi komponentda:
-       * 🧸 BOG‘CHA
-       * 🏫 MAKTAB
-       * oynalarini chiqaradi.
-       */}
+      {/* =================================================
+          EDUCATION SELECTION
+      ================================================= */}
 
       {screen === 'education' && (
-        <EducationSelectionPlaceholder
-          onSelect={openEducation}
-          onBack={goHome}
+        <EducationScreen
+          onBack={goBack}
+          onSelect={
+            selectEducation
+          }
         />
       )}
 
-      {/*
-       * MODULES
-       *
-       * Tanlangan ta'lim yo‘nalishining
-       * modullari shu yerda chiqadi.
-       */}
+      {/* =================================================
+          MODULES
+      ================================================= */}
 
       {screen === 'modules' && (
-        <ModulesPlaceholder
-          educationType={navigation.educationType}
-          onSelect={openModule}
+        <ModuleScreen
+          educationType={
+            navigation.educationType
+          }
+          categories={
+            activeCategories
+          }
           onBack={goBack}
+          onSelect={
+            selectModule
+          }
         />
       )}
 
-      {/*
-       * TOPICS
-       */}
+      {/* =================================================
+          TOPICS
+      ================================================= */}
 
       {screen === 'topics' && (
-        <TopicsPlaceholder
-          moduleId={navigation.moduleId}
-          onSelect={openTopic}
+        <TopicScreen
+          module={
+            activeModule
+          }
           onBack={goBack}
+          onSelect={
+            selectTopic
+          }
         />
       )}
 
-      {/*
-       * LEVELS
-       */}
+      {/* =================================================
+          LEVELS
+      ================================================= */}
 
       {screen === 'levels' && (
-        <LevelSelectionPlaceholder
-          topicId={navigation.topicId}
-          onSelect={openLevel}
+        <LevelScreen
+          topic={
+            activeTopic
+          }
           onBack={goBack}
+          onSelect={
+            selectLevel
+          }
         />
       )}
 
-      {/*
-       * QUIZ
-       */}
+      {/* =================================================
+          QUIZ
+      ================================================= */}
 
-      {screen === 'quiz' && session && (
-        <QuizScreen
-          key={session.startedAt}
-          session={session}
-          showCloseButton={!isTelegram}
-          onExit={goHome}
-          onFinish={finish}
-        />
-      )}
+      {screen === 'quiz' &&
+        session && (
+          <QuizScreen
+            key={
+              session.startedAt
+            }
+            session={
+              session
+            }
+            showCloseButton={
+              !isTelegram
+            }
+            onExit={
+              goHome
+            }
+            onFinish={
+              finish
+            }
+          />
+        )}
 
-      {/*
-       * RESULT
-       */}
+      {/* =================================================
+          RESULT
+      ================================================= */}
 
-      {screen === 'result' && result && (
-        <ResultScreen
-          result={result}
-          onRetry={retryQuiz}
-          onHome={goHome}
-        />
-      )}
+      {screen === 'result' &&
+        result && (
+          <ResultScreen
+            result={
+              result
+            }
+            onRetry={
+              retryQuiz
+            }
+            onHome={
+              goHome
+            }
+          />
+        )}
+
     </main>
   )
 }
 
 /*
- * =====================================================
- * TEMPORARY NAVIGATION COMPONENTS
- * =====================================================
- *
- * Bular vaqtinchalik "placeholder".
- *
- * Keyingi bosqichlarda ularning o‘rniga
- * professional UI komponentlarini qo‘yamiz.
- *
- * Hozircha app arxitekturasi to‘g‘ri ishlashi
- * uchun qoldirilmoqda.
+ * =========================================================
+ * EDUCATION SCREEN
+ * =========================================================
  */
 
-/* -----------------------------------------------------
- * EDUCATION SELECTION
- * --------------------------------------------------- */
-
-function EducationSelectionPlaceholder({
-  onSelect,
+function EducationScreen({
   onBack,
+  onSelect,
 }: {
-  onSelect: (type: EducationType) => void
   onBack: () => void
+
+  onSelect: (
+    type: EducationType,
+  ) => void
 }) {
   return (
-    <section className="flex min-h-[80vh] flex-col justify-center gap-5">
+    <section className="flex min-h-[80vh] flex-col justify-center gap-6">
+
       <header className="text-center">
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+
+        <div className="mx-auto flex size-16 items-center justify-center rounded-3xl bg-primary text-3xl shadow-lg">
+          🎓
+        </div>
+
+        <p className="mt-5 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
           MENEJERLIK
         </p>
 
@@ -441,267 +606,628 @@ function EducationSelectionPlaceholder({
           Ta’lim yo‘nalishini tanlang
         </h1>
 
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Bilim va boshqaruv kompetensiyalaringizni
-          bosqichma-bosqich rivojlantiring.
+        <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-muted-foreground">
+          O‘zingizga mos ta’lim yo‘nalishini
+          tanlang va boshqaruv bilimlarini
+          bosqichma-bosqich sinab ko‘ring.
         </p>
+
       </header>
 
       <div className="grid gap-4">
-        <button
-          type="button"
-          onClick={() => onSelect('preschool')}
-          className="group rounded-3xl border bg-card p-6 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
-        >
-          <div className="text-4xl">🧸</div>
 
-          <h2 className="mt-4 text-xl font-bold">
-            BOG‘CHA
-          </h2>
-
-          <p className="mt-1 text-sm text-muted-foreground">
-            Maktabgacha ta’lim menejmenti
-          </p>
-
-          <div className="mt-5 text-sm font-semibold text-primary">
-            Yo‘nalishni ochish →
-          </div>
-        </button>
+        {/* BOG‘CHA */}
 
         <button
           type="button"
-          onClick={() => onSelect('school')}
-          className="group rounded-3xl border bg-card p-6 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+          onClick={() =>
+            onSelect(
+              'preschool',
+            )
+          }
+          className="group relative overflow-hidden rounded-[2rem] border bg-card p-6 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl active:scale-[0.99]"
         >
-          <div className="text-4xl">🏫</div>
 
-          <h2 className="mt-4 text-xl font-bold">
-            MAKTAB
-          </h2>
+          <div className="absolute -right-8 -top-8 size-32 rounded-full bg-primary/5" />
 
-          <p className="mt-1 text-sm text-muted-foreground">
-            Umumiy o‘rta ta’lim menejmenti
-          </p>
+          <div className="relative flex items-center gap-5">
 
-          <div className="mt-5 text-sm font-semibold text-primary">
-            Yo‘nalishni ochish →
+            <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-4xl">
+              🧸
+            </div>
+
+            <div className="min-w-0 flex-1">
+
+              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                01
+              </p>
+
+              <h2 className="mt-1 text-xl font-bold">
+                BOG‘CHA
+              </h2>
+
+              <p className="mt-1 text-sm text-muted-foreground">
+                Maktabgacha ta’lim menejmenti
+              </p>
+
+            </div>
+
+            <span className="text-2xl text-muted-foreground transition-transform group-hover:translate-x-1">
+              →
+            </span>
+
           </div>
+
         </button>
+
+        {/* MAKTAB */}
+
+        <button
+          type="button"
+          onClick={() =>
+            onSelect(
+              'school',
+            )
+          }
+          className="group relative overflow-hidden rounded-[2rem] border bg-card p-6 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl active:scale-[0.99]"
+        >
+
+          <div className="absolute -right-8 -top-8 size-32 rounded-full bg-primary/5" />
+
+          <div className="relative flex items-center gap-5">
+
+            <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-secondary text-4xl">
+              🏫
+            </div>
+
+            <div className="min-w-0 flex-1">
+
+              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                02
+              </p>
+
+              <h2 className="mt-1 text-xl font-bold">
+                MAKTAB
+              </h2>
+
+              <p className="mt-1 text-sm text-muted-foreground">
+                Umumiy o‘rta ta’lim menejmenti
+              </p>
+
+            </div>
+
+            <span className="text-2xl text-muted-foreground transition-transform group-hover:translate-x-1">
+              →
+            </span>
+
+          </div>
+
+        </button>
+
       </div>
 
       <button
         type="button"
         onClick={onBack}
-        className="mt-2 rounded-2xl border px-4 py-3 text-sm font-medium"
+        className="rounded-2xl border px-4 py-3 text-sm font-semibold transition-colors hover:bg-muted"
       >
         ← Bosh sahifaga
       </button>
+
     </section>
   )
 }
 
-/* -----------------------------------------------------
- * MODULES
- * --------------------------------------------------- */
+/*
+ * =========================================================
+ * MODULE SCREEN
+ * =========================================================
+ */
 
-function ModulesPlaceholder({
+function ModuleScreen({
   educationType,
-  onSelect,
+  categories,
   onBack,
+  onSelect,
 }: {
-  educationType: EducationType | null
-  onSelect: (moduleId: string) => void
+  educationType:
+    | EducationType
+    | null
+
+  categories: Category[]
+
   onBack: () => void
+
+  onSelect: (
+    moduleId: string,
+  ) => void
 }) {
+  const isSchool =
+    educationType === 'school'
+
   return (
     <section className="flex flex-col gap-5">
+
       <header>
+
         <button
           type="button"
           onClick={onBack}
-          className="mb-4 text-sm font-medium text-muted-foreground"
+          className="mb-5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
         >
-          ← Orqaga
+          ← Yo‘nalishlarga
         </button>
 
-        <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          {educationType === 'school'
-            ? 'MAKTAB'
-            : 'BOG‘CHA'}
-        </p>
+        <div className="flex items-end justify-between">
 
-        <h1 className="mt-1 text-2xl font-bold">
-          Modullar
-        </h1>
+          <div>
+
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+              {isSchool
+                ? 'MAKTAB'
+                : 'BOG‘CHA'}
+            </p>
+
+            <h1 className="mt-1 text-2xl font-bold tracking-tight">
+              O‘quv modullari
+            </h1>
+
+            <p className="mt-2 text-sm leading-5 text-muted-foreground">
+              Kerakli modulni tanlang.
+            </p>
+
+          </div>
+
+          <div className="rounded-2xl bg-secondary px-3 py-2 text-center">
+
+            <p className="text-lg font-bold">
+              {categories.length}
+            </p>
+
+            <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+              Modul
+            </p>
+
+          </div>
+
+        </div>
+
       </header>
 
-      <div className="rounded-2xl border border-dashed p-5 text-center">
-        <p className="text-sm text-muted-foreground">
-          Modullar tizimi keyingi bosqichda
-          ma’lumotlar bazasiga ulanadi.
-        </p>
+      {categories.length === 0 ? (
+        <EmptyState
+          icon="🧸"
+          title="Tez orada"
+          text="Bu yo‘nalish uchun o‘quv modullari tayyorlanmoqda."
+        />
+      ) : (
+        <div className="flex flex-col gap-3">
 
-        <button
-          type="button"
-          onClick={() => onSelect('m1')}
-          className="mt-4 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
-        >
-          1-modulni ochish
-        </button>
-      </div>
+          {categories.map(
+            (
+              category,
+              index,
+            ) => (
+              <button
+                key={
+                  category.id
+                }
+                type="button"
+                onClick={() =>
+                  onSelect(
+                    category.id,
+                  )
+                }
+                className="group flex items-center gap-4 rounded-3xl border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+              >
+
+                <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground">
+                  {String(
+                    index + 1,
+                  ).padStart(
+                    2,
+                    '0',
+                  )}
+                </div>
+
+                <div className="min-w-0 flex-1">
+
+                  <h2 className="font-semibold leading-5">
+                    {category.title}
+                  </h2>
+
+                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-muted-foreground">
+                    {
+                      category.description
+                    }
+                  </p>
+
+                  <p className="mt-2 text-xs font-medium text-primary">
+                    {
+                      category.topics
+                        .length
+                    }{' '}
+                    ta mavzu
+                  </p>
+
+                </div>
+
+                <span className="text-xl text-muted-foreground transition-transform group-hover:translate-x-1">
+                  →
+                </span>
+
+              </button>
+            ),
+          )}
+
+        </div>
+      )}
+
     </section>
   )
 }
 
-/* -----------------------------------------------------
- * TOPICS
- * --------------------------------------------------- */
+/*
+ * =========================================================
+ * TOPIC SCREEN
+ * =========================================================
+ */
 
-function TopicsPlaceholder({
-  moduleId,
-  onSelect,
+function TopicScreen({
+  module,
   onBack,
+  onSelect,
 }: {
-  moduleId: string | null
-  onSelect: (topicId: string) => void
+  module:
+    | Category
+    | undefined
+
   onBack: () => void
+
+  onSelect: (
+    topicId: string,
+  ) => void
 }) {
   return (
     <section className="flex flex-col gap-5">
+
       <header>
+
         <button
           type="button"
           onClick={onBack}
-          className="mb-4 text-sm font-medium text-muted-foreground"
+          className="mb-5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
         >
           ← Modullarga
         </button>
 
-        <p className="text-sm text-muted-foreground">
-          {moduleId}
-        </p>
+        {module && (
+          <>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+              MODUL
+            </p>
 
-        <h1 className="mt-1 text-2xl font-bold">
-          Mavzular
-        </h1>
+            <h1 className="mt-1 text-2xl font-bold tracking-tight">
+              {module.title}
+            </h1>
+
+            <p className="mt-2 text-sm leading-5 text-muted-foreground">
+              Mavzulardan birini tanlang.
+            </p>
+          </>
+        )}
+
       </header>
 
-      <button
-        type="button"
-        onClick={() => onSelect('m1t1')}
-        className="rounded-2xl border bg-card p-5 text-left shadow-sm transition hover:shadow-md"
-      >
-        <span className="text-xs font-semibold uppercase tracking-wide text-primary">
-          01-MAVZU
-        </span>
+      {!module ? (
+        <EmptyState
+          icon="⚠️"
+          title="Modul topilmadi"
+          text="Tanlangan modul ma’lumotlar bazasida mavjud emas."
+        />
+      ) : (
+        <div className="flex flex-col gap-3">
 
-        <h2 className="mt-2 font-semibold">
-          Umumiy ta’lim muassasasini boshqarish
-        </h2>
+          {module.topics.map(
+            (
+              topic,
+              index,
+            ) => (
+              <button
+                key={
+                  topic.id
+                }
+                type="button"
+                onClick={() =>
+                  onSelect(
+                    topic.id,
+                  )
+                }
+                className="group flex gap-4 rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+              >
 
-        <p className="mt-1 text-sm text-muted-foreground">
-          Mavzu bo‘yicha bilimlarni tekshirish.
-        </p>
-      </button>
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-xs font-bold">
+                  {String(
+                    index + 1,
+                  ).padStart(
+                    2,
+                    '0',
+                  )}
+                </div>
+
+                <div className="min-w-0 flex-1">
+
+                  <h2 className="font-semibold leading-5">
+                    {topic.title}
+                  </h2>
+
+                  <p className="mt-1 text-sm leading-5 text-muted-foreground">
+                    {
+                      topic.description
+                    }
+                  </p>
+
+                  <div className="mt-3 flex gap-1.5">
+
+                    <Badge>
+                      🟢 10
+                    </Badge>
+
+                    <Badge>
+                      🟡 10
+                    </Badge>
+
+                    <Badge>
+                      🔴 10
+                    </Badge>
+
+                    <Badge>
+                      🔵 10
+                    </Badge>
+
+                  </div>
+
+                </div>
+
+                <span className="self-center text-xl text-muted-foreground transition-transform group-hover:translate-x-1">
+                  →
+                </span>
+
+              </button>
+            ),
+          )}
+
+        </div>
+      )}
+
     </section>
   )
 }
 
-/* -----------------------------------------------------
- * LEVELS
- * --------------------------------------------------- */
+/*
+ * =========================================================
+ * LEVEL SCREEN
+ * =========================================================
+ */
 
-function LevelSelectionPlaceholder({
-  topicId,
-  onSelect,
+function LevelScreen({
+  topic,
   onBack,
+  onSelect,
 }: {
-  topicId: string | null
-  onSelect: (
-    level: 'easy' | 'medium' | 'hard' | 'case',
-  ) => void
+  topic:
+    | ReturnType<
+        typeof getTopicById
+      >
+
   onBack: () => void
+
+  onSelect: (
+    level: QuizLevel,
+  ) => void
 }) {
-  const levels = [
+  if (!topic) {
+    return (
+      <section className="flex flex-col gap-5">
+
+        <button
+          type="button"
+          onClick={onBack}
+          className="text-left text-sm font-semibold text-muted-foreground"
+        >
+          ← Mavzularga
+        </button>
+
+        <EmptyState
+          icon="⚠️"
+          title="Mavzu topilmadi"
+          text="Tanlangan mavzu mavjud emas."
+        />
+
+      </section>
+    )
+  }
+
+  const levels: Array<{
+    id: QuizLevel
+    icon: string
+    title: string
+    description: string
+    questions: number
+  }> = [
     {
-      id: 'easy' as const,
+      id: 'easy',
       icon: '🟢',
       title: 'Oson',
-      description: 'Asosiy tushunchalar va bilimlar',
+      description:
+        'Asosiy tushunchalar va bilimlar',
+      questions:
+        topic.levels.easy.length,
     },
     {
-      id: 'medium' as const,
+      id: 'medium',
       icon: '🟡',
       title: 'O‘rta',
-      description: 'Amaliy qo‘llash va vaziyatlar',
+      description:
+        'Amaliy qo‘llash va vaziyatlar',
+      questions:
+        topic.levels.medium.length,
     },
     {
-      id: 'hard' as const,
+      id: 'hard',
       icon: '🔴',
       title: 'Qiyin',
-      description: 'Tahliliy va murakkab savollar',
+      description:
+        'Tahliliy va murakkab savollar',
+      questions:
+        topic.levels.hard.length,
     },
     {
-      id: 'case' as const,
+      id: 'case',
       icon: '🔵',
       title: 'Keys',
-      description: 'Real boshqaruv vaziyatlari',
+      description:
+        'Real boshqaruv vaziyatlari',
+      questions:
+        topic.levels.case.length,
     },
   ]
 
   return (
     <section className="flex flex-col gap-5">
+
       <header>
+
         <button
           type="button"
           onClick={onBack}
-          className="mb-4 text-sm font-medium text-muted-foreground"
+          className="mb-5 text-sm font-semibold text-muted-foreground"
         >
           ← Mavzularga
         </button>
 
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          {topicId}
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+          TEST
         </p>
 
-        <h1 className="mt-1 text-2xl font-bold">
-          Test darajasini tanlang
+        <h1 className="mt-1 text-2xl font-bold tracking-tight">
+          {topic.title}
         </h1>
 
-        <p className="mt-2 text-sm text-muted-foreground">
-          O‘zingizga mos darajani tanlab,
-          bilimlaringizni sinab ko‘ring.
+        <p className="mt-2 text-sm leading-5 text-muted-foreground">
+          Test darajasini tanlang.
         </p>
+
       </header>
 
-      <div className="grid gap-3">
-        {levels.map((level) => (
-          <button
-            key={level.id}
-            type="button"
-            onClick={() => onSelect(level.id)}
-            className="flex items-center gap-4 rounded-2xl border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
-          >
-            <span className="text-2xl">
-              {level.icon}
-            </span>
+      <div className="flex flex-col gap-3">
 
-            <span className="min-w-0 flex-1">
-              <span className="block font-semibold">
-                {level.title}
+        {levels.map(
+          (level) => (
+            <button
+              key={
+                level.id
+              }
+              type="button"
+              onClick={() =>
+                onSelect(
+                  level.id,
+                )
+              }
+              className="group flex items-center gap-4 rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg"
+            >
+
+              <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary text-2xl">
+                {level.icon}
+              </div>
+
+              <div className="min-w-0 flex-1">
+
+                <div className="flex items-center gap-2">
+
+                  <h2 className="font-bold">
+                    {level.title}
+                  </h2>
+
+                  <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold">
+                    {level.questions}
+                  </span>
+
+                </div>
+
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {
+                    level.description
+                  }
+                </p>
+
+              </div>
+
+              <span className="text-xl text-muted-foreground transition-transform group-hover:translate-x-1">
+                →
               </span>
 
-              <span className="mt-0.5 block text-sm text-muted-foreground">
-                {level.description}
-              </span>
-            </span>
+            </button>
+          ),
+        )}
 
-            <span className="text-lg text-muted-foreground">
-              →
-            </span>
-          </button>
-        ))}
       </div>
+
+      <div className="rounded-2xl bg-muted/50 p-4 text-center">
+
+        <p className="text-xs leading-5 text-muted-foreground">
+          Har bir daraja 10 ta savoldan
+          iborat bo‘ladi.
+        </p>
+
+      </div>
+
     </section>
+  )
+}
+
+/*
+ * =========================================================
+ * SMALL UI COMPONENTS
+ * =========================================================
+ */
+
+function Badge({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <span className="rounded-lg bg-muted px-1.5 py-1 text-[10px] font-semibold">
+      {children}
+    </span>
+  )
+}
+
+function EmptyState({
+  icon,
+  title,
+  text,
+}: {
+  icon: string
+  title: string
+  text: string
+}) {
+  return (
+    <div className="rounded-3xl border border-dashed p-8 text-center">
+
+      <div className="text-4xl">
+        {icon}
+      </div>
+
+      <h2 className="mt-3 font-bold">
+        {title}
+      </h2>
+
+      <p className="mx-auto mt-2 max-w-xs text-sm leading-5 text-muted-foreground">
+        {text}
+      </p>
+
+    </div>
   )
 }
