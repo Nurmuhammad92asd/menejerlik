@@ -1,232 +1,461 @@
+import {
+  CATEGORIES,
+  getLevelQuestions,
+  getModuleById,
+  getTopicById,
+  MIXED_COUNT,
+  MIXED_ID,
+  type Question,
+} from './quiz-data'
+
 /*
  * =========================================================
- * QUIZ ENGINE
- * ---------------------------------------------------------
- * 1) Darajalar bo‘yicha alohida testlar: 30 oson / 30 o‘rta /
- *    30 qiyin / 10 keys
- * 2) ARALASH test: har safar yangi 30 ta savol (oldin tushganlari
- *    imkon qadar takrorlanmaydi), variantlar ham aralashadi
- * 3) Javobga qarab: to‘g‘ri → maqtov, noto‘g‘ri → nima uchun
- *    xato ekanini tushuntirish
- * 4) Reyting: o‘rningiz, jami qatnashchilar, foiz (percentile)
+ * TYPES
  * =========================================================
  */
 
-// ⚠️ Yo‘lni o‘z loyihangizga moslang (savollar fayli)
-import { CATEGORIES, type Question } from './questions'
+export type QuizLevel = 'easy' | 'medium' | 'hard' | 'case'
 
-/* ---------------------------------------------------------
- * TURLAR
- * ------------------------------------------------------- */
+export const QUIZ_LEVEL_ORDER: QuizLevel[] = [
+  'easy',
+  'medium',
+  'hard',
+  'case',
+]
 
-export type Level = 'easy' | 'medium' | 'hard' | 'case'
-
-export const LEVELS: Level[] = ['easy', 'medium', 'hard', 'case']
-
-export const LEVEL_LABELS: Record<Level, string> = {
-  easy: '🟢 Oson',
-  medium: '🟡 O‘rta',
-  hard: '🔴 Qiyin',
-  case: '🔵 Keys',
+/** Savol + (aralash testda) qaysi daraja/mavzudan kelgani */
+export type SessionQuestion = Question & {
+  level?: QuizLevel
+  topicId?: string
 }
 
-/** Savol + tushgan vaqtdagi aralashtirilgan variantlar */
-export type PreparedQuestion = {
-  id: string
+export type QuizSession = {
+  categoryId: string
   topicId: string
-  level: Level
-  text: string
-  options: string[] // aralashtirilgan
-  answer: number // aralashgan variantlardagi to‘g‘ri indeks
-  explanation: string
+  level: QuizLevel
+  title: string
+  questions: SessionQuestion[]
+  startedAt: number
 }
 
 export type AnswerRecord = {
-  questionId: string
-  level: Level
-  chosen: number | null // null = vaqt tugadi / javob berilmadi
-  correct: boolean
+  question: Question
+  selected: number
 }
 
-/* ---------------------------------------------------------
- * YORDAMCHI: tasodifiylik va xotira
- * ------------------------------------------------------- */
+export type QuizResult = {
+  categoryId: string
+  topicId: string
+  level: QuizLevel
+  title: string
+  answers: AnswerRecord[]
+  correct: number
+  total: number
+  durationSec: number
+}
 
-export function shuffle<T>(items: readonly T[]): T[] {
-  const arr = [...items]
-  for (let i = arr.length - 1; i > 0; i--) {
+/*
+ * =========================================================
+ * RANDOMIZATION
+ * =========================================================
+ */
+
+function shuffle<T>(items: readonly T[]): T[] {
+  const copy = [...items]
+
+  for (let i = copy.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
-    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+    ;[copy[i], copy[j]] = [copy[j], copy[i]]
   }
-  return arr
+
+  return copy
 }
 
-const pickRandom = <T,>(items: readonly T[]): T =>
-  items[Math.floor(Math.random() * items.length)]
-
-export interface KV {
-  get(key: string): string | null
-  set(key: string, value: string): void
+function pickRandom<T>(items: readonly T[]): T {
+  return items[Math.floor(Math.random() * items.length)]
 }
+
+/*
+ * Variantlarni aralashtiradi va to‘g‘ri javob indeksini
+ * yangilaydi (A — to‘g‘ri bo‘lsa, test paytida C bo‘lishi mumkin).
+ */
+function shuffleOptions<T extends Question>(question: T): T {
+  const order = shuffle(question.options.map((_, index) => index))
+
+  return {
+    ...question,
+    options: order.map((index) => question.options[index]),
+    answer: order.indexOf(question.answer),
+  }
+}
+
+/*
+ * =========================================================
+ * "OLDIN TUSHGAN SAVOLLAR" XOTIRASI
+ * =========================================================
+ *
+ * Aralash test har safar yangi savollardan tuzilishi uchun
+ * tushgan savol ID lari saqlanadi. Brauzer / Telegram WebApp
+ * ichida localStorage ishlaydi. Serverda esa vaqtincha
+ * xotirada turadi (kerak bo‘lsa, bazaga ulash mumkin).
+ */
 
 const memoryStore = new Map<string, string>()
 
-/** Brauzerda localStorage, bo‘lmasa (SSR) xotirada ishlaydi */
-export const defaultKV: KV = {
-  get(key) {
-    try {
-      if (typeof localStorage !== 'undefined') return localStorage.getItem(key)
-    } catch {
-      /* ignore */
+function readStore(key: string): string | null {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem(key)
     }
-    return memoryStore.get(key) ?? null
-  },
-  set(key, value) {
-    try {
-      if (typeof localStorage !== 'undefined') {
-        localStorage.setItem(key, value)
-        return
-      }
-    } catch {
-      /* ignore */
-    }
-    memoryStore.set(key, value)
-  },
-}
-
-/* ---------------------------------------------------------
- * SAVOLLAR BAZASIDAN O‘QISH
- * ------------------------------------------------------- */
-
-type PoolItem = { q: Question; topicId: string; level: Level }
-
-/** Bo‘sh mavzular (savollari hali kiritilmagan) avtomatik o‘tkazib yuboriladi */
-function collectPool(scope: { topicId?: string; moduleId?: string }): PoolItem[] {
-  const out: PoolItem[] = []
-  for (const mod of CATEGORIES) {
-    if (scope.moduleId && mod.id !== scope.moduleId) continue
-    for (const topic of mod.topics) {
-      if (scope.topicId && topic.id !== scope.topicId) continue
-      for (const level of LEVELS) {
-        for (const q of topic.levels[level]) {
-          out.push({ q, topicId: topic.id, level })
-        }
-      }
-    }
+  } catch {
+    /* ignore */
   }
-  return out
+
+  return memoryStore.get(key) ?? null
 }
 
-/** Variantlarni aralashtiradi, to‘g‘ri javob indeksini yangilaydi */
-function prepare(item: PoolItem): PreparedQuestion {
-  const correctText = item.q.options[item.q.answer]
-  const options = shuffle(item.q.options)
-  return {
-    id: item.q.id,
-    topicId: item.topicId,
-    level: item.level,
-    text: item.q.text,
-    options,
-    answer: options.indexOf(correctText),
-    explanation: item.q.explanation,
+function writeStore(key: string, value: string) {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(key, value)
+      return
+    }
+  } catch {
+    /* ignore */
+  }
+
+  memoryStore.set(key, value)
+}
+
+function loadSeen(scope: string): Set<string> {
+  try {
+    return new Set<string>(
+      JSON.parse(readStore(`quiz:seen:${scope}`) ?? '[]'),
+    )
+  } catch {
+    return new Set<string>()
   }
 }
 
-/* ---------------------------------------------------------
- * 1) DARAJA BO‘YICHA TEST (30 / 30 / 30 / 10)
- * ------------------------------------------------------- */
+function saveSeen(scope: string, seen: Set<string>) {
+  writeStore(`quiz:seen:${scope}`, JSON.stringify([...seen]))
+}
 
-/**
- * Tanlangan mavzu va darajaning barcha savollari, har safar
- * boshqa tartibda va variantlari aralashgan holda.
+/*
+ * =========================================================
+ * TITLES
+ * =========================================================
  */
-export function buildLevelQuiz(topicId: string, level: Level): PreparedQuestion[] {
-  return shuffle(collectPool({ topicId }).filter((p) => p.level === level)).map(prepare)
+
+export function getLevelTitle(level: QuizLevel): string {
+  switch (level) {
+    case 'easy':
+      return 'Oson'
+    case 'medium':
+      return 'O‘rta'
+    case 'hard':
+      return 'Qiyin'
+    case 'case':
+      return 'Keys'
+    default:
+      return 'Test'
+  }
 }
 
-/* ---------------------------------------------------------
- * 2) ARALASH TEST — har safar yangi 30 ta
- * ------------------------------------------------------- */
+export function getLevelIcon(level: QuizLevel): string {
+  switch (level) {
+    case 'easy':
+      return '🟢'
+    case 'medium':
+      return '🟡'
+    case 'hard':
+      return '🔴'
+    case 'case':
+      return '🔵'
+    default:
+      return '📝'
+  }
+}
 
-export const MIXED_DEFAULT_COUNT = 30
+export function getCategoryTitle(id: string): string {
+  if (id === MIXED_ID) {
+    return 'Aralash test'
+  }
 
-/** 30 ta savolning taqsimoti: 10 oson, 9 o‘rta, 8 qiyin, 3 keys */
-export const MIXED_DEFAULT_QUOTA: Record<Level, number> = {
+  return CATEGORIES.find((category) => category.id === id)?.title ?? 'Test'
+}
+
+export function getTopicTitle(topicId: string): string {
+  return getTopicById(topicId)?.title ?? 'Mavzu'
+}
+
+/*
+ * =========================================================
+ * CREATE TOPIC QUIZ SESSION
+ * (oson 30 / o‘rta 30 / qiyin 30 / keys 10 — har safar
+ *  boshqa tartibda va variantlari aralashgan)
+ * =========================================================
+ */
+
+export function createTopicSession(
+  topicId: string,
+  level: QuizLevel,
+): QuizSession {
+  const topic = getTopicById(topicId)
+
+  const questions = getLevelQuestions(topicId, level)
+
+  const prepared: SessionQuestion[] = shuffle(questions).map((q) =>
+    shuffleOptions({ ...q, level, topicId }),
+  )
+
+  return {
+    categoryId: topicId.split('t')[0] || 'unknown',
+    topicId,
+    level,
+    title: topic
+      ? `${topic.title} — ${getLevelTitle(level)}`
+      : `${getLevelTitle(level)} test`,
+    questions: prepared,
+    startedAt: Date.now(),
+  }
+}
+
+/*
+ * =========================================================
+ * CREATE MODULE SESSION
+ * =========================================================
+ */
+
+export function createModuleSession(moduleId: string): QuizSession {
+  const module = getModuleById(moduleId)
+
+  const questions: SessionQuestion[] = []
+
+  for (const topic of module?.topics ?? []) {
+    for (const level of QUIZ_LEVEL_ORDER) {
+      for (const q of topic.levels[level]) {
+        questions.push({ ...q, level, topicId: topic.id })
+      }
+    }
+  }
+
+  return {
+    categoryId: moduleId,
+    topicId: '',
+    level: 'medium',
+    title: module?.title ?? 'Modul testi',
+    questions: shuffle(questions).map((q) => shuffleOptions(q)),
+    startedAt: Date.now(),
+  }
+}
+
+/*
+ * =========================================================
+ * MIXED SESSION — HAR SAFAR YANGI 30 TA
+ * =========================================================
+ *
+ * Barcha daraja savollaridan (oson, o‘rta, qiyin, keys)
+ * tasodifiy tanlanadi. Oldin tushgan savollar iloji boricha
+ * takrorlanmaydi. Hammasi tushib bo‘lgach, aylanish yangidan
+ * boshlanadi.
+ *
+ * Bo‘sh mavzular (savollari hali kiritilmagan) avtomatik
+ * o‘tkazib yuboriladi.
+ */
+
+/** 30 ta savolning taqsimoti */
+export const MIXED_QUOTA: Record<QuizLevel, number> = {
   easy: 10,
   medium: 9,
   hard: 8,
   case: 3,
 }
 
-function scaleQuota(count: number): Record<Level, number> {
-  const base = MIXED_DEFAULT_QUOTA
-  const total = LEVELS.reduce((s, l) => s + base[l], 0)
-  const quota = {} as Record<Level, number>
+function scaleQuota(count: number): Record<QuizLevel, number> {
+  const total = QUIZ_LEVEL_ORDER.reduce((sum, l) => sum + MIXED_QUOTA[l], 0)
+  const quota = {} as Record<QuizLevel, number>
+
   let used = 0
-  LEVELS.forEach((l, i) => {
-    quota[l] =
-      i === LEVELS.length - 1 ? count - used : Math.round((base[l] / total) * count)
-    used += quota[l]
+
+  QUIZ_LEVEL_ORDER.forEach((level, index) => {
+    const isLast = index === QUIZ_LEVEL_ORDER.length - 1
+
+    quota[level] = isLast
+      ? count - used
+      : Math.round((MIXED_QUOTA[level] / total) * count)
+
+    used += quota[level]
   })
+
   return quota
 }
 
-export function buildMixedQuiz(
-  opts: {
+export function createMixedSession(
+  options: {
     topicId?: string
     moduleId?: string
     count?: number
-    kv?: KV
   } = {},
-): PreparedQuestion[] {
-  const kv = opts.kv ?? defaultKV
-  const count = opts.count ?? MIXED_DEFAULT_COUNT
-  const scope = opts.topicId ?? opts.moduleId ?? 'all'
-  const seenKey = `quiz:seen:${scope}`
+): QuizSession {
+  const count = options.count ?? MIXED_COUNT
+  const scope = options.topicId ?? options.moduleId ?? 'all'
 
-  const pool = collectPool(opts)
-  if (pool.length === 0) return []
+  // Savollar hovuzi
+  const pool: SessionQuestion[] = []
 
-  // Oldin tushgan savollar
-  let seen = new Set<string>()
-  try {
-    seen = new Set<string>(JSON.parse(kv.get(seenKey) ?? '[]'))
-  } catch {
-    /* buzilgan yozuv — yangidan boshlaymiz */
+  for (const module of CATEGORIES) {
+    if (options.moduleId && module.id !== options.moduleId) continue
+
+    for (const topic of module.topics) {
+      if (options.topicId && topic.id !== options.topicId) continue
+
+      for (const level of QUIZ_LEVEL_ORDER) {
+        for (const q of topic.levels[level]) {
+          pool.push({ ...q, level, topicId: topic.id })
+        }
+      }
+    }
   }
 
+  const seen = loadSeen(scope)
   const quota = scaleQuota(count)
-  const picked: PoolItem[] = []
+  const picked: SessionQuestion[] = []
 
-  for (const level of LEVELS) {
-    const levelPool = pool.filter((p) => p.level === level)
-    let fresh = shuffle(levelPool.filter((p) => !seen.has(p.q.id)))
+  for (const level of QUIZ_LEVEL_ORDER) {
+    const levelPool = pool.filter((q) => q.level === level)
 
-    // Bu darajadagi yangi savollar tugasa — aylanishni boshidan boshlaymiz
+    let fresh = shuffle(levelPool.filter((q) => !seen.has(q.id)))
+
+    // Yangi savollar yetmasa — shu daraja aylanishi yangidan boshlanadi
     if (fresh.length < quota[level]) {
-      levelPool.forEach((p) => seen.delete(p.q.id))
-      const rest = shuffle(levelPool.filter((p) => !fresh.includes(p)))
+      levelPool.forEach((q) => seen.delete(q.id))
+
+      const rest = shuffle(levelPool.filter((q) => !fresh.includes(q)))
+
       fresh = [...fresh, ...rest]
     }
+
     picked.push(...fresh.slice(0, quota[level]))
   }
 
-  // Ba’zi daraja yetmasa (masalan keys kam) — qolgan savollardan to‘ldiramiz
+  // Biror daraja kam bo‘lsa — qolgan savollardan to‘ldiramiz
   if (picked.length < count) {
-    const ids = new Set(picked.map((p) => p.q.id))
-    const extra = shuffle(pool.filter((p) => !ids.has(p.q.id)))
-    picked.push(...extra.slice(0, count - picked.length))
+    const ids = new Set(picked.map((q) => q.id))
+
+    picked.push(
+      ...shuffle(pool.filter((q) => !ids.has(q.id))).slice(
+        0,
+        count - picked.length,
+      ),
+    )
   }
 
-  picked.forEach((p) => seen.add(p.q.id))
-  kv.set(seenKey, JSON.stringify([...seen]))
+  picked.forEach((q) => seen.add(q.id))
+  saveSeen(scope, seen)
 
-  return shuffle(picked).map(prepare)
+  return {
+    categoryId: MIXED_ID,
+    topicId: options.topicId ?? '',
+    level: 'medium',
+    title: 'Aralash test',
+    questions: shuffle(picked).map((q) => shuffleOptions(q)),
+    startedAt: Date.now(),
+  }
 }
 
-/* ---------------------------------------------------------
- * 3) JAVOBGA REAKSIYA: maqtov yoki tushuntirish
- * ------------------------------------------------------- */
+/*
+ * =========================================================
+ * BACKWARD COMPATIBILITY
+ * =========================================================
+ */
+
+export function createSession(categoryId: string): QuizSession {
+  if (categoryId === MIXED_ID) {
+    return createMixedSession()
+  }
+
+  return createModuleSession(categoryId)
+}
+
+/*
+ * =========================================================
+ * FORMAT DURATION
+ * =========================================================
+ */
+
+export function formatDuration(totalSec: number): string {
+  const safe = Math.max(0, Math.round(totalSec))
+
+  const minutes = Math.floor(safe / 60)
+  const seconds = safe % 60
+
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`
+}
+
+/*
+ * =========================================================
+ * RESULT / GRADE
+ * =========================================================
+ */
+
+export function gradeFor(percent: number) {
+  if (percent >= 90) {
+    return {
+      label: "A'lo natija!",
+      note: 'Siz mavzuni juda yaxshi o‘zlashtirgansiz.',
+    }
+  }
+
+  if (percent >= 70) {
+    return {
+      label: 'Yaxshi natija',
+      note: 'Ozgina takrorlash bilan natijangizni yanada oshirishingiz mumkin.',
+    }
+  }
+
+  if (percent >= 50) {
+    return {
+      label: 'Qoniqarli',
+      note: 'Xatolaringizni tahlil qiling va mavzuni yana bir bor takrorlang.',
+    }
+  }
+
+  return {
+    label: 'Yana urinib ko‘ring',
+    note: 'Mavzuni takrorlab, testni qayta topshirishingiz mumkin.',
+  }
+}
+
+/*
+ * =========================================================
+ * PERCENTAGE
+ * =========================================================
+ */
+
+export function calculatePercentage(correct: number, total: number): number {
+  if (total === 0) {
+    return 0
+  }
+
+  return Math.round((correct / total) * 100)
+}
+
+/*
+ * =========================================================
+ * ANSWER CHECK
+ * =========================================================
+ */
+
+export function isAnswerCorrect(question: Question, selected: number): boolean {
+  return selected === question.answer
+}
+
+/*
+ * =========================================================
+ * FEEDBACK — to‘g‘ri bo‘lsa maqtov, xato bo‘lsa tushuntirish
+ * =========================================================
+ */
 
 const PRAISE = [
   'Barakalla! 👏 To‘g‘ri topdingiz.',
@@ -258,29 +487,32 @@ export type Feedback = {
   correctText: string
 }
 
-export function checkAnswer(
-  q: PreparedQuestion,
-  chosen: number | null,
-  currentStreak = 0,
+/**
+ * @param selected  tanlangan variant indeksi (null — javob berilmadi)
+ * @param streak    shu paytgacha ketma-ket to‘g‘ri javoblar soni
+ */
+export function getFeedback(
+  question: Question,
+  selected: number | null,
+  streak = 0,
 ): Feedback {
-  const correctText = q.options[q.answer]
-  const correct = chosen === q.answer
+  const correctText = question.options[question.answer]
 
-  if (correct) {
-    const streak = currentStreak + 1
+  if (selected === question.answer) {
     return {
       correct: true,
       title: pickRandom(PRAISE),
-      message: STREAK_PRAISE[streak] ?? '',
-      explanation: q.explanation,
+      message: STREAK_PRAISE[streak + 1] ?? '',
+      explanation: question.explanation,
       chosenText: correctText,
       correctText,
     }
   }
 
-  const chosenText = chosen === null ? null : q.options[chosen]
+  const chosenText = selected === null ? null : question.options[selected]
+
   const why =
-    chosen === null
+    selected === null
       ? 'Javob tanlanmadi. '
       : `Siz tanlagan javob («${chosenText}») bu savolga mos kelmaydi. `
 
@@ -288,43 +520,51 @@ export function checkAnswer(
     correct: false,
     title: '❌ Bu safar to‘g‘ri chiqmadi',
     message: `${why}${pickRandom(ENCOURAGE)}`,
-    explanation: `To‘g‘ri javob: «${correctText}». Nima uchun: ${q.explanation}`,
+    explanation: `To‘g‘ri javob: «${correctText}». Nima uchun: ${question.explanation}`,
     chosenText,
     correctText,
   }
 }
 
-/* ---------------------------------------------------------
- * NATIJA TAHLILI
- * ------------------------------------------------------- */
+/*
+ * =========================================================
+ * NATIJA TAHLILI (daraja bo‘yicha, eng zaif joy, maslahat)
+ * =========================================================
+ */
 
-export type LevelStat = { level: Level; correct: number; total: number; percent: number }
-
-export type Summary = {
+export type LevelStat = {
+  level: QuizLevel
   correct: number
   total: number
   percent: number
+}
+
+export type ResultSummary = {
+  percent: number
   byLevel: LevelStat[]
-  weakest: Level | null
+  weakest: QuizLevel | null
   headline: string
   advice: string
 }
 
-export function summarize(answers: AnswerRecord[]): Summary {
-  const total = answers.length
-  const correct = answers.filter((a) => a.correct).length
-  const percent = total ? Math.round((correct / total) * 100) : 0
+export function summarizeResult(result: QuizResult): ResultSummary {
+  const percent = calculatePercentage(result.correct, result.total)
 
-  const byLevel: LevelStat[] = LEVELS.map((level) => {
-    const list = answers.filter((a) => a.level === level)
-    const c = list.filter((a) => a.correct).length
+  const byLevel: LevelStat[] = QUIZ_LEVEL_ORDER.map((level) => {
+    const list = result.answers.filter(
+      (a) => (a.question as SessionQuestion).level === level,
+    )
+
+    const correct = list.filter((a) => isAnswerCorrect(a.question, a.selected))
+      .length
+
     return {
       level,
-      correct: c,
+      correct,
       total: list.length,
-      percent: list.length ? Math.round((c / list.length) * 100) : 0,
+      percent: calculatePercentage(correct, list.length),
     }
-  }).filter((s) => s.total > 0)
+  }).filter((stat) => stat.total > 0)
 
   const weakest = byLevel.length
     ? [...byLevel].sort((a, b) => a.percent - b.percent)[0].level
@@ -335,13 +575,16 @@ export function summarize(answers: AnswerRecord[]): Summary {
 
   if (percent >= 90) {
     headline = '🏆 A’lo natija! Siz tayyorsiz.'
-    advice = 'Bilimingiz juda yuqori. Endi faqat qiyin va keys savollarda o‘zingizni sinab turing.'
+    advice =
+      'Bilimingiz juda yuqori. Endi qiyin va keys savollarda o‘zingizni sinab turing.'
   } else if (percent >= 75) {
     headline = '🎉 Yaxshi natija!'
-    advice = 'Asosiy tushunchalarni yaxshi bilasiz. Xato qilgan savollaringiz izohini qayta o‘qib chiqing.'
+    advice =
+      'Asosiy tushunchalarni yaxshi bilasiz. Xato qilgan savollaringiz izohini qayta o‘qib chiqing.'
   } else if (percent >= 55) {
     headline = '👍 O‘rtacha natija — o‘sish uchun joy bor.'
-    advice = 'Tamoyillar va jarayonlar ketma-ketligini (attestatsiya, akkreditatsiya) qayta takrorlang.'
+    advice =
+      'Tamoyillar va jarayonlar ketma-ketligini (attestatsiya, akkreditatsiya) qayta takrorlang.'
   } else {
     headline = '📚 Hozircha boshlang‘ich bosqich.'
     advice =
@@ -349,172 +592,54 @@ export function summarize(answers: AnswerRecord[]): Summary {
   }
 
   if (weakest && byLevel.length > 1) {
-    advice += ` Eng zaif joyingiz: ${LEVEL_LABELS[weakest]} daraja.`
+    advice += ` Eng zaif joyingiz: ${getLevelIcon(weakest)} ${getLevelTitle(weakest)} daraja.`
   }
 
-  return { correct, total, percent, byLevel, weakest, headline, advice }
+  return { percent, byLevel, weakest, headline, advice }
 }
 
-/* ---------------------------------------------------------
- * 4) REYTING (LEADERBOARD)
- * ------------------------------------------------------- */
-
-export type LeaderboardEntry = {
-  userId: string
-  name: string
-  mode: string // 'aralash' | 'm1t1:easy' | ...
-  score: number // to‘g‘ri javoblar soni
-  total: number
-  percent: number
-  timeSec: number // sarflangan vaqt (teng ballda tezroq yuqoriroq)
-  date: string // ISO
-}
-
-/**
- * Saqlash adapteri. Hozir localStorage (faqat shu qurilma).
- * Haqiqiy, umumiy reyting uchun HttpLeaderboardStore yoki o‘z
- * bazangiz (Supabase, Firebase, Telegram bot API) ni ulang.
+/*
+ * =========================================================
+ * LEVEL METADATA
+ * =========================================================
  */
-export interface LeaderboardStore {
-  submit(entry: LeaderboardEntry): Promise<void>
-  all(mode: string): Promise<LeaderboardEntry[]>
-}
 
-export class LocalLeaderboardStore implements LeaderboardStore {
-  constructor(private kv: KV = defaultKV) {}
+export const QUIZ_LEVELS: Array<{
+  id: QuizLevel
+  title: string
+  icon: string
+  description: string
+  questionCount: number
+}> = [
+  {
+    id: 'easy',
+    title: 'Oson',
+    icon: '🟢',
+    description: 'Asosiy tushunchalar va bilimlar',
+    questionCount: 30,
+  },
 
-  private read(): LeaderboardEntry[] {
-    try {
-      return JSON.parse(this.kv.get('quiz:leaderboard') ?? '[]')
-    } catch {
-      return []
-    }
-  }
+  {
+    id: 'medium',
+    title: 'O‘rta',
+    icon: '🟡',
+    description: 'Amaliy qo‘llash va vaziyatlar',
+    questionCount: 30,
+  },
 
-  async submit(entry: LeaderboardEntry) {
-    this.kv.set('quiz:leaderboard', JSON.stringify([...this.read(), entry]))
-  }
+  {
+    id: 'hard',
+    title: 'Qiyin',
+    icon: '🔴',
+    description: 'Tahliliy va murakkab savollar',
+    questionCount: 30,
+  },
 
-  async all(mode: string) {
-    return this.read().filter((e) => e.mode === mode)
-  }
-}
-
-/** Server orqali (masalan, bot backend): POST /submit, GET /all?mode= */
-export class HttpLeaderboardStore implements LeaderboardStore {
-  constructor(private baseUrl: string) {}
-
-  async submit(entry: LeaderboardEntry) {
-    await fetch(`${this.baseUrl}/submit`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(entry),
-    })
-  }
-
-  async all(mode: string) {
-    const res = await fetch(`${this.baseUrl}/all?mode=${encodeURIComponent(mode)}`)
-    return (await res.json()) as LeaderboardEntry[]
-  }
-}
-
-/** Har bir foydalanuvchining eng yaxshi natijasi */
-function bestPerUser(entries: LeaderboardEntry[]): LeaderboardEntry[] {
-  const best = new Map<string, LeaderboardEntry>()
-  for (const e of entries) {
-    const prev = best.get(e.userId)
-    if (!prev || isBetter(e, prev)) best.set(e.userId, e)
-  }
-  return [...best.values()]
-}
-
-/** Ko‘p ball yaxshi; teng bo‘lsa — kam vaqt yaxshi */
-function isBetter(a: LeaderboardEntry, b: LeaderboardEntry): boolean {
-  if (a.percent !== b.percent) return a.percent > b.percent
-  return a.timeSec < b.timeSec
-}
-
-export type Standing = {
-  rank: number // siz nechinchi o‘rindasiz
-  totalParticipants: number // jami qatnashchilar
-  topPercent: number // «eng yaxshi X% ichidasiz»
-  top: LeaderboardEntry[] // birinchi 10 ta
-  message: string
-}
-
-/**
- * Berilgan natija reytingda nechinchi o‘rinda ekanini hisoblaydi.
- * Test davomida ham (vaqtinchalik natija bilan) chaqirish mumkin —
- * shunda «hozirgi o‘rningiz» jonli ko‘rsatib turiladi.
- */
-export function getStanding(
-  entries: LeaderboardEntry[],
-  me: LeaderboardEntry,
-): Standing {
-  const others = bestPerUser(entries).filter((e) => e.userId !== me.userId)
-  const prevMine = entries.filter((e) => e.userId === me.userId)
-  const myBest = [me, ...prevMine].reduce((a, b) => (isBetter(a, b) ? a : b))
-
-  const ranked = [...others, myBest].sort((a, b) =>
-    isBetter(a, b) ? -1 : isBetter(b, a) ? 1 : 0,
-  )
-
-  const rank = ranked.findIndex((e) => e.userId === me.userId) + 1
-  const total = ranked.length
-  const topPercent = Math.max(1, Math.round((rank / total) * 100))
-
-  let message: string
-  if (total === 1) message = '🌟 Siz birinchi qatnashchisiz! Boshqalar sizni quvib yetishga harakat qiladi.'
-  else if (rank === 1) message = `🥇 Siz ${total} kishi orasida 1-o‘rindasiz!`
-  else if (rank <= 3) message = `🏅 Siz ${total} kishi orasida ${rank}-o‘rindasiz — sovrinli uchlikda!`
-  else if (topPercent <= 25) message = `🔥 ${total} kishi ichida ${rank}-o‘rin — eng yaxshi ${topPercent}% qatorida.`
-  else message = `📈 ${total} kishi ichida ${rank}-o‘rindasiz. Yana urinib ko‘ring — yuqoriga ko‘tarilish mumkin!`
-
-  return { rank, totalParticipants: total, topPercent, top: ranked.slice(0, 10), message }
-}
-
-/** Natijani yuborib, yangi o‘rinni qaytaradi */
-export async function submitAndGetStanding(
-  store: LeaderboardStore,
-  user: { id: string; name: string },
-  mode: string,
-  answers: AnswerRecord[],
-  timeSec: number,
-): Promise<{ summary: Summary; standing: Standing }> {
-  const summary = summarize(answers)
-  const entry: LeaderboardEntry = {
-    userId: user.id,
-    name: user.name,
-    mode,
-    score: summary.correct,
-    total: summary.total,
-    percent: summary.percent,
-    timeSec,
-    date: new Date().toISOString(),
-  }
-  const before = await store.all(mode)
-  await store.submit(entry)
-  return { summary, standing: getStanding(before, entry) }
-}
-
-/* ---------------------------------------------------------
- * ISHLATISH NAMUNASI
- * ---------------------------------------------------------
- *
- * // Aralash test (har safar yangi 30 ta)
- * const quiz = buildMixedQuiz({ topicId: 'm1t1' })
- *
- * // Daraja bo‘yicha test
- * const easy = buildLevelQuiz('m1t1', 'easy')   // 30 ta
- * const keys = buildLevelQuiz('m1t1', 'case')   // 10 ta
- *
- * // Har bir javobda
- * const fb = checkAnswer(quiz[i], chosenIndex, streak)
- *
- * // Test oxirida
- * const store = new LocalLeaderboardStore()
- * const { summary, standing } = await submitAndGetStanding(
- *   store, { id: userId, name: userName }, 'm1t1:aralash', answers, seconds,
- * )
- * // standing.message → «🥇 Siz 128 kishi orasida 1-o‘rindasiz!»
- */
+  {
+    id: 'case',
+    title: 'Keys',
+    icon: '🔵',
+    description: 'Real boshqaruv vaziyatlari',
+    questionCount: 10,
+  },
+]
