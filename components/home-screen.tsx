@@ -40,7 +40,6 @@ export function HomeScreen({
 }: Props) {
   // =========================================================
   // XAVFSIZ DEFAULT QIYMATLAR
-  // Build/prerender vaqtida undefined xatolarining oldini oladi
   // =========================================================
 
   const safeHistory = Array.isArray(history) ? history : []
@@ -53,8 +52,7 @@ export function HomeScreen({
 
   const safeBestByCategory = bestByCategory ?? {}
 
-  // safeBestByCategory hozircha statistik kartalarda ishlatilmayapti,
-  // lekin kelajakdagi kategoriya statistikasi uchun saqlab qo‘yildi.
+  // Kelajakdagi kategoriya statistikasi uchun saqlanadi.
   void safeBestByCategory
 
   return (
@@ -98,8 +96,6 @@ export function HomeScreen({
       ====================================================== */}
 
       <section className="relative overflow-hidden rounded-[2rem] bg-primary p-6 text-primary-foreground shadow-lg">
-
-        {/* Decorative elements */}
 
         <div className="pointer-events-none absolute -right-12 -top-12 size-36 rounded-full bg-white/10" />
 
@@ -195,7 +191,9 @@ export function HomeScreen({
 
         </div>
 
-        {/* BOG‘CHA */}
+        {/* =====================================================
+            BOG‘CHA
+        ====================================================== */}
 
         <button
           type="button"
@@ -237,7 +235,9 @@ export function HomeScreen({
           </div>
         </button>
 
-        {/* MAKTAB */}
+        {/* =====================================================
+            MAKTAB
+        ====================================================== */}
 
         <button
           type="button"
@@ -308,12 +308,54 @@ export function HomeScreen({
       </section>
 
       {/* =====================================================
+          RANKING
+      ====================================================== */}
+
+      <button
+        type="button"
+        className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+      >
+        <div className="absolute -right-6 -top-6 size-24 rounded-full bg-primary/5" />
+
+        <div className="relative flex items-center gap-4">
+
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary">
+            <Trophy className="size-7 text-primary" />
+          </div>
+
+          <div className="min-w-0 flex-1">
+
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
+              Reyting
+            </p>
+
+            <h3 className="mt-1 text-lg font-bold">
+              🏆 Menejerlik TOP reyting
+            </h3>
+
+            <p className="mt-1 text-sm leading-5 text-muted-foreground">
+              Qatnashchilar orasidagi o‘rningizni
+              va eng yuqori natijalarni ko‘ring.
+            </p>
+
+          </div>
+
+          <ChevronRight
+            className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1"
+            aria-hidden="true"
+          />
+
+        </div>
+      </button>
+
+      {/* =====================================================
           LEARNING PRINCIPLES
       ====================================================== */}
 
       <section className="rounded-3xl border bg-muted/40 p-5">
 
         <div className="mb-4">
+
           <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
             Platforma imkoniyatlari
           </p>
@@ -321,6 +363,7 @@ export function HomeScreen({
           <h2 className="mt-1 text-lg font-bold">
             Bilimingizni tizimli rivojlantiring
           </h2>
+
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -498,11 +541,13 @@ function StatCard({
     <div className="rounded-2xl border bg-card p-3 shadow-sm">
 
       <div className="flex items-center gap-1.5 text-muted-foreground">
+
         {icon}
 
         <span className="text-[11px] font-medium">
           {label}
         </span>
+
       </div>
 
       <p className="mt-2 text-lg font-bold tabular-nums">
