@@ -1,6 +1,7 @@
 import { M1T1_LEVELS } from './data/m1t1'
 import { M1T2_LEVELS } from './data/m1t2'
 import { M1T3_LEVELS } from './data/m1t3'
+import { M1T4_LEVELS } from './data/m1t4'
 
 /*
  * =========================================================
@@ -111,7 +112,7 @@ const MODULE_1: Category = {
       description:
         'Ta’lim muassasasida korrupsiyaviy xavflarni aniqlash va oldini olish mexanizmlari.',
 
-      levels: EMPTY_LEVELS,
+      levels: M1T4_LEVELS,
     },
 
     {
