@@ -87,20 +87,18 @@ export const CATEGORIES: Category[] = [
           'Umumiy o‘rta ta’lim muassasasini boshqarish, boshqaruv tamoyillari, attestatsiya, akkreditatsiya va TALIS.',
         levels: M1T1_LEVELS,
       },
-      {
-        id: 'm1t2',
-        title: 'Strategik menejment',
-        description:
-          'Maktab rivojlanishini strategik rejalashtirish va uzoq muddatli maqsadlarni belgilash.',
-        levels: M1T2_LEVELS,
-      },
-      {
-        id: 'm1t3',
-        title: 'Boshqaruv psixologiyasi',
-        description:
-          'Rahbar, jamoa, motivatsiya va samarali boshqaruvning psixologik asoslari.',
-        levels: EMPTY_LEVELS,
-      },
+     {
+  id: 'm1t2',
+  title: '🔥 TEST — STRATEGIK MENEJMENT 🔥',
+  description: 'M1T2 TEST',
+  levels: M1T2_LEVELS,
+},
+    {
+  id: 'm1t3',
+  title: 'TEST 3',
+  description: 'TEST 3',
+  levels: EMPTY_LEVELS,
+},
       {
         id: 'm1t4',
         title: 'Korrupsiyaviy xavf-xatarlarni oldini olish',
