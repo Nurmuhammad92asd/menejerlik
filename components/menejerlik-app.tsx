@@ -1,12 +1,12 @@
 'use client'
 
-import type { ReactNode } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 
 import { AIAssistant } from '@/components/ai-assistant'
 import { HomeScreen } from '@/components/home-screen'
 import { QuizScreen } from '@/components/quiz-screen'
 import { ResultScreen } from '@/components/result-screen'
+import { RankingScreen } from '@/components/ranking-screen'
 
 import {
   createTopicSession,
@@ -47,6 +47,7 @@ type Screen =
   | 'levels'
   | 'quiz'
   | 'result'
+  | 'ranking'
   | 'ai'
 
 type NavigationState = {
@@ -68,10 +69,13 @@ const INITIAL_NAVIGATION: NavigationState = {
 export function MenejerlikApp() {
   const { isTelegram, webApp } = useTelegram()
 
-  const [screen, setScreen] = useState<Screen>('home')
+  const [screen, setScreen] =
+    useState<Screen>('home')
 
   const [navigation, setNavigation] =
-    useState<NavigationState>(INITIAL_NAVIGATION)
+    useState<NavigationState>(
+      INITIAL_NAVIGATION,
+    )
 
   const [quizSession, setQuizSession] =
     useState<QuizSession | null>(null)
@@ -102,7 +106,8 @@ export function MenejerlikApp() {
       }
 
       if (
-        typeof webApp.requestFullscreen === 'function'
+        typeof webApp.requestFullscreen ===
+        'function'
       ) {
         webApp.requestFullscreen()
         setIsFullscreen(true)
@@ -122,9 +127,12 @@ export function MenejerlikApp() {
     const handleFullscreenChanged = () => {
       try {
         if (
-          typeof webApp.isFullscreen === 'boolean'
+          typeof webApp.isFullscreen ===
+          'boolean'
         ) {
-          setIsFullscreen(webApp.isFullscreen)
+          setIsFullscreen(
+            webApp.isFullscreen,
+          )
         }
       } catch {
         // ignore
@@ -169,6 +177,15 @@ export function MenejerlikApp() {
     setQuizSession(null)
     setQuizResult(null)
 
+    scrollToTop()
+  }
+
+  /* =========================================================
+     RANKING
+  ========================================================= */
+
+  const openRanking = () => {
+    setScreen('ranking')
     scrollToTop()
   }
 
@@ -222,7 +239,9 @@ export function MenejerlikApp() {
      MODULE
   ========================================================= */
 
-  const selectModule = (moduleId: string) => {
+  const selectModule = (
+    moduleId: string,
+  ) => {
     setNavigation((previous) => ({
       ...previous,
       moduleId,
@@ -238,7 +257,9 @@ export function MenejerlikApp() {
      TOPIC
   ========================================================= */
 
-  const selectTopic = (topicId: string) => {
+  const selectTopic = (
+    topicId: string,
+  ) => {
     setNavigation((previous) => ({
       ...previous,
       topicId,
@@ -253,10 +274,15 @@ export function MenejerlikApp() {
      LEVEL
   ========================================================= */
 
-  const selectLevel = (level: QuizLevel) => {
+  const selectLevel = (
+    level: QuizLevel,
+  ) => {
     if (!navigation.topicId) return
 
-    startQuiz(navigation.topicId, level)
+    startQuiz(
+      navigation.topicId,
+      level,
+    )
   }
 
   /* =========================================================
@@ -268,17 +294,23 @@ export function MenejerlikApp() {
     level: QuizLevel,
   ) => {
     try {
-      const session = createTopicSession(
-        topicId,
-        level,
-      )
+      const session =
+        createTopicSession(
+          topicId,
+          level,
+        )
 
-      if (!session || !session.questions?.length) {
+      if (
+        !session ||
+        !session.questions?.length
+      ) {
         return
       }
 
       setQuizSession(session)
+
       setQuizResult(null)
+
       setScreen('quiz')
 
       scrollToTop()
@@ -299,25 +331,23 @@ export function MenejerlikApp() {
   ) => {
     if (!quizSession) return
 
-    /*
-      QuizResult qanday tuzilganidan qat'i nazar,
-      quiz komponentidan kelgan natijani session
-      bilan birga hisoblash uchun mavjud helperlardan
-      foydalaniladi.
-    */
-
     const total =
       quizSession.questions.length
 
-    const correct = answers.filter(
-      (answer) => answer.isCorrect,
-    ).length
+    const correct =
+      answers.filter(
+        (answer) =>
+          answer.isCorrect,
+      ).length
 
-    const wrong = total - correct
+    const wrong =
+      total - correct
 
     const percentage =
       total > 0
-        ? Math.round((correct / total) * 100)
+        ? Math.round(
+            (correct / total) * 100,
+          )
         : 0
 
     const result = {
@@ -330,6 +360,7 @@ export function MenejerlikApp() {
     } as unknown as QuizResult
 
     setQuizResult(result)
+
     setScreen('result')
 
     scrollToTop()
@@ -340,11 +371,15 @@ export function MenejerlikApp() {
   ========================================================= */
 
   const retryQuiz = () => {
-    if (!navigation.topicId || !quizSession) {
+    if (
+      !navigation.topicId ||
+      !quizSession
+    ) {
       return
     }
 
-    const level = quizSession.level
+    const level =
+      quizSession.level
 
     startQuiz(
       navigation.topicId,
@@ -361,10 +396,27 @@ export function MenejerlikApp() {
       return
     }
 
+    /* =========================
+       RANKING
+    ========================= */
+
+    if (screen === 'ranking') {
+      goHome()
+      return
+    }
+
+    /* =========================
+       EDUCATION
+    ========================= */
+
     if (screen === 'education') {
       goHome()
       return
     }
+
+    /* =========================
+       MODULES
+    ========================= */
 
     if (screen === 'modules') {
       setScreen('education')
@@ -372,11 +424,19 @@ export function MenejerlikApp() {
       return
     }
 
+    /* =========================
+       TOPICS
+    ========================= */
+
     if (screen === 'topics') {
       setScreen('modules')
       scrollToTop()
       return
     }
+
+    /* =========================
+       LEVELS
+    ========================= */
 
     if (screen === 'levels') {
       setScreen('topics')
@@ -384,11 +444,19 @@ export function MenejerlikApp() {
       return
     }
 
+    /* =========================
+       QUIZ
+    ========================= */
+
     if (screen === 'quiz') {
       setScreen('levels')
       scrollToTop()
       return
     }
+
+    /* =========================
+       RESULT
+    ========================= */
 
     if (screen === 'result') {
       setScreen('levels')
@@ -396,6 +464,10 @@ export function MenejerlikApp() {
       scrollToTop()
       return
     }
+
+    /* =========================
+       AI
+    ========================= */
 
     if (screen === 'ai') {
       goHome()
@@ -434,7 +506,9 @@ export function MenejerlikApp() {
 
     return () => {
       try {
-        setClosingConfirmation(false)
+        setClosingConfirmation(
+          false,
+        )
       } catch {
         // ignore
       }
@@ -445,36 +519,45 @@ export function MenejerlikApp() {
      ACTIVE DATA
   ========================================================= */
 
-  const activeCategories = useMemo(() => {
-    if (
-      navigation.educationType ===
-      'preschool'
-    ) {
-      return PRESCHOOL_CATEGORIES
-    }
+  const activeCategories =
+    useMemo(() => {
+      if (
+        navigation.educationType ===
+        'preschool'
+      ) {
+        return PRESCHOOL_CATEGORIES
+      }
 
-    return CATEGORIES
-  }, [navigation.educationType])
+      return CATEGORIES
+    }, [
+      navigation.educationType,
+    ])
 
-  const activeModule = useMemo(() => {
-    if (!navigation.moduleId) {
-      return undefined
-    }
+  const activeModule =
+    useMemo(() => {
+      if (!navigation.moduleId) {
+        return undefined
+      }
 
-    return getModuleById(
+      return getModuleById(
+        navigation.moduleId,
+      )
+    }, [
       navigation.moduleId,
-    )
-  }, [navigation.moduleId])
+    ])
 
-  const activeTopic = useMemo(() => {
-    if (!navigation.topicId) {
-      return undefined
-    }
+  const activeTopic =
+    useMemo(() => {
+      if (!navigation.topicId) {
+        return undefined
+      }
 
-    return getTopicById(
+      return getTopicById(
+        navigation.topicId,
+      )
+    }, [
       navigation.topicId,
-    )
-  }, [navigation.topicId])
+    ])
 
   /* =========================================================
      RENDER
@@ -607,8 +690,21 @@ export function MenejerlikApp() {
 
         {screen === 'home' && (
           <HomeScreen
-            onStart={openEducationSelection}
+            onStart={
+              openEducationSelection
+            }
             onAI={openAI}
+            onRanking={
+              openRanking
+            }
+          />
+        )}
+
+        {/* RANKING */}
+
+        {screen === 'ranking' && (
+          <RankingScreen
+            onBack={goBack}
           />
         )}
 
@@ -617,7 +713,9 @@ export function MenejerlikApp() {
         {screen === 'education' && (
           <EducationScreen
             onBack={goBack}
-            onSelect={selectEducation}
+            onSelect={
+              selectEducation
+            }
           />
         )}
 
@@ -625,12 +723,16 @@ export function MenejerlikApp() {
 
         {screen === 'modules' && (
           <ModuleScreen
-            categories={activeCategories}
+            categories={
+              activeCategories
+            }
             educationType={
               navigation.educationType
             }
             onBack={goBack}
-            onSelect={selectModule}
+            onSelect={
+              selectModule
+            }
           />
         )}
 
@@ -640,7 +742,9 @@ export function MenejerlikApp() {
           <TopicScreen
             module={activeModule}
             onBack={goBack}
-            onSelect={selectTopic}
+            onSelect={
+              selectTopic
+            }
           />
         )}
 
@@ -650,7 +754,9 @@ export function MenejerlikApp() {
           <LevelScreen
             topic={activeTopic}
             onBack={goBack}
-            onSelect={selectLevel}
+            onSelect={
+              selectLevel
+            }
           />
         )}
 
@@ -659,9 +765,15 @@ export function MenejerlikApp() {
         {screen === 'quiz' &&
           quizSession && (
             <QuizScreen
-              session={quizSession}
-              onFinish={finish}
-              onExit={goBack}
+              session={
+                quizSession
+              }
+              onFinish={
+                finish
+              }
+              onExit={
+                goBack
+              }
             />
           )}
 
@@ -670,9 +782,15 @@ export function MenejerlikApp() {
         {screen === 'result' &&
           quizResult && (
             <ResultScreen
-              result={quizResult}
-              onRetry={retryQuiz}
-              onHome={goHome}
+              result={
+                quizResult
+              }
+              onRetry={
+                retryQuiz
+              }
+              onHome={
+                goHome
+              }
             />
           )}
 
@@ -878,7 +996,9 @@ function ModuleScreen({
               key={category.id}
               type="button"
               onClick={() =>
-                onSelect(category.id)
+                onSelect(
+                  category.id,
+                )
               }
               className="
                 group
@@ -966,7 +1086,9 @@ function TopicScreen({
   onSelect,
 }: {
   module:
-    | ReturnType<typeof getModuleById>
+    | ReturnType<
+        typeof getModuleById
+      >
     | undefined
   onBack: () => void
   onSelect: (
@@ -1039,7 +1161,9 @@ function TopicScreen({
         {'description' in module &&
           module.description && (
             <p className="mt-2 text-sm leading-5 text-muted-foreground">
-              {module.description}
+              {
+                module.description
+              }
             </p>
           )}
       </div>
@@ -1051,7 +1175,9 @@ function TopicScreen({
               key={topic.id}
               type="button"
               onClick={() =>
-                onSelect(topic.id)
+                onSelect(
+                  topic.id,
+                )
               }
               className="
                 group
@@ -1082,7 +1208,9 @@ function TopicScreen({
                   font-bold
                 "
               >
-                {String(index + 1).padStart(
+                {String(
+                  index + 1,
+                ).padStart(
                   2,
                   '0',
                 )}
@@ -1095,7 +1223,9 @@ function TopicScreen({
 
                 {topic.description && (
                   <p className="mt-1 text-sm leading-5 text-muted-foreground">
-                    {topic.description}
+                    {
+                      topic.description
+                    }
                   </p>
                 )}
               </div>
@@ -1136,7 +1266,9 @@ function LevelScreen({
   onSelect,
 }: {
   topic:
-    | ReturnType<typeof getTopicById>
+    | ReturnType<
+        typeof getTopicById
+      >
     | undefined
   onBack: () => void
   onSelect: (
@@ -1265,7 +1397,9 @@ function LevelScreen({
               key={level.id}
               type="button"
               onClick={() =>
-                onSelect(level.id)
+                onSelect(
+                  level.id,
+                )
               }
               className="
                 group
@@ -1320,7 +1454,9 @@ function LevelScreen({
                 </div>
 
                 <p className="mt-1 text-sm text-muted-foreground">
-                  {level.description}
+                  {
+                    level.description
+                  }
                 </p>
               </div>
 
@@ -1338,8 +1474,6 @@ function LevelScreen({
           ),
         )}
       </div>
-
-      {/* ARALASH TEST IZOH */}
 
       <div
         className="
