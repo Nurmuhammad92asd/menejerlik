@@ -1,737 +1,1215 @@
-import type { Question } from '../quiz-data'
-
-/*
- * =========================================================
- * 1-MODUL · 1-MAVZU
- * Umumiy ta’lim muassasasini boshqarish
- * ---------------------------------------------------------
- * 30 oson · 30 o‘rta · 30 qiyin · 10 keys
- * =========================================================
- */
-
-const q = (
-  id: string,
-  text: string,
-  options: string[],
-  answer: number,
-  explanation: string,
-): Question => ({ id, text, options, answer, explanation })
-
-/* 🟢 OSON — 30 TA */
-const easy: Question[] = [
-  q('m1t1-e01', 'Maktabni boshqarishning bosh maqsadi nima?', [
-    'Faqat hujjatlar sonini ko‘paytirish',
-    'Ta’lim sifati va tarbiya samaradorligini oshirish',
-    'Faqat o‘qituvchilar faoliyatini nazorat qilish',
-    'Maktabning moddiy bazasini kengaytirish',
-  ], 1, 'Maktab boshqaruvining bosh maqsadi ta’lim sifati va tarbiya samaradorligini oshirishdir.'),
-
-  q('m1t1-e02', 'Maktab boshqaruvida qaysi faoliyat ta’lim-tarbiya jarayonini boshqarishga bevosita kiradi?', [
-    'Ta’lim-tarbiya jarayonini rejalashtirish va tashkil etish',
-    'Faqat maktab binosini ta’mirlash',
-    'Faqat moliyaviy hisobot tayyorlash',
-    'Faqat sport musobaqalarini o‘tkazish',
-  ], 0, 'Ta’lim-tarbiya jarayonini rejalashtirish va tashkil etish maktab boshqaruvining asosiy yo‘nalishidir.'),
-
-  q('m1t1-e03', 'Boshqaruv tamoyillari qanday vazifani bajaradi?', [
-    'Faqat moliyaviy nazoratni amalga oshiradi',
-    'Boshqaruv faoliyatini yo‘naltiruvchi asosiy qoidalar bo‘lib xizmat qiladi',
-    'Faqat o‘quvchilarni baholaydi',
-    'Faqat hujjatlarni saqlaydi',
-  ], 1, 'Boshqaruv tamoyillari rahbar va jamoa faoliyatini yo‘naltiruvchi asosiy qoidalardir.'),
-
-  q('m1t1-e04', 'Maqsadlilik tamoyili nimani anglatadi?', [
-    'Boshqaruvni tasodifiy amalga oshirishni',
-    'Barcha faoliyatni aniq maqsad va vazifalarga yo‘naltirishni',
-    'Faqat uzoq muddatli rejalar tuzishni',
-    'Faqat moliyaviy resurslarni nazorat qilishni',
-  ], 1, 'Maqsadlilik barcha boshqaruv faoliyatini aniq maqsad va vazifalarga yo‘naltirishni anglatadi.'),
-
-  q('m1t1-e05', 'Maktabni yagona tizim sifatida ko‘rib, barcha yo‘nalishlarni o‘zaro bog‘liq holda boshqarish qaysi tamoyilga tegishli?', [
-    'Rag‘batlantirish',
-    'Rejalilik',
-    'Tizimlilik va kompleks yondashuv',
-    'Shaffoflik',
-  ], 2, 'Maktabdagi barcha subyekt va jarayonlarning o‘zaro bog‘liqligi tizimlilik tamoyilini ifodalaydi.'),
-
-  q('m1t1-e06', 'Boshqaruv qarorlarini taxmin emas, dalil va tahlillarga asoslanib qabul qilish qaysi tamoyil?', [
-    'Ilmiylik',
-    'Demokratiklik',
-    'Hamkorlik',
-    'Rejalilik',
-  ], 0, 'Dalil, tahlil, monitoring va diagnostikaga tayanish ilmiylik tamoyiliga mos.'),
-
-  q('m1t1-e07', 'Quyidagilardan qaysi biri ilmiylik tamoyiliga mos keladi?', [
-    'Qarorni odat asosida qabul qilish',
-    'Qarorni shaxsiy taxmin asosida qabul qilish',
-    'O‘quvchilarning o‘zlashtirish ko‘rsatkichlarini tahlil qilish',
-    'Qarorni faqat bitta xodim fikriga asoslash',
-  ], 2, 'O‘zlashtirish ko‘rsatkichlarini tahlil qilish ilmiy va dalillarga asoslangan boshqaruvga misoldir.'),
-
-  q('m1t1-e08', 'Qaror qabul qilishda pedagogik kengash va jamoa fikrini inobatga olish qaysi tamoyilga mos?', [
-    'Demokratiklik va jamoaviy boshqaruv',
-    'Ilmiylik',
-    'Rejalilik',
-    'Nazorat',
-  ], 0, 'Jamoa fikrini qaror qabul qilishga jalb etish demokratik boshqaruvga xos.'),
-
-  q('m1t1-e09', 'Demokratik boshqaruvda yakuniy mas’uliyat kimning zimmasida bo‘ladi?', [
-    'Har bir o‘qituvchining',
-    'Ota-onalar qo‘mitasining',
-    'Maktab direktorining',
-    'O‘quvchilar yetakchisining',
-  ], 2, 'Jamoaviy muhokama mavjud bo‘lsa-da, yakuniy mas’uliyat rahbar zimmasida qoladi.'),
-
-  q('m1t1-e10', 'Maktab faoliyatining rejasiz bo‘lishi mumkin emasligini ifodalovchi tamoyil qaysi?', [
-    'Ilmiylik',
-    'Rejalilik',
-    'Shaffoflik',
-    'Motivatsiya',
-  ], 1, 'Maktab faoliyatini oldindan belgilash va tashkil etish rejalilik tamoyiliga asoslanadi.'),
-
-  q('m1t1-e11', 'Quyidagilardan qaysi biri maktabning rejalashtirish hujjatlariga kiradi?', [
-    'Yillik ish rejasi',
-    'Faqat reklama rejasi',
-    'Faqat xodimlarning shaxsiy rejasi',
-    'Faqat sport rejasi',
-  ], 0, 'Yillik ish rejasi maktab faoliyatini rejalashtirishning asosiy hujjatlaridan biridir.'),
-
-  q('m1t1-e12', 'Nazoratning asosiy maqsadi materialga ko‘ra nima?', [
-    'Xodimlarni qo‘rqitish',
-    'Faqat kamchilik topish',
-    'Sifatni oshirish',
-    'Faqat hisobot yig‘ish',
-  ], 2, 'Nazorat faqat tekshirish emas, balki sifatni oshirish vositasidir.'),
-
-  q('m1t1-e13', 'Nazorat natijasida rahbar xulosa chiqarib, tavsiya berishi nimani ta’minlaydi?', [
-    'Teskari aloqani',
-    'Moliyaviy nazoratni',
-    'Ish taqsimotini',
-    'Reklamani',
-  ], 0, 'Nazoratdan keyingi tavsiya va yordam teskari aloqani ta’minlaydi.'),
-
-  q('m1t1-e14', 'Barcha xodimlarga teng talab va mezon qo‘yish qaysi tamoyilga mos?', [
-    'Hamkorlik',
-    'Adolatlilik va shaffoflik',
-    'Ilmiylik',
-    'Rejalilik',
-  ], 1, 'Teng mezon va talablar adolatlilik hamda shaffoflikni ta’minlaydi.'),
-
-  q('m1t1-e15', 'Quyidagilardan qaysi biri ma’naviy rag‘batlantirishga misol bo‘ladi?', [
-    'E’tirof va tashakkurnoma',
-    'Ish vaqtini qisqartirish',
-    'Hujjatlarni tekshirish',
-    'Monitoring o‘tkazish',
-  ], 0, 'E’tirof va tashakkurnoma ma’naviy rag‘batlantirish shakllaridir.'),
-
-  q('m1t1-e16', 'Ota-onalar, mahalla, OTM va tashkilotlar bilan hamkorlik qilish qaysi tamoyilga tegishli?', [
-    'Ilmiylik',
-    'Hamkorlik va ijtimoiy sheriklik',
-    'Rejalilik',
-    'Nazorat',
-  ], 1, 'Tashqi hamkorlar bilan ishlash hamkorlik va ijtimoiy sheriklik tamoyiliga kiradi.'),
-
-  q('m1t1-e17', 'Maktab boshqaruvida maqsadlar aniq bo‘lsa, nima to‘g‘ri taqsimlanadi?', [
-    'Faqat o‘quvchilar',
-    'Resurslar',
-    'Faqat darsliklar',
-    'Faqat hujjatlar',
-  ], 1, 'Aniq maqsad resurslarni to‘g‘ri yo‘naltirish va taqsimlashga yordam beradi.'),
-
-  q('m1t1-e18', 'O‘quvchilarning rivojlanishini muntazam kuzatish maktab boshqaruvining qaysi yo‘nalishiga kiradi?', [
-    'Monitoring',
-    'Reklama',
-    'Moliyalashtirish',
-    'Ishga qabul qilish',
-  ], 0, 'O‘quvchilar rivojlanishini kuzatish monitoring faoliyatidir.'),
-
-  q('m1t1-e19', 'Boshqaruv tamoyillarini ularning mazmuni bilan moslashtiring: 1-Maqsadlilik, 2-Ilmiylik, 3-Rejalilik, 4-Rag‘batlantirish.', [
-    '1-c, 2-b, 3-a, 4-d',
-    '1-a, 2-c, 3-d, 4-b',
-    '1-b, 2-d, 3-c, 4-a',
-    '1-d, 2-a, 3-b, 4-c',
-  ], 0, 'Maqsadlilik—aniq maqsad; ilmiylik—dalil; rejalilik—reja; rag‘batlantirish—mehnatni baholash.'),
-
-  q('m1t1-e20', 'Boshqaruv yo‘nalishlarini moslashtiring: 1-Pedagoglar, 2-O‘quvchilar, 3-Ota-onalar, 4-Moddiy resurslar.', [
-    '1-b, 2-a, 3-c, 4-d',
-    '1-a, 2-b, 3-d, 4-c',
-    '1-c, 2-d, 3-a, 4-b',
-    '1-d, 2-c, 3-b, 4-a',
-  ], 0, 'Pedagoglar faoliyati muvofiqlashtiriladi, o‘quvchilar monitoring qilinadi, ota-onalar bilan hamkorlik qilinadi.'),
-
-  q('m1t1-e21', 'Akkreditatsiyadan o‘tkazish bosqichlarining boshlang‘ich bosqichini aniqlang.', [
-    'Attestatsiya jarayoniga tayyorgarlik ko‘rish',
-    'Ta’lim sifati monitoringini amalga oshirish',
-    'Kamchiliklarni bartaraf etish',
-    'Ijroni nazorat qilish',
-  ], 0, 'Akkreditatsiya jarayonida dastlab attestatsiyaga tayyorgarlik ko‘riladi.'),
-
-  q('m1t1-e22', 'Akkreditatsiya bosqichlarining to‘g‘ri ketma-ketligini belgilang: 1-Tayyorgarlik, 2-Attestatsiya va tahlil, 3-Qaror, 4-Kamchiliklarni bartaraf etish.', [
-    '1 → 2 → 3 → 4',
-    '2 → 1 → 4 → 3',
-    '3 → 2 → 1 → 4',
-    '4 → 3 → 2 → 1',
-  ], 0, 'Akkreditatsiya jarayoni tayyorgarlikdan boshlanib, attestatsiya, qaror va kamchiliklarni bartaraf etish bosqichlariga o‘tadi.'),
-
-  q('m1t1-e23', 'Quyidagi boshqaruv faoliyatlarining mantiqiy ketma-ketligini belgilang: 1-Maqsadni belgilash, 2-Reja tuzish, 3-Amalga oshirish, 4-Nazorat.', [
-    '1 → 2 → 3 → 4',
-    '2 → 1 → 4 → 3',
-    '3 → 2 → 1 → 4',
-    '4 → 3 → 2 → 1',
-  ], 0, 'Boshqaruvda avval maqsad, keyin reja, ijro va nazorat amalga oshiriladi.'),
-
-  q('m1t1-e24', 'Attestatsiya nima?', [
-    'Ta’lim tashkilotining faoliyatini baholashda davlat nazoratining asosiy shakli',
-    'O‘qituvchilarni ishga qabul qilish jarayoni',
-    'Maktabning moliyaviy rejasi',
-    'O‘quvchilarni yakuniy baholash shakli',
-  ], 0, 'Attestatsiya ta’lim tashkilotining faoliyatini baholashda davlat nazoratining asosiy shaklidir.'),
-
-  q('m1t1-e25', 'Attestatsiyaning asosiy maqsadi nima?', [
-    'Maktabning moliyaviy holatini aniqlash',
-    'Ta’lim sifatining davlat ta’lim standartlari va davlat ta’lim talablariga muvofiqligini aniqlash',
-    'O‘qituvchilar sonini kamaytirish',
-    'Ota-onalar faoliyatini baholash',
-  ], 1, 'Attestatsiyaning maqsadi ta’lim sifatining belgilangan davlat standartlari va talablariga muvofiqligini aniqlashdir.'),
-
-  q('m1t1-e26', 'Attestatsiyaning asosiy prinsiplaridan biri qaysi?', [
-    'Mustaqillik',
-    'Jazolash',
-    'Yashirinlik',
-    'Bir tomonlama boshqaruv',
-  ], 0, 'Mustaqillik attestatsiyaning asosiy prinsiplaridan biridir.'),
-
-  q('m1t1-e27', 'Umumiy o‘rta ta’lim tashkilotlarining attestatsiyasida oxirgi necha yillik faoliyati kompleks tahlil qilinadi?', [
-    '1 yil',
-    '2 yil',
-    '3 yil',
-    '5 yil',
-  ], 1, 'Attestatsiya jarayonida oxirgi ikki yillik faoliyat kompleks tahlil qilinadi.'),
-
-  q('m1t1-e28', 'Yangi tashkil etilgan davlat umumiy o‘rta ta’lim tashkiloti necha yil muddatga akkreditatsiyadan o‘tgan deb hisoblanadi?', [
-    '5 yil',
-    '7 yil',
-    '10 yil',
-    '11 yil',
-  ], 3, 'Materialga ko‘ra, yangi tashkil etilgan davlat umumiy o‘rta ta’lim tashkiloti 11 yilga akkreditatsiyadan o‘tgan deb hisoblanadi.'),
-
-  q('m1t1-e29', 'TALIS qanday tadqiqot?', [
-    'O‘quvchilar uchun imtihon',
-    'O‘qituvchilar va maktab rahbarlarining anonim so‘rovnomasi',
-    'Maktablarni moliyaviy tekshirish tizimi',
-    'O‘qituvchilarni attestatsiyadan o‘tkazish imtihoni',
-  ], 1, 'TALIS o‘qituvchilar va maktab rahbarlarining anonim so‘rovnomalariga asoslangan xalqaro tadqiqotdir.'),
-
-  q('m1t1-e30', 'TALIS ma’lumotlarni qanday usul orqali to‘playdi?', [
-    'Standartlashtirilgan so‘rovnomalar orqali',
-    'Faqat yozma imtihon orqali',
-    'Faqat direktorlarning buyruqlari orqali',
-    'Faqat moliyaviy hisobotlar orqali',
-  ], 0, 'TALIS standartlashtirilgan so‘rovnomalar orqali ma’lumot to‘playdi.'),
-]
-
-/* 🟡 O‘RTA — 30 TA */
-const medium: Question[] = [
-  q('m1t1-m01', 'Maktab rahbari choraklik vazifalarni maktabning uzoq muddatli ta’lim sifati maqsadlari bilan bog‘ladi. Bu qaysi tamoyilning amaliy ko‘rinishi?', [
-    'Rag‘batlantirish',
-    'Maqsadlilik',
-    'Hamkorlik',
-    'Shaffoflik',
-  ], 1, 'Qisqa va uzoq muddatli maqsadlarni uyg‘unlashtirish maqsadlilik tamoyiliga mos.'),
-
-  q('m1t1-m02', 'Maktabda o‘quvchilarning o‘zlashtirish darajasi pasaymoqda. Direktor davomat, intizom, psixologik muhit va metodik ta’minotni ham birgalikda tahlil qildi. Qaysi tamoyil qo‘llanilgan?', [
-    'Tizimlilik va kompleks yondashuv',
-    'Yakkaboshchilik',
-    'Rag‘batlantirish',
-    'Rejalilik',
-  ], 0, 'Bir muammoni bir nechta o‘zaro bog‘liq omillar bilan birga ko‘rish kompleks yondashuvdir.'),
-
-  q('m1t1-m03', 'Direktor o‘qituvchining faoliyatiga oid qarorni dars kuzatuvi, monitoring va pedagogik diagnostika natijalariga asoslab qabul qildi. Bu qaysi tamoyilga mos?', [
-    'Demokratiklik',
-    'Ilmiylik',
-    'Hamkorlik',
-    'Motivatsiya',
-  ], 1, 'Dalillarga asoslangan boshqaruv ilmiylik tamoyiliga mos.'),
-
-  q('m1t1-m04', 'Maktabdagi yangi metodik yondashuvni joriy etishdan oldin direktor pedagogik kengash va metodik birlashmalar fikrini o‘rgandi. Qaysi tamoyil ustuvor?', [
-    'Demokratiklik va jamoaviy boshqaruv',
-    'Nazorat va teskari aloqa',
-    'Rejalilik',
-    'Adolatlilik',
-  ], 0, 'Jamoa fikrini qaror jarayoniga jalb etish demokratik boshqaruvni ifodalaydi.'),
-
-  q('m1t1-m05', 'Jamoa qarorni muhokama qilishda faol qatnashdi, ammo qarorning bajarilishi uchun yakuniy mas’uliyat direktor zimmasida qoldi. Bu holat nimani ifodalaydi?', [
-    'Demokratiklik va rahbar mas’uliyatining uyg‘unligini',
-    'Faqat jamoaviy boshqaruvni',
-    'Faqat yakkaboshchilikni',
-    'Nazoratning bekor qilinishini',
-  ], 0, 'Jamoaviy ishtirok rahbarning yakuniy mas’uliyatini bekor qilmaydi.'),
-
-  q('m1t1-m06', 'Maktabda ichki nazorat rejasida dars kuzatuvi, bilim monitoringi va hujjatlar ijrosi belgilangan. Bu qaysi tamoyilning amaliy ifodasidir?', [
-    'Rejalilik',
-    'Rag‘batlantirish',
-    'Hamkorlik',
-    'Demokratiklik',
-  ], 0, 'Nazorat faoliyatining oldindan rejalashtirilishi rejalilik tamoyilini ko‘rsatadi.'),
-
-  q('m1t1-m07', 'Direktor dars kuzatuvidan keyin o‘qituvchiga faqat kamchiliklarini ko‘rsatib, ularni tuzatish bo‘yicha tavsiya bermadi. Qaysi jihat yetishmayapti?', [
-    'Teskari aloqa',
-    'Rejalilik',
-    'Ijtimoiy sheriklik',
-    'Moliyaviy boshqaruv',
-  ], 0, 'Nazoratdan keyingi tavsiya va yordam teskari aloqaning muhim qismidir.'),
-
-  q('m1t1-m08', 'Bir xil ishni bajarayotgan ikki pedagogga turlicha mezon qo‘llanildi. Bu qaysi tamoyilga zid?', [
-    'Ilmiylik',
-    'Adolatlilik va shaffoflik',
-    'Hamkorlik',
-    'Tizimlilik',
-  ], 1, 'Bir xil holatga turlicha mezon qo‘llash adolatlilik va shaffoflikka zid.'),
-
-  q('m1t1-m09', 'O‘qituvchining yaxshi natijasi jamoa oldida e’tirof etildi va unga kasbiy rivojlanish imkoniyati yaratildi. Bu qaysi yondashuvga mos?', [
-    'Nazorat',
-    'Motivatsiya va rag‘batlantirish',
-    'Intizomiy ta’sir',
-    'Akkreditatsiya',
-  ], 1, 'E’tirof va kasbiy rivojlanish motivatsiyaning muhim shakllaridir.'),
-
-  q('m1t1-m10', 'Maktab o‘quvchilarni kasbga yo‘naltirishni kuchaytirish uchun OTM va mahalliy tashkilotlar bilan hamkorlik qildi. Bu qaysi tamoyilning amaliy ko‘rinishi?', [
-    'Hamkorlik va ijtimoiy sheriklik',
-    'Ilmiylik',
-    'Rejalilik',
-    'Nazorat',
-  ], 0, 'OTM va tashkilotlar bilan hamkorlik ijtimoiy sheriklikni ifodalaydi.'),
-
-  q('m1t1-m11', 'Quyidagi holatlardan qaysi biri tizimlilik va kompleks yondashuvga eng mos?', [
-    'Faqat o‘quvchilar baholarini tahlil qilish',
-    'Faqat o‘qituvchilar davomatini tekshirish',
-    'Ta’lim sifati bilan birga tarbiya, intizom, psixologik muhit va resurslarni tahlil qilish',
-    'Faqat maktab binosini ta’mirlash',
-  ], 2, 'Kompleks yondashuv ta’lim bilan bog‘liq bir nechta omillarni birgalikda ko‘rib chiqadi.'),
-
-  q('m1t1-m12', 'Maktab rahbari “o‘quvchilar natijasi yaxshilanadi” degan umumiy maqsadni o‘lchash uchun o‘zlashtirish va davomat ko‘rsatkichlarini belgiladi. Bu qanday yondashuv?', [
-    'Natijalarni indikatorlar orqali o‘lchash',
-    'Jamoaviy boshqaruvdan voz kechish',
-    'Faqat nazoratni kuchaytirish',
-    'Akkreditatsiyaga tayyorgarlik',
-  ], 0, 'O‘zlashtirish va davomat maqsadga erishishni o‘lchash indikatorlari sifatida qo‘llanmoqda.'),
-
-  q('m1t1-m13', 'Rahbar ichki nazoratni xodimlarni jazolash vositasi emas, ularning faoliyatini yaxshilash vositasi sifatida tashkil etdi. Bu qaysi yondashuvga mos?', [
-    'Nazoratni rivojlantirish vositasi sifatida qo‘llash',
-    'Nazoratni bekor qilish',
-    'Faqat intizomiy nazorat',
-    'Faqat tashqi baholash',
-  ], 0, 'Materialda nazoratni qo‘rqitish emas, rivojlantirish vositasi sifatida tashkil etish ko‘rsatilgan.'),
-
-  q('m1t1-m14', 'Maktabda maqsadlar aniq belgilanmaganligi sababli resurslar samarasiz taqsimlandi. Qaysi tamoyil yetarli darajada ta’minlanmagan?', [
-    'Maqsadlilik',
-    'Hamkorlik',
-    'Rag‘batlantirish',
-    'Demokratiklik',
-  ], 0, 'Aniq maqsad resurslarni to‘g‘ri yo‘naltirish uchun asos bo‘ladi.'),
-
-  q('m1t1-m15', 'Quyidagilardan qaysi biri ilmiylik tamoyiliga mos kelmaydi?', [
-    'Monitoring natijalarini tahlil qilish',
-    'So‘rovnoma natijalaridan foydalanish',
-    'Dars kuzatuvlarini hisobga olish',
-    'Qarorni faqat rahbarning shaxsiy taxminiga asoslash',
-  ], 3, 'Shaxsiy taxmin dalil va tahlilga asoslangan ilmiy boshqaruvga mos kelmaydi.'),
-
-  q('m1t1-m16', 'Tamoyillarni moslashtiring: 1-Maqsadlilik, 2-Ilmiylik, 3-Demokratiklik, 4-Adolatlilik. a-Dalillarga asoslash, b-Aniq maqsad, c-Jamoa fikri, d-Teng mezon.', [
-    '1-b, 2-a, 3-c, 4-d',
-    '1-a, 2-b, 3-d, 4-c',
-    '1-c, 2-d, 3-a, 4-b',
-    '1-d, 2-c, 3-b, 4-a',
-  ], 0, 'Har bir tamoyil o‘zining mazmuniy tavsifiga moslashtirilgan.'),
-
-  q('m1t1-m17', 'Nazorat shakllarini moslashtiring: 1-Dars kuzatuvi, 2-Bilim monitoringi, 3-Hujjatlar nazorati, 4-Tarbiyaviy ishlar tahlili.', [
-    '1-b, 2-a, 3-c, 4-d',
-    '1-a, 2-b, 3-d, 4-c',
-    '1-c, 2-d, 3-a, 4-b',
-    '1-d, 2-c, 3-b, 4-a',
-  ], 0, 'Dars kuzatuvi—dars jarayoni; bilim monitoringi—natija; hujjatlar nazorati—ijro; tarbiyaviy tahlil—tarbiya samaradorligi.'),
-
-  q('m1t1-m18', 'Rag‘batlantirish shakllarini moslashtiring: 1-Ma’naviy, 2-Kasbiy rivojlanish, 3-Moddiy.', [
-    '1-b, 2-a, 3-c',
-    '1-a, 2-c, 3-b',
-    '1-c, 2-b, 3-a',
-    '1-b, 2-c, 3-a',
-  ], 0, 'Tashakkurnoma—ma’naviy, seminar—kasbiy, belgilangan tartibdagi to‘lov—moddiy rag‘bat.'),
-
-  q('m1t1-m19', 'Attestatsiya va akkreditatsiyani mazmuniga ko‘ra moslashtiring.', [
-    '1-attestatsiya: muvofiqlikni aniqlash; 2-akkreditatsiya: muvofiqlikni davlat tomonidan e’tirof etish',
-    '1-attestatsiya: davlat tomonidan e’tirof; 2-akkreditatsiya: sifatni aniqlash',
-    'Ikkalasi ham faqat ichki monitoring',
-    'Ikkalasi ham TALIS so‘rovi',
-  ], 0, 'Attestatsiya muvofiqlikni aniqlaydi, akkreditatsiya esa muvofiqlikning davlat tomonidan e’tirofidir.'),
-
-  q('m1t1-m20', 'TALIS yo‘nalishlarini moslashtiring: 1-Ish sharoitlari, 2-Kasbiy rivojlanish, 3-Kasbiy qoniqish, 4-Maktab madaniyati va boshqaruvi.', [
-    '1-c, 2-a, 3-d, 4-b',
-    '1-a, 2-c, 3-b, 4-d',
-    '1-d, 2-b, 3-c, 4-a',
-    '1-b, 2-d, 3-a, 4-c',
-  ], 0, 'TALIS o‘qituvchilarning ish sharoiti, rivojlanishi, qoniqishi va maktab boshqaruvini o‘rganadi.'),
-
-  q('m1t1-m21', 'Maktab boshqaruvida maqsad va natijaga yo‘naltirilgan faoliyatning mantiqiy ketma-ketligini belgilang.', [
-    'Maqsad → reja → amalga oshirish → nazorat',
-    'Reja → maqsad → nazorat → amalga oshirish',
-    'Amalga oshirish → maqsad → reja → nazorat',
-    'Nazorat → reja → maqsad → amalga oshirish',
-  ], 0, 'Boshqaruv jarayoni maqsadni belgilashdan boshlanib, rejalashtirish, ijro va nazorat bilan davom etadi.'),
-
-  q('m1t1-m22', 'Akkreditatsiya jarayonining to‘g‘ri ketma-ketligini belgilang.', [
-    'Tayyorgarlik → attestatsiya va tahlil → qaror → kamchiliklarni bartaraf etish → ijroni nazorat qilish → xavf-xatarga asoslangan monitoring',
-    'Attestatsiya → tayyorgarlik → qaror → monitoring → kamchiliklarni bartaraf etish → nazorat',
-    'Tayyorgarlik → qaror → attestatsiya → monitoring → nazorat → kamchiliklar',
-    'Kamchiliklarni bartaraf etish → tayyorgarlik → attestatsiya → qaror → monitoring → nazorat',
-  ], 0, 'Materialda akkreditatsiyaning olti bosqichi aynan shu ketma-ketlikda berilgan.'),
-
-  q('m1t1-m23', 'Ilmiy asoslangan boshqaruv qarorini qabul qilish jarayonini belgilang.', [
-    'Muammoni aniqlash → ma’lumot yig‘ish → tahlil → qaror',
-    'Ma’lumot yig‘ish → qaror → muammoni aniqlash → tahlil',
-    'Tahlil → qaror → ma’lumot yig‘ish → muammo',
-    'Qaror → muammo → tahlil → ma’lumot',
-  ], 0, 'Ilmiy boshqaruv avval muammoni aniqlash, dalil yig‘ish va tahlil qilishni talab qiladi.'),
-
-  q('m1t1-m24', 'Maktabda o‘zlashtirish ko‘rsatkichlari pasaydi. Rahbar dars kuzatuvi, o‘quvchilar natijalari, suhbat va so‘rovnoma ma’lumotlarini yig‘di. Bu harakatning asosiy tamoyili qaysi?', [
-    'Ilmiylik',
-    'Rag‘batlantirish',
-    'Hamkorlik',
-    'Yakkaboshchilik',
-  ], 0, 'Turli dalillarni yig‘ib, muammoni tahlil qilish ilmiylik tamoyiliga mos.'),
-
-  q('m1t1-m25', 'Direktor yangi ichki tartibni ishlab chiqishda pedagoglar, sinf rahbarlari va ota-onalar vakillarining fikrlarini oldi. Buning asosiy maqsadi nimaga mos?', [
-    'Jamoaning boshqaruvdagi ishtirokini ta’minlash',
-    'Rahbar mas’uliyatini bekor qilish',
-    'Nazoratni to‘xtatish',
-    'Rejalashtirishdan voz kechish',
-  ], 0, 'Turli manfaatdor tomonlarning fikrini olish demokratik boshqaruvni kuchaytiradi.'),
-
-  q('m1t1-m26', 'Maktab rahbari o‘qituvchilarning ish samaradorligini oshirish uchun metodik seminar, individual maslahat va kasbiy rivojlanish imkoniyatlarini tashkil etdi. Bu qaysi yo‘nalishga mos?', [
-    'Motivatsiya va kasbiy rivojlanishni qo‘llab-quvvatlash',
-    'Faqat intizomiy nazorat',
-    'Akkreditatsiya',
-    'Moliyaviy audit',
-  ], 0, 'Kasbiy rivojlanish va metodik yordam xodimlarni rivojlantirish hamda motivatsiyalashga xizmat qiladi.'),
-
-  q('m1t1-m27', 'TALIS tadqiqotining asosiy xususiyati qaysi javobda to‘g‘ri berilgan?', [
-    'O‘quvchilar bilimini individual baholaydigan imtihon',
-    'O‘qituvchilar va maktab rahbarlaridan standartlashtirilgan so‘rovnomalar orqali ma’lumot yig‘adigan tadqiqot',
-    'Maktablarni davlat akkreditatsiyasidan o‘tkazish mexanizmi',
-    'Faqat direktorlar faoliyatini tekshiruvchi nazorat turi',
-  ], 1, 'TALIS imtihon emas, standartlashtirilgan so‘rovnomalar asosidagi xalqaro tadqiqotdir.'),
-
-  q('m1t1-m28', 'Yangi tashkil etilgan davlat umumiy o‘rta ta’lim tashkiloti haqida qaysi fikr materialga muvofiq?', [
-    'Tashkil etilgan kundan boshlab 5 yil akkreditatsiyadan o‘tgan hisoblanadi',
-    'Tashkil etilgan kundan boshlab 11 yil akkreditatsiyadan o‘tgan hisoblanadi',
-    'Faqat attestatsiyadan keyin akkreditatsiyadan o‘tgan hisoblanadi',
-    '11 oy muddatga akkreditatsiyadan o‘tgan hisoblanadi',
-  ], 1, 'Materialga ko‘ra yangi tashkil etilgan davlat umumiy o‘rta ta’lim tashkiloti 11 yilga akkreditatsiyadan o‘tgan deb hisoblanadi.'),
-
-  q('m1t1-m29', 'Attestatsiyada umumiy o‘rta ta’lim tashkilotining qaysi faoliyat davri kompleks tahlil qilinadi?', [
-    'Oxirgi 6 oylik faoliyati',
-    'Oxirgi bir yillik faoliyati',
-    'Oxirgi ikki yillik faoliyati',
-    'Oxirgi besh yillik faoliyati',
-  ], 2, 'Attestatsiyada oxirgi ikki yillik faoliyat kompleks tahlil qilinadi.'),
-
-  q('m1t1-m30', 'Maktab rahbari boshqaruvni transformatsiya qilishda qaysi yo‘nalishni strategik yo‘nalish sifatida belgilashi mumkin?', [
-    'Jamoatchilik ishtirokini kamaytirish',
-    'Avtonomiyani hisobdorlikdan ajratish',
-    'Samarali kadrlar zaxirasini yaratish',
-    'Xalqaro tajribadan foydalanmaslik',
-  ], 2, 'Samarali kadrlar zaxirasini yaratish boshqaruv transformatsiyasining taklif etilgan strategik yo‘nalishlaridan biridir.'),
-]
-
-/* 🔴 QIYIN — 30 TA */
-const hard: Question[] = [
-  q('m1t1-h01', 'Maktabda o‘quvchilarning o‘zlashtirish ko‘rsatkichi pasaygan. Direktor faqat fan o‘qituvchilarini nazorat qilish o‘rniga davomat, intizom, psixologik muhit, metodik ta’minot va o‘quv natijalarini birgalikda tahlil qildi. Qarorning metodologik asosi qaysi?', [
-    'Nazorat va teskari aloqa',
-    'Tizimlilik va kompleks yondashuv',
-    'Demokratiklik va jamoaviy boshqaruv',
-    'Rag‘batlantirish va motivatsiya',
-  ], 1, 'Muammoni o‘zaro bog‘liq bir nechta omillar orqali tahlil qilish kompleks yondashuvdir.'),
-
-  q('m1t1-h02', 'Direktor yangi boshqaruv qarorini qabul qilishdan oldin dars kuzatuvlari, o‘zlashtirish monitoringi va pedagoglar so‘rovi natijalarini oldi. Qaysi tamoyil eng bevosita namoyon bo‘lmoqda?', [
-    'Ilmiylik',
-    'Rejalilik',
-    'Adolatlilik',
-    'Hamkorlik',
-  ], 0, 'Bir nechta dalil va tahlil manbalaridan foydalanish ilmiylik tamoyiliga mos.'),
-
-  q('m1t1-h03', 'Quyidagi vaziyatlardan qaysi biri demokratik boshqaruv va rahbar mas’uliyatining bir vaqtda ta’minlanganini eng aniq ifodalaydi?', [
-    'Direktor barcha qarorlarni mustaqil qabul qiladi',
-    'Jamoa qarorni muhokama qiladi, direktor me’yoriy talablar asosida yakuniy qaror qabul qilib, ijro uchun javob beradi',
-    'Qaror jamoa tomonidan qabul qilinadi va direktor faqat kuzatadi',
-    'Qaror ota-onalar tomonidan qabul qilinadi',
-  ], 1, 'Demokratik muhokama va rahbarning yakuniy mas’uliyati birgalikda ta’minlangan.'),
-
-  q('m1t1-h04', 'Direktor “ta’lim sifatini oshirish”ni strategik maqsad sifatida belgiladi, ammo maqsadga erishilganini aniqlash uchun ko‘rsatkichlar belgilanmadi. Qaysi jihat yetishmayapti?', [
-    'Maqsadni jamoaga topshirish',
-    'Natijalarni o‘lchash indikatorlarini belgilash',
-    'Tashqi hamkorlarni jalb qilish',
-    'Moddiy rag‘batni kuchaytirish',
-  ], 1, 'Maqsad natija indikatorlari orqali o‘lchanadigan bo‘lishi kerak.'),
-
-  q('m1t1-h05', 'Maktab rahbari dars kuzatuvi yakunida 4 ta kamchilikni ko‘rsatdi, ammo ularni bartaraf etish bo‘yicha tavsiya yoki yordam bermadi. Boshqaruv siklining qaysi elementi to‘liq amalga oshmagan?', [
-    'Nazorat',
-    'Teskari aloqa',
-    'Rejalashtirish',
-    'Maqsad belgilash',
-  ], 1, 'Nazoratdan keyingi tavsiya, yordam va rivojlantirish teskari aloqani tashkil etadi.'),
-
-  q('m1t1-h06', 'Quyidagi juftliklardan qaysi biri mazmun jihatidan to‘g‘ri moslashtirilgan?', [
-    'Attestatsiya — davlat tomonidan e’tirof; akkreditatsiya — sifatni aniqlash',
-    'Attestatsiya — sifatning davlat standartlari va talablariga muvofiqligini aniqlash; akkreditatsiya — muvofiqlikning davlat tomonidan e’tirof etilishi',
-    'Attestatsiya — TALIS; akkreditatsiya — ichki monitoring',
-    'Attestatsiya — moliyaviy audit; akkreditatsiya — pedagogik kengash qarori',
-  ], 1, 'Materialda attestatsiya va akkreditatsiyaning vazifalari aynan shu tarzda farqlangan.'),
-
-  q('m1t1-h07', 'Quyidagi holatlardan qaysi biri nazoratni rivojlantirish vositasi sifatida qo‘llashga eng mos?', [
-    'Kamchilik aniqlangach, xodimni darhol jazolash',
-    'Darsni kuzatish, muammoni aniqlash, tavsiya berish va keyingi natijani qayta kuzatish',
-    'Faqat hisobotni talab qilish',
-    'Faqat hujjatlarni tekshirish',
-  ], 1, 'Nazorat natijasini rivojlantirish, tavsiya va keyingi monitoring bilan bog‘lash kerak.'),
-
-  q('m1t1-h08', 'Direktor o‘qituvchini rag‘batlantirdi, ammo aynan nima uchun rag‘batlantirilgani ochiq mezonlarda ko‘rsatilmagan. Qaysi tamoyil bilan bog‘liq muammo yuzaga kelishi mumkin?', [
-    'Ilmiylik',
-    'Adolatlilik va shaffoflik',
-    'Tizimlilik',
-    'Rejalilik',
-  ], 1, 'Rag‘batlantirish mezonlarining noaniqligi shaffoflik va adolatlilik muammosini keltirib chiqarishi mumkin.'),
-
-  q('m1t1-h09', 'Maktabda ta’lim sifati yuqori, ammo ota-onalar bilan aloqa sust va kasbga yo‘naltirish ishlari yetarli emas. Rahbar faqat ta’lim sifatiga e’tibor qaratmoqda. Qaysi tamoyil nuqtayi nazaridan bu yondashuv muammoli?', [
-    'Tizimlilik va kompleks yondashuv',
-    'Ilmiylik',
-    'Rag‘batlantirish',
-    'Rejalilik',
-  ], 0, 'Maktab faoliyatining boshqa muhim yo‘nalishlarini e’tiborsiz qoldirish kompleks yondashuvga zid.'),
-
-  q('m1t1-h10', 'Qaysi qaror ilmiylik va tizimlilik tamoyillarining birgalikdagi qo‘llanilishiga eng mos?', [
-    'Direktor o‘z tajribasiga asoslanib tizim joriy qildi',
-    'Direktor monitoring ma’lumotlarini tahlil qilib, ta’lim sifati pasayishiga ta’sir qilayotgan bir nechta omillar bo‘yicha kompleks chora ishlab chiqdi',
-    'Direktor jamoa fikrini eshitmasdan qaror qabul qildi',
-    'Direktor faqat bitta fan natijasiga asoslandi',
-  ], 1, 'Dalillar asosida bir nechta bog‘liq omillarni tahlil qilish ikkala tamoyilni birlashtiradi.'),
-
-  q('m1t1-h11', 'Ilmiy asoslangan boshqaruv qarorini ishlab chiqishning eng mantiqiy ketma-ketligini belgilang.', [
-    'Muammoni aniqlash → dalillarni yig‘ish → tahlil → qaror → monitoring',
-    'Dalillarni yig‘ish → muammo → qaror → monitoring → tahlil',
-    'Muammo → tahlil → dalillar → monitoring → qaror',
-    'Qaror → muammo → tahlil → dalillar → monitoring',
-  ], 0, 'Muammo aniqlanadi, dalillar yig‘iladi, tahlil qilinadi, qaror qabul qilinadi va natija kuzatiladi.'),
-
-  q('m1t1-h12', 'Akkreditatsiya jarayonidagi quyidagi bosqichlarning to‘g‘ri ketma-ketligini belgilang: 1-Kamchiliklarni bartaraf etish, 2-Tayyorgarlik, 3-Monitoring, 4-Attestatsiya va tahlil, 5-Qaror, 6-Ijroni nazorat qilish.', [
-    '2 → 4 → 5 → 1 → 6 → 3',
-    '4 → 2 → 5 → 1 → 3 → 6',
-    '2 → 5 → 4 → 1 → 6 → 3',
-    '1 → 2 → 4 → 5 → 6 → 3',
-  ], 0, 'Materialdagi akkreditatsiya bosqichlari aynan shu ketma-ketlikda berilgan.'),
-
-  q('m1t1-h13', 'Rahbar avval maqsadni belgiladi, keyin indikatorlarni aniqladi, resurslarni taqsimladi va monitoring mexanizmini belgiladi. Ushbu faoliyatning boshqaruv mantig‘i qaysi?', [
-    'Maqsad → o‘lchov → resurs → nazorat',
-    'Nazorat → maqsad → resurs → o‘lchov',
-    'Resurs → nazorat → maqsad → o‘lchov',
-    'O‘lchov → resurs → nazorat → maqsad',
-  ], 0, 'Aniq maqsad, uni o‘lchash, resurslarni yo‘naltirish va nazorat qilish boshqaruvning mantiqiy ketma-ketligidir.'),
-
-  q('m1t1-h14', '“Davomatni oshirish” maqsadini eng to‘liq amalga oshiruvchi yondashuv qaysi?', [
-    '“Davomatni yaxshilash kerak.”',
-    '“Davomatni oshirish uchun o‘qituvchilarga topshiriq beriladi.”',
-    '“Mavjud ko‘rsatkich tahlil qilinadi, indikator belgilanadi, choralar rejalashtiriladi va natija monitoring qilinadi.”',
-    '“Davomat bo‘yicha yig‘ilish o‘tkaziladi.”',
-  ], 2, 'Maqsad, indikator, reja va monitoring birgalikda natijaga yo‘naltirilgan boshqaruvni ta’minlaydi.'),
-
-  q('m1t1-h15', 'Direktor motivatsiya uchun faqat moddiy rag‘batdan foydalanmoqda. Materialga ko‘ra qaysi yondashuv to‘liqroq?', [
-    'Faqat moddiy rag‘bat yetarli',
-    'Ma’naviy rag‘bat, kasbiy o‘sish va belgilangan tartibdagi moddiy rag‘batni uyg‘unlashtirish',
-    'Faqat intizomiy choralarni kuchaytirish',
-    'Faqat jamoa oldida tanqid qilish',
-  ], 1, 'Material motivatsiyaning ma’naviy, kasbiy va moddiy shakllarini uyg‘un qo‘llashni ko‘rsatadi.'),
-
-  q('m1t1-h16', 'Maktab rahbari ota-onalar, mahalla va OTM bilan hamkorlikni yo‘lga qo‘ydi. Natijada kasbga yo‘naltirish imkoniyatlari kengaydi. Qaysi natija bevosita namoyon bo‘lgan?', [
-    'Maktab ichki intizomining kuchayishi',
-    'Resurs va imkoniyatlarning kengayishi',
-    'Attestatsiya muddatining qisqarishi',
-    'TALIS natijasining avtomatik oshishi',
-  ], 1, 'Hamkorlik resurs va imkoniyatlarni kengaytirishi materialda bevosita ko‘rsatilgan.'),
-
-  q('m1t1-h17', 'Quyidagi holatlardan qaysi biri adolatlilik va shaffoflik tamoyiliga eng katta xavf tug‘diradi?', [
-    'Barcha pedagoglarga bir xil mezon e’lon qilinishi',
-    'Rag‘batlantirish mezonlarining oldindan ma’lum qilinishi',
-    'Bir xil natijaga ega xodimlarga turli mezon asosida baho berilishi',
-    'Qarorlarning asoslarini jamoaga tushuntirish',
-  ], 2, 'Bir xil natijaga turlicha mezon qo‘llash adolatlilikka zid.'),
-
-  q('m1t1-h18', 'Direktor pedagogik kengash fikrini oldi, ammo jamoa fikri me’yoriy talablarga zid bo‘lgani sababli boshqa qaror qabul qildi. Bu holat qanday tushuntiriladi?', [
-    'Demokratiklik mavjud emas',
-    'Demokratik muhokama rahbarning yakuniy mas’uliyatini bekor qilmaydi',
-    'Jamoa fikri har qanday holatda majburiydir',
-    'Direktor qaror qabul qilish huquqidan voz kechishi kerak',
-  ], 1, 'Jamoa fikri inobatga olinadi, ammo yakuniy qaror rahbarning qonuniy mas’uliyati doirasida qabul qilinadi.'),
-
-  q('m1t1-h19', 'Ta’lim tashkilotining oxirgi ikki yillik faoliyatini kompleks tahlil qilish qaysi jarayon bilan bevosita bog‘liq?', [
-    'TALIS',
-    'Attestatsiya',
-    'Motivatsiya',
-    'Ichki metodik seminar',
-  ], 1, 'Materialda attestatsiyada oxirgi ikki yillik faoliyat kompleks tahlil qilinishi ko‘rsatilgan.'),
-
-  q('m1t1-h20', 'Quyidagilardan qaysi biri umumiy o‘rta ta’lim tashkilotlarini attestatsiyadan o‘tkazishda o‘rganiladigan baholash sohalariga kirmaydi?', [
-    'Tashkiliy-boshqaruv faoliyatining samaradorligi',
-    'Ta’lim sifati ko‘rsatkichlari',
-    'Xavfsizlik',
-    'Xodimlarning shaxsiy moliyaviy daromadlari',
-  ], 3, 'Xodimlarning shaxsiy moliyaviy daromadlari materialda attestatsiyaning baholash sohasi sifatida keltirilmagan.'),
-
-  q('m1t1-h21', 'Attestatsiyaning asosiy prinsiplaridan qaysi qatorda faqat materialda ko‘rsatilgan prinsiplar berilgan?', [
-    'Mustaqillik, xolislik, oshkoralik, shaffoflik',
-    'Tezkorlik, raqobat, maxfiylik, jazolash',
-    'Ierarxiya, majburiylik, raqobat, markazlashuv',
-    'Innovatsiya, tejamkorlik, raqobat, maxfiylik',
-  ], 0, 'Mustaqillik, xolislik, oshkoralik va shaffoflik attestatsiyaning asosiy prinsiplaridir.'),
-
-  q('m1t1-h22', 'Qaysi fikr akkreditatsiya mazmunini eng to‘liq ifodalaydi?', [
-    'Ta’lim tashkilotining faoliyatini faqat ichki baholash',
-    'Ta’lim tashkiloti faoliyatining davlat ta’lim standartlari va talablariga muvofiqligining davlat tomonidan e’tirof etilishi',
-    'O‘qituvchilarni kasbiy rivojlantirish dasturi',
-    'Maktabning yillik ish rejasini tasdiqlash',
-  ], 1, 'Akkreditatsiya davlat tomonidan muvofiqlikni e’tirof etish mazmunini anglatadi.'),
-
-  q('m1t1-h23', 'Direktor TALISni o‘quvchilar bilimini bevosita baholaydigan xalqaro imtihon deb hisoblaydi. Qaysi javob uning xatosini eng aniq ko‘rsatadi?', [
-    'TALIS faqat o‘qituvchilarni qamrab oladi',
-    'TALIS faqat direktorlarni qamrab oladi',
-    'TALIS anonim so‘rovnoma bo‘lib, imtihon emas',
-    'TALIS faqat akkreditatsiya uchun o‘tkaziladi',
-  ], 2, 'Material TALISni o‘qituvchilar va maktab rahbarlarining anonim so‘rovnomasi sifatida belgilaydi.'),
-
-  q('m1t1-h24', 'TALIS ma’lumotlaridan foydalanishning boshqaruv nuqtayi nazaridan eng bevosita ahamiyati qaysi?', [
-    'Barcha maktablarga bir xil qaror berish',
-    'Boshqaruv qarorlari uchun ilmiy asos yaratish',
-    'O‘quvchilarni avtomatik baholash',
-    'Maktab akkreditatsiyasini avtomatik amalga oshirish',
-  ], 1, 'TALIS ma’lumotlari boshqaruv qarorlarini ilmiy asoslashga xizmat qilishi mumkin.'),
-
-  q('m1t1-h25', 'TALISning maqsadiga eng to‘liq mos keladigan javobni belgilang.', [
-    'Faqat maktab direktorlarini reytinglash',
-    'Samarali o‘quv jarayonini ta’minlovchi mexanizmlarni aniqlash va o‘qituvchi hamda rahbarlar haqidagi ma’lumotlarni qiyosiy tahlil qilish',
-    'O‘quvchilarni yakuniy attestatsiyadan o‘tkazish',
-    'Maktablarning moliyaviy faoliyatini tekshirish',
-  ], 1, 'TALIS samarali o‘quv jarayoni mexanizmlarini o‘rganish va xalqaro qiyoslashga xizmat qiladi.'),
-
-  q('m1t1-h26', 'Tushunchalarni moslashtiring: 1-Ilmiylik, 2-Demokratiklik, 3-Nazorat va teskari aloqa, 4-Hamkorlik.', [
-    '1-b, 2-d, 3-c, 4-a',
-    '1-d, 2-b, 3-a, 4-c',
-    '1-c, 2-a, 3-d, 4-b',
-    '1-a, 2-c, 3-b, 4-d',
-  ], 0, 'Ilmiylik—dalil; demokratiklik—jamoa; teskari aloqa—tavsiya; hamkorlik—tashqi sheriklar.'),
-
-  q('m1t1-h27', 'Quyidagi uch tushunchaning to‘g‘ri mosligini aniqlang: 1-Attestatsiya, 2-Akkreditatsiya, 3-TALIS.', [
-    '1-muvofiqlikni aniqlash; 2-davlat tomonidan e’tirof; 3-xalqaro so‘rovnoma',
-    '1-davlat tomonidan e’tirof; 2-muvofiqlikni aniqlash; 3-imtihon',
-    '1-so‘rovnoma; 2-ichki monitoring; 3-attestatsiya',
-    '1-imtihon; 2-so‘rovnoma; 3-akkreditatsiya',
-  ], 0, 'Uch tushuncha materialda aynan shu funksional farqlar bilan berilgan.'),
-
-  q('m1t1-h28', 'Maktabda o‘zlashtirish pasaydi. Quyidagi ketma-ketliklardan qaysi biri ilmiy boshqaruvga eng mos?', [
-    'Dars kuzatuvi → natijalar tahlili → suhbat → sabablarni aniqlash → chora-tadbir',
-    'Chora-tadbir → dars kuzatuvi → sabab → natija → suhbat',
-    'Tanbeh → chora → monitoring → sabab → tahlil',
-    'Rag‘bat → qaror → monitoring → sabab → tahlil',
-  ], 0, 'Dalillarni yig‘ish va sababni aniqlashdan keyin chora ishlab chiqiladi.'),
-
-  q('m1t1-h29', 'Qaysi variant maqsadlilik, ilmiylik, demokratiklik, rejalilik va nazorat tamoyillarini birgalikda eng to‘liq aks ettiradi?', [
-    'Faqat direktorning yakka qarori',
-    'Maqsad va indikatorlarni belgilash, ma’lumotlarni tahlil qilish, jamoa fikrini olish, reja tuzish va monitoring qilish',
-    'Faqat xodimlarni tekshirish',
-    'Faqat moddiy rag‘bat berish',
-  ], 1, 'Variantda bir nechta asosiy boshqaruv tamoyillari yagona jarayonda uyg‘unlashgan.'),
-
-  q('m1t1-h30', 'Maktab rahbari ta’lim sifatini oshirish tizimini joriy etdi. O‘zlashtirish, davomat va intizom yaxshilandi. Ammo direktor natijani faqat o‘z tajribasi bilan izohladi va boshqa omillarni tahlil qilmadi. Qaysi jihat yetarli emas?', [
-    'Ilmiylik — natijani dalillar asosida kompleks tahlil qilish',
-    'Hamkorlik — ota-onalar bilan aloqani to‘xtatish',
-    'Rag‘batlantirish — barcha xodimlarga mukofot berish',
-    'Rejalilik — yangi reja tuzishni bekor qilish',
-  ], 0, 'Natijani faqat shaxsiy tajriba bilan izohlash ilmiy va dalillarga asoslangan tahlilni yetarli ta’minlamaydi.'),
-]
-
-/* 🔵 KEYS — 10 TA */
-const caseStudies: Question[] = [
-  q('m1t1-c01', 'Maktabda 7-sinf o‘quvchilarining matematika fanidan o‘zlashtirish ko‘rsatkichi ikki chorak davomida pasaydi. Ayrim o‘qituvchilar bunga o‘quvchilarning qiziqishi pastligini sabab qilib ko‘rsatmoqda. Direktor muammoni aniqlash uchun dars kuzatuvlari, o‘zlashtirish ko‘rsatkichlari, davomat ma’lumotlari va o‘quvchilar bilan suhbat natijalarini o‘rganmoqchi. Direktorning eng maqbul birinchi harakati qaysi?', [
-    'Darhol matematika o‘qituvchilariga intizomiy chora ko‘rish',
-    'Muammoni dalillar va monitoring natijalari asosida kompleks tahlil qilish',
-    'Barcha o‘qituvchilarga qo‘shimcha topshiriq berish',
-    'Ota-onalarni yig‘ib, o‘quvchilarni tanqid qilish',
-  ], 1, 'Muammoni avval dalillar asosida kompleks tahlil qilish ilmiylik va tizimlilik tamoyillariga mos.'),
-
-  q('m1t1-c02', 'Maktabda yangi ichki nazorat tizimi joriy etilmoqda. Direktor pedagogik kengashda o‘qituvchilar, metodik birlashma rahbarlari va sinf rahbarlarining fikrlarini eshitdi. Ayrim takliflar amaldagi talablarga mos emasligi aniqlandi. Direktor nima qilishi kerak?', [
-    'Jamoaning barcha takliflarini o‘zgartirmasdan qabul qilish',
-    'Jamoa fikrlarini inobatga olib, amaldagi talablar asosida yakuniy qaror qabul qilish',
-    'Jamoa fikrini umuman hisobga olmaslik',
-    'Qarorni faqat metodik birlashma rahbarlariga topshirish',
-  ], 1, 'Demokratik muhokama rahbarning qonuniy va yakuniy mas’uliyatini bekor qilmaydi.'),
-
-  q('m1t1-c03', 'Direktor bir o‘qituvchining darsini kuzatdi. Darsda ayrim metodik kamchiliklar aniqlandi. Direktor faqat “dars sifati talab darajasida emas” deb xulosa yozdi va boshqa tavsiya bermadi. Qaysi harakat yetishmayapti?', [
-    'O‘qituvchini boshqa lavozimga o‘tkazish',
-    'Kamchiliklarni bartaraf etish bo‘yicha teskari aloqa, tavsiya va yordam berish',
-    'Dars kuzatuvlarini butunlay to‘xtatish',
-    'O‘qituvchini jamoa oldida tanqid qilish',
-  ], 1, 'Nazorat rivojlantirishga xizmat qilishi uchun teskari aloqa va metodik yordam berilishi kerak.'),
-
-  q('m1t1-c04', 'Maktabda ikki nafar o‘qituvchi bir xil natijaga erishdi. Birinchi o‘qituvchi rahbariyatga yaqin bo‘lgani sababli rag‘batlantirildi, ikkinchisiga rag‘bat berilmadi. Oldindan belgilangan aniq mezonlar ham mavjud emas. Rahbar qanday chora ko‘rishi kerak?', [
-    'Faqat birinchi o‘qituvchini rag‘batlantirishni davom ettirish',
-    'Rag‘batlantirish mezonlarini aniq va shaffof belgilash',
-    'Umuman rag‘batlantirishni bekor qilish',
-    'Barcha xodimlarga bir xil miqdorda mukofot berish',
-  ], 1, 'Aniq va shaffof mezonlar adolatlilikni ta’minlash uchun zarur.'),
-
-  q('m1t1-c05', 'Direktor yangi o‘quv yilida “ta’lim sifatini oshirish”ni asosiy maqsad qilib belgiladi. Ammo maqsadga erishilganini qanday aniqlash bo‘yicha mezonlar belgilanmagan. Keyingi eng zarur boshqaruv harakati qaysi?', [
-    'Faqat yig‘ilishlar sonini ko‘paytirish',
-    'Maqsadni o‘lchash uchun aniq indikatorlarni belgilash',
-    'Barcha o‘qituvchilarga qo‘shimcha vazifa berish',
-    'Maktabning tashqi ko‘rinishini yaxshilash',
-  ], 1, 'Maqsadga erishilganini baholash uchun aniq va o‘lchanadigan indikatorlar kerak.'),
-
-  q('m1t1-c06', 'Maktabda attestatsiya jarayoniga tayyorgarlik boshlandi. Direktor faqat hujjatlarni tartibga keltirmoqchi. Biroq attestatsiyada tashkilot faoliyatining oxirgi ikki yillik holati kompleks tahlil qilinadi. Eng to‘g‘ri yondashuv qaysi?', [
-    'Faqat hujjatlarni tartibga keltirish',
-    'Faqat o‘qituvchilar faoliyatini tekshirish',
-    'Baholash sohalari bo‘yicha maktab faoliyatini kompleks tahlil qilish va tayyorgarlik ko‘rish',
-    'Faqat maktab binosini ta’mirlash',
-  ], 2, 'Attestatsiyada oxirgi ikki yillik faoliyat kompleks tahlil qilinishi sababli tayyorgarlik ham kompleks bo‘lishi kerak.'),
-
-  q('m1t1-c07', 'Direktor yig‘ilishda: “TALISdan yuqori natija olish uchun o‘qituvchilarni imtihonga tayyorlashimiz kerak”, dedi. Material asosida bu fikr qanday to‘g‘rilanadi?', [
-    'TALIS o‘quvchilar uchun imtihon ekanini tushuntirish kerak',
-    'TALIS o‘qituvchilar va maktab rahbarlarining anonim so‘rovnomasi ekanini tushuntirish kerak',
-    'TALIS faqat direktorlar uchun imtihon ekanini tushuntirish kerak',
-    'TALIS akkreditatsiya jarayonining bir bosqichi ekanini tushuntirish kerak',
-  ], 1, 'Materialda TALIS imtihon emas, o‘qituvchi va maktab rahbarlarining anonim so‘rovnomasi sifatida berilgan.'),
-
-  q('m1t1-c08', 'Maktabda davomat pasaygan. Direktor faqat sinf rahbarlariga tanbeh berdi. Keyingi oyda ham davomat yaxshilanmadi. Tahlil natijasida oilaviy sharoit, transport, o‘quvchilarning qiziqishi va ayrim darslarning tashkil etilishi bilan bog‘liq omillar aniqlandi. Direktor keyingi bosqichda nima qilishi kerak?', [
-    'Faqat sinf rahbarlariga yana tanbeh berish',
-    'Muammoni bir nechta o‘zaro bog‘liq omillar asosida kompleks hal qilish',
-    'Barcha o‘quvchilarni jazolash',
-    'Davomat monitoringini bekor qilish',
-  ], 1, 'Muammo bir nechta omilga bog‘liq bo‘lsa, kompleks yondashuv asosida choralar ko‘riladi.'),
-
-  q('m1t1-c09', 'Maktabda o‘quvchilarni kasbga yo‘naltirish ishlari sust. Maktab rahbari yaqin hududdagi OTMlar, tashkilotlar va mahalla bilan hamkorlik qilish imkoniyatlari mavjudligini aniqladi. Eng maqbul qaror qaysi?', [
-    'Kasbga yo‘naltirishni faqat maktab ichida tashkil etish',
-    'Ota-onalar, mahalla, OTM va hamkor tashkilotlar bilan tizimli hamkorlikni yo‘lga qo‘yish',
-    'Faqat sinf rahbarlariga qo‘shimcha topshiriq berish',
-    'Kasbga yo‘naltirish ishlarini keyingi yilga qoldirish',
-  ], 1, 'Hamkorlik va ijtimoiy sheriklik maktabning imkoniyat va resurslarini kengaytiradi.'),
-
-  q('m1t1-c10', 'Maktabda ta’lim sifati, davomat va intizom ko‘rsatkichlari bir vaqtda pasaymoqda. Direktor uch variantni ko‘rib chiqdi: 1) barcha o‘qituvchilarga tanbeh berish; 2) faqat davomatni nazorat qilishni kuchaytirish; 3) ma’lumotlarni tahlil qilish, sabablarni aniqlash, jamoa bilan muhokama qilish, maqsad va indikatorlarni belgilash, chora-tadbirlar rejasini tuzish hamda natijani monitoring qilish. Qaysi variant materialdagi boshqaruv tamoyillariga eng to‘liq mos?', [
-    '1-variant',
-    '2-variant',
-    '3-variant',
-    '1 va 2-variant',
-  ], 2, '3-variant ilmiylik, tizimlilik, demokratiklik, maqsadlilik, rejalilik hamda nazorat va teskari aloqani birlashtiradi.'),
-]
+import type { Question } from '@/lib/quiz-data'
 
 export const M1T1_LEVELS = {
-  easy,
-  medium,
-  hard,
-  case: caseStudies,
+easy: [
+{
+id: 'm1t1e01',
+text: 'Umumiy ta’lim muassasasini boshqarishning asosiy mazmuni nimadan iborat?',
+options: [
+'Faqat hujjatlarni yuritishdan',
+'Ta’lim-tarbiya jarayonini maqsadli tashkil etish va muvofiqlashtirishdan',
+'Faqat xodimlar faoliyatini nazorat qilishdan',
+'Faqat o‘quvchilar davomatini kuzatishdan',
+],
+answer: 1,
+explanation: 'Maktab boshqaruvi ta’lim-tarbiya jarayonini maqsadli tashkil etish, muvofiqlashtirish va natijadorlikni ta’minlashni qamrab oladi.',
+},
+{
+id: 'm1t1e02',
+text: 'Maktab boshqaruvida strategik yondashuvning asosiy belgisi qaysi?',
+options: [
+'Faqat bugungi muammolarni hal qilish',
+'Muammolar yuzaga kelgandan keyin chora ko‘rish',
+'Uzoq muddatli maqsad va natijalarni oldindan belgilash',
+'Barcha qarorlarni bir shaxs qabul qilishi',
+],
+answer: 2,
+explanation: 'Strategik boshqaruv uzoq muddatli maqsadlarni belgilash va ularga erishish yo‘llarini oldindan ko‘rishni nazarda tutadi.',
+},
+{
+id: 'm1t1e03',
+text: 'Boshqaruvning rejalashtirish funksiyasi nimani anglatadi?',
+options: [
+'Maqsad, vazifa va amalga oshirish yo‘llarini belgilash',
+'Faqat bajarilgan ishlarni baholash',
+'Xodimlarni jazolash',
+'Hisobotlarni arxivlash',
+],
+answer: 0,
+explanation: 'Rejalashtirish kelgusidagi maqsadlar, vazifalar, muddatlar va ularga erishish usullarini oldindan belgilashdir.',
+},
+{
+id: 'm1t1e04',
+text: 'Nazoratning boshqaruvdagi asosiy vazifasi nima?',
+options: [
+'Xodimlarni qo‘rqitish',
+'Faqat kamchiliklarni izlash',
+'Hujjatlar sonini ko‘paytirish',
+'Belgilangan maqsad va natijalarning bajarilishini aniqlash',
+],
+answer: 3,
+explanation: 'Nazorat belgilangan vazifalar va natijalarning bajarilish holatini aniqlash hamda zarur tuzatishlarni kiritishga xizmat qiladi.',
+},
+{
+id: 'm1t1e05',
+text: 'Maktab boshqaruvida “maqsad” tushunchasi nimani bildiradi?',
+options: [
+'Kutilayotgan aniq natijani',
+'Xodimlar ro‘yxatini',
+'Kunlik topshiriqlar yig‘indisini',
+'Hisobot shaklini',
+],
+answer: 0,
+explanation: 'Maqsad boshqaruv faoliyati orqali erishilishi ko‘zda tutilgan holat yoki natijani ifodalaydi.',
+},
+{
+id: 'm1t1e06',
+text: 'Samarali boshqaruv qarorining muhim belgisi qaysi?',
+options: [
+'Tez qabul qilinishi',
+'Rahbarning shaxsiy fikriga asoslanishi',
+'Dalil va mavjud vaziyatni hisobga olishi',
+'Barcha xodimlarga bir xil topshiriq berishi',
+],
+answer: 2,
+explanation: 'Sifatli qaror mavjud vaziyat, ishonchli ma’lumotlar va muqobil yechimlarni hisobga olgan holda qabul qilinadi.',
+},
+{
+id: 'm1t1e07',
+text: 'Maktab rahbari uchun boshqaruv axborotining eng muhim xususiyati qaysi?',
+options: [
+'Ko‘pligi',
+'Dolzarbligi va ishonchliligi',
+'Faqat yozma shaklda bo‘lishi',
+'Faqat yuqori tashkilotdan kelishi',
+],
+answer: 1,
+explanation: 'Boshqaruv qarori uchun axborotning ko‘pligidan ko‘ra uning ishonchliligi, dolzarbligi va qarorga aloqadorligi muhim.',
+},
+{
+id: 'm1t1e08',
+text: 'Delegatsiya nima?',
+options: [
+'Vazifani bekor qilish',
+'Nazoratdan voz kechish',
+'Vazifani boshqa shaxsga bajarish uchun topshirish',
+'Qarorni kechiktirish',
+],
+answer: 2,
+explanation: 'Delegatsiya rahbarning muayyan vazifa va unga mos vakolatlarni boshqa xodimga topshirish jarayonidir.',
+},
+{
+id: 'm1t1e09',
+text: 'Boshqaruvda kommunikatsiyaning asosiy vazifasi nima?',
+options: [
+'Axborotni aniq yetkazish va o‘zaro tushunishni ta’minlash',
+'Hujjatlarni ko‘paytirish',
+'Nazoratni kuchaytirish',
+'Rahbar mavqeini ko‘rsatish',
+],
+answer: 0,
+explanation: 'Samarali kommunikatsiya boshqaruv ishtirokchilari o‘rtasida zarur axborot va tushunishni ta’minlaydi.',
+},
+{
+id: 'm1t1e10',
+text: 'Maktab faoliyatini baholashda faqat bitta ko‘rsatkichga tayanishning asosiy xavfi nima?',
+options: [
+'Vaqt tejaladi',
+'Natija har doim aniq bo‘ladi',
+'Tahlil soddalashadi',
+'Vaziyatning to‘liq manzarasi ko‘rinmay qoladi',
+],
+answer: 3,
+explanation: 'Bitta indikator butun tizimdagi jarayonlarni to‘liq ifodalamasligi mumkin. Kompleks baholash aniqroq xulosa beradi.',
+},
+{
+id: 'm1t1e11',
+text: 'Boshqaruv jarayonining mantiqiy boshlang‘ich nuqtasi odatda nima?',
+options: [
+'Hisobot',
+'Muammo yoki ehtiyojni aniqlash',
+'Jazolash',
+'Nazorat',
+],
+answer: 1,
+explanation: 'Samarali boshqaruv odatda mavjud muammo, ehtiyoj yoki rivojlanish imkoniyatini aniqlashdan boshlanadi.',
+},
+{
+id: 'm1t1e12',
+text: 'Maktab rahbari faoliyatida monitoring nimaga xizmat qiladi?',
+options: [
+'Jarayon va natijalarni muntazam kuzatish hamda tahlil qilishga',
+'Faqat yakuniy hisobot tuzishga',
+'Xodimlarni almashtirishga',
+'Hujjatlarni saqlashga',
+],
+answer: 0,
+explanation: 'Monitoring jarayon va natijalarni muntazam kuzatish, o‘zgarishlarni aniqlash va boshqaruv choralarini moslashtirish imkonini beradi.',
+},
+{
+id: 'm1t1e13',
+text: 'Boshqaruvda “resurs” tushunchasiga qaysi javob eng to‘liq mos keladi?',
+options: [
+'Faqat pul mablag‘lari',
+'Faqat pedagoglar',
+'Maqsadga erishishda foydalaniladigan insoniy, moddiy, vaqt va axborot imkoniyatlari',
+'Faqat bino va jihozlar',
+],
+answer: 2,
+explanation: 'Maktab boshqaruvida inson, vaqt, moliyaviy, moddiy, axborot va boshqa imkoniyatlar resurs sifatida qaraladi.',
+},
+{
+id: 'm1t1e14',
+text: 'Rahbarning mas’uliyati nimani anglatadi?',
+options: [
+'Barcha ishni o‘zi bajarishini',
+'Faqat topshiriq berishini',
+'Xatolarni xodimlarga yuklashini',
+'Qabul qilingan qaror va natijalar uchun javob berishini',
+],
+answer: 3,
+explanation: 'Rahbar vakolat bilan birga qabul qilingan boshqaruv qarorlari va ularning natijalari uchun mas’uliyatni ham o‘z zimmasiga oladi.',
+},
+{
+id: 'm1t1e15',
+text: 'Maktab boshqaruvida jamoaviy muhokamaning asosiy afzalligi nima?',
+options: [
+'Qaror qabul qilish doimo tezlashadi',
+'Turli nuqtayi nazarlar hisobga olinadi',
+'Rahbarning mas’uliyati kamayadi',
+'Nazoratga ehtiyoj qolmaydi',
+],
+answer: 1,
+explanation: 'Jamoaviy muhokama turli tajriba va nuqtayi nazarlarni hisobga olish orqali qaror sifatini oshirishi mumkin.',
+},
+{
+id: 'm1t1e16',
+text: 'Operativ boshqaruv nimaga ko‘proq yo‘naltiriladi?',
+options: [
+'Uzoq muddatli strategiyaga',
+'Tashqi imijga',
+'Joriy vazifalar va muammolarni hal etishga',
+'Faqat kadrlar siyosatiga',
+],
+answer: 2,
+explanation: 'Operativ boshqaruv kundalik yoki qisqa muddatli vazifalar, muammolar va jarayonlarni boshqarishga yo‘naltiriladi.',
+},
+{
+id: 'm1t1e17',
+text: 'Boshqaruv samaradorligini aniqlashda eng muhim savollardan biri qaysi?',
+options: [
+'Nechta yig‘ilish o‘tkazildi?',
+'Nechta buyruq chiqarildi?',
+'Nechta hujjat tayyorlandi?',
+'Belgilangan natijaga qay darajada erishildi?',
+],
+answer: 3,
+explanation: 'Boshqaruv samaradorligi bajarilgan ishlar sonidan ko‘ra erishilgan natija bilan bog‘liq.',
+},
+{
+id: 'm1t1e18',
+text: 'Rahbarning boshqaruv faoliyatida teskari aloqadan foydalanishi nimaga yordam beradi?',
+options: [
+'Topshiriqni tushunish va bajarilish holatini aniqlashga',
+'Hujjatlarni kamaytirishga',
+'Xodimlar sonini oshirishga',
+'Rejani bekor qilishga',
+],
+answer: 0,
+explanation: 'Teskari aloqa topshiriqning qanday tushunilgani, bajarilishdagi muammolar va natijalar haqida axborot beradi.',
+},
+{
+id: 'm1t1e19',
+text: 'Maktab boshqaruvida ustuvor vazifalarni belgilashda birinchi navbatda nima hisobga olinishi kerak?',
+options: [
+'Rahbarning shaxsiy qiziqishi',
+'Ta’lim tashkilotining maqsadi va real ehtiyojlari',
+'Eng oson bajariladigan ishlar',
+'Faqat tashqi talablar',
+],
+answer: 1,
+explanation: 'Ustuvorliklar maktabning strategik maqsadlari, mavjud ehtiyojlari va kutilayotgan ta’siriga qarab belgilanadi.',
+},
+{
+id: 'm1t1e20',
+text: 'Boshqaruvda koordinatsiya nima?',
+options: [
+'Vazifalarni bekor qilish',
+'Xodimlarni baholash',
+'Turli faoliyat va ishtirokchilar harakatlarini uyg‘unlashtirish',
+'Faqat nazorat qilish',
+],
+answer: 2,
+explanation: 'Koordinatsiya turli xodimlar, bo‘linmalar va jarayonlarning bir maqsad yo‘lida uyg‘un ishlashini ta’minlaydi.',
+},
+{
+id: 'm1t1e21',
+text: 'Maktab rahbari qaror qabul qilishdan oldin eng avvalo nimani aniqlashi maqsadga muvofiq?',
+options: [
+'Muammoning sababi va ko‘lami',
+'Kimni jazolash kerakligini',
+'Qaysi hujjatni chiqarishni',
+'Qaysi yig‘ilishda e’lon qilishni',
+],
+answer: 0,
+explanation: 'Muammo sababi va ko‘lamini tushunmasdan qabul qilingan qaror ko‘pincha oqibat bilan ishlashga olib keladi.',
+},
+{
+id: 'm1t1e22',
+text: '“Boshqaruv subyekti” deganda nima tushuniladi?',
+options: [
+'Boshqarilayotgan jarayon',
+'Boshqaruvni amalga oshiruvchi tomon',
+'Moddiy resurs',
+'Statistik ko‘rsatkich',
+],
+answer: 1,
+explanation: 'Boshqaruv subyekti boshqaruv ta’sirini amalga oshiruvchi shaxs, guruh yoki boshqaruv organidir.',
+},
+{
+id: 'm1t1e23',
+text: '“Boshqaruv obyekti”ga qaysi biri misol bo‘la oladi?',
+options: [
+'Rahbar',
+'Rahbar o‘rinbosari',
+'Ta’lim-tarbiya jarayoni',
+'Boshqaruv qarori',
+],
+answer: 2,
+explanation: 'Boshqaruv obyekti boshqaruv ta’siri yo‘naltiriladigan jarayon, faoliyat yoki tizimdir.',
+},
+{
+id: 'm1t1e24',
+text: 'Samarali topshiriq qanday bo‘lishi kerak?',
+options: [
+'Umumiy va qisqa',
+'Faqat og‘zaki',
+'Muddat va kutilgan natijasi aniq',
+'Iloji boricha murakkab',
+],
+answer: 2,
+explanation: 'Topshiriq bajaruvchiga nima qilinishi, qachongacha va qanday natija kutilayotgani aniq bo‘lsa, ijro samaraliroq bo‘ladi.',
+},
+{
+id: 'm1t1e25',
+text: 'Maktab faoliyatini takomillashtirishning muhim sharti qaysi?',
+options: [
+'Muammolarni yashirish',
+'Natijalarni muntazam tahlil qilish',
+'Faqat kamchiliklarni qayd etish',
+'Barcha vazifalarni rahbarning o‘zi bajarishi',
+],
+answer: 1,
+explanation: 'Muntazam tahlil natijalarni tushunish, muammolarni aniqlash va keyingi boshqaruv choralarini takomillashtirishga xizmat qiladi.',
+},
+{
+id: 'm1t1e26',
+text: 'Rahbarning ish vaqtini boshqarishi nimaga yordam beradi?',
+options: [
+'Barcha vazifalarni bir xil darajada bajarishga',
+'Vaqtni faqat yig‘ilishlarga sarflashga',
+'Ustuvor vazifalarni o‘z vaqtida bajarishga',
+'Barcha vazifalarni shaxsan bajarishga',
+],
+answer: 2,
+explanation: 'Vaqtni boshqarish rahbarga muhim va ta’siri yuqori vazifalarni ustuvorlashtirish imkonini beradi.',
+},
+{
+id: 'm1t1e27',
+text: 'Boshqaruv qarorining ijrosi ustidan nazorat qachondan boshlanishi kerak?',
+options: [
+'Faqat yakunda',
+'Muammo yuzaga kelganda',
+'Qaror ijroga yo‘naltirilgandan boshlab',
+'Hisobot topshirilgandan keyin',
+],
+answer: 2,
+explanation: 'Ijro nazorati qaror amalga oshirilishi jarayonida muntazam olib borilsa, muammolarni vaqtida aniqlash mumkin.',
+},
+{
+id: 'm1t1e28',
+text: 'Maktab rahbari uchun jamoa bilan ishlashda eng muhim omillardan biri qaysi?',
+options: [
+'Bir xil fikrlashni talab qilish',
+'Ochiq va aniq kommunikatsiya',
+'Faqat buyruqbozlik',
+'Barcha qarorni yashirin qabul qilish',
+],
+answer: 1,
+explanation: 'Ochiq va aniq kommunikatsiya jamoada vazifalar, maqsadlar va kutilayotgan natijalarni to‘g‘ri tushunishga yordam beradi.',
+},
+{
+id: 'm1t1e29',
+text: 'Boshqaruvda tahlilning asosiy vazifasi nima?',
+options: [
+'Ma’lumotlardan xulosa va qaror uchun asos olish',
+'Statistikani ko‘paytirish',
+'Hisobot hajmini oshirish',
+'Faqat kamchiliklarni sanash',
+],
+answer: 0,
+explanation: 'Tahlil ma’lumotlarni mazmunan o‘rganish va ular asosida boshqaruv xulosalarini shakllantirishga xizmat qiladi.',
+},
+{
+id: 'm1t1e30',
+text: 'Samarali boshqaruv siklini eng to‘g‘ri ifodalovchi variantni aniqlang.',
+options: [
+'Nazorat → buyruq → muammo → reja',
+'Hisobot → nazorat → maqsad → qaror',
+'Maqsad → rejalashtirish → amalga oshirish → monitoring va tahlil',
+'Buyruq → jazolash → hisobot → reja',
+],
+answer: 2,
+explanation: 'Boshqaruv maqsadni belgilash, rejalashtirish, ijro, monitoring va tahlil orqali takomillashtirish siklini tashkil etadi.',
+},
+] as Question[],
+
+medium: [
+{
+id: 'm1t1m01',
+text: 'Maktabda o‘quvchilar davomati pasaygani aniqlandi. Rahbarning birinchi harakati qaysi bo‘lishi maqsadga muvofiq?',
+options: [
+'Darhol sinf rahbarlarini jazolash',
+'Muammoning ko‘lami va sabablarini ma’lumotlar asosida aniqlash',
+'Barcha ota-onalarni yig‘ilishga chaqirish',
+'Davomat bo‘yicha yangi buyruq chiqarish',
+],
+answer: 1,
+explanation: 'Boshqaruv qaroridan oldin muammoning ko‘lami va ildiz sabablarini aniqlash dalillarga asoslangan yondashuvni ta’minlaydi.',
+},
+{
+id: 'm1t1m02',
+text: 'Bir vazifa ikki xodimga bir-biridan mustaqil tarzda berildi va natijada ish takrorlandi. Muammo nimada?',
+options: [
+'Motivatsiyada',
+'Resurs yetishmasligida',
+'Koordinatsiya va vakolatlarning aniq belgilanmaganida',
+'Nazoratning ortiqligida',
+],
+answer: 2,
+explanation: 'Bir vazifaning takrorlanishi odatda vazifalar va vakolatlar chegarasi hamda koordinatsiya mexanizmi yetarlicha aniqlanmaganini ko‘rsatadi.',
+},
+{
+id: 'm1t1m03',
+text: 'Rahbar barcha qarorlarni o‘zi qabul qiladi. Qisqa muddatda tartib saqlansa-da, jamoa tashabbusi pasaydi. Bunda qaysi boshqaruv muammosi ko‘rinmoqda?',
+options: [
+'Delegatsiyaning yetarli emasligi',
+'Monitoringning kuchayishi',
+'Rejalashtirishning ortiqligi',
+'Axborotning ko‘pligi',
+],
+answer: 0,
+explanation: 'Vazifalar va qarorlarning haddan tashqari markazlashuvi jamoaning tashabbusi va mas’uliyatini cheklashi mumkin.',
+},
+{
+id: 'm1t1m04',
+text: 'Maktabda o‘qish natijalari pasaydi. Qaysi yondashuv muammoni to‘g‘ri boshqarishga yaqin?',
+options: [
+'Eng past natijali o‘qituvchini aniqlab jazolash',
+'Faqat qo‘shimcha nazorat o‘rnatish',
+'Natijani boshqa maktab bilan taqqoslash',
+'Natijani sinf, fan, davr va sabablar kesimida tahlil qilish',
+],
+answer: 3,
+explanation: 'Natijani turli kesimlarda tahlil qilish muammoning qayerda va nima sababdan yuzaga kelganini aniqroq ko‘rsatadi.',
+},
+{
+id: 'm1t1m05',
+text: 'Rahbar topshiriq berdi, lekin bajaruvchi, muddat va kutilgan natijani ko‘rsatmadi. Asosiy xato nimada?',
+options: [
+'Vazifa juda oson bo‘lgan',
+'Topshiriqning aniqligi ta’minlanmagan',
+'Nazorat juda kuchli bo‘lgan',
+'Xodimlar soni kam bo‘lgan',
+],
+answer: 1,
+explanation: 'Aniq bajaruvchi, muddat va kutilgan natija ko‘rsatilmasa, ijro uchun mas’uliyat va kutilmalar noaniq bo‘lib qoladi.',
+},
+{
+id: 'm1t1m06',
+text: 'Bir xil muammo har oy takrorlanmoqda. Bu holatda rahbar nimaga e’tibor berishi kerak?',
+options: [
+'Muammoning ildiz sababiga',
+'Jazoni kuchaytirishga',
+'Hisobot shakliga',
+'Yig‘ilishlar soniga',
+],
+answer: 0,
+explanation: 'Takrorlanuvchi muammo faqat oqibat emas, tizimli yoki ildiz sabab bilan ishlash zarurligini ko‘rsatadi.',
+},
+{
+id: 'm1t1m07',
+text: 'Rahbar o‘qituvchilardan turli takliflar oldi. Ayrim takliflar bir-biriga zid. Keyingi maqbul qadam nima?',
+options: [
+'Eng ko‘p ovoz olgan taklifni darhol qabul qilish',
+'Barcha takliflarni rad etish',
+'Takliflarni mezonlar asosida tahlil qilib, variantlarni solishtirish',
+'Qarorni noma’lum muddatga qoldirish',
+],
+answer: 2,
+explanation: 'Muqobil variantlarni oldindan belgilangan mezonlar asosida taqqoslash qaror sifatini oshiradi.',
+},
+{
+id: 'm1t1m08',
+text: 'Maktabdagi reja juda ko‘p vazifalarni o‘z ichiga olgan, ammo ustuvorlik belgilanmagan. Eng katta xavf nima?',
+options: [
+'Vazifalar teng bajariladi',
+'Barcha ishlar tezlashadi',
+'Nazorat osonlashadi',
+'Muhim vazifalar ikkinchi darajali ishlar orasida yo‘qolib qoladi',
+],
+answer: 3,
+explanation: 'Ustuvorlik belgilanmasa, resurslar ta’siri yuqori vazifalarga emas, mayda va ikkilamchi ishlarga tarqalib ketishi mumkin.',
+},
+{
+id: 'm1t1m09',
+text: 'Rahbar o‘qituvchining natijasini baholashda faqat bir martalik kuzatuvga tayandi. Bu qanday kamchilik?',
+options: [
+'Baholashning yetarli dalilga asoslanmaganligi',
+'Strategik rejaning yo‘qligi',
+'Delegatsiyaning ortiqligi',
+'Resurslarning kamayishi',
+],
+answer: 0,
+explanation: 'Bir martalik kuzatuv doimiy faoliyat haqida to‘liq xulosa chiqarish uchun yetarli dalil bo‘lmasligi mumkin.',
+},
+{
+id: 'm1t1m10',
+text: 'Maktab jamoasida yangi tizim joriy qilinmoqda. Ayrim xodimlar qarshilik ko‘rsatmoqda. Rahbarning maqbul yondashuvi qaysi?',
+options: [
+'Qarshilik qilganlarni jazolash',
+'O‘zgarish sababini tushuntirish, fikrlarni eshitish va joriy etishni bosqichlash',
+'O‘zgarishni darhol bekor qilish',
+'Faqat buyruq chiqarish',
+],
+answer: 1,
+explanation: 'O‘zgarishlarni boshqarishda maqsadni tushuntirish, manfaatdor tomonlarni tinglash va zarur qo‘llab-quvvatlash qarshilikni kamaytiradi.',
+},
+{
+id: 'm1t1m11',
+text: 'Maktabda ma’lumotlar mavjud, lekin ular turli fayllarda va turli formatlarda saqlanadi. Birinchi boshqaruv vazifasi nima?',
+options: [
+'Yangi hisobot yaratish',
+'Barcha ma’lumotni o‘chirish',
+'Ma’lumotlarni tizimlashtirish va yagona mezonlarni belgilash',
+'Faqat qog‘oz shakliga o‘tkazish',
+],
+answer: 2,
+explanation: 'Tahlil uchun ma’lumotlar yagona mezon va tartibda shakllantirilishi kerak.',
+},
+{
+id: 'm1t1m12',
+text: 'Rahbar topshiriqni xodimga topshirdi va keyin umuman tekshirmadi. Delegatsiyaning noto‘g‘ri qo‘llangan jihati qaysi?',
+options: [
+'Vakolat berilgan',
+'Vazifa aniqlangan',
+'Muddat belgilangan',
+'Natija ustidan monitoring saqlanmagan',
+],
+answer: 3,
+explanation: 'Delegatsiya vazifani topshirish bilan tugamaydi; rahbar natija va muhim bosqichlar ustidan nazorat mexanizmini saqlab qoladi.',
+},
+{
+id: 'm1t1m13',
+text: 'Maktabda bir ko‘rsatkich yaxshilandi, ammo boshqa ko‘rsatkichlar pasaydi. Rahbar qanday xulosa qilishi kerak?',
+options: [
+'Birinchi ko‘rsatkich yetarli',
+'Umumiy natijani kompleks ko‘rsatkichlar orqali baholash kerak',
+'Pasaygan ko‘rsatkichlarni hisobga olmaslik kerak',
+'Rejani bekor qilish kerak',
+],
+answer: 1,
+explanation: 'Bitta ijobiy indikator boshqa natijalardagi salbiy o‘zgarishlarni yashirishi mumkin. Kompleks tahlil zarur.',
+},
+{
+id: 'm1t1m14',
+text: 'Boshqaruv qarorining sifatini oshirish uchun qaysi kombinatsiya eng muhim?',
+options: [
+'Tezlik va buyruq',
+'Tajriba va taxmin',
+'Ma’lumot, tahlil va muqobil variantlar',
+'Yig‘ilish va bayonnoma',
+],
+answer: 2,
+explanation: 'Dalillarni tahlil qilish va muqobil yechimlarni solishtirish qaror sifatini oshiradi.',
+},
+{
+id: 'm1t1m15',
+text: 'Rahbar ish vaqtining katta qismi mayda operativ masalalarga ketmoqda. U nima qilishi kerak?',
+options: [
+'Barcha ishni o‘zi bajarishi',
+'Ustuvorliklarni aniqlab, ayrim vazifalarni delegatsiya qilishi',
+'Yig‘ilishlarni ko‘paytirishi',
+'Strategik ishlarni to‘xtatishi',
+],
+answer: 1,
+explanation: 'Rahbarning vaqti yuqori ta’sirli vazifalarga yo‘naltirilishi uchun mos vazifalarni delegatsiya qilish zarur.',
+},
+{
+id: 'm1t1m16',
+text: 'Jamoada qaror qabul qilishda ikki guruh o‘rtasida kelishmovchilik bor. Eng konstruktiv yondashuv qaysi?',
+options: [
+'Kuchliroq guruh fikrini qabul qilish',
+'Mojaroni e’tiborsiz qoldirish',
+'Muammoni umumiy maqsad nuqtayi nazaridan muhokama qilish',
+'Har ikki guruhga alohida topshiriq berish',
+],
+answer: 2,
+explanation: 'Umumiy maqsad va dalillar atrofidagi muhokama shaxsiy qarama-qarshilikni konstruktiv yechimga aylantirishga yordam beradi.',
+},
+{
+id: 'm1t1m17',
+text: 'Maktab rivojlanish rejasining bajarilishini baholash uchun nima zarur?',
+options: [
+'Faqat umumiy maqsad',
+'Faqat rahbar fikri',
+'O‘lchanadigan ko‘rsatkichlar va muddatlar',
+'Ko‘proq yig‘ilish',
+],
+answer: 2,
+explanation: 'Reja bajarilishini obyektiv baholash uchun natija ko‘rsatkichlari, muddat va imkon qadar boshlang‘ich holat belgilanishi kerak.',
+},
+{
+id: 'm1t1m18',
+text: 'Rahbar bir muammoni hal qilish uchun uchta variant ishlab chiqdi. Eng to‘g‘ri keyingi qadam qaysi?',
+options: [
+'Birinchi variantni tanlash',
+'Variantlarni mezonlar bo‘yicha baholash',
+'Xodimlardan tasodifiy tanlashni so‘rash',
+'Eng arzon variantni olish',
+],
+answer: 1,
+explanation: 'Muqobil variantlarni ta’sir, xarajat, amalga oshiriluvchanlik va xavf kabi mezonlar asosida baholash maqsadga muvofiq.',
+},
+{
+id: 'm1t1m19',
+text: 'Maktabda muammo haqida xodimlardan turli ma’lumotlar kelmoqda. Rahbarning maqbul harakati qaysi?',
+options: [
+'Eng yuqori lavozimdagi xodim ma’lumotini qabul qilish',
+'O‘zi bilgan variantni tanlash',
+'Ma’lumotlarni tekshirish va mustaqil dalillar bilan solishtirish',
+'Barcha ma’lumotni rad etish',
+],
+answer: 2,
+explanation: 'Qaror uchun ma’lumotlarning ishonchliligi va boshqa manbalar bilan mosligi tekshirilishi kerak.',
+},
+{
+id: 'm1t1m20',
+text: 'Maktab boshqaruvida indikatorning asosiy vazifasi nima?',
+options: [
+'Maqsadga erishish darajasini kuzatish imkonini berish',
+'Xodimni jazolash',
+'Hisobot hajmini oshirish',
+'Faqat statistik ma’lumot yig‘ish',
+],
+answer: 0,
+explanation: 'Indikator maqsad yoki natijaga erishish darajasini o‘lchash va kuzatishga xizmat qiladi.',
+},
+{
+id: 'm1t1m21',
+text: 'Rahbar topshirig‘i bajarildi, lekin kutilgan natija olinmadi. Qaysi savol eng muhim?',
+options: [
+'Kim bajardi?',
+'Qancha vaqt ketdi?',
+'Nima sababdan natija kutilgan darajada bo‘lmadi?',
+'Nechta hujjat tayyorlandi?',
+],
+answer: 2,
+explanation: 'Ijro faktining o‘zi yetarli emas; boshqaruv uchun natijaga nima ta’sir qilganini aniqlash muhim.',
+},
+{
+id: 'm1t1m22',
+text: 'Yaxshi natijaga erishgan o‘qituvchining tajribasi mavjud. Rahbarning eng samarali yondashuvi qaysi?',
+options: [
+'Uni faqat mukofotlash',
+'Tajribani tahlil qilib, mos jihatlarini boshqa jarayonlarga tarqatish',
+'Boshqalarga aynan nusxa ko‘chirishni buyurish',
+'Tajribani faqat shu o‘qituvchida qoldirish',
+],
+answer: 1,
+explanation: 'Samarali tajribani ko‘chirishdan oldin uning qaysi sharoitlarda ishlaganini tahlil qilish va moslashtirish zarur.',
+},
+{
+id: 'm1t1m23',
+text: 'Rahbar muammoni hal qilishda faqat oqibat bilan ishladi. Natija yana takrorlandi. Nima yetishmagan?',
+options: [
+'Nazorat',
+'Resurs',
+'Ildiz sabab tahlili',
+'Hisobot',
+],
+answer: 2,
+explanation: 'Takroriy muammoni barqaror hal qilish uchun uning ildiz sabablarini aniqlash kerak.',
+},
+{
+id: 'm1t1m24',
+text: 'Maktabdagi qaror xodimlarga yetkazildi, ammo ularning aksariyati vazifaning maqsadini tushunmadi. Muammo nimada?',
+options: [
+'Kommunikatsiya sifati',
+'Resurslar',
+'Strategiya',
+'Nazorat',
+],
+answer: 0,
+explanation: 'Qarorni yetkazishning o‘zi yetarli emas; maqsad va kutilayotgan natija ham tushunarli bo‘lishi kerak.',
+},
+{
+id: 'm1t1m25',
+text: 'Rahbar rejasida 20 ta vazifa bor. Ulardan 5 tasi maktab natijasiga katta ta’sir qiladi. Qaysi yondashuv to‘g‘ri?',
+options: [
+'20 vazifaning barchasiga bir xil vaqt ajratish',
+'5 ta yuqori ta’sirli vazifani ustuvorlashtirish',
+'Eng oson 10 tasini bajarish',
+'Faqat rahbarga yoqadiganlarini tanlash',
+],
+answer: 1,
+explanation: 'Cheklangan vaqt va resurslarda ta’siri yuqori vazifalarni ustuvorlashtirish boshqaruv samaradorligini oshiradi.',
+},
+{
+id: 'm1t1m26',
+text: 'Boshqaruvda natijaga yo‘naltirilganlik nimani anglatadi?',
+options: [
+'Ko‘p ish bajarishni',
+'Ko‘p hujjat tayyorlashni',
+'Faoliyatni kutilgan o‘lchanadigan natija bilan bog‘lashni',
+'Nazoratni kuchaytirishni',
+],
+answer: 2,
+explanation: 'Natijaga yo‘naltirilgan boshqaruv faoliyat hajmiga emas, erishilishi ko‘zda tutilgan natijaga e’tibor beradi.',
+},
+{
+id: 'm1t1m27',
+text: 'Maktabda o‘zgarish joriy qilinmoqda. Xodimlar “Nega?” degan savolni bermoqda. Bu nimani anglatadi?',
+options: [
+'Xodimlar albatta qarshi',
+'Kommunikatsiya va o‘zgarish maqsadini tushuntirish zarur',
+'O‘zgarish noto‘g‘ri',
+'Buyruq yetarli emas',
+],
+answer: 1,
+explanation: 'O‘zgarishning maqsadi, kutilayotgan foydasi va amaliy ta’siri tushuntirilmasa, qarshilik kuchayishi mumkin.',
+},
+{
+id: 'm1t1m28',
+text: 'Rahbar qaror qabul qilishda manfaatdor tomonlarning fikrini hisobga oldi. Bu qanday yondashuvga yaqin?',
+options: [
+'Tizimli va manfaatdor tomonlarga yo‘naltirilgan boshqaruv',
+'Tasodifiy boshqaruv',
+'Faqat operativ boshqaruv',
+'Individual boshqaruv',
+],
+answer: 0,
+explanation: 'Manfaatdor tomonlarni hisobga olish qarorning ta’sirini kengroq ko‘rish va tizimli yondashuvni ta’minlashga yordam beradi.',
+},
+{
+id: 'm1t1m29',
+text: 'Muammo yechildi, ammo uning qayta takrorlanish ehtimoli yuqori. Rahbar keyingi bosqichda nima qilishi kerak?',
+options: [
+'Yana xuddi shu chorani qo‘llashi',
+'Profilaktik mexanizm yaratishi',
+'Xodimni almashtirishi',
+'Muammoni yopilgan deb hisoblash',
+],
+answer: 1,
+explanation: 'Barqaror boshqaruv faqat muammoni bartaraf etish emas, uning qayta yuzaga kelishini kamaytiruvchi mexanizm yaratishni ham talab qiladi.',
+},
+{
+id: 'm1t1m30',
+text: 'Boshqaruv siklining qaysi modeli eng mantiqiy?',
+options: [
+'Qaror → jazolash → hisobot → reja',
+'Muammo → reja → natija → nazorat',
+'Maqsad → reja → ijro → monitoring → tahlil → takomillashtirish',
+'Hisobot → buyruq → maqsad → ijro',
+],
+answer: 2,
+explanation: 'Samarali boshqaruv maqsadni belgilashdan boshlanib, rejalashtirish, ijro, monitoring, tahlil va takomillashtirish bilan davom etadi.',
+},
+] as Question[],
+
+hard: [
+{
+id: 'm1t1h01',
+text: 'Maktabda ta’lim natijalari pasaygan. Tahlilda davomatdagi pasayish, ayrim fanlardagi metodik muammolar va ota-onalar bilan aloqa sustligi aniqlandi. Eng maqbul boshqaruv yondashuvi qaysi?',
+options: [
+'Barcha o‘qituvchilar nazoratini kuchaytirish',
+'Faqat davomat muammosiga e’tibor berish',
+'Omillarni ustuvorlashtirib, har biri bo‘yicha choralarni yagona reja asosida birlashtirish',
+'Faqat ota-onalar bilan yig‘ilish o‘tkazish',
+],
+answer: 2,
+explanation: 'Bir nechta o‘zaro bog‘liq sabablar mavjud bo‘lsa, ularni ustuvorlashtirib, yagona tizimli chora-tadbirlar majmuasi orqali boshqarish maqsadga muvofiq.',
+},
+{
+id: 'm1t1h02',
+text: 'Rahbar yangi boshqaruv tizimini joriy etdi. Bir oyda hisobotlar ko‘paydi, lekin natijalar o‘zgarmadi. Eng asosli xulosa qaysi?',
+options: [
+'Nazoratni yana kuchaytirish kerak',
+'Faoliyat va natija o‘rtasidagi bog‘liqlikni qayta ko‘rib chiqish kerak',
+'Xodimlar sust ishlamoqda',
+'Hisobotlarni yanada ko‘paytirish kerak',
+],
+answer: 1,
+explanation: 'Hisobot va faoliyatning ko‘payishi o‘z-o‘zidan natija yaxshilanganini anglatmaydi. Jarayonlarning real natijaga ta’siri tekshirilishi kerak.',
+},
+{
+id: 'm1t1h03',
+text: 'Bir o‘qituvchining natijasi juda yuqori. Boshqalar uning metodini aynan ko‘chirdi, ammo natija takrorlanmadi. Qaysi xulosa eng asosli?',
+options: [
+'O‘qituvchi tajribasi noto‘g‘ri',
+'Boshqalar malakasiz',
+'Tajriba boshqa kontekstga moslashtirilmasdan ko‘chirilgan bo‘lishi mumkin',
+'Metoddan foydalanishni to‘xtatish kerak',
+],
+answer: 2,
+explanation: 'Samarali amaliyotni boshqa sharoitga ko‘chirishda kontekst, o‘quvchi tarkibi, resurs va jamoa imkoniyatlari hisobga olinishi kerak.',
+},
+{
+id: 'm1t1h04',
+text: 'Rahbar oldida ikkita variant bor: tezkor, ammo qisqa muddatli yechim va sekinroq, ammo muammoning sababiga ta’sir qiluvchi yechim. Qaysi mezon ustuvor?',
+options: [
+'Rahbarga qulayligi',
+'Hujjatlashtirish tezligi',
+'Muammoni barqaror hal qilish ehtimoli',
+'Jamoaning birinchi reaksiyasi',
+],
+answer: 2,
+explanation: 'Strategik boshqaruvda qarorning barqaror natija berishi va ildiz sababga ta’siri muhim mezonlardan biridir.',
+},
+{
+id: 'm1t1h05',
+text: 'MOSLASHTIRISH: 1. Rejalashtirish; 2. Tashkil etish; 3. Muvofiqlashtirish; 4. Nazorat. A. Vazifalar va resurslarni taqsimlash; B. Maqsad va faoliyat yo‘nalishlarini belgilash; C. Ishtirokchilar faoliyatini uyg‘unlashtirish; D. Natijaning mezonlarga mosligini aniqlash. To‘g‘ri moslikni toping.',
+options: [
+'1-B, 2-A, 3-C, 4-D',
+'1-A, 2-B, 3-D, 4-C',
+'1-C, 2-D, 3-A, 4-B',
+'1-D, 2-C, 3-B, 4-A',
+],
+answer: 0,
+explanation: 'Rejalashtirish maqsadni belgilaydi, tashkil etish resurs va vazifalarni taqsimlaydi, koordinatsiya faoliyatni uyg‘unlashtiradi, nazorat natijani tekshiradi.',
+},
+{
+id: 'm1t1h06',
+text: 'KETMA-KETLIK: Muammoni ma’lumotlarga asoslangan tarzda hal qilish bosqichlarini to‘g‘ri tartibga keltiring: 1) muammoni aniqlash; 2) ma’lumot yig‘ish; 3) sabablarni tahlil qilish; 4) muqobil yechimlarni ishlab chiqish; 5) qaror qabul qilish; 6) natijani monitoring qilish.',
+options: [
+'1 → 2 → 3 → 4 → 5 → 6',
+'2 → 1 → 4 → 3 → 5 → 6',
+'1 → 3 → 2 → 5 → 4 → 6',
+'3 → 2 → 1 → 4 → 6 → 5',
+],
+answer: 0,
+explanation: 'Avval muammo aniqlanadi, keyin dalillar yig‘iladi, sabablar tahlil qilinadi, variantlar ishlab chiqiladi, qaror qabul qilinadi va natija kuzatiladi.',
+},
+{
+id: 'm1t1h07',
+text: 'Rahbar barcha qarorlarni jamoa bilan kelishadi. Natijada jamoaviylik yuqori, ammo ayrim tezkor vazifalar kechikmoqda. Eng maqbul yechim qaysi?',
+options: [
+'Jamoaviy qarorlarni butunlay bekor qilish',
+'Barcha qarorlarni rahbarning o‘zi qabul qilishi',
+'Qarorlarni tezkorlik va ta’siriga qarab turkumlash',
+'Yig‘ilishlar sonini oshirish',
+],
+answer: 2,
+explanation: 'Har bir qaror bir xil darajadagi jamoaviy muhokamani talab qilmaydi. Qarorlarni turi, ta’siri va shoshilinchligiga ko‘ra farqlash samaraliroq.',
+},
+{
+id: 'm1t1h08',
+text: 'Maktabda ko‘rsatkichlar yaxshi, lekin o‘qituvchilarning ish yuklamasi haddan tashqari yuqori. Rahbar nimani baholashi kerak?',
+options: [
+'Natija yaxshi ekan, vaziyatni o‘zgartirmaslik',
+'Natija va resurslardan foydalanish barqarorligini birgalikda baholash',
+'Ish yuklamasini yanada oshirish',
+'Faqat natijaga qarash',
+],
+answer: 1,
+explanation: 'Yuqori natija barqaror bo‘lishi uchun inson resurslari va ish yuklamasining maqbulligi ham hisobga olinishi kerak.',
+},
+{
+id: 'm1t1h09',
+text: 'Rahbar muammoni hal qilish uchun uchta bo‘limdan ma’lumot oldi. Ularning ko‘rsatkichlari bir-biriga zid. Eng to‘g‘ri harakat qaysi?',
+options: [
+'O‘rtacha qiymatni olish',
+'Eng yuqori ko‘rsatkichni qabul qilish',
+'Ma’lumot yig‘ish metodikasi va manbalarini tekshirish',
+'Rahbarning taxminiga asoslanish',
+],
+answer: 2,
+explanation: 'Zid ma’lumotlar mavjud bo‘lsa, ularni birlashtirishdan oldin manba, metodika, davr va hisoblash mezonlari tekshirilishi lozim.',
+},
+{
+id: 'm1t1h10',
+text: 'MOSLASHTIRISH: 1. Delegatsiya; 2. Monitoring; 3. Tahlil; 4. Kommunikatsiya. A. Axborot almashinuvi; B. Jarayonni muntazam kuzatish; C. Vakolat va vazifaning topshirilishi; D. Ma’lumotlardan xulosa chiqarish. To‘g‘ri moslikni toping.',
+options: [
+'1-C, 2-B, 3-D, 4-A',
+'1-B, 2-C, 3-A, 4-D',
+'1-D, 2-A, 3-C, 4-B',
+'1-A, 2-D, 3-B, 4-C',
+],
+answer: 0,
+explanation: 'Delegatsiya vazifa va vakolatni topshiradi, monitoring kuzatadi, tahlil xulosa beradi, kommunikatsiya axborot almashinuvini ta’minlaydi.',
+},
+{
+id: 'm1t1h11',
+text: 'Maktab rivojlanish rejasida 15 ta indikator bor, ammo ularning hech birida boshlang‘ich holat ko‘rsatilmagan. Asosiy muammo nimada?',
+options: [
+'Indikatorlar juda ko‘p',
+'Maqsadlar yo‘q',
+'Natijani o‘lchash uchun bazaviy nuqta mavjud emas',
+'Reja juda qisqa',
+],
+answer: 2,
+explanation: 'Boshlang‘ich qiymat bo‘lmasa, keyingi o‘zgarish va rivojlanish darajasini obyektiv taqqoslash qiyinlashadi.',
+},
+{
+id: 'm1t1h12',
+text: 'Rahbar muammoni hal qilishda “ko‘proq nazorat” chorasi bilan cheklangan. Bu qarorning zaifligi nimada?',
+options: [
+'Nazorat umuman kerak emas',
+'Nazorat sabablarni bartaraf etuvchi mexanizm bo‘lmasligi mumkin',
+'Nazorat juda arzon',
+'Nazorat faqat o‘qituvchilar uchun',
+],
+answer: 1,
+explanation: 'Nazorat muhim bo‘lsa-da, u ildiz sababni bartaraf etuvchi chora bilan almashtirilmasa, muammo qayta yuzaga kelishi mumkin.',
+},
+{
+id: 'm1t1h13',
+text: 'Maktabda qaror qabul qilish tez, lekin noto‘g‘ri qarorlar soni ko‘paygan. Rahbar nimani muvozanatlashtirishi kerak?',
+options: [
+'Tezlik va qaror sifati',
+'Hisobot va yig‘ilish',
+'Jazolash va mukofot',
+'Hujjat va arxiv',
+],
+answer: 0,
+explanation: 'Samarali qaror qabul qilish tezkorlikni qaror sifatiga zarar yetkazmaydigan darajada muvozanatlashtirishni talab qiladi.',
+},
+{
+id: 'm1t1h14',
+text: 'Bir indikatorning o‘sishi maktabning haqiqiy rivojlanishini anglatmasligi mumkin. Buni aniqlash uchun nima qilish kerak?',
+options: [
+'Faqat shu indikatorni oshirish',
+'Qo‘shimcha indikatorlar va sifat ma’lumotlarini ko‘rish',
+'Indikatorni bekor qilish',
+'Faqat rahbar fikrini olish',
+],
+answer: 1,
+explanation: 'Natijani to‘liq baholash uchun miqdoriy indikatorlar bilan birga sifat ma’lumotlari va boshqa bog‘liq ko‘rsatkichlar ham tahlil qilinadi.',
+},
+{
+id: 'm1t1h15',
+text: 'Rahbar xodimga vazifa berdi, vakolat berdi, lekin zarur resurs bermadi. Bunday holatda qaysi xulosa to‘g‘ri?',
+options: [
+'Faqat xodim javobgar',
+'Vazifa bajarilmasligi tabiiy',
+'Delegatsiya to‘liq ta’minlanmagan',
+'Nazoratni bekor qilish kerak',
+],
+answer: 2,
+explanation: 'Samarali delegatsiyada vazifa bilan birga uni bajarish uchun zarur vakolat va resurslar ham muvofiqlashtiriladi.',
+},
+{
+id: 'm1t1h16',
+text: 'KETMA-KETLIK: Strategik maqsadni amaliy vazifaga aylantirishning eng maqbul ketma-ketligini toping: 1) muammo/ehtiyoj; 2) maqsad; 3) kutilayotgan natija; 4) indikator; 5) faoliyat va muddat; 6) monitoring.',
+options: [
+'1 → 2 → 3 → 4 → 5 → 6',
+'2 → 1 → 3 → 5 → 4 → 6',
+'1 → 3 → 2 → 4 → 6 → 5',
+'3 → 2 → 1 → 4 → 5 → 6',
+],
+answer: 0,
+explanation: 'Ehtiyoj aniqlanadi, maqsad belgilanadi, kutilgan natija aniqlashtiriladi, indikator belgilanadi, faoliyat rejalashtiriladi va monitoring qilinadi.',
+},
+{
+id: 'm1t1h17',
+text: 'Rahbar qaror qabul qilishda xodimlarning fikrini oldi, ammo qaror natijasini o‘lchash mezonlarini belgilamadi. Qaysi bosqich yetishmayapti?',
+options: [
+'Delegatsiya',
+'Baholash mezonlarini belgilash',
+'Kommunikatsiya',
+'Motivatsiya',
+],
+answer: 1,
+explanation: 'Qaror natijasi oldindan belgilangan mezonlar orqali baholanmasa, uning samaradorligini obyektiv aniqlash qiyin.',
+},
+{
+id: 'm1t1h18',
+text: 'Maktabdagi muammolar ko‘p bo‘lsa, rahbarning birinchi navbatdagi vazifasi nima?',
+options: [
+'Barchasini bir vaqtda hal qilish',
+'Ularni ta’siri va dolzarbligiga ko‘ra ustuvorlashtirish',
+'Eng osonini tanlash',
+'Eng ko‘p shikoyat qilinganini tanlash',
+],
+answer: 1,
+explanation: 'Cheklangan resurs sharoitida muammolar ta’sir, dolzarblik, xavf va amalga oshirish imkoniyatiga ko‘ra ustuvorlashtiriladi.',
+},
+{
+id: 'm1t1h19',
+text: 'Bir qaror yaxshi natija berdi. Rahbar uni boshqa barcha holatlarga avtomatik tatbiq qilmoqchi. Qaysi xato mavjud?',
+options: [
+'Haddan tashqari umumlashtirish',
+'Monitoring',
+'Delegatsiya',
+'Koordinatsiya',
+],
+answer: 0,
+explanation: 'Bir sharoitda ishlagan yechim boshqa kontekstda ham aynan shu natijani berishi kafolatlanmaydi.',
+},
+{
+id: 'm1t1h20',
+text: 'MOSLASHTIRISH: 1. Strategik boshqaruv; 2. Operativ boshqaruv; 3. Taktik boshqaruv; 4. Inqiroz boshqaruvi. A. Joriy muammoga tezkor javob; B. Uzoq muddatli yo‘nalish va maqsad; C. Strategiyani amaliy dasturlarga aylantirish; D. Keskin xavf yoki favqulodda vaziyatni boshqarish.',
+options: [
+'1-B, 2-A, 3-C, 4-D',
+'1-A, 2-B, 3-D, 4-C',
+'1-C, 2-D, 3-B, 4-A',
+'1-D, 2-C, 3-A, 4-B',
+],
+answer: 0,
+explanation: 'Strategik uzoq muddatli yo‘nalishni, taktik amaliy dasturlashni, operativ joriy boshqaruvni, inqiroz boshqaruvi esa keskin xavfga javobni anglatadi.',
+},
+{
+id: 'm1t1h21',
+text: 'Rahbar maktabning kuchli tomonlarini yaxshi biladi, ammo zaif tomonlarini muhokama qilishdan qochadi. Strategik tahlilda nima buziladi?',
+options: [
+'Xolislik',
+'Tezkorlik',
+'Delegatsiya',
+'Resurs',
+],
+answer: 0,
+explanation: 'Strategik tahlil kuchli va zaif tomonlarni xolis ko‘rib chiqishni talab qiladi.',
+},
+{
+id: 'm1t1h22',
+text: 'Maktabda barcha vazifalar bajarilgan, lekin asosiy maqsadga erishilmagan. Bu nimani ko‘rsatishi mumkin?',
+options: [
+'Faoliyat va natija bir xil tushunilgan',
+'Faoliyatlar natija bilan yetarlicha bog‘lanmagan',
+'Xodimlar juda ko‘p ishlagan',
+'Monitoring ortiqcha bo‘lgan',
+],
+answer: 1,
+explanation: 'Ko‘p vazifa bajarilishi avtomatik ravishda strategik natijaga olib kelmaydi. Faoliyatlar natijaga xizmat qilishi kerak.',
+},
+{
+id: 'm1t1h23',
+text: 'Rahbar muammoning sababini noto‘g‘ri aniqlasa, keyingi bosqichlarga eng katta ta’sir qiladigan xavf nima?',
+options: [
+'Noto‘g‘ri yechim tanlanishi',
+'Hisobot kamayishi',
+'Yig‘ilishlar qisqarishi',
+'Delegatsiya kuchayishi',
+],
+answer: 0,
+explanation: 'Noto‘g‘ri tashxis noto‘g‘ri yechim va resurslarning samarasiz sarflanishiga olib kelishi mumkin.',
+},
+{
+id: 'm1t1h24',
+text: 'Maktabda yangi loyiha boshlandi. Rahbar loyiha muvaffaqiyatini faqat yakunda baholamoqchi. Qaysi boshqaruv tamoyili buziladi?',
+options: [
+'Uzluksiz monitoring',
+'Delegatsiya',
+'Ierarxiya',
+'Markazlashuv',
+],
+answer: 0,
+explanation: 'Jarayon davomida monitoring qilish muammolarni yakuniy bosqichgacha kutmasdan tuzatish imkonini beradi.',
+},
+{
+id: 'm1t1h25',
+text: 'MOSLASHTIRISH: 1. Samaradorlik; 2. Amalga oshiriluvchanlik; 3. Barqarorlik; 4. Ta’sir. A. Qaror natijasi qancha foyda keltiradi? B. Qarorni mavjud sharoitda bajarish mumkinmi? C. Natija uzoqroq saqlanadimi? D. Qaror boshqa jarayonlarga qanday o‘zgarish olib keladi?',
+options: [
+'1-A, 2-B, 3-C, 4-D',
+'1-D, 2-A, 3-B, 4-C',
+'1-B, 2-C, 3-D, 4-A',
+'1-C, 2-D, 3-A, 4-B',
+],
+answer: 0,
+explanation: 'Samaradorlik foyda va natijani, amalga oshiriluvchanlik bajarish imkonini, barqarorlik natijaning davomiyligini, ta’sir esa boshqa jarayonlardagi o‘zgarishni bildiradi.',
+},
+{
+id: 'm1t1h26',
+text: 'Rahbar muammoni faqat bitta sabab bilan izohladi, holbuki bir nechta omil mavjud edi. Bu qaysi kamchilikni ko‘rsatadi?',
+options: [
+'Tizimli yondashuvning yetishmasligi',
+'Delegatsiyaning kuchliligi',
+'Monitoringning ortiqligi',
+'Kommunikatsiyaning samaradorligi',
+],
+answer: 0,
+explanation: 'Murakkab maktab muammolari ko‘pincha bir nechta omil bilan bog‘liq bo‘ladi. Tizimli tahlil ularning o‘zaro ta’sirini ko‘rishga yordam beradi.',
+},
+{
+id: 'm1t1h27',
+text: 'Jamoa qarorni qabul qildi, lekin kim nima qilishi aniq emas. Eng muhim keyingi harakat qaysi?',
+options: [
+'Yangi yig‘ilish o‘tkazish',
+'Vazifalar, mas’ullar va muddatlarni aniqlashtirish',
+'Qarorni bekor qilish',
+'Nazoratni kuchaytirish',
+],
+answer: 1,
+explanation: 'Qarorning ijrosi uchun vazifalar, mas’ullar, muddatlar va kutilayotgan natijalar aniqlashtirilishi kerak.',
+},
+{
+id: 'm1t1h28',
+text: 'Rahbar o‘zgarishni joriy etishda faqat texnik tomonini rejalashtirdi. Nima yetishmaydi?',
+options: [
+'Inson omili va kommunikatsiya',
+'Hujjat',
+'Hisobot',
+'Nazorat',
+],
+answer: 0,
+explanation: 'Tashkiliy o‘zgarishning muvaffaqiyati texnik yechim bilan birga xodimlarning tayyorgarligi, kommunikatsiyasi va qo‘llab-quvvatlanishiga ham bog‘liq.',
+},
+{
+id: 'm1t1h29',
+text: 'Maktab boshqaruvida tizimli fikrlashning asosiy belgisi qaysi?',
+options: [
+'Har bir muammoni alohida ko‘rish',
+'Muammo va uning boshqa jarayonlar bilan o‘zaro bog‘liqligini ko‘rish',
+'Faqat natijaga qarash',
+'Faqat rahbar fikriga tayanish',
+],
+answer: 1,
+explanation: 'Tizimli fikrlash muammoni alohida hodisa sifatida emas, boshqa jarayonlar va manfaatdor tomonlar bilan bog‘liq tizim sifatida ko‘rishni nazarda tutadi.',
+},
+{
+id: 'm1t1h30',
+text: 'KETMA-KETLIK: Qaror ijrosini boshqarishning maqbul ketma-ketligini toping: 1) vazifani aniq belgilash; 2) mas’ulni belgilash; 3) resurs va muddatni aniqlash; 4) ijroni kuzatish; 5) natijani baholash; 6) zarur tuzatish kiritish.',
+options: [
+'1 → 2 → 3 → 4 → 5 → 6',
+'2 → 1 → 3 → 5 → 4 → 6',
+'1 → 3 → 2 → 6 → 4 → 5',
+'3 → 1 → 2 → 4 → 6 → 5',
+],
+answer: 0,
+explanation: 'Avval vazifa aniqlanadi, mas’ul va resurslar belgilanadi, ijro kuzatiladi, natija baholanadi va zarur bo‘lsa tuzatish kiritiladi.',
+},
+] as Question[],
+
+case: [
+{
+id: 'm1t1c01',
+text: 'CASE: Maktabda matematika fanidan natijalar uch oy davomida pasaymoqda. Rahbar yig‘ilish o‘tkazib, o‘qituvchilarni tanqid qilishni taklif qildi. Siz rahbar bo‘lsangiz, birinchi navbatda nima qilasiz?',
+options: [
+'O‘qituvchilarni ogohlantirasiz',
+'Nazorat ishlarini ko‘paytirasiz',
+'Natijalarni sinflar, mavzular va davrlar kesimida tahlil qilib, sabablarni aniqlaysiz',
+'Qo‘shimcha darslarni majburiy qilasiz',
+],
+answer: 2,
+explanation: 'Muammo bo‘yicha choradan oldin uning ko‘lami va sabablarini dalillar asosida aniqlash eng maqbul boshqaruv bosqichidir.',
+},
+{
+id: 'm1t1c02',
+text: 'CASE: Ikki direktor o‘rinbosari bir xil vazifa bo‘yicha turlicha topshiriq bermoqda. O‘qituvchilar qaysi ko‘rsatmaga amal qilishni bilmayapti. Eng maqbul boshqaruv chorasi qaysi?',
+options: [
+'O‘qituvchilardan birini tanlashni so‘rash',
+'Vazifalar va vakolatlarni aniqlashtirib, yagona koordinatsiya mexanizmini belgilash',
+'Ikkala o‘rinbosarning vakolatini kamaytirish',
+'Rahbar barcha vazifani o‘zi berishi',
+],
+answer: 1,
+explanation: 'Vakolatlar va vazifalar aniq chegaralanib, yagona koordinatsiya mexanizmi o‘rnatilsa, qarama-qarshi topshiriqlar kamayadi.',
+},
+{
+id: 'm1t1c03',
+text: 'CASE: Maktabda yangi elektron tizim joriy qilindi. Ayrim o‘qituvchilar undan foydalanishni bilmaydi. Rahbar “foydalanmaganlarga chora ko‘raman” dedi. Professional boshqaruv nuqtayi nazaridan eng maqbul yondashuv qaysi?',
+options: [
+'Darhol jazolash',
+'Tizimni bekor qilish',
+'Ehtiyojni aniqlab, qisqa o‘qitish va amaliy qo‘llab-quvvatlashni tashkil etish',
+'Tizimdan faqat yosh o‘qituvchilar foydalanishi',
+],
+answer: 2,
+explanation: 'Yangi tizimni joriy etishda xodimlarning kompetensiya ehtiyojini aniqlash va amaliy yordam ko‘rsatish barqaror natija beradi.',
+},
+{
+id: 'm1t1c04',
+text: 'CASE: Maktabning rivojlanish rejasida 25 ta vazifa bor. Chorak oxirida 20 tasi bajarilgan, ammo asosiy ta’lim ko‘rsatkichi deyarli o‘zgarmagan. Rahbar nimani tekshirishi kerak?',
+options: [
+'Nega 5 ta vazifa qolganini',
+'Vazifalar sonini yana oshirishni',
+'Bajarilgan vazifalar haqiqiy natija bilan bog‘langan-bog‘lanmaganini',
+'Hisobotni qayta yozishni',
+],
+answer: 2,
+explanation: 'Faoliyatlar soni emas, ularning kutilgan natijaga ta’siri muhim. Rejadagi vazifalar natija bilan bog‘langanligi tekshirilishi kerak.',
+},
+{
+id: 'm1t1c05',
+text: 'CASE: Bir o‘qituvchi haqida ota-onalardan qarama-qarshi fikrlar kelmoqda. Ayrimlari yuqori baholaydi, boshqalari dars sifati pastligini aytmoqda. Rahbar uchun eng maqbul birinchi qadam qaysi?',
+options: [
+'Ko‘pchilik fikrini haqiqat deb qabul qilish',
+'O‘qituvchini boshqa sinfga o‘tkazish',
+'Dalillarni yig‘ib, dars jarayoni va o‘quv natijalarini kompleks o‘rganish',
+'Ota-onalar fikrini e’tiborsiz qoldirish',
+],
+answer: 2,
+explanation: 'Qarama-qarshi fikrlar mavjud bo‘lsa, xulosa chiqarishdan oldin bir nechta ishonchli manbadan dalillar olinishi kerak.',
+},
+{
+id: 'm1t1c06',
+text: 'CASE: Maktabda o‘quvchilar davomatini yaxshilash bo‘yicha chora ko‘rildi. Bir oyda davomat oshdi, biroq keyingi oy yana pasaydi. Rahbarning keyingi qarori qaysi?',
+options: [
+'Xuddi shu chorani yanada kuchaytirish',
+'Natija nima sababdan vaqtinchalik bo‘lganini tahlil qilish',
+'Sinf rahbarlarini almashtirish',
+'Davomatni faqat tekshirish',
+],
+answer: 1,
+explanation: 'Natijaning vaqtinchalik bo‘lishi sabablarning to‘liq bartaraf etilmaganini ko‘rsatishi mumkin. Qayta tahlil zarur.',
+},
+{
+id: 'm1t1c07',
+text: 'CASE: Rahbar bir xodimga yangi loyiha uchun katta vakolat berdi. Loyiha muvaffaqiyatsiz bo‘ldi. Tahlilda xodimga yetarli resurs berilmagani aniqlandi. Qaysi xulosa to‘g‘ri?',
+options: [
+'Delegatsiya xodimga mas’uliyatni to‘liq topshiradi',
+'Vakolat, mas’uliyat va resurslar o‘zaro mos bo‘lishi kerak',
+'Delegatsiyadan voz kechish kerak',
+'Xodim tashabbus ko‘rsatmasligi kerak',
+],
+answer: 1,
+explanation: 'Delegatsiya samarali bo‘lishi uchun vazifa, vakolat, mas’uliyat va zarur resurslar o‘zaro muvofiq bo‘lishi kerak.',
+},
+{
+id: 'm1t1c08',
+text: 'CASE: Maktabda yangi maqsad belgilandi: “Ta’lim sifatini oshirish”. Jamoa maqsadni qo‘llab-quvvatladi, ammo bir yil o‘tib natijani qanday o‘lchash noma’lum bo‘lib qoldi. Rahbarning asosiy xatosi nima?',
+options: [
+'Maqsadni jamoa bilan muhokama qilgani',
+'Maqsadni o‘lchanadigan natija va indikatorlarga aylantirmagani',
+'Maqsadni yozma shaklda bergani',
+'Jamoani jalb qilgani',
+],
+answer: 1,
+explanation: 'Umumiy maqsad o‘lchanadigan natijalar va indikatorlar bilan konkretlashtirilmasa, uning bajarilish darajasini baholash qiyin.',
+},
+{
+id: 'm1t1c09',
+text: 'CASE — MOSLASHTIRISH: Rahbar muammo bilan ishlashda 1) muammoni aniqladi; 2) ma’lumot yig‘di; 3) sabablarni tahlil qildi; 4) yechimni tanladi; 5) ijroni kuzatdi. Quyidagi bosqichlarni moslashtiring: A. Diagnostika; B. Dalil yig‘ish; C. Sabab tahlili; D. Qaror; E. Monitoring.',
+options: [
+'1-A, 2-B, 3-C, 4-D, 5-E',
+'1-B, 2-A, 3-D, 4-C, 5-E',
+'1-C, 2-B, 3-A, 4-E, 5-D',
+'1-A, 2-C, 3-B, 4-E, 5-D',
+],
+answer: 0,
+explanation: 'Muammoni aniqlash diagnostika, ma’lumot yig‘ish dalil yig‘ish, sabablarni tahlil qilish sabab tahlili, yechimni tanlash qaror, ijroni kuzatish monitoringdir.',
+},
+{
+id: 'm1t1c10',
+text: 'CASE — ENG YUQORI DARAJA: Maktabda ta’lim natijalari pasaygan. Ma’lumotlarda davomat pastligi, ayrim fanlarda o‘zlashtirish pasayishi, ota-onalar bilan aloqa sustligi va pedagoglarning metodik ehtiyoji aniqlangan. Resurslar ham cheklangan. Qaysi qaror tizimli boshqaruvga eng yaqin?',
+options: [
+'Barcha o‘qituvchilar uchun qo‘shimcha nazoratni joriy etish',
+'Davomatni kuchaytirib, boshqa omillarni keyin ko‘rib chiqish',
+'Omillarni ustuvorlashtirish, qisqa va o‘rta muddatli choralarni birlashtirish, mas’ullar va indikatorlarni belgilash hamda monitoring qilish',
+'Eng past natijali fan o‘qituvchilariga intizomiy chora qo‘llash',
+],
+answer: 2,
+explanation: 'Murakkab muammoni birgina chora bilan emas, sabablar va resurslarni hisobga olgan ustuvorlashtirilgan tizimli reja orqali boshqarish maqsadga muvofiq.',
+},
+] as Question[],
 }
