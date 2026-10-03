@@ -1,5 +1,6 @@
 import { M1T1_LEVELS } from './data/m1t1'
 import { M1T2_LEVELS } from './data/m1t2'
+import { M1T3_LEVELS } from './data/m1t3'
 
 /*
  * =========================================================
@@ -89,16 +90,15 @@ export const CATEGORIES: Category[] = [
       },
      {
   id: 'm1t2',
-  title: '🔥 TEST — STRATEGIK MENEJMENT 🔥',
-  description: 'M1T2 TEST',
+  title: '🔥  — STRATEGIK MENEJMENT 🔥',
+  description: 'M1T2',
   levels: M1T2_LEVELS,
 },
-    {
-  id: 'm1t3',
-  title: 'TEST 3',
-  description: 'TEST 3',
-  levels: EMPTY_LEVELS,
-},
+    id: 'm1t3',
+  title: 'Boshqaruv psixologiyasi',
+  description:
+    'Rahbarning emotsional intellekti, muloqot madaniyati, temperament, stressni boshqarish va jamoa psixologiyasi.',
+  levels: M1T3_LEVELS,
       {
         id: 'm1t4',
         title: 'Korrupsiyaviy xavf-xatarlarni oldini olish',
