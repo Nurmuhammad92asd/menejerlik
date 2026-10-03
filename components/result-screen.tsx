@@ -48,9 +48,9 @@ function ScoreRing({
   return (
     <div className="relative mx-auto h-52 w-52">
       <svg
-        className="h-full w-full -rotate-90"
+        className="-rotate-90 h-full w-full"
         viewBox="0 0 180 180"
-        aria-label={`Natija ${safePercent} foiz`}
+        aria-label={'Natija ' + safePercent + ' foiz'}
         role="img"
       >
         <circle
@@ -130,7 +130,11 @@ export function ResultScreen({
 }: ResultScreenProps) {
   const total = Math.max(
     0,
-    Number(result.total ?? result.questions?.length ?? 0),
+    Number(
+      result.total ??
+        result.questions?.length ??
+        0,
+    ),
   )
 
   const correct = Math.max(
@@ -175,19 +179,27 @@ export function ResultScreen({
   }
 
   function share() {
-    shareText(
-      `🎓 “Menejerlik by Nurmuhammad” ilovasida “${result.title}” testidan ${correct}/${total} ta savolga to‘g‘ri javob berdim!
+    const message =
+      '🎓 “Menejerlik by Nurmuhammad” ilovasida “' +
+      result.title +
+      '” testidan ' +
+      correct +
+      '/' +
+      total +
+      ' ta savolga to‘g‘ri javob berdim!\n\n' +
+      '📊 Natijam: ' +
+      percent +
+      '%\n' +
+      '⚡ XP: +' +
+      xp +
+      '\n\n' +
+      'Siz ham o‘zingizni sinab ko‘ring! 🚀'
 
-📊 Natijam: ${percent}%
-⚡ XP: +${xp}
-
-Siz ham o‘zingizni sinab ko‘ring! 🚀`,
-    )
+    shareText(message)
   }
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 pb-10 pt-4">
-      {/* Header */}
       <section className="mb-5 rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 p-6 text-white shadow-lg">
         <div className="mb-3 flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15">
@@ -210,7 +222,6 @@ Siz ham o‘zingizni sinab ko‘ring! 🚀`,
         </p>
       </section>
 
-      {/* Main result */}
       <section className="rounded-3xl border bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <ScoreRing percent={percent} />
 
@@ -239,7 +250,6 @@ Siz ham o‘zingizni sinab ko‘ring! 🚀`,
           </div>
         </div>
 
-        {/* Progress */}
         <div className="mt-7">
           <div className="mb-2 flex items-center justify-between text-xs font-semibold">
             <span className="text-slate-500 dark:text-slate-400">
@@ -255,14 +265,13 @@ Siz ham o‘zingizni sinab ko‘ring! 🚀`,
             <div
               className="h-full rounded-full bg-blue-600 transition-all"
               style={{
-                width: `${percent}%`,
+                width: percent + '%',
               }}
             />
           </div>
         </div>
       </section>
 
-      {/* Statistics */}
       <section className="mt-4 grid grid-cols-3 gap-3">
         <StatCard
           icon={
@@ -289,7 +298,6 @@ Siz ham o‘zingizni sinab ko‘ring! 🚀`,
         />
       </section>
 
-      {/* Performance message */}
       <section className="mt-4 rounded-3xl border bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950">
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300">
@@ -316,7 +324,6 @@ Siz ham o‘zingizni sinab ko‘ring! 🚀`,
         </div>
       </section>
 
-      {/* Perfect result */}
       {percent === 100 && (
         <section className="mt-4 rounded-3xl border border-emerald-200 bg-emerald-50 p-5 dark:border-emerald-900 dark:bg-emerald-950/30">
           <div className="flex items-center gap-3">
@@ -337,7 +344,6 @@ Siz ham o‘zingizni sinab ko‘ring! 🚀`,
         </section>
       )}
 
-      {/* Mistakes */}
       {wrong > 0 &&
         result.answers &&
         result.questions && (
@@ -372,7 +378,10 @@ Siz ham o‘zingizni sinab ko‘ring! 🚀`,
 
                   return (
                     <div
-                      key={question.id ?? index}
+                      key={
+                        question.id ??
+                        index
+                      }
                       className="rounded-2xl border border-red-100 bg-red-50/70 p-4 dark:border-red-950 dark:bg-red-950/20"
                     >
                       <div className="flex gap-3">
@@ -390,7 +399,9 @@ Siz ham o‘zingizni sinab ko‘ring! 🚀`,
                               <span className="font-bold">
                                 Izoh:
                               </span>{' '}
-                              {question.explanation}
+                              {
+                                question.explanation
+                              }
                             </p>
                           )}
                         </div>
@@ -403,7 +414,6 @@ Siz ham o‘zingizni sinab ko‘ring! 🚀`,
           </section>
         )}
 
-      {/* Actions */}
       <section className="mt-5 grid gap-3 sm:grid-cols-2">
         <Button
           type="button"
@@ -435,7 +445,6 @@ Siz ham o‘zingizni sinab ko‘ring! 🚀`,
         </Button>
       </section>
 
-      {/* Footer */}
       <div className="mt-6 text-center">
         <p className="text-xs text-slate-400">
           Menejerlik by Nurmuhammad
