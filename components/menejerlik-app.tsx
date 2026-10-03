@@ -1,5 +1,6 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 
 import { AIAssistant } from '@/components/ai-assistant'
@@ -231,7 +232,7 @@ export function MenejerlikApp() {
 
   /*
    * =====================================================
-   * SCROLL
+   * SCROLL TOP
    * =====================================================
    */
 
@@ -262,6 +263,44 @@ export function MenejerlikApp() {
     setResult(null)
 
     scrollToTop()
+  }
+
+  /*
+   * =====================================================
+   * CLOSE MINI APP
+   *
+   * X TUGMASI SHU FUNKSIYANI ISHLATADI
+   * =====================================================
+   */
+
+  function closeMiniApp() {
+    try {
+      setClosingConfirmation(false)
+
+      const tg =
+        (window as any).Telegram?.WebApp
+
+      if (
+        tg &&
+        typeof tg.close === 'function'
+      ) {
+        tg.close()
+        return
+      }
+
+      /*
+       * Telegramdan tashqarida ochilgan bo‘lsa,
+       * bosh sahifaga qaytamiz.
+       */
+      goHome()
+    } catch (error) {
+      console.log(
+        'Mini App close error:',
+        error,
+      )
+
+      goHome()
+    }
   }
 
   /*
@@ -399,7 +438,8 @@ export function MenejerlikApp() {
     setScreen('quiz')
 
     /*
-     * Telegramdan chiqishda confirmation
+     * Test paytida Telegramdan chiqishda
+     * confirmation yoqiladi.
      */
     setClosingConfirmation(true)
 
@@ -419,9 +459,6 @@ export function MenejerlikApp() {
       return
     }
 
-    /*
-     * Testni qayta yakunlashning oldini olish
-     */
     if (screen !== 'quiz') {
       return
     }
@@ -463,26 +500,14 @@ export function MenejerlikApp() {
       durationSec,
     }
 
-    /*
-     * Natijani saqlaymiz
-     */
     setResult(quizResult)
 
-    /*
-     * Testdan natijaga o'tamiz
-     */
     setScreen('result')
 
-    /*
-     * Telegram close confirmationni o'chiramiz
-     */
     setClosingConfirmation(false)
 
     scrollToTop()
 
-    /*
-     * Statistikaga qo'shamiz
-     */
     void addAttempt({
       id: `${Date.now()}`,
 
@@ -521,7 +546,12 @@ export function MenejerlikApp() {
    * =====================================================
    * BACK NAVIGATION
    *
-   * ENG MUHIM QISM
+   * BU FUNKSIYA:
+   *
+   * ← tugmasi
+   * Telegram native BackButton
+   *
+   * ikkalasi uchun ham ishlaydi.
    * =====================================================
    */
 
@@ -601,7 +631,8 @@ export function MenejerlikApp() {
     /*
      * QUIZ
      *
-     * Testdan chiqsa bosh sahifaga.
+     * Testdan ← bosib chiqilsa
+     * bosh sahifaga qaytadi.
      */
     if (screen === 'quiz') {
       setClosingConfirmation(false)
@@ -641,22 +672,23 @@ export function MenejerlikApp() {
     }
 
     /*
-     * HOME yoki noma'lum holat
+     * HOME
      */
+    if (screen === 'home') {
+      return
+    }
+
     goHome()
   }
 
   /*
    * =====================================================
-   * TELEGRAM BACK BUTTON
+   * TELEGRAM NATIVE BACK BUTTON
    *
    * MUHIM:
    *
-   * OLD:
-   * useBackButton(screen !== 'home', goBack)
-   *
-   * YANGI:
-   * useBackButton(goBack, screen !== 'home')
+   * onBack = goBack
+   * enabled = screen !== 'home'
    * =====================================================
    */
 
@@ -731,56 +763,173 @@ export function MenejerlikApp() {
         max-w-md
         px-4
         pb-8
-        pt-5
+        pt-3
       "
     >
 
       {/* =================================================
-          FULLSCREEN BUTTON
+          MINI APP HEADER
       ================================================= */}
 
-      {isTelegram && (
+      <div
+        className="
+          sticky
+          top-0
+          z-[90]
+          mb-4
+          flex
+          h-12
+          items-center
+          justify-between
+          rounded-2xl
+          border
+          border-border/60
+          bg-background/95
+          px-1.5
+          shadow-sm
+          backdrop-blur-xl
+        "
+      >
+
+        {/* ===============================================
+            ORQAGA
+        =============================================== */}
+
+        <button
+          type="button"
+          onClick={goBack}
+          disabled={
+            screen === 'home'
+          }
+          aria-label="Orqaga"
+          title="Orqaga"
+          className="
+            flex
+            size-10
+            shrink-0
+            items-center
+            justify-center
+            rounded-xl
+            text-2xl
+            font-medium
+            transition-all
+            hover:bg-muted
+            active:scale-90
+            disabled:pointer-events-none
+            disabled:opacity-25
+          "
+        >
+          ←
+        </button>
+
+        {/* ===============================================
+            TITLE
+        =============================================== */}
+
+        <div
+          className="
+            min-w-0
+            flex-1
+            px-2
+            text-center
+          "
+        >
+          <p
+            className="
+              truncate
+              text-sm
+              font-bold
+            "
+          >
+            Menejerlik
+          </p>
+
+          {screen !== 'home' && (
+            <p
+              className="
+                truncate
+                text-[9px]
+                font-medium
+                uppercase
+                tracking-wider
+                text-muted-foreground
+              "
+            >
+              Nurmuhammad
+            </p>
+          )}
+        </div>
+
+        {/* ===============================================
+            FULLSCREEN
+        =============================================== */}
+
+        {isTelegram && (
+          <button
+            type="button"
+            onClick={
+              toggleFullscreen
+            }
+            aria-label={
+              isFullscreen
+                ? 'Kichik ekran'
+                : 'To‘liq ekran'
+            }
+            title={
+              isFullscreen
+                ? 'Kichik ekran'
+                : 'To‘liq ekran'
+            }
+            className="
+              flex
+              size-10
+              shrink-0
+              items-center
+              justify-center
+              rounded-xl
+              text-lg
+              transition-all
+              hover:bg-muted
+              active:scale-90
+            "
+          >
+            {isFullscreen
+              ? '↙️'
+              : '⛶'}
+          </button>
+        )}
+
+        {/* ===============================================
+            YOPISH
+        =============================================== */}
+
         <button
           type="button"
           onClick={
-            toggleFullscreen
+            closeMiniApp
           }
-          aria-label={
-            isFullscreen
-              ? 'Kichik ekran'
-              : 'To‘liq ekran'
-          }
-          title={
-            isFullscreen
-              ? 'Kichik ekran'
-              : 'To‘liq ekran'
-          }
+          aria-label="Mini ilovani yopish"
+          title="Mini ilovani yopish"
           className="
-            fixed
-            right-4
-            top-4
-            z-[100]
             flex
-            size-11
+            size-10
+            shrink-0
             items-center
             justify-center
-            rounded-2xl
-            border
-            border-border/60
-            bg-background/90
-            text-lg
-            shadow-lg
-            backdrop-blur-xl
+            rounded-xl
+            text-2xl
+            font-semibold
+            text-muted-foreground
             transition-all
-            hover:scale-105
-            active:scale-95
+            hover:bg-destructive/10
+            hover:text-destructive
+            active:scale-90
           "
         >
-          {isFullscreen
-            ? '↙️'
-            : '⛶'}
+          ×
         </button>
-      )}
+
+      </div>
 
       {/* =================================================
           AI
@@ -797,7 +946,13 @@ export function MenejerlikApp() {
       ================================================= */}
 
       {screen === 'home' && (
-        <div className="flex flex-col gap-5">
+        <div
+          className="
+            flex
+            flex-col
+            gap-5
+          "
+        >
 
           <HomeScreen
             user={user}
@@ -844,7 +999,14 @@ export function MenejerlikApp() {
               "
             />
 
-            <div className="relative flex items-center gap-4">
+            <div
+              className="
+                relative
+                flex
+                items-center
+                gap-4
+              "
+            >
 
               <div
                 className="
@@ -861,19 +1023,46 @@ export function MenejerlikApp() {
                 🤖
               </div>
 
-              <div className="min-w-0 flex-1">
+              <div
+                className="
+                  min-w-0
+                  flex-1
+                "
+              >
 
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                <p
+                  className="
+                    text-xs
+                    font-semibold
+                    uppercase
+                    tracking-[0.16em]
+                    text-primary
+                  "
+                >
                   MENEJERLIK AI
                 </p>
 
-                <h2 className="mt-1 text-lg font-bold">
+                <h2
+                  className="
+                    mt-1
+                    text-lg
+                    font-bold
+                  "
+                >
                   AI Rahbar yordamchisi
                 </h2>
 
-                <p className="mt-1 text-sm leading-5 text-muted-foreground">
-                  Ta’lim boshqaruvi va rahbarlik
-                  bo‘yicha savol bering.
+                <p
+                  className="
+                    mt-1
+                    text-sm
+                    leading-5
+                    text-muted-foreground
+                  "
+                >
+                  Ta’lim boshqaruvi va
+                  rahbarlik bo‘yicha
+                  savol bering.
                 </p>
 
               </div>
@@ -971,9 +1160,7 @@ export function MenejerlikApp() {
             session={
               session
             }
-            showCloseButton={
-              !isTelegram
-            }
+            showCloseButton={false}
             onExit={
               goBack
             }
@@ -1001,6 +1188,7 @@ export function MenejerlikApp() {
             }
           />
         )}
+
     </main>
   )
 }
@@ -1021,23 +1209,68 @@ function EducationScreen({
   ) => void
 }) {
   return (
-    <section className="flex min-h-[80vh] flex-col justify-center gap-6">
+    <section
+      className="
+        flex
+        min-h-[80vh]
+        flex-col
+        justify-center
+        gap-6
+      "
+    >
 
       <header className="text-center">
 
-        <div className="mx-auto flex size-16 items-center justify-center rounded-3xl bg-primary text-3xl shadow-lg">
+        <div
+          className="
+            mx-auto
+            flex
+            size-16
+            items-center
+            justify-center
+            rounded-3xl
+            bg-primary
+            text-3xl
+            shadow-lg
+          "
+        >
           🎓
         </div>
 
-        <p className="mt-5 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+        <p
+          className="
+            mt-5
+            text-xs
+            font-semibold
+            uppercase
+            tracking-[0.2em]
+            text-primary
+          "
+        >
           MENEJERLIK
         </p>
 
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">
+        <h1
+          className="
+            mt-2
+            text-3xl
+            font-bold
+            tracking-tight
+          "
+        >
           Ta’lim yo‘nalishini tanlang
         </h1>
 
-        <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-muted-foreground">
+        <p
+          className="
+            mx-auto
+            mt-3
+            max-w-sm
+            text-sm
+            leading-6
+            text-muted-foreground
+          "
+        >
           O‘zingizga mos ta’lim yo‘nalishini
           tanlang va boshqaruv bilimlarini
           bosqichma-bosqich sinab ko‘ring.
@@ -1047,7 +1280,7 @@ function EducationScreen({
 
       <div className="grid gap-4">
 
-        {/* BOG'CHA */}
+        {/* BOG‘CHA */}
 
         <button
           type="button"
@@ -1084,29 +1317,79 @@ function EducationScreen({
             "
           />
 
-          <div className="relative flex items-center gap-5">
+          <div
+            className="
+              relative
+              flex
+              items-center
+              gap-5
+            "
+          >
 
-            <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-4xl">
+            <div
+              className="
+                flex
+                size-16
+                shrink-0
+                items-center
+                justify-center
+                rounded-2xl
+                bg-primary/10
+                text-4xl
+              "
+            >
               🧸
             </div>
 
-            <div className="min-w-0 flex-1">
+            <div
+              className="
+                min-w-0
+                flex-1
+              "
+            >
 
-              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              <p
+                className="
+                  text-xs
+                  font-semibold
+                  uppercase
+                  tracking-widest
+                  text-muted-foreground
+                "
+              >
                 01
               </p>
 
-              <h2 className="mt-1 text-xl font-bold">
+              <h2
+                className="
+                  mt-1
+                  text-xl
+                  font-bold
+                "
+              >
                 BOG‘CHA
               </h2>
 
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p
+                className="
+                  mt-1
+                  text-sm
+                  text-muted-foreground
+                "
+              >
                 Maktabgacha ta’lim menejmenti
               </p>
 
             </div>
 
-            <span className="text-2xl text-muted-foreground transition-transform group-hover:translate-x-1">
+            <span
+              className="
+                text-2xl
+                text-muted-foreground
+                transition-transform
+                group-hover:translate-x-1
+              "
+            >
               →
             </span>
 
@@ -1150,29 +1433,79 @@ function EducationScreen({
             "
           />
 
-          <div className="relative flex items-center gap-5">
+          <div
+            className="
+              relative
+              flex
+              items-center
+              gap-5
+            "
+          >
 
-            <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-secondary text-4xl">
+            <div
+              className="
+                flex
+                size-16
+                shrink-0
+                items-center
+                justify-center
+                rounded-2xl
+                bg-secondary
+                text-4xl
+              "
+            >
               🏫
             </div>
 
-            <div className="min-w-0 flex-1">
+            <div
+              className="
+                min-w-0
+                flex-1
+              "
+            >
 
-              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              <p
+                className="
+                  text-xs
+                  font-semibold
+                  uppercase
+                  tracking-widest
+                  text-muted-foreground
+                "
+              >
                 02
               </p>
 
-              <h2 className="mt-1 text-xl font-bold">
+              <h2
+                className="
+                  mt-1
+                  text-xl
+                  font-bold
+                "
+              >
                 MAKTAB
               </h2>
 
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p
+                className="
+                  mt-1
+                  text-sm
+                  text-muted-foreground
+                "
+              >
                 Umumiy o‘rta ta’lim menejmenti
               </p>
 
             </div>
 
-            <span className="text-2xl text-muted-foreground transition-transform group-hover:translate-x-1">
+            <span
+              className="
+                text-2xl
+                text-muted-foreground
+                transition-transform
+                group-hover:translate-x-1
+              "
+            >
               →
             </span>
 
@@ -1184,7 +1517,16 @@ function EducationScreen({
       <button
         type="button"
         onClick={onBack}
-        className="rounded-2xl border px-4 py-3 text-sm font-semibold transition-colors hover:bg-muted"
+        className="
+          rounded-2xl
+          border
+          px-4
+          py-3
+          text-sm
+          font-semibold
+          transition-colors
+          hover:bg-muted
+        "
       >
         ← Bosh sahifaga
       </button>
@@ -1221,45 +1563,102 @@ function ModuleScreen({
     educationType === 'school'
 
   return (
-    <section className="flex flex-col gap-5">
+    <section
+      className="
+        flex
+        flex-col
+        gap-5
+      "
+    >
 
       <header>
 
         <button
           type="button"
           onClick={onBack}
-          className="mb-5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+          className="
+            mb-5
+            text-sm
+            font-semibold
+            text-muted-foreground
+            transition-colors
+            hover:text-foreground
+          "
         >
           ← Yo‘nalishlarga
         </button>
 
-        <div className="flex items-end justify-between">
+        <div
+          className="
+            flex
+            items-end
+            justify-between
+          "
+        >
 
           <div>
 
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+            <p
+              className="
+                text-xs
+                font-semibold
+                uppercase
+                tracking-[0.18em]
+                text-primary
+              "
+            >
               {isSchool
                 ? 'MAKTAB'
                 : 'BOG‘CHA'}
             </p>
 
-            <h1 className="mt-1 text-2xl font-bold tracking-tight">
+            <h1
+              className="
+                mt-1
+                text-2xl
+                font-bold
+                tracking-tight
+              "
+            >
               O‘quv modullari
             </h1>
 
-            <p className="mt-2 text-sm leading-5 text-muted-foreground">
+            <p
+              className="
+                mt-2
+                text-sm
+                leading-5
+                text-muted-foreground
+              "
+            >
               Kerakli modulni tanlang.
             </p>
 
           </div>
 
-          <div className="rounded-2xl bg-secondary px-3 py-2 text-center">
+          <div
+            className="
+              rounded-2xl
+              bg-secondary
+              px-3
+              py-2
+              text-center
+            "
+          >
 
             <p className="text-lg font-bold">
               {categories.length}
             </p>
 
-            <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+            <p
+              className="
+                text-[10px]
+                font-medium
+                uppercase
+                tracking-wide
+                text-muted-foreground
+              "
+            >
               Modul
             </p>
 
@@ -1276,7 +1675,13 @@ function ModuleScreen({
           text="Bu yo‘nalish uchun o‘quv modullari tayyorlanmoqda."
         />
       ) : (
-        <div className="flex flex-col gap-3">
+        <div
+          className="
+            flex
+            flex-col
+            gap-3
+          "
+        >
 
           {categories.map(
             (
@@ -1293,10 +1698,37 @@ function ModuleScreen({
                     category.id,
                   )
                 }
-                className="group flex items-center gap-4 rounded-3xl border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                className="
+                  group
+                  flex
+                  items-center
+                  gap-4
+                  rounded-3xl
+                  border
+                  bg-card
+                  p-4
+                  text-left
+                  shadow-sm
+                  transition-all
+                  hover:-translate-y-0.5
+                  hover:shadow-md
+                "
               >
 
-                <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground">
+                <div
+                  className="
+                    flex
+                    size-12
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-2xl
+                    bg-primary
+                    text-sm
+                    font-bold
+                    text-primary-foreground
+                  "
+                >
                   {String(
                     index + 1,
                   ).padStart(
@@ -1305,19 +1737,44 @@ function ModuleScreen({
                   )}
                 </div>
 
-                <div className="min-w-0 flex-1">
+                <div
+                  className="
+                    min-w-0
+                    flex-1
+                  "
+                >
 
-                  <h2 className="font-semibold leading-5">
+                  <h2
+                    className="
+                      font-semibold
+                      leading-5
+                    "
+                  >
                     {category.title}
                   </h2>
 
-                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-muted-foreground">
+                  <p
+                    className="
+                      mt-1
+                      line-clamp-2
+                      text-xs
+                      leading-5
+                      text-muted-foreground
+                    "
+                  >
                     {
                       category.description
                     }
                   </p>
 
-                  <p className="mt-2 text-xs font-medium text-primary">
+                  <p
+                    className="
+                      mt-2
+                      text-xs
+                      font-medium
+                      text-primary
+                    "
+                  >
                     {
                       category.topics
                         .length
@@ -1327,7 +1784,14 @@ function ModuleScreen({
 
                 </div>
 
-                <span className="text-xl text-muted-foreground transition-transform group-hover:translate-x-1">
+                <span
+                  className="
+                    text-xl
+                    text-muted-foreground
+                    transition-transform
+                    group-hover:translate-x-1
+                  "
+                >
                   →
                 </span>
 
@@ -1364,29 +1828,64 @@ function TopicScreen({
   ) => void
 }) {
   return (
-    <section className="flex flex-col gap-5">
+    <section
+      className="
+        flex
+        flex-col
+        gap-5
+      "
+    >
 
       <header>
 
         <button
           type="button"
           onClick={onBack}
-          className="mb-5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+          className="
+            mb-5
+            text-sm
+            font-semibold
+            text-muted-foreground
+            transition-colors
+            hover:text-foreground
+          "
         >
           ← Modullarga
         </button>
 
         {module && (
           <>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+            <p
+              className="
+                text-xs
+                font-semibold
+                uppercase
+                tracking-[0.18em]
+                text-primary
+              "
+            >
               MODUL
             </p>
 
-            <h1 className="mt-1 text-2xl font-bold tracking-tight">
+            <h1
+              className="
+                mt-1
+                text-2xl
+                font-bold
+                tracking-tight
+              "
+            >
               {module.title}
             </h1>
 
-            <p className="mt-2 text-sm leading-5 text-muted-foreground">
+            <p
+              className="
+                mt-2
+                text-sm
+                leading-5
+                text-muted-foreground
+              "
+            >
               Mavzulardan birini tanlang.
             </p>
           </>
@@ -1401,7 +1900,13 @@ function TopicScreen({
           text="Tanlangan modul ma’lumotlar bazasida mavjud emas."
         />
       ) : (
-        <div className="flex flex-col gap-3">
+        <div
+          className="
+            flex
+            flex-col
+            gap-3
+          "
+        >
 
           {module.topics.map(
             (
@@ -1418,10 +1923,35 @@ function TopicScreen({
                     topic.id,
                   )
                 }
-                className="group flex gap-4 rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                className="
+                  group
+                  flex
+                  gap-4
+                  rounded-3xl
+                  border
+                  bg-card
+                  p-5
+                  text-left
+                  shadow-sm
+                  transition-all
+                  hover:-translate-y-0.5
+                  hover:shadow-md
+                "
               >
 
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-xs font-bold">
+                <div
+                  className="
+                    flex
+                    size-10
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-xl
+                    bg-secondary
+                    text-xs
+                    font-bold
+                  "
+                >
                   {String(
                     index + 1,
                   ).padStart(
@@ -1430,19 +1960,42 @@ function TopicScreen({
                   )}
                 </div>
 
-                <div className="min-w-0 flex-1">
+                <div
+                  className="
+                    min-w-0
+                    flex-1
+                  "
+                >
 
-                  <h2 className="font-semibold leading-5">
+                  <h2
+                    className="
+                      font-semibold
+                      leading-5
+                    "
+                  >
                     {topic.title}
                   </h2>
 
-                  <p className="mt-1 text-sm leading-5 text-muted-foreground">
+                  <p
+                    className="
+                      mt-1
+                      text-sm
+                      leading-5
+                      text-muted-foreground
+                    "
+                  >
                     {
                       topic.description
                     }
                   </p>
 
-                  <div className="mt-3 flex gap-1.5">
+                  <div
+                    className="
+                      mt-3
+                      flex
+                      gap-1.5
+                    "
+                  >
 
                     <Badge>
                       🟢 {topic.levels.easy.length}
@@ -1464,7 +2017,15 @@ function TopicScreen({
 
                 </div>
 
-                <span className="self-center text-xl text-muted-foreground transition-transform group-hover:translate-x-1">
+                <span
+                  className="
+                    self-center
+                    text-xl
+                    text-muted-foreground
+                    transition-transform
+                    group-hover:translate-x-1
+                  "
+                >
                   →
                 </span>
 
@@ -1503,12 +2064,23 @@ function LevelScreen({
 }) {
   if (!topic) {
     return (
-      <section className="flex flex-col gap-5">
+      <section
+        className="
+          flex
+          flex-col
+          gap-5
+        "
+      >
 
         <button
           type="button"
           onClick={onBack}
-          className="text-left text-sm font-semibold text-muted-foreground"
+          className="
+            text-left
+            text-sm
+            font-semibold
+            text-muted-foreground
+          "
         >
           ← Mavzularga
         </button>
@@ -1569,33 +2141,72 @@ function LevelScreen({
   ]
 
   return (
-    <section className="flex flex-col gap-5">
+    <section
+      className="
+        flex
+        flex-col
+        gap-5
+      "
+    >
 
       <header>
 
         <button
           type="button"
           onClick={onBack}
-          className="mb-5 text-sm font-semibold text-muted-foreground"
+          className="
+            mb-5
+            text-sm
+            font-semibold
+            text-muted-foreground
+          "
         >
           ← Mavzularga
         </button>
 
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+        <p
+          className="
+            text-xs
+            font-semibold
+            uppercase
+            tracking-[0.18em]
+            text-primary
+          "
+        >
           TEST
         </p>
 
-        <h1 className="mt-1 text-2xl font-bold tracking-tight">
+        <h1
+          className="
+            mt-1
+            text-2xl
+            font-bold
+            tracking-tight
+          "
+        >
           {topic.title}
         </h1>
 
-        <p className="mt-2 text-sm leading-5 text-muted-foreground">
+        <p
+          className="
+            mt-2
+            text-sm
+            leading-5
+            text-muted-foreground
+          "
+        >
           Test darajasini tanlang.
         </p>
 
       </header>
 
-      <div className="flex flex-col gap-3">
+      <div
+        className="
+          flex
+          flex-col
+          gap-3
+        "
+      >
 
         {levels.map(
           (level) => (
@@ -1609,28 +2220,79 @@ function LevelScreen({
                   level.id,
                 )
               }
-              className="group flex items-center gap-4 rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg"
+              className="
+                group
+                flex
+                items-center
+                gap-4
+                rounded-3xl
+                border
+                bg-card
+                p-5
+                text-left
+                shadow-sm
+                transition-all
+                hover:-translate-y-0.5
+                hover:shadow-lg
+              "
             >
 
-              <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary text-2xl">
+              <div
+                className="
+                  flex
+                  size-14
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  bg-secondary
+                  text-2xl
+                "
+              >
                 {level.icon}
               </div>
 
-              <div className="min-w-0 flex-1">
+              <div
+                className="
+                  min-w-0
+                  flex-1
+                "
+              >
 
-                <div className="flex items-center gap-2">
+                <div
+                  className="
+                    flex
+                    items-center
+                    gap-2
+                  "
+                >
 
                   <h2 className="font-bold">
                     {level.title}
                   </h2>
 
-                  <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold">
+                  <span
+                    className="
+                      rounded-full
+                      bg-muted
+                      px-2
+                      py-0.5
+                      text-[10px]
+                      font-semibold
+                    "
+                  >
                     {level.questions}
                   </span>
 
                 </div>
 
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p
+                  className="
+                    mt-1
+                    text-sm
+                    text-muted-foreground
+                  "
+                >
                   {
                     level.description
                   }
@@ -1638,7 +2300,14 @@ function LevelScreen({
 
               </div>
 
-              <span className="text-xl text-muted-foreground transition-transform group-hover:translate-x-1">
+              <span
+                className="
+                  text-xl
+                  text-muted-foreground
+                  transition-transform
+                  group-hover:translate-x-1
+                "
+              >
                 →
               </span>
 
@@ -1648,9 +2317,22 @@ function LevelScreen({
 
       </div>
 
-      <div className="rounded-2xl bg-muted/50 p-4 text-center">
+      <div
+        className="
+          rounded-2xl
+          bg-muted/50
+          p-4
+          text-center
+        "
+      >
 
-        <p className="text-xs leading-5 text-muted-foreground">
+        <p
+          className="
+            text-xs
+            leading-5
+            text-muted-foreground
+          "
+        >
           Savollar soni tanlangan
           darajadagi mavjud testlar
           asosida belgilanadi.
@@ -1664,21 +2346,36 @@ function LevelScreen({
 
 /*
  * =========================================================
- * SMALL UI COMPONENTS
+ * BADGE
  * =========================================================
  */
 
 function Badge({
   children,
 }: {
-  children: React.ReactNode
+  children: ReactNode
 }) {
   return (
-    <span className="rounded-lg bg-muted px-1.5 py-1 text-[10px] font-semibold">
+    <span
+      className="
+        rounded-lg
+        bg-muted
+        px-1.5
+        py-1
+        text-[10px]
+        font-semibold
+      "
+    >
       {children}
     </span>
   )
 }
+
+/*
+ * =========================================================
+ * EMPTY STATE
+ * =========================================================
+ */
 
 function EmptyState({
   icon,
@@ -1690,7 +2387,15 @@ function EmptyState({
   text: string
 }) {
   return (
-    <div className="rounded-3xl border border-dashed p-8 text-center">
+    <div
+      className="
+        rounded-3xl
+        border
+        border-dashed
+        p-8
+        text-center
+      "
+    >
 
       <div className="text-4xl">
         {icon}
@@ -1700,7 +2405,16 @@ function EmptyState({
         {title}
       </h2>
 
-      <p className="mx-auto mt-2 max-w-xs text-sm leading-5 text-muted-foreground">
+      <p
+        className="
+          mx-auto
+          mt-2
+          max-w-xs
+          text-sm
+          leading-5
+          text-muted-foreground
+        "
+      >
         {text}
       </p>
 
