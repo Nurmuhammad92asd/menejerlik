@@ -1,19 +1,81 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// src/lib/telegram.ts
 
-/*
- * =========================================================
- * TELEGRAM MINI APP (WebApp) YORDAMCHILARI
- * ---------------------------------------------------------
- * hooks/use-telegram.ts va hooks/use-history.ts shu fayldan
- * getWebApp va supports ni import qiladi.
- *
- * ESLATMA: bu fayl asl faylning qayta tiklangan nusxasi.
- * Imkoni bo‘lsa, GitHub History'dagi asl versiyani qaytaring.
- * =========================================================
- */
+export type TelegramUser = {
+  id: number
+  first_name?: string
+  last_name?: string
+  username?: string
+  language_code?: string
+  is_premium?: boolean
+  photo_url?: string
+}
 
-/** Telegram WebApp obyekti (turlar erkin: har xil metodlar ishlatiladi) */
-export type TelegramWebApp = any
+export type TelegramWebApp = {
+  initData: string
+
+  initDataUnsafe: {
+    user?: TelegramUser
+    query_id?: string
+    auth_date?: number
+    hash?: string
+    [key: string]: unknown
+  }
+
+  colorScheme: 'light' | 'dark'
+  platform: string
+  version: string
+
+  ready: () => void
+  expand: () => void
+  close: () => void
+
+  setHeaderColor?: (color: string) => void
+  setBackgroundColor?: (color: string) => void
+
+  enableClosingConfirmation?: () => void
+  disableClosingConfirmation?: () => void
+
+  MainButton?: {
+    text: string
+    color: string
+    textColor: string
+    isVisible: boolean
+    isActive: boolean
+
+    show: () => void
+    hide: () => void
+    enable: () => void
+    disable: () => void
+    setText: (text: string) => void
+
+    onClick: (callback: () => void) => void
+    offClick: (callback: () => void) => void
+  }
+
+  BackButton?: {
+    isVisible: boolean
+
+    show: () => void
+    hide: () => void
+
+    onClick: (callback: () => void) => void
+    offClick: (callback: () => void) => void
+  }
+
+  HapticFeedback?: {
+    impactOccurred: (
+      style: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft'
+    ) => void
+
+    notificationOccurred: (
+      type: 'error' | 'success' | 'warning'
+    ) => void
+
+    selectionChanged: () => void
+  }
+
+  [key: string]: unknown
+}
 
 declare global {
   interface Window {
@@ -24,52 +86,116 @@ declare global {
 }
 
 /**
- * Telegram ichida ochilgan bo‘lsa WebApp obyektini qaytaradi.
- * Oddiy brauzerda yoki serverda null qaytaradi.
+ * Telegram WebApp obyektini olish
  */
 export function getWebApp(): TelegramWebApp | null {
-  if (typeof window === 'undefined') return null
+  if (typeof window === 'undefined') {
+    return null
+  }
 
   return window.Telegram?.WebApp ?? null
 }
 
 /**
- * Funksiya yoki versiya qo‘llab-quvvatlanishini tekshiradi.
- *
- * Quyidagi chaqirish usullarining hammasi ishlaydi:
- *   supports('6.1')                    — versiya kamida 6.1 mi
- *   supports('HapticFeedback')         — shu imkoniyat mavjudmi
- *   supports(webApp, '6.1')            — berilgan WebApp uchun
- *   supports(webApp, 'HapticFeedback')
+ * Telegram foydalanuvchisini olish
  */
-export function supports(...args: unknown[]): boolean {
-  const first = args[0]
+export function getTelegramUser(): TelegramUser | null {
+  const webApp = getWebApp()
 
-  const app: TelegramWebApp | null =
-    first && typeof first === 'object' ? first : getWebApp()
+  if (!webApp) {
+    return null
+  }
 
-  if (!app) return false
+  return webApp.initDataUnsafe?.user ?? null
+}
 
-  const key = args.find((arg) => typeof arg === 'string') as string | undefined
+/**
+ * Telegram initData
+ */
+export function getInitData(): string {
+  const webApp = getWebApp()
 
-  if (!key) return true
+  return webApp?.initData ?? ''
+}
 
-  // Versiya ko‘rinishidagi kalit: "6.1", "7.0"
-  if (/^\d+(\.\d+)*$/.test(key)) {
-    try {
-      return typeof app.isVersionAtLeast === 'function'
-        ? Boolean(app.isVersionAtLeast(key))
-        : false
-    } catch {
+/**
+ * Ilova Telegram ichida ishlayotganini tekshirish
+ */
+export function isTelegramWebApp(): boolean {
+  return getWebApp() !== null
+}
+
+/**
+ * Telegram WebApp versiyasini tekshirish
+ *
+ * Masalan:
+ * supports('6.1')
+ * supports('7.0')
+ */
+export function supports(version: string): boolean {
+  const webApp = getWebApp()
+
+  if (!webApp?.version) {
+    return false
+  }
+
+  const current = webApp.version.split('.').map(Number)
+  const required = version.split('.').map(Number)
+
+  const length = Math.max(current.length, required.length)
+
+  for (let i = 0; i < length; i++) {
+    const currentPart = current[i] ?? 0
+    const requiredPart = required[i] ?? 0
+
+    if (currentPart > requiredPart) {
+      return true
+    }
+
+    if (currentPart < requiredPart) {
       return false
     }
   }
 
-  // Imkoniyat nomi ko‘rinishidagi kalit: "HapticFeedback", "CloudStorage"
-  return Boolean(app[key])
+  return true
 }
+
+/**
+ * Telegram WebApp ni ishga tushirish
+ */
+export function initTelegram(): TelegramWebApp | null {
+  const webApp = getWebApp()
+
+  if (!webApp) {
+    return null
+  }
+
+  try {
+    webApp.ready()
+    webApp.expand()
+  } catch (error) {
+    console.error(
+      'Telegram WebApp initialization error:',
+      error
+    )
+  }
+
+  return webApp
+}
+
+/**
+ * Haptic feedback
+ */
 export function haptic(
-  type: 'light' | 'medium' | 'heavy' | 'success' | 'error' | 'warning' = 'light'
+  type:
+    | 'light'
+    | 'medium'
+    | 'heavy'
+    | 'rigid'
+    | 'soft'
+    | 'success'
+    | 'error'
+    | 'warning' = 'light'
 ): void {
   const webApp = getWebApp()
 
@@ -88,10 +214,19 @@ export function haptic(
       webApp.HapticFeedback.impactOccurred(type)
     }
   } catch (error) {
-    console.error('Telegram haptic error:', error)
+    console.error(
+      'Telegram haptic error:',
+      error
+    )
   }
 }
-export function setClosingConfirmation(enabled: boolean): void {
+
+/**
+ * Ilovadan chiqishda tasdiqlash oynasini yoqish/o‘chirish
+ */
+export function setClosingConfirmation(
+  enabled: boolean
+): void {
   const webApp = getWebApp()
 
   if (!webApp) {
@@ -99,19 +234,41 @@ export function setClosingConfirmation(enabled: boolean): void {
   }
 
   try {
-    const webAppWithClosing = webApp as TelegramWebApp & {
-      enableClosingConfirmation?: () => void
-      disableClosingConfirmation?: () => void
-    }
-
     if (enabled) {
-      webAppWithClosing.enableClosingConfirmation?.()
+      webApp.enableClosingConfirmation?.()
     } else {
-      webAppWithClosing.disableClosingConfirmation?.()
+      webApp.disableClosingConfirmation?.()
     }
   } catch (error) {
     console.error(
       'Telegram closing confirmation error:',
+      error
+    )
+  }
+}
+
+/**
+ * Telegram orqali matn ulashish
+ */
+export function shareText(text: string): void {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  try {
+    const encodedText = encodeURIComponent(text)
+
+    const shareUrl =
+      `https://t.me/share/url?url=&text=${encodedText}`
+
+    window.open(
+      shareUrl,
+      '_blank',
+      'noopener,noreferrer'
+    )
+  } catch (error) {
+    console.error(
+      'Telegram share error:',
       error
     )
   }
