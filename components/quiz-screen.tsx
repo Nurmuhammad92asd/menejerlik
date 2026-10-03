@@ -2,11 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Check, Clock, Lightbulb, X } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
 import {
   type AnswerRecord,
   type QuizSession,
 } from '@/lib/quiz'
+
 import { haptic } from '@/lib/telegram'
 import { cn } from '@/lib/utils'
 
@@ -33,10 +35,14 @@ export function QuizScreen({
   const [selected, setSelected] = useState<number | null>(null)
   const [timeLeft, setTimeLeft] = useState(QUESTION_TIME)
 
-  // Stale closure muammosini oldini olish uchun ref
   const answersRef = useRef<AnswerRecord[]>([])
   const selectedRef = useRef<number | null>(null)
-  const finishedRef = useRef(false)
+
+  // Test tugagan yoki chiqib ketilganini nazorat qiladi
+  const stoppedRef = useRef(false)
+
+  // Timer ID
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const question = session.questions[index]
   const total = session.questions.length
@@ -46,88 +52,151 @@ export function QuizScreen({
   const progress =
     ((index + (locked ? 1 : 0)) / total) * 100
 
-  /**
-   * Har bir yangi savolga kirilganda
-   * vaqt yana 2:00 dan boshlanadi.
+  /*
+   * TIMERNI TO'XTATISH
+   */
+  function stopTimer() {
+    if (timerRef.current !== null) {
+      clearInterval(timerRef.current)
+      timerRef.current = null
+    }
+  }
+
+  /*
+   * TESTDAN CHIQISH
+   */
+  function exitQuiz() {
+    if (stoppedRef.current) {
+      return
+    }
+
+    stoppedRef.current = true
+
+    stopTimer()
+
+    haptic('light')
+
+    onExit()
+  }
+
+  /*
+   * JAVOB BERILMAGAN SAVOLNI SAQLASH
+   */
+  function addUnansweredAnswer() {
+    if (!question) {
+      return answersRef.current
+    }
+
+    // Bir savolni ikki marta qo'shib yubormaslik
+    const alreadyAnswered = answersRef.current.some(
+      (item) => item.question.id === question.id,
+    )
+
+    if (alreadyAnswered) {
+      return answersRef.current
+    }
+
+    const record: AnswerRecord = {
+      question,
+      selected: -1,
+    }
+
+    const updated = [
+      ...answersRef.current,
+      record,
+    ]
+
+    answersRef.current = updated
+    setAnswers(updated)
+
+    return updated
+  }
+
+  /*
+   * HAR BIR YANGI SAVOL UCHUN YANGI 2 DAQIQALIK TIMER
    */
   useEffect(() => {
+    if (!question || stoppedRef.current) {
+      return
+    }
+
+    // Eski timer bo'lsa to'xtatamiz
+    stopTimer()
+
+    // Yangi savolga 2 daqiqa
     setTimeLeft(QUESTION_TIME)
-    setSelected(null)
+
     selectedRef.current = null
+    setSelected(null)
 
-    const timer = setInterval(() => {
-      setTimeLeft((currentTime) => {
-        if (currentTime <= 1) {
-          clearInterval(timer)
+    timerRef.current = setInterval(() => {
+      setTimeLeft((current) => {
+        if (current <= 1) {
+          stopTimer()
 
-          // Savolga javob berilmagan bo'lsa,
-          // -1 sifatida saqlaymiz
-          if (selectedRef.current === null) {
-            const unanswered: AnswerRecord = {
-              question: session.questions[index],
-              selected: -1,
-            }
+          if (stoppedRef.current) {
+            return 0
+          }
 
-            const updatedAnswers = [
-              ...answersRef.current,
-              unanswered,
-            ]
+          const updatedAnswers =
+            selectedRef.current === null
+              ? addUnansweredAnswer()
+              : answersRef.current
 
-            answersRef.current = updatedAnswers
-            setAnswers(updatedAnswers)
+          haptic('error')
 
-            haptic('error')
+          // Oxirgi savol
+          if (isLast) {
+            stoppedRef.current = true
 
-            // Oxirgi savol bo'lsa test tugaydi
-            if (isLast) {
-              if (!finishedRef.current) {
-                finishedRef.current = true
-
-                setTimeout(() => {
-                  onFinish(updatedAnswers)
-                }, 300)
+            setTimeout(() => {
+              if (!stoppedRef.current) {
+                return
               }
-            } else {
-              // Keyingi savolga o'tamiz
-              setTimeout(() => {
-                setIndex((currentIndex) => currentIndex + 1)
-              }, 300)
-            }
+
+              onFinish(updatedAnswers)
+            }, 300)
           } else {
-            // Javob allaqachon berilgan bo'lsa,
-            // uni qayta qo'shmaymiz.
-            if (isLast) {
-              if (!finishedRef.current) {
-                finishedRef.current = true
-
-                setTimeout(() => {
-                  onFinish(answersRef.current)
-                }, 300)
+            // Keyingi savol
+            setTimeout(() => {
+              if (stoppedRef.current) {
+                return
               }
-            } else {
-              setTimeout(() => {
-                setIndex((currentIndex) => currentIndex + 1)
-              }, 300)
-            }
+
+              setIndex((currentIndex) => currentIndex + 1)
+            }, 300)
           }
 
           return 0
         }
 
-        return currentTime - 1
+        return current - 1
       })
     }, 1000)
 
     return () => {
-      clearInterval(timer)
+      stopTimer()
     }
-  }, [index, isLast, onFinish, session.questions])
+  }, [index])
 
-  /**
-   * Javob tanlash
+  /*
+   * COMPONENT O'CHIRILGANDA TIMERNI TO'XTATISH
+   */
+  useEffect(() => {
+    return () => {
+      stopTimer()
+    }
+  }, [])
+
+  /*
+   * JAVOB TANLASH
    */
   function choose(optionIndex: number) {
-    if (locked || finishedRef.current) {
+    if (
+      locked ||
+      stoppedRef.current ||
+      !question
+    ) {
       return
     }
 
@@ -139,13 +208,13 @@ export function QuizScreen({
       selected: optionIndex,
     }
 
-    const updatedAnswers = [
+    const updated = [
       ...answersRef.current,
       record,
     ]
 
-    answersRef.current = updatedAnswers
-    setAnswers(updatedAnswers)
+    answersRef.current = updated
+    setAnswers(updated)
 
     haptic(
       optionIndex === question.answer
@@ -154,22 +223,30 @@ export function QuizScreen({
     )
   }
 
-  /**
-   * Keyingi savol
+  /*
+   * KEYINGI SAVOL
    */
   function next() {
-    if (!locked || finishedRef.current) {
+    if (
+      !locked ||
+      stoppedRef.current
+    ) {
       return
     }
 
     haptic('light')
 
+    stopTimer()
+
+    // Oxirgi savol
     if (isLast) {
-      finishedRef.current = true
+      stoppedRef.current = true
+
       onFinish(answersRef.current)
       return
     }
 
+    // Keyingi savol
     setIndex((currentIndex) => currentIndex + 1)
   }
 
@@ -177,20 +254,30 @@ export function QuizScreen({
   const seconds = timeLeft % 60
 
   const timerDanger = timeLeft <= 10
+
   const timerWarning =
     timeLeft > 10 && timeLeft <= 30
 
+  if (!question) {
+    return null
+  }
+
   return (
     <div className="flex min-h-[calc(100dvh-3rem)] flex-col gap-5">
+
       {/* HEADER */}
       <header className="flex flex-col gap-3">
+
         <div className="flex items-center gap-3">
+
+          {/* CHIQISH */}
           {showCloseButton && (
             <Button
+              type="button"
               variant="ghost"
               size="icon"
-              onClick={onExit}
-              aria-label="Testni yakunlash"
+              onClick={exitQuiz}
+              aria-label="Testdan chiqish"
             >
               <X
                 className="size-5"
@@ -213,10 +300,13 @@ export function QuizScreen({
           <span
             className={cn(
               'flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold tabular-nums',
+
               timerDanger &&
                 'bg-destructive/15 text-destructive',
+
               timerWarning &&
                 'bg-yellow-500/15 text-yellow-600',
+
               !timerDanger &&
                 !timerWarning &&
                 'bg-muted text-muted-foreground',
@@ -253,9 +343,8 @@ export function QuizScreen({
           />
         </div>
 
-        {/* TIMER INFO */}
         <p className="text-center text-xs text-muted-foreground">
-          Bu savol uchun vaqt: <b>2 daqiqa</b>
+          Har bir savol uchun vaqt: <b>2 daqiqa</b>
         </p>
       </header>
 
@@ -264,90 +353,98 @@ export function QuizScreen({
         key={question.id}
         className="flex flex-1 flex-col gap-5 animate-in fade-in slide-in-from-right-4 duration-300"
       >
+
         <h2 className="text-xl font-semibold leading-snug text-pretty">
           {question.text}
         </h2>
 
-        {/* OPTIONS */}
+        {/* ANSWERS */}
         <ul
           className="flex flex-col gap-2.5"
           aria-label="Javob variantlari"
         >
-          {question.options.map((option, i) => {
-            const isCorrect =
-              i === question.answer
+          {question.options.map(
+            (option, i) => {
+              const isCorrect =
+                i === question.answer
 
-            const isChosen =
-              i === selected
+              const isChosen =
+                i === selected
 
-            const state = !locked
-              ? 'idle'
-              : isCorrect
-                ? 'correct'
-                : isChosen
-                  ? 'wrong'
-                  : 'dim'
+              const state = !locked
+                ? 'idle'
+                : isCorrect
+                  ? 'correct'
+                  : isChosen
+                    ? 'wrong'
+                    : 'dim'
 
-            return (
-              <li key={option}>
-                <button
-                  type="button"
-                  onClick={() => choose(i)}
-                  disabled={locked}
-                  aria-pressed={isChosen}
-                  className={cn(
-                    'flex w-full items-center gap-3 rounded-2xl border-2 bg-card p-4 text-left text-card-foreground transition-all focus-visible:outline-2',
-
-                    state === 'idle' &&
-                      'border-border hover:border-primary/50 active:scale-[0.99]',
-
-                    state === 'correct' &&
-                      'border-success bg-success/10',
-
-                    state === 'wrong' &&
-                      'border-destructive bg-destructive/10',
-
-                    state === 'dim' &&
-                      'border-border opacity-55',
-                  )}
-                >
-                  <span
+              return (
+                <li key={option}>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      choose(i)
+                    }
+                    disabled={locked}
+                    aria-pressed={isChosen}
                     className={cn(
-                      'flex size-8 shrink-0 items-center justify-center rounded-lg text-sm font-semibold',
+                      'flex w-full items-center gap-3 rounded-2xl border-2 bg-card p-4 text-left text-card-foreground transition-all focus-visible:outline-2',
+
+                      state === 'idle' &&
+                        'border-border hover:border-primary/50 active:scale-[0.99]',
 
                       state === 'correct' &&
-                        'bg-success text-success-foreground',
+                        'border-success bg-success/10',
 
                       state === 'wrong' &&
-                        'bg-destructive text-white',
+                        'border-destructive bg-destructive/10',
 
-                      (state === 'idle' ||
-                        state === 'dim') &&
-                        'bg-muted text-muted-foreground',
+                      state === 'dim' &&
+                        'border-border opacity-55',
                     )}
                   >
-                    {state === 'correct' ? (
-                      <Check
-                        className="size-4"
-                        aria-label="To'g'ri"
-                      />
-                    ) : state === 'wrong' ? (
-                      <X
-                        className="size-4"
-                        aria-label="Noto'g'ri"
-                      />
-                    ) : (
-                      LETTERS[i]
-                    )}
-                  </span>
+                    <span
+                      className={cn(
+                        'flex size-8 shrink-0 items-center justify-center rounded-lg text-sm font-semibold',
 
-                  <span className="text-[15px] leading-snug">
-                    {option}
-                  </span>
-                </button>
-              </li>
-            )
-          })}
+                        state ===
+                          'correct' &&
+                          'bg-success text-success-foreground',
+
+                        state === 'wrong' &&
+                          'bg-destructive text-white',
+
+                        (state === 'idle' ||
+                          state === 'dim') &&
+                          'bg-muted text-muted-foreground',
+                      )}
+                    >
+                      {state ===
+                      'correct' ? (
+                        <Check
+                          className="size-4"
+                          aria-label="To'g'ri"
+                        />
+                      ) : state ===
+                        'wrong' ? (
+                        <X
+                          className="size-4"
+                          aria-label="Noto'g'ri"
+                        />
+                      ) : (
+                        LETTERS[i]
+                      )}
+                    </span>
+
+                    <span className="text-[15px] leading-snug">
+                      {option}
+                    </span>
+                  </button>
+                </li>
+              )
+            },
+          )}
         </ul>
 
         {/* EXPLANATION */}
@@ -363,7 +460,8 @@ export function QuizScreen({
 
             <p>
               <span className="font-semibold">
-                {selected === question.answer
+                {selected ===
+                question.answer
                   ? "To'g'ri! "
                   : "Noto'g'ri. "}
               </span>
@@ -374,9 +472,11 @@ export function QuizScreen({
         )}
       </section>
 
-      {/* BOTTOM BUTTON */}
+      {/* BOTTOM */}
       <div className="sticky bottom-0 -mx-4 bg-background/95 px-4 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur">
+
         <Button
+          type="button"
           size="lg"
           className="h-12 w-full rounded-2xl text-base"
           disabled={!locked}
@@ -388,6 +488,7 @@ export function QuizScreen({
               ? "Natijani ko'rish"
               : 'Keyingi savol'}
         </Button>
+
       </div>
     </div>
   )
