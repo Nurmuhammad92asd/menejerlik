@@ -88,19 +88,26 @@ export const CATEGORIES: Category[] = [
           'Umumiy o‘rta ta’lim muassasasini boshqarish, boshqaruv tamoyillari, attestatsiya, akkreditatsiya va TALIS.',
         levels: M1T1_LEVELS,
       },
-     {
-  id: 'm1t2',
-  title: '🔥  — STRATEGIK MENEJMENT 🔥',
-  description: 'M1T2',
-  levels: M1T2_LEVELS,
-},
-    id: 'm1t3',
-  title: 'Boshqaruv psixologiyasi',
-  description:
-    'Rahbarning emotsional intellekti, muloqot madaniyati, temperament, stressni boshqarish va jamoa psixologiyasi.',
-  levels: M1T3_LEVELS,
+      {
+        id: 'm1t2',
+        title: '🔥 TEST — STRATEGIK MENEJMENT 🔥',
+        description: 'M1T2 TEST',
+        levels: M1T2_LEVELS,
+      },
+      {
+        id: 'm1t3',
+        title: 'Boshqaruv psixologiyasi',
+        description:
+          'Rahbarning emotsional intellekti, muloqot madaniyati, temperament, stressni boshqarish, nizolarni hal qilish va jamoani samarali boshqarish psixologiyasi.',
+        levels: M1T3_LEVELS,
+      },
       {
         id: 'm1t4',
+        title: 'Korrupsiyaviy xavf-xatarlarni oldini olish',
+        description:
+          'Ta’lim muassasasida korrupsiyaviy xavflarni aniqlash va oldini olish mexanizmlari.',
+        levels: EMPTY_LEVELS,
+      },
         title: 'Korrupsiyaviy xavf-xatarlarni oldini olish',
         description:
           'Ta’lim muassasasida korrupsiyaviy xavflarni aniqlash va oldini olish mexanizmlari.',
