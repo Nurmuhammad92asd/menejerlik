@@ -1,7 +1,7 @@
 import { CATEGORIES } from './quiz-data'
 
 const GEMINI_API_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent'
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent'
 
 function buildSystemPrompt(): string {
   const topics = CATEGORIES.map(
@@ -25,19 +25,36 @@ Asosiy vazifang:
 - o‘quvchilar natijalarini yaxshilash;
 - ota-onalar bilan hamkorlik;
 - innovatsion loyihalar;
-- ta’lim menejmenti
+- ta’lim menejmenti;
+- maktab rivojlanish strategiyasi;
+- pedagoglarning kasbiy rivojlanishi;
+- rahbarlik va boshqaruv
 
 bo‘yicha amaliy yordam berish.
 
 Qoidalar:
+
 1. Javobni o‘zbek tilida, lotin yozuvida ber.
+
 2. Javob aniq, tushunarli va amaliy bo‘lsin.
-3. Zarur bo‘lsa punktlar va bosqichlardan foydalan.
-4. Maktab rahbariga amalda qo‘llash mumkin bo‘lgan tavsiyalar ber.
-5. Aniq bilmagan qonun moddasi, raqam yoki normani o‘ylab topma.
-6. Huquqiy masalalarda rasmiy manbani, xususan LexUZni tekshirish kerakligini bildir.
-7. Mavzudan butunlay tashqari savollarga qisqa javob berib, suhbatni ta’lim boshqaruvi mavzusiga qaytar.
-8. Foydalanuvchiga hurmat bilan murojaat qil.
+
+3. Kerak bo‘lsa javobni punktlar va bosqichlarga ajrat.
+
+4. Maktab rahbari amalda foydalanishi mumkin bo‘lgan tavsiyalar ber.
+
+5. Misollar kerak bo‘lsa, maktab hayotidan sodda va real misollar keltir.
+
+6. Aniq bilmagan qonun moddasi, raqam, sana yoki normativ hujjatni o‘ylab topma.
+
+7. Huquqiy masalalarda rasmiy manbalarni, xususan LexUZni tekshirish kerakligini bildir.
+
+8. Foydalanuvchi maktab boshqaruvi yoki ta’lim menejmentiga oid savol bersa, imkon qadar amaliy javob ber.
+
+9. Mavzudan butunlay tashqari savol berilsa, muloyim tarzda platformaning asosiy yo‘nalishi ta’lim boshqaruvi ekanini ayt va shu yo‘nalishga qaytar.
+
+10. Javoblar haddan tashqari uzun bo‘lmasin. Odatda 5-10 ta mazmunli punkt yoki gap yetarli.
+
+11. Foydalanuvchiga hurmat bilan murojaat qil.
 
 Platformadagi asosiy mavzular:
 
@@ -53,38 +70,43 @@ export async function askAI(question: string): Promise<string> {
   }
 
   try {
-    const response = await fetch(
-      `${GEMINI_API_URL}?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    const response = await fetch(GEMINI_API_URL, {
+      method: 'POST',
+
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey,
+      },
+
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [
+            {
+              text: buildSystemPrompt(),
+            },
+          ],
         },
-        body: JSON.stringify({
-          systemInstruction: {
+
+        contents: [
+          {
+            role: 'user',
             parts: [
               {
-                text: buildSystemPrompt(),
+                text: question.slice(0, 2000),
               },
             ],
           },
-          contents: [
-            {
-              role: 'user',
-              parts: [
-                {
-                  text: question.slice(0, 2000),
-                },
-              ],
-            },
-          ],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 1000,
+        ],
+
+        generationConfig: {
+          maxOutputTokens: 1000,
+
+          thinkingConfig: {
+            thinkingLevel: 'low',
           },
-        }),
-      },
-    )
+        },
+      }),
+    })
 
     const responseText = await response.text()
 
