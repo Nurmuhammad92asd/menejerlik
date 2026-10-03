@@ -11,5 +11,8 @@ binding = "ASSETS"
 binding = "DB"
 database_name = "menejerlik-db"
 database_id = "24278777-7393-4cb0-acb4-5ad35b5392d0"
+
 # D1 database connected
- 
+
+[triggers]
+crons = ["0 * * * *"]
