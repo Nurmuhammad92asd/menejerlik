@@ -1,3 +1,4 @@
+```ts
 import nextWorker from "./.open-next/worker.js";
 
 interface Env {
@@ -15,8 +16,9 @@ interface TelegramUser {
 
 interface TelegramChat {
   id: number;
-  type: "private" | "group" | "supergroup" | "channel" | string;
+  type: string;
   title?: string;
+  username?: string;
 }
 
 interface TelegramMessage {
@@ -59,30 +61,16 @@ const POINTS_PER_CORRECT = 2;
 const MAX_CHALLENGE_SCORE =
   QUESTIONS_PER_CHALLENGE * POINTS_PER_CORRECT;
 
-/**
- * JSON response helper
- */
-function json(
-  data: unknown,
-  status = 200,
-): Response {
-  return new Response(
-    JSON.stringify(data, null, 2),
-    {
-      status,
-      headers: {
-        "content-type":
-          "application/json; charset=UTF-8",
-        "cache-control":
-          "no-store",
-      },
+function json(data: unknown, status = 200): Response {
+  return new Response(JSON.stringify(data, null, 2), {
+    status,
+    headers: {
+      "content-type": "application/json; charset=UTF-8",
+      "cache-control": "no-store",
     },
-  );
+  });
 }
 
-/**
- * Telegram API bilan ishlash.
- */
 async function telegramRequest<T = unknown>(
   env: Env,
   method: string,
@@ -96,8 +84,7 @@ async function telegramRequest<T = unknown>(
     return {
       ok: false,
       error_code: 500,
-      description:
-        "TELEGRAM_BOT_TOKEN is not configured",
+      description: "TELEGRAM_BOT_TOKEN is not configured",
     };
   }
 
@@ -116,9 +103,14 @@ async function telegramRequest<T = unknown>(
     const data =
       (await response.json()) as TelegramApiResponse<T>;
 
+    console.log(
+      `[TELEGRAM API] method=${method} ok=${data.ok} ` +
+        `status=${response.status}`,
+    );
+
     if (!response.ok || !data.ok) {
       console.error(
-        `[TELEGRAM] ${method} xatosi:`,
+        `[TELEGRAM API ERROR] ${method}:`,
         data,
       );
     }
@@ -126,7 +118,7 @@ async function telegramRequest<T = unknown>(
     return data;
   } catch (error) {
     console.error(
-      `[TELEGRAM] ${method} network xatosi:`,
+      `[TELEGRAM NETWORK ERROR] ${method}:`,
       error,
     );
 
@@ -141,48 +133,32 @@ async function telegramRequest<T = unknown>(
   }
 }
 
-/**
- * Tashkent vaqtini aniq olish.
- *
- * UTC +5.
- */
 function getTashkentTime(
   now = new Date(),
 ): TashkentTime {
-  const parts = new Intl.DateTimeFormat(
-    "en-US",
-    {
-      timeZone: "Asia/Tashkent",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hourCycle: "h23",
-    },
-  ).formatToParts(now);
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Tashkent",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(now);
 
   const get = (type: string) =>
-    parts.find(
-      (part) => part.type === type,
-    )?.value ?? "00";
-
-  const year = get("year");
-  const month = get("month");
-  const day = get("day");
+    parts.find((part) => part.type === type)?.value ?? "00";
 
   return {
-    date: `${year}-${month}-${day}`,
+    date:
+      `${get("year")}-${get("month")}-${get("day")}`,
     hour: Number(get("hour")),
     minute: Number(get("minute")),
     second: Number(get("second")),
   };
 }
 
-/**
- * Mini App tugmasi.
- */
 function miniAppKeyboard(
   buttonText = "🚀 TESTNI BOSHLASH",
 ) {
@@ -200,9 +176,6 @@ function miniAppKeyboard(
   };
 }
 
-/**
- * Guruh yoki private chatga asosiy test xabari.
- */
 async function sendTestMessage(
   env: Env,
   chatId: number,
@@ -211,58 +184,52 @@ async function sendTestMessage(
   const name =
     firstName?.trim() || "do‘st";
 
-  return telegramRequest(env, "sendMessage", {
-    chat_id: chatId,
-
-    text:
-      `👋 Assalomu alaykum, ${name}!\n\n` +
-      `🎓 *${BOT_NAME}*\n\n` +
-      `Rahbarlik va menejerlik bo‘yicha ` +
-      `bilimlaringizni sinab ko‘ring.\n\n` +
-      `📚 Modul va mavzular\n` +
-      `📝 Testlar\n` +
-      `🏆 Reyting\n` +
-      `⚡ Natijalar\n\n` +
-      `Testni boshlash uchun tugmani bosing:`,
-
-    parse_mode: "Markdown",
-
-    reply_markup:
-      miniAppKeyboard(
+  return telegramRequest(
+    env,
+    "sendMessage",
+    {
+      chat_id: chatId,
+      text:
+        `👋 Assalomu alaykum, ${name}!\n\n` +
+        `🎓 *${BOT_NAME}*\n\n` +
+        `Rahbarlik va menejerlik bo‘yicha ` +
+        `bilimlaringizni sinab ko‘ring.\n\n` +
+        `📚 Modul va mavzular\n` +
+        `📝 Testlar\n` +
+        `🏆 Reyting\n` +
+        `⚡ Natijalar\n\n` +
+        `Testni boshlash uchun tugmani bosing:`,
+      parse_mode: "Markdown",
+      reply_markup: miniAppKeyboard(
         "🚀 TESTNI BOSHLASH",
       ),
-  });
+    },
+  );
 }
 
-/**
- * /help komandasi.
- */
 async function sendHelpMessage(
   env: Env,
   chatId: number,
 ) {
-  return telegramRequest(env, "sendMessage", {
-    chat_id: chatId,
-
-    text:
-      `📚 *${BOT_NAME}*\n\n` +
-      `Botdan foydalanish:\n\n` +
-      `🚀 /test — testni boshlash\n` +
-      `ℹ️ /help — yordam\n\n` +
-      `Testlar Mini App orqali ishlaydi.`,
-
-    parse_mode: "Markdown",
-
-    reply_markup:
-      miniAppKeyboard(
+  return telegramRequest(
+    env,
+    "sendMessage",
+    {
+      chat_id: chatId,
+      text:
+        `📚 *${BOT_NAME}*\n\n` +
+        `Botdan foydalanish:\n\n` +
+        `🚀 /test — testni boshlash\n` +
+        `ℹ️ /help — yordam\n\n` +
+        `Testlar Mini App orqali ishlaydi.`,
+      parse_mode: "Markdown",
+      reply_markup: miniAppKeyboard(
         "🚀 TESTNI OCHISH",
       ),
-  });
+    },
+  );
 }
 
-/**
- * Oddiy salomlashuv.
- */
 async function sendWelcomeMessage(
   env: Env,
   chatId: number,
@@ -271,42 +238,53 @@ async function sendWelcomeMessage(
   const name =
     firstName?.trim() || "do‘st";
 
-  return telegramRequest(env, "sendMessage", {
-    chat_id: chatId,
-
-    text:
-      `👋 Salom, ${name}!\n\n` +
-      `🎓 *${BOT_NAME}*\n\n` +
-      `Test platformasiga xush kelibsiz.\n\n` +
-      `Boshlash uchun tugmani bosing.`,
-
-    parse_mode: "Markdown",
-
-    reply_markup:
-      miniAppKeyboard(
+  return telegramRequest(
+    env,
+    "sendMessage",
+    {
+      chat_id: chatId,
+      text:
+        `👋 Salom, ${name}!\n\n` +
+        `🎓 *${BOT_NAME}*\n\n` +
+        `Test platformasiga xush kelibsiz.\n\n` +
+        `Boshlash uchun tugmani bosing.`,
+      parse_mode: "Markdown",
+      reply_markup: miniAppKeyboard(
         "🚀 TESTNI BOSHLASH",
       ),
-  });
+    },
+  );
 }
 
 /**
- * Telegram update'ni qayta ishlash.
+ * Telegram update diagnostikasi
  */
 async function handleTelegramUpdate(
   env: Env,
   update: TelegramUpdate,
 ): Promise<Response> {
+  console.log(
+    "[WEBHOOK UPDATE]",
+    JSON.stringify(update),
+  );
+
   const message = update.message;
 
   if (!message) {
+    console.log(
+      "[WEBHOOK] message mavjud emas",
+    );
+
     return json({
       ok: true,
       ignored: true,
       reason: "message_not_found",
+      update_id: update.update_id,
     });
   }
 
   const chatId = message.chat.id;
+  const chatType = message.chat.type;
 
   const rawText =
     message.text?.trim() ?? "";
@@ -315,15 +293,19 @@ async function handleTelegramUpdate(
     rawText.toLowerCase();
 
   console.log(
-    `[TELEGRAM] update=${update.update_id} ` +
-      `chat=${chatId} ` +
-      `type=${message.chat.type} ` +
-      `text="${rawText}"`,
+    "[WEBHOOK MESSAGE]",
+    JSON.stringify({
+      update_id: update.update_id,
+      chat_id: chatId,
+      chat_type: chatType,
+      chat_title: message.chat.title ?? null,
+      from_id: message.from?.id ?? null,
+      username: message.from?.username ?? null,
+      text: rawText,
+    }),
   );
 
-  /**
-   * /test
-   *
+  /*
    * /test
    * /test@topmenejerbot
    */
@@ -331,6 +313,11 @@ async function handleTelegramUpdate(
     text === "/test" ||
     text.startsWith("/test@")
   ) {
+    console.log(
+      `[COMMAND] /test detected. ` +
+      `chat=${chatId} type=${chatType}`,
+    );
+
     const result =
       await sendTestMessage(
         env,
@@ -338,27 +325,37 @@ async function handleTelegramUpdate(
         message.from?.first_name,
       );
 
+    console.log(
+      `[COMMAND] /test response ` +
+      `ok=${result.ok} ` +
+      `error=${result.description ?? "none"}`,
+    );
+
     return json({
       ok: result.ok,
-      action:
-        "test_button_sent",
-      telegram:
-        result.ok
-          ? "sent"
-          : "failed",
+      action: "test_button_sent",
+      telegram: result.ok
+        ? "sent"
+        : "failed",
+      chat_type: chatType,
     });
   }
 
-  /**
+  /*
    * /start
-   *
-   * /start
-   * /start anything
+   * /start@topmenejerbot
    */
   if (
     text === "/start" ||
     text.startsWith("/start ")
+    ||
+    text.startsWith("/start@")
   ) {
+    console.log(
+      `[COMMAND] /start detected. ` +
+      `chat=${chatId} type=${chatType}`,
+    );
+
     const result =
       await sendWelcomeMessage(
         env,
@@ -366,24 +363,35 @@ async function handleTelegramUpdate(
         message.from?.first_name,
       );
 
+    console.log(
+      `[COMMAND] /start response ` +
+      `ok=${result.ok} ` +
+      `error=${result.description ?? "none"}`,
+    );
+
     return json({
       ok: result.ok,
-      action:
-        "welcome_sent",
-      telegram:
-        result.ok
-          ? "sent"
-          : "failed",
+      action: "welcome_sent",
+      telegram: result.ok
+        ? "sent"
+        : "failed",
+      chat_type: chatType,
     });
   }
 
-  /**
+  /*
    * /help
+   * /help@topmenejerbot
    */
   if (
     text === "/help" ||
     text.startsWith("/help@")
   ) {
+    console.log(
+      `[COMMAND] /help detected. ` +
+      `chat=${chatId} type=${chatType}`,
+    );
+
     const result =
       await sendHelpMessage(
         env,
@@ -392,25 +400,25 @@ async function handleTelegramUpdate(
 
     return json({
       ok: result.ok,
-      action:
-        "help_sent",
-      telegram:
-        result.ok
-          ? "sent"
-          : "failed",
+      action: "help_sent",
+      telegram: result.ok
+        ? "sent"
+        : "failed",
+      chat_type: chatType,
     });
   }
 
-  /**
-   * Botga private chatda oddiy
-   * "salom" kabi xabar yuborilsa.
-   *
-   * Guruhda esa keraksiz javob bermaydi.
+  /*
+   * Shaxsiy chatda oddiy matn
    */
   if (
-    message.chat.type === "private" &&
+    chatType === "private" &&
     rawText
   ) {
+    console.log(
+      `[PRIVATE MESSAGE] ${rawText}`,
+    );
+
     const result =
       await sendWelcomeMessage(
         env,
@@ -420,54 +428,46 @@ async function handleTelegramUpdate(
 
     return json({
       ok: result.ok,
-      action:
-        "private_welcome_sent",
+      action: "private_welcome_sent",
     });
   }
 
-  /**
-   * Boshqa xabarlarni e'tiborsiz qoldiramiz.
-   */
+  console.log(
+    `[IGNORED] chat=${chatId} ` +
+    `type=${chatType} text="${rawText}"`,
+  );
+
   return json({
     ok: true,
     ignored: true,
     reason: "unsupported_message",
+    chat_type: chatType,
+    text: rawText,
   });
 }
 
-/**
- * Cron orqali test yozuvini D1 ga saqlash.
- *
- * Hozircha monitoring uchun.
- * Keyingi bosqichda shu funksiya Daily Challenge
- * generatoriga ulanadi.
- */
 async function saveCronHeartbeat(
   env: Env,
   time: TashkentTime,
 ): Promise<void> {
   try {
-    await env.DB.prepare(
-      `
+    await env.DB.prepare(`
       CREATE TABLE IF NOT EXISTS cron_test (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         tashkent_date TEXT NOT NULL,
         tashkent_hour INTEGER NOT NULL,
         created_at INTEGER NOT NULL
       )
-      `,
-    ).run();
+    `).run();
 
-    await env.DB.prepare(
-      `
+    await env.DB.prepare(`
       INSERT INTO cron_test (
         tashkent_date,
         tashkent_hour,
         created_at
       )
       VALUES (?, ?, ?)
-      `,
-    )
+    `)
       .bind(
         time.date,
         time.hour,
@@ -477,7 +477,8 @@ async function saveCronHeartbeat(
 
     console.log(
       `[CRON] Heartbeat saved: ` +
-        `${time.date} ${String(time.hour).padStart(2, "0")}:00`,
+      `${time.date} ` +
+      `${String(time.hour).padStart(2, "0")}:00`,
     );
   } catch (error) {
     console.error(
@@ -487,10 +488,6 @@ async function saveCronHeartbeat(
   }
 }
 
-/**
- * Cron qaysi soatlarda Daily Challenge
- * ishlashi kerakligini aniqlaydi.
- */
 function isChallengeHour(
   hour: number,
 ): boolean {
@@ -500,9 +497,6 @@ function isChallengeHour(
   );
 }
 
-/**
- * Asosiy Worker.
- */
 export default {
   async fetch(
     request: Request,
@@ -512,7 +506,7 @@ export default {
     const url =
       new URL(request.url);
 
-    /**
+    /*
      * Telegram webhook
      */
     if (
@@ -523,9 +517,26 @@ export default {
         const update =
           (await request.json()) as TelegramUpdate;
 
-        /**
-         * Telegram update'ni background'da
-         * qayta ishlaymiz.
+        console.log(
+          "[WEBHOOK RECEIVED]",
+          JSON.stringify({
+            update_id:
+              update.update_id,
+            has_message:
+              Boolean(update.message),
+            chat_type:
+              update.message?.chat?.type ??
+              null,
+            text:
+              update.message?.text ??
+              null,
+          }),
+        );
+
+        /*
+         * Muhim:
+         * Telegramga darhol 200 qaytaramiz,
+         * update processing esa waitUntil orqali davom etadi.
          */
         ctx.waitUntil(
           handleTelegramUpdate(
@@ -533,22 +544,21 @@ export default {
             update,
           ).catch((error) => {
             console.error(
-              "[WEBHOOK] Update processing error:",
+              "[WEBHOOK PROCESSING ERROR]",
               error,
             );
           }),
         );
 
-        /**
-         * Telegram'ga tezda 200 qaytaramiz.
-         */
         return json({
           ok: true,
           received: true,
+          update_id:
+            update.update_id,
         });
       } catch (error) {
         console.error(
-          "[WEBHOOK] JSON parse error:",
+          "[WEBHOOK JSON ERROR]",
           error,
         );
 
@@ -563,9 +573,8 @@ export default {
       }
     }
 
-    /**
-     * Webhook endpoint'ni brauzer orqali
-     * tekshirish.
+    /*
+     * Webhook GET diagnostikasi
      */
     if (
       url.pathname === WEBHOOK_PATH &&
@@ -576,19 +585,15 @@ export default {
 
       return json({
         ok: true,
-        service:
-          BOT_NAME,
-        webhook:
-          WEBHOOK_PATH,
-        miniApp:
-          MINI_APP_URL,
-        tashkentTime:
-          time,
+        service: BOT_NAME,
+        webhook: WEBHOOK_PATH,
+        miniApp: MINI_APP_URL,
+        tashkentTime: time,
       });
     }
 
-    /**
-     * Health check.
+    /*
+     * Health
      */
     if (
       url.pathname === "/health"
@@ -600,8 +605,7 @@ export default {
         ok: true,
         service:
           "menejerlik-worker",
-        bot:
-          BOT_NAME,
+        bot: BOT_NAME,
         miniApp:
           MINI_APP_URL,
         telegramConfigured:
@@ -610,14 +614,10 @@ export default {
           ),
         databaseConfigured:
           Boolean(env.DB),
-        tashkentTime:
-          time,
+        tashkentTime: time,
       });
     }
 
-    /**
-     * OpenNext / Next.js.
-     */
     return nextWorker.fetch(
       request,
       env,
@@ -625,9 +625,6 @@ export default {
     );
   },
 
-  /**
-   * Cloudflare Cron.
-   */
   async scheduled(
     controller: ScheduledController,
     env: Env,
@@ -637,15 +634,11 @@ export default {
       getTashkentTime();
 
     console.log(
-      `[CRON] ` +
-        `${time.date} ` +
-        `${String(time.hour).padStart(2, "0")}:` +
-        `${String(time.minute).padStart(2, "0")}`,
+      `[CRON] ${time.date} ` +
+      `${String(time.hour).padStart(2, "0")}:` +
+      `${String(time.minute).padStart(2, "0")}`,
     );
 
-    /**
-     * Cron heartbeat.
-     */
     ctx.waitUntil(
       saveCronHeartbeat(
         env,
@@ -653,59 +646,29 @@ export default {
       ),
     );
 
-    /**
-     * 05:00–22:00 oralig'i.
-     *
-     * Keyingi bosqichda aynan shu yerga:
-     *
-     * 1. Daily Challenge yaratish
-     * 2. 25 ta savol tanlash
-     * 3. D1 ga saqlash
-     * 4. Telegram guruhiga yuborish
-     * 5. Challenge URL yaratish
-     * 6. Soatlik leaderboard
-     *
-     * qo'shiladi.
-     */
     if (
-      isChallengeHour(
-        time.hour,
-      )
+      isChallengeHour(time.hour)
     ) {
       console.log(
         `[CRON] Challenge oynasi faol: ` +
-          `${time.date} ${time.hour}:00`,
+        `${time.date} ${time.hour}:00`,
       );
 
       console.log(
         `[CRON] Challenge config: ` +
-          `${QUESTIONS_PER_CHALLENGE} savol, ` +
-          `${POINTS_PER_CORRECT} ball/savol, ` +
-          `maksimum ${MAX_CHALLENGE_SCORE} ball`,
+        `${QUESTIONS_PER_CHALLENGE} savol, ` +
+        `${POINTS_PER_CORRECT} ball/savol, ` +
+        `maksimum ${MAX_CHALLENGE_SCORE} ball`,
       );
     }
 
-    /**
-     * 23:00 — kunlik natijalar.
-     *
-     * Keyingi bosqichda:
-     * - daily leaderboard
-     * - top natijalar
-     * - guruhga hisobot
-     * shu yerga ulanadi.
-     */
-    if (
-      time.hour === 23
-    ) {
+    if (time.hour === 23) {
       console.log(
-        `[CRON] 23:00 — kunlik natijalar oynasi`,
+        "[CRON] 23:00 — kunlik natijalar oynasi",
       );
     }
 
-    /**
-     * controller hozircha kelajakdagi
-     * cron boshqaruvi uchun qoldirilgan.
-     */
     void controller;
   },
 };
+```
