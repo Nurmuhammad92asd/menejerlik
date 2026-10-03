@@ -24,11 +24,13 @@ type Stats = {
 }
 
 type Props = {
-  user: TelegramUser | null
+  user?: TelegramUser | null
   history?: Attempt[] | null
   stats?: Stats | null
   bestByCategory?: Record<string, number> | null
   onStart: () => void
+  onAI?: () => void
+  onRanking: () => void
 }
 
 export function HomeScreen({
@@ -37,6 +39,8 @@ export function HomeScreen({
   stats,
   bestByCategory,
   onStart,
+  onAI,
+  onRanking,
 }: Props) {
   // =========================================================
   // XAVFSIZ DEFAULT QIYMATLAR
@@ -52,7 +56,7 @@ export function HomeScreen({
 
   const safeBestByCategory = bestByCategory ?? {}
 
-  // Kelajakdagi kategoriya statistikasi uchun saqlanadi.
+  // Hozircha kategoriya statistikasi keyingi bosqich uchun saqlanadi.
   void safeBestByCategory
 
   return (
@@ -83,12 +87,27 @@ export function HomeScreen({
           </div>
         </div>
 
-        <div className="flex size-10 items-center justify-center rounded-xl border bg-card">
-          <Sparkles
-            className="size-5 text-primary"
-            aria-hidden="true"
-          />
-        </div>
+        {/* AI tugmasi */}
+        {onAI ? (
+          <button
+            type="button"
+            onClick={onAI}
+            aria-label="AI yordamchi"
+            className="flex size-10 items-center justify-center rounded-xl border bg-card transition-all hover:bg-secondary active:scale-95"
+          >
+            <Sparkles
+              className="size-5 text-primary"
+              aria-hidden="true"
+            />
+          </button>
+        ) : (
+          <div className="flex size-10 items-center justify-center rounded-xl border bg-card">
+            <Sparkles
+              className="size-5 text-primary"
+              aria-hidden="true"
+            />
+          </div>
+        )}
       </header>
 
       {/* =====================================================
@@ -105,7 +124,10 @@ export function HomeScreen({
 
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-3 py-1.5 text-xs font-medium backdrop-blur-sm">
             <Sparkles className="size-3.5" />
-            <span>Ta'lim menejmenti platformasi</span>
+
+            <span>
+              Ta'lim menejmenti platformasi
+            </span>
           </div>
 
           <h2 className="max-w-[320px] text-2xl font-bold leading-tight tracking-tight">
@@ -128,6 +150,7 @@ export function HomeScreen({
           >
             <span className="flex items-center gap-2">
               <BookOpen className="size-5" />
+
               O‘rganishni boshlash
             </span>
 
@@ -200,6 +223,7 @@ export function HomeScreen({
           onClick={onStart}
           className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
         >
+
           <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-primary/5" />
 
           <div className="relative flex items-center gap-4">
@@ -211,6 +235,7 @@ export function HomeScreen({
             <div className="min-w-0 flex-1">
 
               <div className="flex items-center gap-2">
+
                 <h3 className="font-bold">
                   BOG‘CHA
                 </h3>
@@ -218,6 +243,7 @@ export function HomeScreen({
                 <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold uppercase">
                   Maktabgacha
                 </span>
+
               </div>
 
               <p className="mt-1 text-sm leading-5 text-muted-foreground">
@@ -244,6 +270,7 @@ export function HomeScreen({
           onClick={onStart}
           className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
         >
+
           <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-primary/5" />
 
           <div className="relative flex items-center gap-4">
@@ -255,6 +282,7 @@ export function HomeScreen({
             <div className="min-w-0 flex-1">
 
               <div className="flex items-center gap-2">
+
                 <h3 className="font-bold">
                   MAKTAB
                 </h3>
@@ -262,6 +290,7 @@ export function HomeScreen({
                 <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold uppercase">
                   Umumiy ta’lim
                 </span>
+
               </div>
 
               <p className="mt-1 text-sm leading-5 text-muted-foreground">
@@ -313,8 +342,10 @@ export function HomeScreen({
 
       <button
         type="button"
-        className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+        onClick={onRanking}
+        className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg active:scale-[0.99]"
       >
+
         <div className="absolute -right-6 -top-6 size-24 rounded-full bg-primary/5" />
 
         <div className="relative flex items-center gap-4">
@@ -347,6 +378,51 @@ export function HomeScreen({
 
         </div>
       </button>
+
+      {/* =====================================================
+          AI YORDAMCHI
+      ====================================================== */}
+
+      {onAI && (
+        <button
+          type="button"
+          onClick={onAI}
+          className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg active:scale-[0.99]"
+        >
+
+          <div className="absolute -right-8 -top-8 size-28 rounded-full bg-primary/5" />
+
+          <div className="relative flex items-center gap-4">
+
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary">
+              <Sparkles className="size-7 text-primary" />
+            </div>
+
+            <div className="min-w-0 flex-1">
+
+              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
+                Sun’iy intellekt
+              </p>
+
+              <h3 className="mt-1 text-lg font-bold">
+                🤖 AI menejer yordamchi
+              </h3>
+
+              <p className="mt-1 text-sm leading-5 text-muted-foreground">
+                Menejment bo‘yicha savollar bering,
+                tahlil qiling va yangi bilimlarni o‘rganing.
+              </p>
+
+            </div>
+
+            <ChevronRight
+              className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1"
+              aria-hidden="true"
+            />
+
+          </div>
+        </button>
+      )}
 
       {/* =====================================================
           LEARNING PRINCIPLES
