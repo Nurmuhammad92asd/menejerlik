@@ -399,9 +399,7 @@ export function ResultScreen({
                               <span className="font-bold">
                                 Izoh:
                               </span>{' '}
-                              {
-                                question.explanation
-                              }
+                              {question.explanation}
                             </p>
                           )}
                         </div>
