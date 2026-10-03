@@ -1,5 +1,7 @@
 'use client'
 
+import type { ReactNode } from 'react'
+
 import {
   ArrowRight,
   BookOpen,
@@ -15,15 +17,17 @@ import {
 import type { Attempt } from '@/hooks/use-history'
 import type { TelegramUser } from '@/lib/telegram'
 
+type Stats = {
+  count: number
+  average: number
+  best: number
+}
+
 type Props = {
   user: TelegramUser | null
-  history: Attempt[]
-  stats: {
-    count: number
-    average: number
-    best: number
-  }
-  bestByCategory: Record<string, number>
+  history?: Attempt[] | null
+  stats?: Stats | null
+  bestByCategory?: Record<string, number> | null
   onStart: () => void
 }
 
@@ -34,6 +38,25 @@ export function HomeScreen({
   bestByCategory,
   onStart,
 }: Props) {
+  // =========================================================
+  // XAVFSIZ DEFAULT QIYMATLAR
+  // Build/prerender vaqtida undefined xatolarining oldini oladi
+  // =========================================================
+
+  const safeHistory = Array.isArray(history) ? history : []
+
+  const safeStats: Stats = {
+    count: Number(stats?.count ?? 0),
+    average: Number(stats?.average ?? 0),
+    best: Number(stats?.best ?? 0),
+  }
+
+  const safeBestByCategory = bestByCategory ?? {}
+
+  // safeBestByCategory hozircha statistik kartalarda ishlatilmayapti,
+  // lekin kelajakdagi kategoriya statistikasi uchun saqlab qo‘yildi.
+  void safeBestByCategory
+
   return (
     <div className="flex flex-col gap-5 pb-6">
 
@@ -172,6 +195,8 @@ export function HomeScreen({
 
         </div>
 
+        {/* BOG‘CHA */}
+
         <button
           type="button"
           onClick={onStart}
@@ -181,7 +206,7 @@ export function HomeScreen({
 
           <div className="relative flex items-center gap-4">
 
-            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary text-2xl shadow-sm">
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary text-2xl shadow-sm">
               🧸
             </div>
 
@@ -211,6 +236,8 @@ export function HomeScreen({
 
           </div>
         </button>
+
+        {/* MAKTAB */}
 
         <button
           type="button"
@@ -263,19 +290,19 @@ export function HomeScreen({
         <StatCard
           icon={<BookOpen className="size-4" />}
           label="Testlar"
-          value={String(stats.count)}
+          value={String(safeStats.count)}
         />
 
         <StatCard
           icon={<Target className="size-4" />}
           label="O‘rtacha"
-          value={`${stats.average}%`}
+          value={`${safeStats.average}%`}
         />
 
         <StatCard
           icon={<Trophy className="size-4" />}
           label="Rekord"
-          value={`${stats.best}%`}
+          value={`${safeStats.best}%`}
         />
 
       </section>
@@ -330,7 +357,7 @@ export function HomeScreen({
           RECENT RESULTS
       ====================================================== */}
 
-      {history.length > 0 && (
+      {safeHistory.length > 0 && (
         <section className="flex flex-col gap-3">
 
           <div className="flex items-center gap-2 px-1">
@@ -348,7 +375,7 @@ export function HomeScreen({
 
           <div className="overflow-hidden rounded-3xl border bg-card">
 
-            {history.slice(0, 5).map((attempt) => {
+            {safeHistory.slice(0, 5).map((attempt) => {
 
               const percentage =
                 attempt.total > 0
@@ -463,7 +490,7 @@ function StatCard({
   label,
   value,
 }: {
-  icon: React.ReactNode
+  icon: ReactNode
   label: string
   value: string
 }) {
