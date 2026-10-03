@@ -68,3 +68,26 @@ export function supports(...args: unknown[]): boolean {
   // Imkoniyat nomi ko‘rinishidagi kalit: "HapticFeedback", "CloudStorage"
   return Boolean(app[key])
 }
+export function haptic(
+  type: 'light' | 'medium' | 'heavy' | 'success' | 'error' | 'warning' = 'light'
+): void {
+  const webApp = getWebApp()
+
+  if (!webApp?.HapticFeedback) {
+    return
+  }
+
+  try {
+    if (
+      type === 'success' ||
+      type === 'error' ||
+      type === 'warning'
+    ) {
+      webApp.HapticFeedback.notificationOccurred(type)
+    } else {
+      webApp.HapticFeedback.impactOccurred(type)
+    }
+  } catch (error) {
+    console.error('Telegram haptic error:', error)
+  }
+}
