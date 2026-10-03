@@ -1,118 +1,70 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /*
  * =========================================================
- * LEADERBOARD — faqat hisob-kitob (saqlash yo‘q)
- * =========================================================
+ * TELEGRAM MINI APP (WebApp) YORDAMCHILARI
+ * ---------------------------------------------------------
+ * hooks/use-telegram.ts va hooks/use-history.ts shu fayldan
+ * getWebApp va supports ni import qiladi.
  *
- * Bu fayl natijalarni qayerda saqlashni bilmaydi. Natijalar
- * serverdagi bazadan (api/ orqali) olinadi va shu yerga
- * beriladi. Shunda hamma foydalanuvchi bitta umumiy
- * reytingni ko‘radi.
+ * ESLATMA: bu fayl asl faylning qayta tiklangan nusxasi.
+ * Imkoni bo‘lsa, GitHub History'dagi asl versiyani qaytaring.
+ * =========================================================
  */
 
-export type LeaderboardEntry = {
-  userId: string // Telegram ID
-  name: string
-  mode: string // masalan: 'm1t1:aralash' | 'm1t1:easy'
-  score: number // to‘g‘ri javoblar soni
-  total: number
-  percent: number
-  timeSec: number // sarflangan vaqt
-  date: string // ISO
-}
+/** Telegram WebApp obyekti (turlar erkin: har xil metodlar ishlatiladi) */
+export type TelegramWebApp = any
 
-/** Ko‘p foiz yaxshi; teng bo‘lsa — kam vaqt yaxshi */
-function isBetter(a: LeaderboardEntry, b: LeaderboardEntry): boolean {
-  if (a.percent !== b.percent) return a.percent > b.percent
-  return a.timeSec < b.timeSec
-}
-
-/** Har bir foydalanuvchining eng yaxshi natijasi */
-export function bestPerUser(entries: LeaderboardEntry[]): LeaderboardEntry[] {
-  const best = new Map<string, LeaderboardEntry>()
-
-  for (const entry of entries) {
-    const prev = best.get(entry.userId)
-
-    if (!prev || isBetter(entry, prev)) {
-      best.set(entry.userId, entry)
+declare global {
+  interface Window {
+    Telegram?: {
+      WebApp?: TelegramWebApp
     }
   }
-
-  return [...best.values()]
-}
-
-export type Standing = {
-  rank: number // siz nechinchi o‘rindasiz
-  totalParticipants: number // jami qatnashchilar
-  topPercent: number // «eng yaxshi X% ichidasiz»
-  top: LeaderboardEntry[] // birinchi 10 ta
-  message: string
 }
 
 /**
- * `entries` — shu rejimdagi barcha natijalar.
- * `me` — joriy natija (test tugagan yoki hozirgi vaqtinchalik).
- *
- * Test davomida ham chaqirish mumkin: «hozirgi o‘rningiz» jonli
- * ko‘rsatiladi.
+ * Telegram ichida ochilgan bo‘lsa WebApp obyektini qaytaradi.
+ * Oddiy brauzerda yoki serverda null qaytaradi.
  */
-export function getStanding(
-  entries: LeaderboardEntry[],
-  me: LeaderboardEntry,
-): Standing {
-  const others = bestPerUser(entries).filter((e) => e.userId !== me.userId)
+export function getWebApp(): TelegramWebApp | null {
+  if (typeof window === 'undefined') return null
 
-  const previous = entries.filter((e) => e.userId === me.userId)
-
-  const myBest = [me, ...previous].reduce((a, b) => (isBetter(a, b) ? a : b))
-
-  const ranked = [...others, myBest].sort((a, b) =>
-    isBetter(a, b) ? -1 : isBetter(b, a) ? 1 : 0,
-  )
-
-  const rank = ranked.findIndex((e) => e.userId === me.userId) + 1
-  const total = ranked.length
-  const topPercent = Math.max(1, Math.round((rank / total) * 100))
-
-  let message: string
-
-  if (total === 1) {
-    message =
-      '🌟 Siz birinchi qatnashchisiz! Boshqalar sizni quvib yetishga harakat qiladi.'
-  } else if (rank === 1) {
-    message = `🥇 Siz ${total} kishi orasida 1-o‘rindasiz!`
-  } else if (rank <= 3) {
-    message = `🏅 Siz ${total} kishi orasida ${rank}-o‘rindasiz — sovrinli uchlikda!`
-  } else if (topPercent <= 25) {
-    message = `🔥 ${total} kishi ichida ${rank}-o‘rin — eng yaxshi ${topPercent}% qatorida.`
-  } else {
-    message = `📈 ${total} kishi ichida ${rank}-o‘rindasiz. Yana urinib ko‘ring — yuqoriga ko‘tarilish mumkin!`
-  }
-
-  return {
-    rank,
-    totalParticipants: total,
-    topPercent,
-    top: ranked.slice(0, 10),
-    message,
-  }
+  return window.Telegram?.WebApp ?? null
 }
 
-/** Test natijasidan reyting yozuvini yasaydi */
-export function buildEntry(
-  user: { id: string; name: string },
-  mode: string,
-  result: { correct: number; total: number; durationSec: number },
-): LeaderboardEntry {
-  return {
-    userId: user.id,
-    name: user.name,
-    mode,
-    score: result.correct,
-    total: result.total,
-    percent:
-      result.total === 0 ? 0 : Math.round((result.correct / result.total) * 100),
-    timeSec: result.durationSec,
-    date: new Date().toISOString(),
+/**
+ * Funksiya yoki versiya qo‘llab-quvvatlanishini tekshiradi.
+ *
+ * Quyidagi chaqirish usullarining hammasi ishlaydi:
+ *   supports('6.1')                    — versiya kamida 6.1 mi
+ *   supports('HapticFeedback')         — shu imkoniyat mavjudmi
+ *   supports(webApp, '6.1')            — berilgan WebApp uchun
+ *   supports(webApp, 'HapticFeedback')
+ */
+export function supports(...args: unknown[]): boolean {
+  const first = args[0]
+
+  const app: TelegramWebApp | null =
+    first && typeof first === 'object' ? first : getWebApp()
+
+  if (!app) return false
+
+  const key = args.find((arg) => typeof arg === 'string') as string | undefined
+
+  if (!key) return true
+
+  // Versiya ko‘rinishidagi kalit: "6.1", "7.0"
+  if (/^\d+(\.\d+)*$/.test(key)) {
+    try {
+      return typeof app.isVersionAtLeast === 'function'
+        ? Boolean(app.isVersionAtLeast(key))
+        : false
+    } catch {
+      return false
+    }
   }
+
+  // Imkoniyat nomi ko‘rinishidagi kalit: "HapticFeedback", "CloudStorage"
+  return Boolean(app[key])
 }
