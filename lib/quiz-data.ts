@@ -1,4 +1,5 @@
 import { M1T1_LEVELS } from './data/m1t1'
+import { M1T2_LEVELS } from './data/m1t2'
 
 /*
  * =========================================================
@@ -91,7 +92,7 @@ export const CATEGORIES: Category[] = [
         title: 'Strategik menejment',
         description:
           'Maktab rivojlanishini strategik rejalashtirish va uzoq muddatli maqsadlarni belgilash.',
-        levels: EMPTY_LEVELS,
+        levels: M1T2_LEVELS,
       },
       {
         id: 'm1t3',
