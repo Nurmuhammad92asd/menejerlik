@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { AIAssistant } from '@/components/ai-assistant'
 import { HomeScreen } from '@/components/home-screen'
@@ -33,6 +33,10 @@ import {
 
 import { setClosingConfirmation } from '@/lib/telegram'
 
+/* =========================================================
+   TYPES
+========================================================= */
+
 type EducationType = 'preschool' | 'school'
 
 type Screen =
@@ -57,254 +61,154 @@ const INITIAL_NAVIGATION: NavigationState = {
   topicId: null,
 }
 
+/* =========================================================
+   MAIN APP
+========================================================= */
+
 export function MenejerlikApp() {
-  const { user, isTelegram } = useTelegram()
+  const { isTelegram, webApp } = useTelegram()
 
-  const {
-    history,
-    stats,
-    bestByCategory,
-    addAttempt,
-  } = useHistory()
-
-  const [screen, setScreen] =
-    useState<Screen>('home')
+  const [screen, setScreen] = useState<Screen>('home')
 
   const [navigation, setNavigation] =
-    useState<NavigationState>(
-      INITIAL_NAVIGATION,
-    )
+    useState<NavigationState>(INITIAL_NAVIGATION)
 
-  const [session, setSession] =
+  const [quizSession, setQuizSession] =
     useState<QuizSession | null>(null)
 
-  const [result, setResult] =
+  const [quizResult, setQuizResult] =
     useState<QuizResult | null>(null)
 
   const [isFullscreen, setIsFullscreen] =
     useState(false)
 
-  /*
-   * =====================================================
-   * TELEGRAM FULLSCREEN
-   * =====================================================
-   */
+  const [isClosingConfirmation, setIsClosingConfirmation] =
+    useState(false)
+
+  const history = useHistory()
+
+  /* =========================================================
+     TELEGRAM FULLSCREEN
+  ========================================================= */
 
   useEffect(() => {
-    if (!isTelegram) return
-
-    const tg =
-      (window as any).Telegram?.WebApp
-
-    if (!tg) return
+    if (!webApp) return
 
     try {
-      tg.ready?.()
-      tg.expand?.()
+      webApp.ready()
+
+      if (webApp.expand) {
+        webApp.expand()
+      }
 
       if (
-        typeof tg.requestFullscreen ===
-        'function'
+        typeof webApp.requestFullscreen === 'function'
       ) {
-        tg.requestFullscreen()
+        webApp.requestFullscreen()
         setIsFullscreen(true)
       }
-    } catch (error) {
-      console.log(
-        'Telegram fullscreen error:',
-        error,
-      )
+    } catch {
+      // Telegram fullscreen barcha versiyalarda mavjud emas
     }
-  }, [isTelegram])
+  }, [webApp])
 
-  /*
-   * =====================================================
-   * FULLSCREEN TOGGLE
-   * =====================================================
-   */
-
-  function toggleFullscreen() {
-    const tg =
-      (window as any).Telegram?.WebApp
-
-    if (!tg) return
-
-    try {
-      if (isFullscreen) {
-        if (
-          typeof tg.exitFullscreen ===
-          'function'
-        ) {
-          tg.exitFullscreen()
-        }
-
-        setIsFullscreen(false)
-        return
-      }
-
-      if (
-        typeof tg.requestFullscreen ===
-        'function'
-      ) {
-        tg.requestFullscreen()
-        setIsFullscreen(true)
-        return
-      }
-
-      if (
-        typeof tg.expand ===
-        'function'
-      ) {
-        tg.expand()
-        setIsFullscreen(true)
-      }
-    } catch (error) {
-      console.log(
-        'Fullscreen toggle error:',
-        error,
-      )
-    }
-  }
-
-  /*
-   * =====================================================
-   * FULLSCREEN EVENT
-   * =====================================================
-   */
+  /* =========================================================
+     FULLSCREEN EVENT
+  ========================================================= */
 
   useEffect(() => {
-    const tg =
-      (window as any).Telegram?.WebApp
-
-    if (!tg) return
+    if (!webApp) return
 
     const handleFullscreenChanged = () => {
-      setIsFullscreen(
-        Boolean(tg.isFullscreen),
-      )
+      try {
+        if (
+          typeof webApp.isFullscreen === 'boolean'
+        ) {
+          setIsFullscreen(webApp.isFullscreen)
+        }
+      } catch {
+        // ignore
+      }
     }
 
-    tg.onEvent?.(
-      'fullscreenChanged',
+    window.addEventListener(
+      'fullscreenchange',
       handleFullscreenChanged,
     )
 
     return () => {
-      tg.offEvent?.(
-        'fullscreenChanged',
+      window.removeEventListener(
+        'fullscreenchange',
         handleFullscreenChanged,
       )
     }
-  }, [])
+  }, [webApp])
 
-  /*
-   * =====================================================
-   * SCROLL TOP
-   * =====================================================
-   */
+  /* =========================================================
+     SCROLL
+  ========================================================= */
 
-  function scrollToTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
+  const scrollToTop = () => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
+    }
   }
 
-  /*
-   * =====================================================
-   * HOME
-   * =====================================================
-   */
+  /* =========================================================
+     HOME
+  ========================================================= */
 
-  function goHome() {
-    setClosingConfirmation(false)
-
+  const goHome = () => {
     setScreen('home')
 
-    setNavigation(
-      INITIAL_NAVIGATION,
-    )
+    setNavigation(INITIAL_NAVIGATION)
 
-    setSession(null)
-    setResult(null)
+    setQuizSession(null)
+    setQuizResult(null)
 
     scrollToTop()
   }
 
-  /*
-   * =====================================================
-   * CLOSE MINI APP
-   *
-   * X tugmasi shu funksiyani ishlatadi.
-   * =====================================================
-   */
+  /* =========================================================
+     CLOSE MINI APP
+  ========================================================= */
 
-  function closeMiniApp() {
-    setClosingConfirmation(false)
-
-    const tg =
-      (window as any).Telegram?.WebApp
-
-    if (
-      tg &&
-      typeof tg.close === 'function'
-    ) {
-      try {
-        tg.close()
-        return
-      } catch (error) {
-        console.log(
-          'Telegram close error:',
-          error,
-        )
+  const closeMiniApp = () => {
+    try {
+      if (webApp?.close) {
+        webApp.close()
       }
+    } catch {
+      // ignore
     }
-
-    /*
-     * Agar Telegram tashqarisida ochilgan
-     * bo‘lsa, Home sahifaga qaytadi.
-     */
-    goHome()
   }
 
-  /*
-   * =====================================================
-   * AI
-   * =====================================================
-   */
+  /* =========================================================
+     AI
+  ========================================================= */
 
-  function openAI() {
-    setClosingConfirmation(false)
+  const openAI = () => {
     setScreen('ai')
     scrollToTop()
   }
 
-  /*
-   * =====================================================
-   * EDUCATION
-   * =====================================================
-   */
+  /* =========================================================
+     EDUCATION
+  ========================================================= */
 
-  function openEducationSelection() {
-    setClosingConfirmation(false)
-
+  const openEducationSelection = () => {
     setScreen('education')
-
-    setNavigation(
-      INITIAL_NAVIGATION,
-    )
-
-    setSession(null)
-    setResult(null)
-
     scrollToTop()
   }
 
-  function selectEducation(
-    type: EducationType,
-  ) {
+  const selectEducation = (
+    educationType: EducationType,
+  ) => {
     setNavigation({
-      educationType: type,
+      educationType,
       moduleId: null,
       topicId: null,
     })
@@ -314,61 +218,133 @@ export function MenejerlikApp() {
     scrollToTop()
   }
 
-  /*
-   * =====================================================
-   * MODULE
-   * =====================================================
-   */
+  /* =========================================================
+     MODULE
+  ========================================================= */
 
-  function selectModule(
-    moduleId: string,
-  ) {
-    setNavigation(
-      (previous) => ({
-        ...previous,
-        moduleId,
-        topicId: null,
-      }),
-    )
+  const selectModule = (moduleId: string) => {
+    setNavigation((previous) => ({
+      ...previous,
+      moduleId,
+      topicId: null,
+    }))
 
     setScreen('topics')
 
     scrollToTop()
   }
 
-  /*
-   * =====================================================
-   * TOPIC
-   * =====================================================
-   */
+  /* =========================================================
+     TOPIC
+  ========================================================= */
 
-  function selectTopic(
-    topicId: string,
-  ) {
-    setNavigation(
-      (previous) => ({
-        ...previous,
-        topicId,
-      }),
-    )
+  const selectTopic = (topicId: string) => {
+    setNavigation((previous) => ({
+      ...previous,
+      topicId,
+    }))
 
     setScreen('levels')
 
     scrollToTop()
   }
 
-  /*
-   * =====================================================
-   * LEVEL
-   * =====================================================
-   */
+  /* =========================================================
+     LEVEL
+  ========================================================= */
 
-  function selectLevel(
+  const selectLevel = (level: QuizLevel) => {
+    if (!navigation.topicId) return
+
+    startQuiz(navigation.topicId, level)
+  }
+
+  /* =========================================================
+     START QUIZ
+  ========================================================= */
+
+  const startQuiz = (
+    topicId: string,
     level: QuizLevel,
-  ) {
-    if (!navigation.topicId) {
+  ) => {
+    try {
+      const session = createTopicSession(
+        topicId,
+        level,
+      )
+
+      if (!session || !session.questions?.length) {
+        return
+      }
+
+      setQuizSession(session)
+      setQuizResult(null)
+      setScreen('quiz')
+
+      scrollToTop()
+    } catch (error) {
+      console.error(
+        'Testni boshlashda xatolik:',
+        error,
+      )
+    }
+  }
+
+  /* =========================================================
+     FINISH QUIZ
+  ========================================================= */
+
+  const finish = (
+    answers: AnswerRecord[],
+  ) => {
+    if (!quizSession) return
+
+    /*
+      QuizResult qanday tuzilganidan qat'i nazar,
+      quiz komponentidan kelgan natijani session
+      bilan birga hisoblash uchun mavjud helperlardan
+      foydalaniladi.
+    */
+
+    const total =
+      quizSession.questions.length
+
+    const correct = answers.filter(
+      (answer) => answer.isCorrect,
+    ).length
+
+    const wrong = total - correct
+
+    const percentage =
+      total > 0
+        ? Math.round((correct / total) * 100)
+        : 0
+
+    const result = {
+      ...quizSession,
+      answers,
+      total,
+      correct,
+      wrong,
+      percentage,
+    } as unknown as QuizResult
+
+    setQuizResult(result)
+    setScreen('result')
+
+    scrollToTop()
+  }
+
+  /* =========================================================
+     RETRY QUIZ
+  ========================================================= */
+
+  const retryQuiz = () => {
+    if (!navigation.topicId || !quizSession) {
       return
     }
+
+    const level = quizSession.level
 
     startQuiz(
       navigation.topicId,
@@ -376,837 +352,381 @@ export function MenejerlikApp() {
     )
   }
 
-  /*
-   * =====================================================
-   * START QUIZ
-   * =====================================================
-   */
+  /* =========================================================
+     BACK
+  ========================================================= */
 
-  function startQuiz(
-    topicId: string,
-    level: QuizLevel,
-  ) {
-    const newSession =
-      createTopicSession(
-        topicId,
-        level,
-      )
-
-    setSession(newSession)
-    setResult(null)
-    setScreen('quiz')
-
-    /*
-     * Test vaqtida chiqishga
-     * confirmation yoqiladi.
-     */
-    setClosingConfirmation(true)
-
-    scrollToTop()
-  }
-
-  /*
-   * =====================================================
-   * FINISH QUIZ
-   * =====================================================
-   */
-
-  function finish(
-    answers: AnswerRecord[],
-  ) {
-    if (!session) return
-
-    if (screen !== 'quiz') return
-
-    const correct =
-      answers.filter(
-        (answer) =>
-          answer.selected ===
-          answer.question.answer,
-      ).length
-
-    const durationSec =
-      Math.round(
-        (Date.now() -
-          session.startedAt) /
-          1000,
-      )
-
-    const quizResult: QuizResult = {
-      categoryId:
-        session.categoryId,
-
-      topicId:
-        session.topicId,
-
-      level:
-        session.level,
-
-      title:
-        session.title,
-
-      answers,
-
-      correct,
-
-      total:
-        answers.length,
-
-      durationSec,
-    }
-
-    setResult(quizResult)
-    setScreen('result')
-    setClosingConfirmation(false)
-
-    scrollToTop()
-
-    void addAttempt({
-      id: `${Date.now()}`,
-
-      categoryId:
-        session.categoryId,
-
-      correct,
-
-      total:
-        answers.length,
-
-      durationSec,
-
-      at: Date.now(),
-    })
-  }
-
-  /*
-   * =====================================================
-   * RETRY
-   * =====================================================
-   */
-
-  function retryQuiz() {
-    if (!result) return
-
-    startQuiz(
-      result.topicId,
-      result.level,
-    )
-  }
-
-  /*
-   * =====================================================
-   * BACK NAVIGATION
-   * =====================================================
-   */
-
-  function goBack() {
-    /*
-     * AI
-     */
-    if (screen === 'ai') {
-      goHome()
+  const goBack = () => {
+    if (screen === 'home') {
       return
     }
 
-    /*
-     * EDUCATION
-     */
     if (screen === 'education') {
       goHome()
       return
     }
 
-    /*
-     * MODULES
-     */
     if (screen === 'modules') {
-      setNavigation(
-        (previous) => ({
-          ...previous,
-          moduleId: null,
-          topicId: null,
-        }),
-      )
-
       setScreen('education')
       scrollToTop()
-
       return
     }
 
-    /*
-     * TOPICS
-     */
     if (screen === 'topics') {
-      setNavigation(
-        (previous) => ({
-          ...previous,
-          moduleId: null,
-          topicId: null,
-        }),
-      )
-
       setScreen('modules')
       scrollToTop()
-
       return
     }
 
-    /*
-     * LEVELS
-     */
     if (screen === 'levels') {
-      setNavigation(
-        (previous) => ({
-          ...previous,
-          topicId: null,
-        }),
-      )
-
       setScreen('topics')
       scrollToTop()
-
       return
     }
 
-    /*
-     * QUIZ
-     */
     if (screen === 'quiz') {
-      setClosingConfirmation(false)
-
-      setSession(null)
-      setResult(null)
-
-      setScreen('home')
-
-      setNavigation(
-        INITIAL_NAVIGATION,
-      )
-
+      setScreen('levels')
       scrollToTop()
-
       return
     }
 
-    /*
-     * RESULT
-     */
     if (screen === 'result') {
-      setResult(null)
-      setSession(null)
-
-      setScreen('home')
-
-      setNavigation(
-        INITIAL_NAVIGATION,
-      )
-
+      setScreen('levels')
+      setQuizResult(null)
       scrollToTop()
-
       return
     }
 
-    /*
-     * HOME
-     */
-    if (screen === 'home') {
+    if (screen === 'ai') {
+      goHome()
       return
     }
-
-    goHome()
   }
 
-  /*
-   * =====================================================
-   * TELEGRAM NATIVE BACK BUTTON
-   *
-   * Telegram ichidagi native BackButton
-   * screen home bo'lmaganda ishlaydi.
-   * =====================================================
-   */
+  /* =========================================================
+     TELEGRAM BACK BUTTON
+  ========================================================= */
 
   useBackButton(
-    goBack,
     screen !== 'home',
+    goBack,
   )
 
-  /*
-   * =====================================================
-   * CLOSE CONFIRMATION
-   * =====================================================
-   */
+  /* =========================================================
+     CLOSE CONFIRMATION
+  ========================================================= */
 
   useEffect(() => {
-    if (screen !== 'quiz') {
-      setClosingConfirmation(false)
+    const shouldConfirm =
+      screen === 'quiz'
+
+    setIsClosingConfirmation(
+      shouldConfirm,
+    )
+
+    try {
+      setClosingConfirmation(
+        shouldConfirm,
+      )
+    } catch {
+      // ignore
+    }
+
+    return () => {
+      try {
+        setClosingConfirmation(false)
+      } catch {
+        // ignore
+      }
     }
   }, [screen])
 
-  /*
-   * =====================================================
-   * ACTIVE CATEGORIES
-   * =====================================================
-   */
+  /* =========================================================
+     ACTIVE DATA
+  ========================================================= */
 
-  const activeCategories: Category[] =
-    navigation.educationType ===
-    'preschool'
-      ? PRESCHOOL_CATEGORIES
-      : CATEGORIES
+  const activeCategories = useMemo(() => {
+    if (
+      navigation.educationType ===
+      'preschool'
+    ) {
+      return PRESCHOOL_CATEGORIES
+    }
 
-  /*
-   * =====================================================
-   * ACTIVE MODULE
-   * =====================================================
-   */
+    return CATEGORIES
+  }, [navigation.educationType])
 
-  const activeModule =
-    navigation.moduleId
-      ? getModuleById(
-          navigation.moduleId,
-        )
-      : undefined
+  const activeModule = useMemo(() => {
+    if (!navigation.moduleId) {
+      return undefined
+    }
 
-  /*
-   * =====================================================
-   * ACTIVE TOPIC
-   * =====================================================
-   */
+    return getModuleById(
+      navigation.moduleId,
+    )
+  }, [navigation.moduleId])
 
-  const activeTopic =
-    navigation.topicId
-      ? getTopicById(
-          navigation.topicId,
-        )
-      : undefined
+  const activeTopic = useMemo(() => {
+    if (!navigation.topicId) {
+      return undefined
+    }
 
-  /*
-   * =====================================================
-   * RENDER
-   * =====================================================
-   */
+    return getTopicById(
+      navigation.topicId,
+    )
+  }, [navigation.topicId])
+
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
   return (
     <main
       className="
-        relative
-        mx-auto
-        min-h-dvh
-        w-full
-        max-w-md
-        px-4
-        pb-8
-        pt-3
+        min-h-screen
+        bg-background
+        text-foreground
       "
     >
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
 
-      {/* =================================================
-          MINI APP HEADER
-      ================================================= */}
-
-      <div
+      <header
         className="
           sticky
           top-0
-          z-[90]
-          mb-4
-          flex
-          h-12
-          items-center
-          justify-between
-          rounded-2xl
-          border
-          border-border/60
+          z-50
+          border-b
           bg-background/95
-          px-1.5
-          shadow-sm
-          backdrop-blur-xl
+          backdrop-blur
         "
       >
-
-        {/* ===============================================
-            ORQAGA
-        =============================================== */}
-
-        <button
-          type="button"
-          onClick={goBack}
-          disabled={
-            screen === 'home'
-          }
-          aria-label="Orqaga"
-          title="Orqaga"
-          className="
-            flex
-            size-10
-            shrink-0
-            items-center
-            justify-center
-            rounded-xl
-            text-2xl
-            font-medium
-            transition-all
-            hover:bg-muted
-            active:scale-90
-            disabled:pointer-events-none
-            disabled:opacity-25
-          "
-        >
-          ←
-        </button>
-
-        {/* ===============================================
-            TITLE
-        =============================================== */}
-
         <div
           className="
-            min-w-0
-            flex-1
-            px-2
-            text-center
+            mx-auto
+            flex
+            min-h-16
+            max-w-3xl
+            items-center
+            justify-between
+            px-4
           "
         >
-          <p
-            className="
-              truncate
-              text-sm
-              font-bold
-            "
-          >
-            Menejerlik
-          </p>
-
-          {screen !== 'home' && (
-            <p
-              className="
-                truncate
-                text-[9px]
-                font-medium
-                uppercase
-                tracking-wider
-                text-muted-foreground
-              "
-            >
-              Nurmuhammad
-            </p>
-          )}
-        </div>
-
-        {/* ===============================================
-            FULLSCREEN
-        =============================================== */}
-
-        {isTelegram && (
           <button
             type="button"
-            onClick={
-              toggleFullscreen
-            }
-            aria-label={
-              isFullscreen
-                ? 'Kichik ekran'
-                : 'To‘liq ekran'
-            }
-            title={
-              isFullscreen
-                ? 'Kichik ekran'
-                : 'To‘liq ekran'
-            }
+            onClick={goHome}
             className="
               flex
-              size-10
-              shrink-0
               items-center
-              justify-center
-              rounded-xl
-              text-lg
-              transition-all
-              hover:bg-muted
-              active:scale-90
-            "
-          >
-            {isFullscreen
-              ? '↙️'
-              : '⛶'}
-          </button>
-        )}
-
-        {/* ===============================================
-            X — MINI APPNI YOPISH
-        =============================================== */}
-
-        <button
-          type="button"
-          onClick={
-            closeMiniApp
-          }
-          aria-label="Mini ilovani yopish"
-          title="Mini ilovani yopish"
-          className="
-            flex
-            size-10
-            shrink-0
-            items-center
-            justify-center
-            rounded-xl
-            text-2xl
-            font-bold
-            text-muted-foreground
-            transition-all
-            hover:bg-destructive/10
-            hover:text-destructive
-            active:scale-90
-          "
-        >
-          ×
-        </button>
-
-      </div>
-
-      {/* =================================================
-          AI
-      ================================================= */}
-
-      {screen === 'ai' && (
-        <AIAssistant
-          onBack={goBack}
-        />
-      )}
-
-      {/* =================================================
-          HOME
-      ================================================= */}
-
-      {screen === 'home' && (
-        <div
-          className="
-            flex
-            flex-col
-            gap-5
-          "
-        >
-
-          <HomeScreen
-            user={user}
-            history={history}
-            stats={stats}
-            bestByCategory={
-              bestByCategory
-            }
-            onStart={
-              openEducationSelection
-            }
-          />
-
-          <button
-            type="button"
-            onClick={openAI}
-            className="
-              group
-              relative
-              overflow-hidden
-              rounded-[2rem]
-              border
-              bg-card
-              p-5
+              gap-3
               text-left
-              shadow-sm
-              transition-all
-              hover:-translate-y-1
-              hover:shadow-xl
-              active:scale-[0.99]
             "
           >
-
             <div
               className="
-                absolute
-                -right-8
-                -top-8
-                size-32
-                rounded-full
-                bg-primary/5
-              "
-            />
-
-            <div
-              className="
-                relative
                 flex
+                size-10
                 items-center
-                gap-4
+                justify-center
+                rounded-2xl
+                bg-primary
+                text-lg
+                font-bold
+                text-primary-foreground
               "
             >
+              M
+            </div>
 
-              <div
-                className="
-                  flex
-                  size-14
-                  shrink-0
-                  items-center
-                  justify-center
-                  rounded-2xl
-                  bg-primary/10
-                  text-3xl
-                "
-              >
-                🤖
+            <div>
+              <div className="text-sm font-bold">
+                Menejerlik
               </div>
 
-              <div
-                className="
-                  min-w-0
-                  flex-1
-                "
-              >
-
-                <p
-                  className="
-                    text-xs
-                    font-semibold
-                    uppercase
-                    tracking-[0.16em]
-                    text-primary
-                  "
-                >
-                  MENEJERLIK AI
-                </p>
-
-                <h2
-                  className="
-                    mt-1
-                    text-lg
-                    font-bold
-                  "
-                >
-                  AI Rahbar yordamchisi
-                </h2>
-
-                <p
-                  className="
-                    mt-1
-                    text-sm
-                    leading-5
-                    text-muted-foreground
-                  "
-                >
-                  Ta’lim boshqaruvi va
-                  rahbarlik bo‘yicha
-                  savol bering.
-                </p>
-
+              <div className="text-[10px] text-muted-foreground">
+                by Nurmuhammad
               </div>
-
-              <span
-                className="
-                  text-2xl
-                  text-muted-foreground
-                  transition-transform
-                  group-hover:translate-x-1
-                "
-              >
-                →
-              </span>
-
             </div>
           </button>
 
+          <div className="flex items-center gap-2">
+            {isTelegram && (
+              <span
+                className="
+                  hidden
+                  rounded-full
+                  bg-green-100
+                  px-2.5
+                  py-1
+                  text-[10px]
+                  font-semibold
+                  text-green-700
+                  sm:inline-flex
+                "
+              >
+                Telegram
+              </span>
+            )}
+
+            {isFullscreen && (
+              <span
+                className="
+                  hidden
+                  rounded-full
+                  bg-blue-100
+                  px-2.5
+                  py-1
+                  text-[10px]
+                  font-semibold
+                  text-blue-700
+                  sm:inline-flex
+                "
+              >
+                Fullscreen
+              </span>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* =====================================================
+          CONTENT
+      ===================================================== */}
+
+      <div
+        className="
+          mx-auto
+          max-w-3xl
+          px-4
+          pb-10
+          pt-5
+        "
+      >
+        {/* HOME */}
+
+        {screen === 'home' && (
+          <HomeScreen
+            onStart={openEducationSelection}
+            onAI={openAI}
+          />
+        )}
+
+        {/* EDUCATION */}
+
+        {screen === 'education' && (
+          <EducationScreen
+            onBack={goBack}
+            onSelect={selectEducation}
+          />
+        )}
+
+        {/* MODULES */}
+
+        {screen === 'modules' && (
+          <ModuleScreen
+            categories={activeCategories}
+            educationType={
+              navigation.educationType
+            }
+            onBack={goBack}
+            onSelect={selectModule}
+          />
+        )}
+
+        {/* TOPICS */}
+
+        {screen === 'topics' && (
+          <TopicScreen
+            module={activeModule}
+            onBack={goBack}
+            onSelect={selectTopic}
+          />
+        )}
+
+        {/* LEVELS */}
+
+        {screen === 'levels' && (
+          <LevelScreen
+            topic={activeTopic}
+            onBack={goBack}
+            onSelect={selectLevel}
+          />
+        )}
+
+        {/* QUIZ */}
+
+        {screen === 'quiz' &&
+          quizSession && (
+            <QuizScreen
+              session={quizSession}
+              onFinish={finish}
+              onExit={goBack}
+            />
+          )}
+
+        {/* RESULT */}
+
+        {screen === 'result' &&
+          quizResult && (
+            <ResultScreen
+              result={quizResult}
+              onRetry={retryQuiz}
+              onHome={goHome}
+            />
+          )}
+
+        {/* AI */}
+
+        {screen === 'ai' && (
+          <AIAssistant
+            onBack={goBack}
+          />
+        )}
+      </div>
+
+      {/* =====================================================
+          CLOSE CONFIRMATION STATE
+      ===================================================== */}
+
+      {isClosingConfirmation && (
+        <div className="sr-only">
+          Test jarayoni davom etmoqda.
         </div>
       )}
+    </main>
+  )
+}
 
-      {/* =================================================
-          EDUCATION
-      ================================================= */}
+/* =========================================================
+   EDUCATION SCREEN
+========================================================= */
 
-      {screen === 'education' && (
-        <EducationScreen
-          onBack={goBack}
-          onSelect={
-            selectEducation
-          }
-        />
-      )}
-
-      {/* =================================================
-          MODULES
-      ================================================= */}
-
-      {screen === 'modules' && (
-        <ModuleScreen
-          educationType={
-            navigation.educationType
-          }
-          categories={
-            activeCategories
-          }
-          onBack={goBack}
-          onSelect={
-            selectModule
-          }
-        />
-      )}
-
-      {/* =================================================
-          TOPICS
-      ================================================= */}
-
-      {screen === 'topics' && (
-        <TopicScreen
-          module={
-            activeModule
-          }
-          onBack={goBack}
-          onSelect={
-            selectTopic
-          }
-        />
-      )}
-
-      {/* =================================================
-          LEVELS
-      ================================================= */}
-
-      {screen === 'levels' && (
-       /*
- * =========================================================
- * LEVEL SCREEN
- * =========================================================
- */
-
-function LevelScreen({
-  topic,
+function EducationScreen({
   onBack,
   onSelect,
 }: {
-  topic:
-    | ReturnType<
-        typeof getTopicById
-      >
-
   onBack: () => void
-
   onSelect: (
-    level: QuizLevel,
+    educationType: EducationType,
   ) => void
 }) {
-  if (!topic) {
-    return (
-      <section
+  return (
+    <section className="flex flex-col gap-6">
+      <button
+        type="button"
+        onClick={onBack}
         className="
-          flex
-          flex-col
-          gap-5
+          w-fit
+          text-sm
+          font-semibold
+          text-muted-foreground
         "
       >
+        ← Bosh sahifa
+      </button>
 
-        <button
-          type="button"
-          onClick={onBack}
-          className="
-            text-left
-            text-sm
-            font-semibold
-            text-muted-foreground
-          "
-        >
-          ← Mavzularga
-        </button>
-
-        <EmptyState
-          icon="⚠️"
-          title="Mavzu topilmadi"
-          text="Tanlangan mavzu mavjud emas."
-        />
-
-      </section>
-    )
-  }
-
-  const levels: Array<{
-    id: QuizLevel
-    icon: string
-    title: string
-    description: string
-    questions: number
-  }> = [
-    {
-      id: 'easy',
-      icon: '🟢',
-      title: 'Oson',
-      description:
-        'Asosiy tushunchalar va bilimlar',
-      questions:
-        topic.levels.easy.length,
-    },
-
-    {
-      id: 'medium',
-      icon: '🟡',
-      title: 'O‘rta',
-      description:
-        'Amaliy qo‘llash va vaziyatlar',
-      questions:
-        topic.levels.medium.length,
-    },
-
-    {
-      id: 'hard',
-      icon: '🔴',
-      title: 'Qiyin',
-      description:
-        'Tahliliy va murakkab savollar',
-      questions:
-        topic.levels.hard.length,
-    },
-
-    {
-      id: 'case',
-      icon: '🔵',
-      title: 'Keys',
-      description:
-        'Real boshqaruv vaziyatlari',
-      questions:
-        topic.levels.case.length,
-    },
-
-    {
-      id: 'mixed',
-      icon: '🟣',
-      title: 'Aralash test',
-      description:
-        '100 ta savoldan tasodifiy 30 ta',
-      questions: 30,
-    },
-  ]
-
-  return (
-    <section
-      className="
-        flex
-        flex-col
-        gap-5
-      "
-    >
-
-      <header>
-
-        <button
-          type="button"
-          onClick={onBack}
-          className="
-            mb-5
-            text-sm
-            font-semibold
-            text-muted-foreground
-            transition-colors
-            hover:text-foreground
-          "
-        >
-          ← Mavzularga
-        </button>
-
+      <div>
         <p
           className="
             text-xs
@@ -1216,52 +736,149 @@ function LevelScreen({
             text-primary
           "
         >
-          TEST
+          YO‘NALISH
         </p>
 
-        <h1
-          className="
-            mt-1
-            text-2xl
-            font-bold
-            tracking-tight
-          "
-        >
-          {topic.title}
+        <h1 className="mt-2 text-3xl font-bold">
+          Ta’lim yo‘nalishini tanlang
         </h1>
 
-        <p
+        <p className="mt-2 text-sm text-muted-foreground">
+          Sizga kerakli testlar bo‘limini tanlang.
+        </p>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <button
+          type="button"
+          onClick={() =>
+            onSelect('school')
+          }
           className="
-            mt-2
-            text-sm
-            leading-5
-            text-muted-foreground
+            rounded-3xl
+            border
+            bg-card
+            p-6
+            text-left
+            shadow-sm
+            transition
+            hover:-translate-y-1
+            hover:shadow-lg
           "
         >
-          Test turini tanlang.
-        </p>
+          <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-blue-100 text-2xl">
+            🏫
+          </div>
 
-      </header>
+          <h2 className="text-lg font-bold">
+            Umumiy o‘rta ta’lim
+          </h2>
 
-      <div
+          <p className="mt-2 text-sm leading-5 text-muted-foreground">
+            Maktab rahbarlari va ta’lim boshqaruvi
+            bo‘yicha menejerlik testlari.
+          </p>
+        </button>
+
+        <button
+          type="button"
+          onClick={() =>
+            onSelect('preschool')
+          }
+          className="
+            rounded-3xl
+            border
+            bg-card
+            p-6
+            text-left
+            shadow-sm
+            transition
+            hover:-translate-y-1
+            hover:shadow-lg
+          "
+        >
+          <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-green-100 text-2xl">
+            👶
+          </div>
+
+          <h2 className="text-lg font-bold">
+            Maktabgacha ta’lim
+          </h2>
+
+          <p className="mt-2 text-sm leading-5 text-muted-foreground">
+            Maktabgacha ta’lim boshqaruvi va
+            rahbarlik faoliyatiga oid testlar.
+          </p>
+        </button>
+      </div>
+    </section>
+  )
+}
+
+/* =========================================================
+   MODULE SCREEN
+========================================================= */
+
+function ModuleScreen({
+  categories,
+  educationType,
+  onBack,
+  onSelect,
+}: {
+  categories: Category[]
+  educationType: EducationType | null
+  onBack: () => void
+  onSelect: (
+    moduleId: string,
+  ) => void
+}) {
+  return (
+    <section className="flex flex-col gap-6">
+      <button
+        type="button"
+        onClick={onBack}
         className="
-          flex
-          flex-col
-          gap-3
+          w-fit
+          text-sm
+          font-semibold
+          text-muted-foreground
         "
       >
+        ← Yo‘nalishlar
+      </button>
 
-        {levels.map(
-          (level) => (
+      <div>
+        <p
+          className="
+            text-xs
+            font-semibold
+            uppercase
+            tracking-[0.18em]
+            text-primary
+          "
+        >
+          MODULLAR
+        </p>
+
+        <h1 className="mt-2 text-3xl font-bold">
+          Menejerlik modullari
+        </h1>
+
+        <p className="mt-2 text-sm text-muted-foreground">
+          {educationType === 'preschool'
+            ? 'Maktabgacha ta’lim'
+            : 'Umumiy o‘rta ta’lim'}
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        {categories.map(
+          (category, index) => (
             <button
-              key={
-                level.id
-              }
+              key={category.id}
               type="button"
               onClick={() =>
-                onSelect(
-                  level.id,
-                )
+                onSelect(category.id)
               }
               className="
                 group
@@ -1274,13 +891,11 @@ function LevelScreen({
                 p-5
                 text-left
                 shadow-sm
-                transition-all
+                transition
                 hover:-translate-y-0.5
                 hover:shadow-lg
-                active:scale-[0.99]
               "
             >
-
               <div
                 className="
                   flex
@@ -1293,59 +908,26 @@ function LevelScreen({
                   text-2xl
                 "
               >
-                {level.icon}
+                {getModuleIcon(
+                  category,
+                  index,
+                )}
               </div>
 
-              <div
-                className="
-                  min-w-0
-                  flex-1
-                "
-              >
+              <div className="min-w-0 flex-1">
+                <h2 className="font-bold">
+                  {category.title}
+                </h2>
 
-                <div
-                  className="
-                    flex
-                    items-center
-                    gap-2
-                  "
-                >
-
-                  <h2
-                    className="
-                      font-bold
-                    "
-                  >
-                    {level.title}
-                  </h2>
-
-                  <span
-                    className="
-                      rounded-full
-                      bg-muted
-                      px-2
-                      py-0.5
-                      text-[10px]
-                      font-semibold
-                    "
-                  >
-                    {level.questions}
-                  </span>
-
-                </div>
-
-                <p
-                  className="
-                    mt-1
-                    text-sm
-                    text-muted-foreground
-                  "
-                >
-                  {
-                    level.description
-                  }
-                </p>
-
+                {'description' in
+                  category &&
+                  category.description && (
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {
+                        category.description
+                      }
+                    </p>
+                  )}
               </div>
 
               <span
@@ -1358,106 +940,195 @@ function LevelScreen({
               >
                 →
               </span>
-
             </button>
           ),
         )}
-
       </div>
 
-      <div
-        className="
-          rounded-2xl
-          border
-          border-purple-200
-          bg-purple-50
-          p-4
-        "
-      >
+      {categories.length === 0 && (
+        <EmptyState
+          icon="📚"
+          title="Modullar mavjud emas"
+          text="Hozircha ushbu yo‘nalishda modullar kiritilmagan."
+        />
+      )}
+    </section>
+  )
+}
 
-        <div
+/* =========================================================
+   TOPIC SCREEN
+========================================================= */
+
+function TopicScreen({
+  module,
+  onBack,
+  onSelect,
+}: {
+  module:
+    | ReturnType<typeof getModuleById>
+    | undefined
+  onBack: () => void
+  onSelect: (
+    topicId: string,
+  ) => void
+}) {
+  const topics =
+    module &&
+    'topics' in module
+      ? module.topics
+      : []
+
+  if (!module) {
+    return (
+      <section className="flex flex-col gap-5">
+        <button
+          type="button"
+          onClick={onBack}
           className="
-            flex
-            items-start
-            gap-3
+            w-fit
+            text-sm
+            font-semibold
+            text-muted-foreground
           "
         >
+          ← Modullar
+        </button>
 
-          <div
-            className="
-              text-2xl
-            "
-          >
-            🟣
-          </div>
+        <EmptyState
+          icon="⚠️"
+          title="Modul topilmadi"
+          text="Tanlangan modul mavjud emas."
+        />
+      </section>
+    )
+  }
 
-          <div>
+  return (
+    <section className="flex flex-col gap-6">
+      <button
+        type="button"
+        onClick={onBack}
+        className="
+          w-fit
+          text-sm
+          font-semibold
+          text-muted-foreground
+        "
+      >
+        ← Modullar
+      </button>
 
-            <p
-              className="
-                text-sm
-                font-bold
-              "
-            >
-              Aralash test qanday ishlaydi?
+      <div>
+        <p
+          className="
+            text-xs
+            font-semibold
+            uppercase
+            tracking-[0.18em]
+            text-primary
+          "
+        >
+          MAVZULAR
+        </p>
+
+        <h1 className="mt-2 text-2xl font-bold">
+          {module.title}
+        </h1>
+
+        {'description' in module &&
+          module.description && (
+            <p className="mt-2 text-sm leading-5 text-muted-foreground">
+              {module.description}
             </p>
-
-            <p
-              className="
-                mt-1
-                text-xs
-                leading-5
-                text-muted-foreground
-              "
-            >
-              Ushbu mavzudagi 100 ta savol
-              ichidan har safar tasodifiy
-              30 ta savol tanlanadi.
-              Har bir yangi testda savollar
-              qayta aralashtiriladi.
-            </p>
-
-          </div>
-
-        </div>
-
+          )}
       </div>
 
-    </section>
-  )
-}
-                  </div>
+      <div className="flex flex-col gap-3">
+        {topics.map(
+          (topic, index) => (
+            <button
+              key={topic.id}
+              type="button"
+              onClick={() =>
+                onSelect(topic.id)
+              }
+              className="
+                group
+                flex
+                items-center
+                gap-4
+                rounded-3xl
+                border
+                bg-card
+                p-5
+                text-left
+                shadow-sm
+                transition
+                hover:-translate-y-0.5
+                hover:shadow-lg
+              "
+            >
+              <div
+                className="
+                  flex
+                  size-12
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  bg-secondary
+                  text-sm
+                  font-bold
+                "
+              >
+                {String(index + 1).padStart(
+                  2,
+                  '0',
+                )}
+              </div>
 
-                </div>
+              <div className="min-w-0 flex-1">
+                <h2 className="font-bold">
+                  {topic.title}
+                </h2>
 
-                <span
-                  className="
-                    self-center
-                    text-xl
-                    text-muted-foreground
-                    transition-transform
-                    group-hover:translate-x-1
-                  "
-                >
-                  →
-                </span>
+                {topic.description && (
+                  <p className="mt-1 text-sm leading-5 text-muted-foreground">
+                    {topic.description}
+                  </p>
+                )}
+              </div>
 
-              </button>
-            ),
-          )}
+              <span
+                className="
+                  text-xl
+                  text-muted-foreground
+                  transition-transform
+                  group-hover:translate-x-1
+                "
+              >
+                →
+              </span>
+            </button>
+          ),
+        )}
+      </div>
 
-        </div>
+      {topics.length === 0 && (
+        <EmptyState
+          icon="📝"
+          title="Mavzular mavjud emas"
+          text="Bu modulga hali mavzular qo‘shilmagan."
+        />
       )}
-
     </section>
   )
 }
 
-/*
- * =========================================================
- * LEVEL SCREEN
- * =========================================================
- */
+/* =========================================================
+   LEVEL SCREEN
+========================================================= */
 
 function LevelScreen({
   topic,
@@ -1465,37 +1136,27 @@ function LevelScreen({
   onSelect,
 }: {
   topic:
-    | ReturnType<
-        typeof getTopicById
-      >
-
+    | ReturnType<typeof getTopicById>
+    | undefined
   onBack: () => void
-
   onSelect: (
     level: QuizLevel,
   ) => void
 }) {
   if (!topic) {
     return (
-      <section
-        className="
-          flex
-          flex-col
-          gap-5
-        "
-      >
-
+      <section className="flex flex-col gap-5">
         <button
           type="button"
           onClick={onBack}
           className="
-            text-left
+            w-fit
             text-sm
             font-semibold
             text-muted-foreground
           "
         >
-          ← Mavzularga
+          ← Mavzular
         </button>
 
         <EmptyState
@@ -1503,7 +1164,6 @@ function LevelScreen({
           title="Mavzu topilmadi"
           text="Tanlangan mavzu mavjud emas."
         />
-
       </section>
     )
   }
@@ -1551,32 +1211,32 @@ function LevelScreen({
       questions:
         topic.levels.case.length,
     },
+    {
+      id: 'mixed',
+      icon: '🟣',
+      title: 'Aralash test',
+      description:
+        '100 ta savoldan tasodifiy 30 ta',
+      questions: 30,
+    },
   ]
 
   return (
-    <section
-      className="
-        flex
-        flex-col
-        gap-5
-      "
-    >
+    <section className="flex flex-col gap-6">
+      <button
+        type="button"
+        onClick={onBack}
+        className="
+          w-fit
+          text-sm
+          font-semibold
+          text-muted-foreground
+        "
+      >
+        ← Mavzular
+      </button>
 
-      <header>
-
-        <button
-          type="button"
-          onClick={onBack}
-          className="
-            mb-5
-            text-sm
-            font-semibold
-            text-muted-foreground
-          "
-        >
-          ← Mavzularga
-        </button>
-
+      <div>
         <p
           className="
             text-xs
@@ -1589,49 +1249,23 @@ function LevelScreen({
           TEST
         </p>
 
-        <h1
-          className="
-            mt-1
-            text-2xl
-            font-bold
-            tracking-tight
-          "
-        >
+        <h1 className="mt-2 text-2xl font-bold">
           {topic.title}
         </h1>
 
-        <p
-          className="
-            mt-2
-            text-sm
-            leading-5
-            text-muted-foreground
-          "
-        >
-          Test darajasini tanlang.
+        <p className="mt-2 text-sm text-muted-foreground">
+          Test turini tanlang.
         </p>
+      </div>
 
-      </header>
-
-      <div
-        className="
-          flex
-          flex-col
-          gap-3
-        "
-      >
-
+      <div className="flex flex-col gap-3">
         {levels.map(
           (level) => (
             <button
-              key={
-                level.id
-              }
+              key={level.id}
               type="button"
               onClick={() =>
-                onSelect(
-                  level.id,
-                )
+                onSelect(level.id)
               }
               className="
                 group
@@ -1644,12 +1278,12 @@ function LevelScreen({
                 p-5
                 text-left
                 shadow-sm
-                transition-all
+                transition
                 hover:-translate-y-0.5
                 hover:shadow-lg
+                active:scale-[0.99]
               "
             >
-
               <div
                 className="
                   flex
@@ -1665,21 +1299,8 @@ function LevelScreen({
                 {level.icon}
               </div>
 
-              <div
-                className="
-                  min-w-0
-                  flex-1
-                "
-              >
-
-                <div
-                  className="
-                    flex
-                    items-center
-                    gap-2
-                  "
-                >
-
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
                   <h2 className="font-bold">
                     {level.title}
                   </h2>
@@ -1696,21 +1317,11 @@ function LevelScreen({
                   >
                     {level.questions}
                   </span>
-
                 </div>
 
-                <p
-                  className="
-                    mt-1
-                    text-sm
-                    text-muted-foreground
-                  "
-                >
-                  {
-                    level.description
-                  }
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {level.description}
                 </p>
-
               </div>
 
               <span
@@ -1723,72 +1334,82 @@ function LevelScreen({
               >
                 →
               </span>
-
             </button>
           ),
         )}
-
       </div>
+
+      {/* ARALASH TEST IZOH */}
 
       <div
         className="
-          rounded-2xl
-          bg-muted/50
-          p-4
-          text-center
+          rounded-3xl
+          border
+          border-purple-200
+          bg-purple-50
+          p-5
         "
       >
+        <div className="flex items-start gap-3">
+          <div className="text-2xl">
+            🟣
+          </div>
 
-        <p
-          className="
-            text-xs
-            leading-5
-            text-muted-foreground
-          "
-        >
-          Savollar soni tanlangan
-          darajadagi mavjud testlar
-          asosida belgilanadi.
-        </p>
+          <div>
+            <h3 className="font-bold">
+              Aralash test
+            </h3>
 
+            <p className="mt-1 text-sm leading-6 text-muted-foreground">
+              Ushbu mavzudagi 100 ta savol
+              ichidan har safar tasodifiy
+              30 ta savol tanlanadi.
+              Testni qayta boshlasangiz,
+              savollar yana aralashtiriladi.
+            </p>
+          </div>
+        </div>
       </div>
-
     </section>
   )
 }
 
-/*
- * =========================================================
- * BADGE
- * =========================================================
- */
+/* =========================================================
+   HELPERS
+========================================================= */
 
-function Badge({
-  children,
-}: {
-  children: ReactNode
-}) {
-  return (
-    <span
-      className="
-        rounded-lg
-        bg-muted
-        px-1.5
-        py-1
-        text-[10px]
-        font-semibold
-      "
-    >
-      {children}
-    </span>
-  )
+function getModuleIcon(
+  category: Category,
+  index: number,
+) {
+  const icons = [
+    '🎯',
+    '📚',
+    '👨‍💼',
+    '👥',
+    '📊',
+    '⚖️',
+    '💡',
+    '🏫',
+    '🌐',
+    '🚀',
+  ]
+
+  if (
+    'icon' in category &&
+    category.icon
+  ) {
+    return category.icon
+  }
+
+  return icons[
+    index % icons.length
+  ]
 }
 
-/*
- * =========================================================
- * EMPTY STATE
- * =========================================================
- */
+/* =========================================================
+   EMPTY STATE
+========================================================= */
 
 function EmptyState({
   icon,
@@ -1802,35 +1423,29 @@ function EmptyState({
   return (
     <div
       className="
+        flex
+        flex-col
+        items-center
+        justify-center
         rounded-3xl
         border
-        border-dashed
-        p-8
+        bg-card
+        px-6
+        py-12
         text-center
       "
     >
-
       <div className="text-4xl">
         {icon}
       </div>
 
-      <h2 className="mt-3 font-bold">
+      <h2 className="mt-4 text-lg font-bold">
         {title}
       </h2>
 
-      <p
-        className="
-          mx-auto
-          mt-2
-          max-w-xs
-          text-sm
-          leading-5
-          text-muted-foreground
-        "
-      >
+      <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
         {text}
       </p>
-
     </div>
   )
 }
