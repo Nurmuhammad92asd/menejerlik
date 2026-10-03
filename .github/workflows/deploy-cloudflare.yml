@@ -21,18 +21,18 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build project
+      - name: Next.js build
         run: npm run build
 
-      - name: Check build output
-        run: |
-          echo "=== ROOT ==="
-          ls -la
-          echo "=== BUILD DIRECTORIES ==="
-          find . -maxdepth 2 -type d \( -name "dist" -o -name "build" -o -name ".output" \) -print
+      - name: OpenNext Cloudflare build
+        run: npx opennextjs-cloudflare build
 
-      - name: Check Wrangler
-        run: npx wrangler --version
+      - name: Check OpenNext output
+        run: |
+          echo "=== .open-next ==="
+          ls -la .open-next
+          echo "=== Worker ==="
+          ls -la .open-next/worker.js
 
       - name: Deploy to Cloudflare
         run: npx wrangler deploy
