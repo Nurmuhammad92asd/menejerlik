@@ -422,8 +422,7 @@ export function MenejerlikApp() {
     scrollToTop()
 
     void addAttempt({
-      id: `${Date.now()}`,
-
+  id: `${Date.now()}`,
       categoryId:
         session.categoryId,
 
