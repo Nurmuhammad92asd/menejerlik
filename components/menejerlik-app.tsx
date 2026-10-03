@@ -1069,427 +1069,117 @@ export function MenejerlikApp() {
       ================================================= */}
 
       {screen === 'levels' && (
-        <LevelScreen
-          topic={
-            activeTopic
-          }
-          onBack={goBack}
-          onSelect={
-            selectLevel
-          }
-        />
-      )}
-
-      {/* =================================================
-          QUIZ
-      ================================================= */}
-
-      {screen === 'quiz' &&
-        session && (
-          <QuizScreen
-            key={
-              session.startedAt
-            }
-            session={
-              session
-            }
-            showCloseButton={false}
-            onExit={
-              goBack
-            }
-            onFinish={
-              finish
-            }
-          />
-        )}
-
-      {/* =================================================
-          RESULT
-      ================================================= */}
-
-      {screen === 'result' &&
-        result && (
-          <ResultScreen
-            result={
-              result
-            }
-            onRetry={
-              retryQuiz
-            }
-            onHome={
-              goHome
-            }
-          />
-        )}
-
-    </main>
-  )
-}
-
-/*
+       /*
  * =========================================================
- * EDUCATION SCREEN
+ * LEVEL SCREEN
  * =========================================================
  */
 
-function EducationScreen({
+function LevelScreen({
+  topic,
   onBack,
   onSelect,
 }: {
+  topic:
+    | ReturnType<
+        typeof getTopicById
+      >
+
   onBack: () => void
+
   onSelect: (
-    type: EducationType,
+    level: QuizLevel,
   ) => void
 }) {
-  return (
-    <section
-      className="
-        flex
-        min-h-[80vh]
-        flex-col
-        justify-center
-        gap-6
-      "
-    >
+  if (!topic) {
+    return (
+      <section
+        className="
+          flex
+          flex-col
+          gap-5
+        "
+      >
 
-      <header className="text-center">
-
-        <div
+        <button
+          type="button"
+          onClick={onBack}
           className="
-            mx-auto
-            flex
-            size-16
-            items-center
-            justify-center
-            rounded-3xl
-            bg-primary
-            text-3xl
-            shadow-lg
-          "
-        >
-          🎓
-        </div>
-
-        <p
-          className="
-            mt-5
-            text-xs
-            font-semibold
-            uppercase
-            tracking-[0.2em]
-            text-primary
-          "
-        >
-          MENEJERLIK
-        </p>
-
-        <h1
-          className="
-            mt-2
-            text-3xl
-            font-bold
-            tracking-tight
-          "
-        >
-          Ta’lim yo‘nalishini tanlang
-        </h1>
-
-        <p
-          className="
-            mx-auto
-            mt-3
-            max-w-sm
+            text-left
             text-sm
-            leading-6
+            font-semibold
             text-muted-foreground
           "
         >
-          O‘zingizga mos ta’lim yo‘nalishini
-          tanlang va boshqaruv bilimlarini
-          bosqichma-bosqich sinab ko‘ring.
-        </p>
-
-      </header>
-
-      <div className="grid gap-4">
-
-        <button
-          type="button"
-          onClick={() =>
-            onSelect(
-              'preschool',
-            )
-          }
-          className="
-            group
-            relative
-            overflow-hidden
-            rounded-[2rem]
-            border
-            bg-card
-            p-6
-            text-left
-            shadow-sm
-            transition-all
-            hover:-translate-y-1
-            hover:shadow-xl
-            active:scale-[0.99]
-          "
-        >
-
-          <div
-            className="
-              absolute
-              -right-8
-              -top-8
-              size-32
-              rounded-full
-              bg-primary/5
-            "
-          />
-
-          <div
-            className="
-              relative
-              flex
-              items-center
-              gap-5
-            "
-          >
-
-            <div
-              className="
-                flex
-                size-16
-                shrink-0
-                items-center
-                justify-center
-                rounded-2xl
-                bg-primary/10
-                text-4xl
-              "
-            >
-              🧸
-            </div>
-
-            <div
-              className="
-                min-w-0
-                flex-1
-              "
-            >
-
-              <p
-                className="
-                  text-xs
-                  font-semibold
-                  uppercase
-                  tracking-widest
-                  text-muted-foreground
-                "
-              >
-                01
-              </p>
-
-              <h2
-                className="
-                  mt-1
-                  text-xl
-                  font-bold
-                "
-              >
-                BOG‘CHA
-              </h2>
-
-              <p
-                className="
-                  mt-1
-                  text-sm
-                  text-muted-foreground
-                "
-              >
-                Maktabgacha ta’lim menejmenti
-              </p>
-
-            </div>
-
-            <span
-              className="
-                text-2xl
-                text-muted-foreground
-                transition-transform
-                group-hover:translate-x-1
-              "
-            >
-              →
-            </span>
-
-          </div>
+          ← Mavzularga
         </button>
 
-        <button
-          type="button"
-          onClick={() =>
-            onSelect(
-              'school',
-            )
-          }
-          className="
-            group
-            relative
-            overflow-hidden
-            rounded-[2rem]
-            border
-            bg-card
-            p-6
-            text-left
-            shadow-sm
-            transition-all
-            hover:-translate-y-1
-            hover:shadow-xl
-            active:scale-[0.99]
-          "
-        >
+        <EmptyState
+          icon="⚠️"
+          title="Mavzu topilmadi"
+          text="Tanlangan mavzu mavjud emas."
+        />
 
-          <div
-            className="
-              absolute
-              -right-8
-              -top-8
-              size-32
-              rounded-full
-              bg-primary/5
-            "
-          />
+      </section>
+    )
+  }
 
-          <div
-            className="
-              relative
-              flex
-              items-center
-              gap-5
-            "
-          >
+  const levels: Array<{
+    id: QuizLevel
+    icon: string
+    title: string
+    description: string
+    questions: number
+  }> = [
+    {
+      id: 'easy',
+      icon: '🟢',
+      title: 'Oson',
+      description:
+        'Asosiy tushunchalar va bilimlar',
+      questions:
+        topic.levels.easy.length,
+    },
 
-            <div
-              className="
-                flex
-                size-16
-                shrink-0
-                items-center
-                justify-center
-                rounded-2xl
-                bg-secondary
-                text-4xl
-              "
-            >
-              🏫
-            </div>
+    {
+      id: 'medium',
+      icon: '🟡',
+      title: 'O‘rta',
+      description:
+        'Amaliy qo‘llash va vaziyatlar',
+      questions:
+        topic.levels.medium.length,
+    },
 
-            <div
-              className="
-                min-w-0
-                flex-1
-              "
-            >
+    {
+      id: 'hard',
+      icon: '🔴',
+      title: 'Qiyin',
+      description:
+        'Tahliliy va murakkab savollar',
+      questions:
+        topic.levels.hard.length,
+    },
 
-              <p
-                className="
-                  text-xs
-                  font-semibold
-                  uppercase
-                  tracking-widest
-                  text-muted-foreground
-                "
-              >
-                02
-              </p>
+    {
+      id: 'case',
+      icon: '🔵',
+      title: 'Keys',
+      description:
+        'Real boshqaruv vaziyatlari',
+      questions:
+        topic.levels.case.length,
+    },
 
-              <h2
-                className="
-                  mt-1
-                  text-xl
-                  font-bold
-                "
-              >
-                MAKTAB
-              </h2>
-
-              <p
-                className="
-                  mt-1
-                  text-sm
-                  text-muted-foreground
-                "
-              >
-                Umumiy o‘rta ta’lim menejmenti
-              </p>
-
-            </div>
-
-            <span
-              className="
-                text-2xl
-                text-muted-foreground
-                transition-transform
-                group-hover:translate-x-1
-              "
-            >
-              →
-            </span>
-
-          </div>
-        </button>
-
-      </div>
-
-      <button
-        type="button"
-        onClick={onBack}
-        className="
-          rounded-2xl
-          border
-          px-4
-          py-3
-          text-sm
-          font-semibold
-          transition-colors
-          hover:bg-muted
-        "
-      >
-        ← Bosh sahifaga
-      </button>
-
-    </section>
-  )
-}
-
-/*
- * =========================================================
- * MODULE SCREEN
- * =========================================================
- */
-
-function ModuleScreen({
-  educationType,
-  categories,
-  onBack,
-  onSelect,
-}: {
-  educationType:
-    | EducationType
-    | null
-
-  categories: Category[]
-
-  onBack: () => void
-
-  onSelect: (
-    moduleId: string,
-  ) => void
-}) {
-  const isSchool =
-    educationType === 'school'
+    {
+      id: 'mixed',
+      icon: '🟣',
+      title: 'Aralash test',
+      description:
+        '100 ta savoldan tasodifiy 30 ta',
+      questions: 30,
+    },
+  ]
 
   return (
     <section
@@ -1514,435 +1204,228 @@ function ModuleScreen({
             hover:text-foreground
           "
         >
-          ← Yo‘nalishlarga
+          ← Mavzularga
         </button>
+
+        <p
+          className="
+            text-xs
+            font-semibold
+            uppercase
+            tracking-[0.18em]
+            text-primary
+          "
+        >
+          TEST
+        </p>
+
+        <h1
+          className="
+            mt-1
+            text-2xl
+            font-bold
+            tracking-tight
+          "
+        >
+          {topic.title}
+        </h1>
+
+        <p
+          className="
+            mt-2
+            text-sm
+            leading-5
+            text-muted-foreground
+          "
+        >
+          Test turini tanlang.
+        </p>
+
+      </header>
+
+      <div
+        className="
+          flex
+          flex-col
+          gap-3
+        "
+      >
+
+        {levels.map(
+          (level) => (
+            <button
+              key={
+                level.id
+              }
+              type="button"
+              onClick={() =>
+                onSelect(
+                  level.id,
+                )
+              }
+              className="
+                group
+                flex
+                items-center
+                gap-4
+                rounded-3xl
+                border
+                bg-card
+                p-5
+                text-left
+                shadow-sm
+                transition-all
+                hover:-translate-y-0.5
+                hover:shadow-lg
+                active:scale-[0.99]
+              "
+            >
+
+              <div
+                className="
+                  flex
+                  size-14
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  bg-secondary
+                  text-2xl
+                "
+              >
+                {level.icon}
+              </div>
+
+              <div
+                className="
+                  min-w-0
+                  flex-1
+                "
+              >
+
+                <div
+                  className="
+                    flex
+                    items-center
+                    gap-2
+                  "
+                >
+
+                  <h2
+                    className="
+                      font-bold
+                    "
+                  >
+                    {level.title}
+                  </h2>
+
+                  <span
+                    className="
+                      rounded-full
+                      bg-muted
+                      px-2
+                      py-0.5
+                      text-[10px]
+                      font-semibold
+                    "
+                  >
+                    {level.questions}
+                  </span>
+
+                </div>
+
+                <p
+                  className="
+                    mt-1
+                    text-sm
+                    text-muted-foreground
+                  "
+                >
+                  {
+                    level.description
+                  }
+                </p>
+
+              </div>
+
+              <span
+                className="
+                  text-xl
+                  text-muted-foreground
+                  transition-transform
+                  group-hover:translate-x-1
+                "
+              >
+                →
+              </span>
+
+            </button>
+          ),
+        )}
+
+      </div>
+
+      <div
+        className="
+          rounded-2xl
+          border
+          border-purple-200
+          bg-purple-50
+          p-4
+        "
+      >
 
         <div
           className="
             flex
-            items-end
-            justify-between
+            items-start
+            gap-3
           "
         >
+
+          <div
+            className="
+              text-2xl
+            "
+          >
+            🟣
+          </div>
 
           <div>
 
             <p
               className="
-                text-xs
-                font-semibold
-                uppercase
-                tracking-[0.18em]
-                text-primary
-              "
-            >
-              {isSchool
-                ? 'MAKTAB'
-                : 'BOG‘CHA'}
-            </p>
-
-            <h1
-              className="
-                mt-1
-                text-2xl
+                text-sm
                 font-bold
-                tracking-tight
               "
             >
-              O‘quv modullari
-            </h1>
+              Aralash test qanday ishlaydi?
+            </p>
 
             <p
               className="
-                mt-2
-                text-sm
+                mt-1
+                text-xs
                 leading-5
                 text-muted-foreground
               "
             >
-              Kerakli modulni tanlang.
-            </p>
-
-          </div>
-
-          <div
-            className="
-              rounded-2xl
-              bg-secondary
-              px-3
-              py-2
-              text-center
-            "
-          >
-
-            <p className="text-lg font-bold">
-              {categories.length}
-            </p>
-
-            <p
-              className="
-                text-[10px]
-                font-medium
-                uppercase
-                tracking-wide
-                text-muted-foreground
-              "
-            >
-              Modul
+              Ushbu mavzudagi 100 ta savol
+              ichidan har safar tasodifiy
+              30 ta savol tanlanadi.
+              Har bir yangi testda savollar
+              qayta aralashtiriladi.
             </p>
 
           </div>
 
         </div>
 
-      </header>
-
-      {categories.length === 0 ? (
-        <EmptyState
-          icon="🧸"
-          title="Tez orada"
-          text="Bu yo‘nalish uchun o‘quv modullari tayyorlanmoqda."
-        />
-      ) : (
-        <div
-          className="
-            flex
-            flex-col
-            gap-3
-          "
-        >
-
-          {categories.map(
-            (
-              category,
-              index,
-            ) => (
-              <button
-                key={
-                  category.id
-                }
-                type="button"
-                onClick={() =>
-                  onSelect(
-                    category.id,
-                  )
-                }
-                className="
-                  group
-                  flex
-                  items-center
-                  gap-4
-                  rounded-3xl
-                  border
-                  bg-card
-                  p-4
-                  text-left
-                  shadow-sm
-                  transition-all
-                  hover:-translate-y-0.5
-                  hover:shadow-md
-                "
-              >
-
-                <div
-                  className="
-                    flex
-                    size-12
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-2xl
-                    bg-primary
-                    text-sm
-                    font-bold
-                    text-primary-foreground
-                  "
-                >
-                  {String(
-                    index + 1,
-                  ).padStart(
-                    2,
-                    '0',
-                  )}
-                </div>
-
-                <div
-                  className="
-                    min-w-0
-                    flex-1
-                  "
-                >
-
-                  <h2
-                    className="
-                      font-semibold
-                      leading-5
-                    "
-                  >
-                    {category.title}
-                  </h2>
-
-                  <p
-                    className="
-                      mt-1
-                      line-clamp-2
-                      text-xs
-                      leading-5
-                      text-muted-foreground
-                    "
-                  >
-                    {
-                      category.description
-                    }
-                  </p>
-
-                  <p
-                    className="
-                      mt-2
-                      text-xs
-                      font-medium
-                      text-primary
-                    "
-                  >
-                    {
-                      category.topics
-                        .length
-                    }{' '}
-                    ta mavzu
-                  </p>
-
-                </div>
-
-                <span
-                  className="
-                    text-xl
-                    text-muted-foreground
-                    transition-transform
-                    group-hover:translate-x-1
-                  "
-                >
-                  →
-                </span>
-
-              </button>
-            ),
-          )}
-
-        </div>
-      )}
+      </div>
 
     </section>
   )
 }
-
-/*
- * =========================================================
- * TOPIC SCREEN
- * =========================================================
- */
-
-function TopicScreen({
-  module,
-  onBack,
-  onSelect,
-}: {
-  module:
-    | Category
-    | undefined
-
-  onBack: () => void
-
-  onSelect: (
-    topicId: string,
-  ) => void
-}) {
-  return (
-    <section
-      className="
-        flex
-        flex-col
-        gap-5
-      "
-    >
-
-      <header>
-
-        <button
-          type="button"
-          onClick={onBack}
-          className="
-            mb-5
-            text-sm
-            font-semibold
-            text-muted-foreground
-            transition-colors
-            hover:text-foreground
-          "
-        >
-          ← Modullarga
-        </button>
-
-        {module && (
-          <>
-            <p
-              className="
-                text-xs
-                font-semibold
-                uppercase
-                tracking-[0.18em]
-                text-primary
-              "
-            >
-              MODUL
-            </p>
-
-            <h1
-              className="
-                mt-1
-                text-2xl
-                font-bold
-                tracking-tight
-              "
-            >
-              {module.title}
-            </h1>
-
-            <p
-              className="
-                mt-2
-                text-sm
-                leading-5
-                text-muted-foreground
-              "
-            >
-              Mavzulardan birini tanlang.
-            </p>
-          </>
-        )}
-
-      </header>
-
-      {!module ? (
-        <EmptyState
-          icon="⚠️"
-          title="Modul topilmadi"
-          text="Tanlangan modul ma’lumotlar bazasida mavjud emas."
-        />
-      ) : (
-        <div
-          className="
-            flex
-            flex-col
-            gap-3
-          "
-        >
-
-          {module.topics.map(
-            (
-              topic,
-              index,
-            ) => (
-              <button
-                key={
-                  topic.id
-                }
-                type="button"
-                onClick={() =>
-                  onSelect(
-                    topic.id,
-                  )
-                }
-                className="
-                  group
-                  flex
-                  gap-4
-                  rounded-3xl
-                  border
-                  bg-card
-                  p-5
-                  text-left
-                  shadow-sm
-                  transition-all
-                  hover:-translate-y-0.5
-                  hover:shadow-md
-                "
-              >
-
-                <div
-                  className="
-                    flex
-                    size-10
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-secondary
-                    text-xs
-                    font-bold
-                  "
-                >
-                  {String(
-                    index + 1,
-                  ).padStart(
-                    2,
-                    '0',
-                  )}
-                </div>
-
-                <div
-                  className="
-                    min-w-0
-                    flex-1
-                  "
-                >
-
-                  <h2
-                    className="
-                      font-semibold
-                      leading-5
-                    "
-                  >
-                    {topic.title}
-                  </h2>
-
-                  <p
-                    className="
-                      mt-1
-                      text-sm
-                      leading-5
-                      text-muted-foreground
-                    "
-                  >
-                    {
-                      topic.description
-                    }
-                  </p>
-
-                  <div
-                    className="
-                      mt-3
-                      flex
-                      flex-wrap
-                      gap-1.5
-                    "
-                  >
-
-                    <Badge>
-                      🟢 {topic.levels.easy.length}
-                    </Badge>
-
-                    <Badge>
-                      🟡 {topic.levels.medium.length}
-                    </Badge>
-
-                    <Badge>
-                      🔴 {topic.levels.hard.length}
-                    </Badge>
-
-                    <Badge>
-                      🔵 {topic.levels.case.length}
-                    </Badge>
-
                   </div>
 
                 </div>
