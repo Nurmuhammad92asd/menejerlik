@@ -1,4 +1,3 @@
-```tsx
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -25,7 +24,6 @@ import {
 } from '@/lib/quiz-data'
 
 import { useHistory } from '@/hooks/use-history'
-
 import {
   useBackButton,
   useTelegram,
@@ -33,9 +31,7 @@ import {
 
 import { setClosingConfirmation } from '@/lib/telegram'
 
-type EducationType =
-  | 'preschool'
-  | 'school'
+type EducationType = 'preschool' | 'school'
 
 type Screen =
   | 'home'
@@ -374,19 +370,17 @@ export function MenejerlikApp() {
       return
     }
 
-    const correct =
-      answers.filter(
-        (answer) =>
-          answer.selected ===
-          answer.question.answer,
-      ).length
+    const correct = answers.filter(
+      (answer) =>
+        answer.selected ===
+        answer.question.answer,
+    ).length
 
-    const durationSec =
-      Math.round(
-        (Date.now() -
-          session.startedAt) /
-          1000,
-      )
+    const durationSec = Math.round(
+      (Date.now() -
+        session.startedAt) /
+        1000,
+    )
 
     const quizResult: QuizResult = {
       categoryId:
@@ -411,9 +405,7 @@ export function MenejerlikApp() {
       durationSec,
     }
 
-    setResult(
-      quizResult,
-    )
+    setResult(quizResult)
 
     setScreen('result')
 
@@ -422,17 +414,13 @@ export function MenejerlikApp() {
     scrollToTop()
 
     void addAttempt({
-  id: `${Date.now()}`,
+      id: `${Date.now()}`,
       categoryId:
         session.categoryId,
-
       correct,
-
       total:
         answers.length,
-
       durationSec,
-
       at: Date.now(),
     })
   }
@@ -588,7 +576,6 @@ export function MenejerlikApp() {
         pt-5
       "
     >
-
       {/* FULLSCREEN */}
 
       {isTelegram && (
@@ -634,7 +621,7 @@ export function MenejerlikApp() {
         </button>
       )}
 
-      {/* AI */}
+      {/* AI SCREEN */}
 
       {screen === 'ai' && (
         <AIAssistant
@@ -682,16 +669,18 @@ export function MenejerlikApp() {
 
             <div className="relative flex items-center gap-4">
 
-              <div className="
-                flex
-                size-14
-                shrink-0
-                items-center
-                justify-center
-                rounded-2xl
-                bg-primary/10
-                text-3xl
-              ">
+              <div
+                className="
+                  flex
+                  size-14
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  bg-primary/10
+                  text-3xl
+                "
+              >
                 🤖
               </div>
 
@@ -712,18 +701,19 @@ export function MenejerlikApp() {
 
               </div>
 
-              <span className="
-                text-2xl
-                text-muted-foreground
-                transition-transform
-                group-hover:translate-x-1
-              ">
+              <span
+                className="
+                  text-2xl
+                  text-muted-foreground
+                  transition-transform
+                  group-hover:translate-x-1
+                "
+              >
                 →
               </span>
 
             </div>
           </button>
-
         </div>
       )}
 
@@ -822,7 +812,6 @@ export function MenejerlikApp() {
             }
           />
         )}
-
     </main>
   )
 }
@@ -892,7 +881,6 @@ function EducationScreen({
             active:scale-[0.99]
           "
         >
-
           <div className="absolute -right-8 -top-8 size-32 rounded-full bg-primary/5" />
 
           <div className="relative flex items-center gap-5">
@@ -922,7 +910,6 @@ function EducationScreen({
             </span>
 
           </div>
-
         </button>
 
         <button
@@ -948,7 +935,6 @@ function EducationScreen({
             active:scale-[0.99]
           "
         >
-
           <div className="absolute -right-8 -top-8 size-32 rounded-full bg-primary/5" />
 
           <div className="relative flex items-center gap-5">
@@ -978,7 +964,6 @@ function EducationScreen({
             </span>
 
           </div>
-
         </button>
 
       </div>
@@ -1097,7 +1082,6 @@ function ModuleScreen({
                 }
                 className="group flex items-center gap-4 rounded-3xl border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
               >
-
                 <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground">
                   {String(
                     index + 1,
@@ -1509,24 +1493,3 @@ function EmptyState({
     </div>
   )
 }
-```
-
-**Muhim:** bu kod `AIAssistant` komponentini chaqiradi, shuning uchun avvalgi qadamda yaratgan:
-
-```text
-components/ai-assistant.tsx
-```
-
-faylingiz GitHub'da bo‘lishi shart.
-
-Hozircha **AI tugmasi ko‘rinadi va AI oynasi ochiladi**, lekin `🤖 So‘rash` tugmasining ishlashi uchun keyingi qadamda `/api/ai` route'ni ulaymiz.
-
-Shu faylni GitHub'ga joylab **Commit changes** qiling. Commit nomini:
-
-```text
-add AI assistant to main app
-```
-
-deb qo‘ying.
-
-Keyin Vercel'da **Ready** bo‘lsa, menga natijasini yuboring.
