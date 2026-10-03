@@ -1,4 +1,8 @@
 import nextWorker from "./.open-next/worker.js";
+import {
+  getTopicQuestions,
+  getModuleById,
+} from "./lib/quiz-data";
 
 /* =========================================================
    TYPES
@@ -20,12 +24,7 @@ interface TelegramUser {
 
 interface TelegramChat {
   id: number;
-  type:
-    | "private"
-    | "group"
-    | "supergroup"
-    | "channel"
-    | string;
+  type: string;
   title?: string;
   username?: string;
 }
@@ -40,19 +39,10 @@ interface TelegramMessage {
 
 interface TelegramUpdate {
   update_id: number;
-
   message?: TelegramMessage;
-
   edited_message?: TelegramMessage;
-
   channel_post?: TelegramMessage;
-
   edited_channel_post?: TelegramMessage;
-
-  my_chat_member?: unknown;
-
-  chat_member?: unknown;
-
   callback_query?: unknown;
 }
 
@@ -82,8 +72,13 @@ const MINI_APP_URL =
 const WEBHOOK_PATH =
   "/telegram/webhook";
 
+const GROUP_CHAT_ID =
+  -1003642158156;
+
 const DAILY_START_HOUR = 5;
 const DAILY_END_HOUR = 22;
+
+const DAILY_RESULTS_HOUR = 23;
 
 const QUESTIONS_PER_CHALLENGE = 25;
 
@@ -93,8 +88,20 @@ const MAX_CHALLENGE_SCORE =
   QUESTIONS_PER_CHALLENGE *
   POINTS_PER_CORRECT;
 
+const CHALLENGE_DURATION_SEC =
+  50 * 60;
+
+/*
+ * 1-kun = 2026-10-01.
+ *
+ * Keyinchalik kerak bo‘lsa shu sanani
+ * bitta joydan o‘zgartirish mumkin.
+ */
+const CURRICULUM_START_DATE =
+  "2026-10-01";
+
 /* =========================================================
-   GENERIC RESPONSE
+   JSON
 ========================================================= */
 
 function json(
@@ -108,18 +115,16 @@ function json(
       headers: {
         "content-type":
           "application/json; charset=UTF-8",
-
         "cache-control":
           "no-store, no-cache, must-revalidate",
-
-        "pragma": "no-cache",
+        pragma: "no-cache",
       },
     },
   );
 }
 
 /* =========================================================
-   TASHKENT TIME
+   TIME
 ========================================================= */
 
 function getTashkentTime(
@@ -128,38 +133,29 @@ function getTashkentTime(
   const parts =
     new Intl.DateTimeFormat("en-US", {
       timeZone: "Asia/Tashkent",
-
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
-
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
-
       hourCycle: "h23",
     }).formatToParts(now);
 
   const get = (type: string) =>
     parts.find(
-      (part) => part.type === type,
+      (p) => p.type === type,
     )?.value ?? "00";
 
   return {
     date:
       `${get("year")}-${get("month")}-${get("day")}`,
-
-    hour: Number(
-      get("hour"),
-    ),
-
-    minute: Number(
-      get("minute"),
-    ),
-
-    second: Number(
-      get("second"),
-    ),
+    hour:
+      Number(get("hour")),
+    minute:
+      Number(get("minute")),
+    second:
+      Number(get("second")),
   };
 }
 
@@ -174,7 +170,7 @@ async function telegramRequest<T = unknown>(
 ): Promise<TelegramApiResponse<T>> {
   if (!env.TELEGRAM_BOT_TOKEN) {
     console.error(
-      "[TELEGRAM] TELEGRAM_BOT_TOKEN mavjud emas.",
+      "[TELEGRAM] Secret mavjud emas",
     );
 
     return {
@@ -185,11 +181,6 @@ async function telegramRequest<T = unknown>(
     };
   }
 
-  /*
-   * URLni string concatenation bilan quramiz.
-   * Markdown yoki noto'g'ri template hech qachon
-   * bu yerga aralashmaydi.
-   */
   const url =
     "https://api.telegram.org/bot" +
     env.TELEGRAM_BOT_TOKEN +
@@ -200,46 +191,21 @@ async function telegramRequest<T = unknown>(
     const response =
       await fetch(url, {
         method: "POST",
-
         headers: {
           "content-type":
             "application/json",
         },
-
-        body: JSON.stringify(body),
+        body:
+          JSON.stringify(body),
       });
 
-    let data:
-      | TelegramApiResponse<T>
-      | null = null;
-
-    try {
-      data =
-        (await response.json()) as TelegramApiResponse<T>;
-    } catch {
-      console.error(
-        `[TELEGRAM API] JSON parse xatosi: ${method}`,
-      );
-    }
-
-    if (!data) {
-      return {
-        ok: false,
-        error_code: response.status,
-        description:
-          "Telegram returned invalid JSON",
-      };
-    }
-
-    console.log(
-      `[TELEGRAM API] ${method} ` +
-      `status=${response.status} ` +
-      `ok=${data.ok}`,
-    );
+    const data =
+      (await response.json()) as
+        TelegramApiResponse<T>;
 
     if (!response.ok || !data.ok) {
       console.error(
-        `[TELEGRAM API ERROR] ${method}`,
+        `[TELEGRAM ERROR] ${method}`,
         JSON.stringify(data),
       );
     }
@@ -263,20 +229,35 @@ async function telegramRequest<T = unknown>(
 }
 
 /* =========================================================
-   MINI APP KEYBOARD
+   MINI APP
 ========================================================= */
 
-function miniAppKeyboard(
-  buttonText = "🚀 TESTNI BOSHLASH",
+function challengeUrl(
+  challengeId: string,
+): string {
+  return (
+    MINI_APP_URL +
+    "?challenge=" +
+    encodeURIComponent(
+      challengeId,
+    )
+  );
+}
+
+function challengeKeyboard(
+  challengeId: string,
 ) {
   return {
     inline_keyboard: [
       [
         {
-          text: buttonText,
-
+          text:
+            "🚀 TESTNI BOSHLASH",
           web_app: {
-            url: MINI_APP_URL,
+            url:
+              challengeUrl(
+                challengeId,
+              ),
           },
         },
       ],
@@ -285,108 +266,850 @@ function miniAppKeyboard(
 }
 
 /* =========================================================
-   TELEGRAM MESSAGES
+   CURRICULUM
 ========================================================= */
 
-async function sendWelcomeMessage(
-  env: Env,
-  chatId: number,
-  firstName?: string,
-) {
-  const name =
-    firstName?.trim() || "do‘st";
+function getDayNumber(
+  date: string,
+): number {
+  const start =
+    Date.parse(
+      `${CURRICULUM_START_DATE}T00:00:00Z`,
+    );
 
-  return telegramRequest(
-    env,
-    "sendMessage",
-    {
-      chat_id: chatId,
+  const current =
+    Date.parse(
+      `${date}T00:00:00Z`,
+    );
 
-      text:
-        `👋 Salom, ${name}!\n\n` +
-        `🎓 *${BOT_NAME}*\n\n` +
-        `Test platformasiga xush kelibsiz.\n\n` +
-        `📚 Modul va mavzular\n` +
-        `📝 Menejerlik testlari\n` +
-        `🏆 Reyting\n` +
-        `⚡ Natijalar\n\n` +
-        `Testni boshlash uchun quyidagi tugmani bosing:`,
+  const diff =
+    Math.floor(
+      (
+        current - start
+      ) /
+      86400000,
+    );
 
-      parse_mode: "Markdown",
-
-      reply_markup:
-        miniAppKeyboard(
-          "🚀 TESTNI BOSHLASH",
-        ),
-    },
+  return Math.max(
+    1,
+    diff + 1,
   );
 }
 
-async function sendTestMessage(
-  env: Env,
-  chatId: number,
-  firstName?: string,
-) {
-  const name =
-    firstName?.trim() || "do‘st";
+function getCurriculumModules(
+  day: number,
+): string[] {
+  if (
+    day >= 1 &&
+    day <= 10
+  ) {
+    return [`m${day}`];
+  }
 
-  return telegramRequest(
-    env,
-    "sendMessage",
-    {
-      chat_id: chatId,
+  if (day === 11) {
+    return [
+      "m1",
+      "m2",
+      "m3",
+    ];
+  }
 
-      text:
-        `👋 Assalomu alaykum, ${name}!\n\n` +
-        `🎓 *${BOT_NAME}*\n\n` +
-        `Rahbarlik va menejerlik bo‘yicha ` +
-        `bilimlaringizni sinab ko‘ring.\n\n` +
-        `📚 10 ta modul\n` +
-        `📝 Mavzular bo‘yicha testlar\n` +
-        `🎯 Oson / o‘rta / qiyin / case\n` +
-        `🏆 Reyting va natijalar\n\n` +
-        `Boshlash uchun tugmani bosing:`,
+  if (day === 12) {
+    return [
+      "m4",
+      "m5",
+      "m6",
+    ];
+  }
 
-      parse_mode: "Markdown",
+  if (day === 13) {
+    return [
+      "m7",
+      "m8",
+      "m9",
+      "m10",
+    ];
+  }
 
-      reply_markup:
-        miniAppKeyboard(
-          "🚀 TESTNI BOSHLASH",
+  if (day === 14) {
+    return [
+      "m1",
+      "m2",
+      "m3",
+      "m4",
+      "m5",
+    ];
+  }
+
+  if (day === 15) {
+    return [
+      "m6",
+      "m7",
+      "m8",
+      "m9",
+      "m10",
+    ];
+  }
+
+  return [
+    "m1",
+    "m2",
+    "m3",
+    "m4",
+    "m5",
+    "m6",
+    "m7",
+    "m8",
+    "m9",
+    "m10",
+  ];
+}
+
+/* =========================================================
+   RANDOM
+========================================================= */
+
+function shuffle<T>(
+  array: T[],
+): T[] {
+  const result =
+    [...array];
+
+  for (
+    let i =
+      result.length - 1;
+    i > 0;
+    i--
+  ) {
+    const j =
+      Math.floor(
+        Math.random() *
+        (i + 1),
+      );
+
+    [
+      result[i],
+      result[j],
+    ] = [
+      result[j],
+      result[i],
+    ];
+  }
+
+  return result;
+}
+
+/* =========================================================
+   QUESTION POOL
+========================================================= */
+
+type QuizLevel =
+  | "easy"
+  | "medium"
+  | "hard"
+  | "case";
+
+interface SelectedQuestion {
+  id: string;
+  topicId: string;
+  categoryId: string | null;
+  level: QuizLevel;
+}
+
+function collectModuleQuestions(
+  moduleIds: string[],
+): SelectedQuestion[] {
+  const result:
+    SelectedQuestion[] = [];
+
+  for (
+    const moduleId
+    of moduleIds
+  ) {
+    const module =
+      getModuleById(
+        moduleId,
+      );
+
+    if (!module) {
+      continue;
+    }
+
+    for (
+      const topic
+      of module.topics
+    ) {
+      const levels:
+        QuizLevel[] = [
+          "easy",
+          "medium",
+          "hard",
+          "case",
+        ];
+
+      for (
+        const level
+        of levels
+      ) {
+        const questions =
+          getTopicQuestions(
+            topic.id,
+            level,
+          );
+
+        for (
+          const question
+          of questions
+        ) {
+          result.push({
+            id:
+              question.id,
+            topicId:
+              topic.id,
+            categoryId:
+              module.id,
+            level,
+          });
+        }
+      }
+    }
+  }
+
+  return result;
+}
+
+/* =========================================================
+   QUESTION SELECTION
+========================================================= */
+
+function pickQuestions(
+  moduleIds: string[],
+): SelectedQuestion[] {
+  const pool =
+    collectModuleQuestions(
+      moduleIds,
+    );
+
+  const pickLevel = (
+    level: QuizLevel,
+    count: number,
+  ) =>
+    shuffle(
+      pool.filter(
+        (q) =>
+          q.level === level,
+      ),
+    ).slice(
+      0,
+      count,
+    );
+
+  let selected = [
+    ...pickLevel(
+      "easy",
+      5,
+    ),
+    ...pickLevel(
+      "medium",
+      10,
+    ),
+    ...pickLevel(
+      "hard",
+      7,
+    ),
+    ...pickLevel(
+      "case",
+      3,
+    ),
+  ];
+
+  /*
+   * Hozircha ayrim modullarda savollar
+   * hali yo‘q. Shuning uchun tizimni
+   * sindirmaslik uchun mavjud savollar
+   * bilan to‘ldiramiz.
+   */
+  if (
+    selected.length <
+    QUESTIONS_PER_CHALLENGE
+  ) {
+    const selectedIds =
+      new Set(
+        selected.map(
+          (q) => q.id,
         ),
-    },
+      );
+
+    const remaining =
+      shuffle(
+        pool.filter(
+          (q) =>
+            !selectedIds.has(
+              q.id,
+            ),
+        ),
+      );
+
+    selected = [
+      ...selected,
+      ...remaining.slice(
+        0,
+        QUESTIONS_PER_CHALLENGE -
+          selected.length,
+      ),
+    ];
+  }
+
+  return shuffle(
+    selected,
+  ).slice(
+    0,
+    QUESTIONS_PER_CHALLENGE,
   );
 }
 
-async function sendHelpMessage(
+/* =========================================================
+   CHALLENGE ID
+========================================================= */
+
+function makeChallengeId(
+  date: string,
+  hour: number,
+): string {
+  return (
+    `daily-${date}-${String(hour).padStart(2, "0")}`
+  );
+}
+
+/* =========================================================
+   CREATE CHALLENGE
+========================================================= */
+
+async function createHourlyChallenge(
   env: Env,
-  chatId: number,
+  time: TashkentTime,
+): Promise<{
+  created: boolean;
+  challengeId?: string;
+  reason?: string;
+}> {
+  const challengeId =
+    makeChallengeId(
+      time.date,
+      time.hour,
+    );
+
+  const dayNumber =
+    getDayNumber(
+      time.date,
+    );
+
+  const moduleIds =
+    getCurriculumModules(
+      dayNumber,
+    );
+
+  /*
+   * Bir xil soatda ikkinchi challenge
+   * yaratilishiga yo‘l qo‘ymaymiz.
+   */
+  const existing =
+    await env.DB
+      .prepare(
+        `
+        SELECT id
+        FROM daily_challenges
+        WHERE id = ?
+        LIMIT 1
+        `,
+      )
+      .bind(
+        challengeId,
+      )
+      .first<{
+        id: string;
+      }>();
+
+  if (existing) {
+    return {
+      created: false,
+      challengeId,
+      reason:
+        "already_exists",
+    };
+  }
+
+  const questions =
+    pickQuestions(
+      moduleIds,
+    );
+
+  if (
+    questions.length === 0
+  ) {
+    console.error(
+      "[CHALLENGE] Savollar topilmadi",
+      {
+        dayNumber,
+        moduleIds,
+      },
+    );
+
+    return {
+      created: false,
+      reason:
+        "no_questions",
+    };
+  }
+
+  /*
+   * Challenge boshlanishi — shu soat.
+   * Tugashi — 50 daqiqadan keyin.
+   */
+  const startAt =
+    Date.now();
+
+  const endAt =
+    startAt +
+    CHALLENGE_DURATION_SEC *
+      1000;
+
+  await env.DB
+    .prepare(
+      `
+      INSERT INTO daily_challenges (
+        id,
+        challenge_date,
+        hour_local,
+        day_number,
+        module_ids_json,
+        start_at,
+        end_at,
+        total_questions,
+        points_per_correct,
+        max_score,
+        status,
+        created_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `,
+    )
+    .bind(
+      challengeId,
+      time.date,
+      time.hour,
+      dayNumber,
+      JSON.stringify(
+        moduleIds,
+      ),
+      startAt,
+      endAt,
+      QUESTIONS_PER_CHALLENGE,
+      POINTS_PER_CORRECT,
+      MAX_CHALLENGE_SCORE,
+      "active",
+      startAt,
+    )
+    .run();
+
+  /*
+   * Savollarni tartib bilan saqlaymiz.
+   */
+  for (
+    let i = 0;
+    i < questions.length;
+    i++
+  ) {
+    const q =
+      questions[i];
+
+    await env.DB
+      .prepare(
+        `
+        INSERT INTO challenge_questions (
+          challenge_id,
+          question_id,
+          category_id,
+          topic_id,
+          level,
+          order_index,
+          created_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        `,
+      )
+      .bind(
+        challengeId,
+        q.id,
+        q.categoryId,
+        q.topicId,
+        q.level,
+        i,
+        startAt,
+      )
+      .run();
+  }
+
+  console.log(
+    "[CHALLENGE CREATED]",
+    JSON.stringify({
+      challengeId,
+      date:
+        time.date,
+      hour:
+        time.hour,
+      dayNumber,
+      modules:
+        moduleIds,
+      questions:
+        questions.length,
+    }),
+  );
+
+  return {
+    created: true,
+    challengeId,
+  };
+}
+
+/* =========================================================
+   TELEGRAM CHALLENGE MESSAGE
+========================================================= */
+
+async function sendChallengeMessage(
+  env: Env,
+  challengeId: string,
+  date: string,
+  hour: number,
+  dayNumber: number,
+  moduleIds: string[],
+  questionCount: number,
 ) {
+  const text =
+    `🏆 *MENEJERLIK — SOATLIK CHALLENGE*\n\n` +
+    `🕐 ${String(hour).padStart(2, "0")}:00\n` +
+    `📅 ${date}\n` +
+    `📚 ${moduleIds.join(", ")}\n\n` +
+    `📝 ${questionCount} ta savol\n` +
+    `⏱ 50 daqiqa\n` +
+    `🎯 Har bir to‘g‘ri javob — 2 ball\n` +
+    `🏅 Maksimal — 50 ball\n\n` +
+    `Savollar oson, o‘rta, qiyin va case formatlarida aralashtirilgan.\n\n` +
+    `🚀 Tayyor bo‘lsangiz, boshlang!`;
+
   return telegramRequest(
     env,
     "sendMessage",
     {
-      chat_id: chatId,
+      chat_id:
+        GROUP_CHAT_ID,
 
-      text:
-        `📚 *${BOT_NAME}*\n\n` +
-        `Botdan foydalanish:\n\n` +
-        `🚀 /start — boshlash\n` +
-        `📝 /test — testni ochish\n` +
-        `ℹ️ /help — yordam\n\n` +
-        `Testlar Mini App orqali ishlaydi.`,
+      text,
 
-      parse_mode: "Markdown",
+      parse_mode:
+        "Markdown",
 
       reply_markup:
-        miniAppKeyboard(
-          "🚀 TESTNI OCHISH",
+        challengeKeyboard(
+          challengeId,
         ),
     },
   );
 }
 
 /* =========================================================
-   COMMAND NORMALIZATION
+   DAILY CHALLENGE RUNNER
+========================================================= */
+
+async function runHourlyChallenge(
+  env: Env,
+  time: TashkentTime,
+) {
+  const result =
+    await createHourlyChallenge(
+      env,
+      time,
+    );
+
+  if (
+    !result.created ||
+    !result.challengeId
+  ) {
+    console.log(
+      "[CRON] Challenge yaratilmadi:",
+      result.reason,
+    );
+
+    return;
+  }
+
+  const challenge =
+    await env.DB
+      .prepare(
+        `
+        SELECT
+          day_number,
+          module_ids_json,
+          total_questions
+        FROM daily_challenges
+        WHERE id = ?
+        `,
+      )
+      .bind(
+        result.challengeId,
+      )
+      .first<{
+        day_number: number;
+        module_ids_json: string;
+        total_questions: number;
+      }>();
+
+  if (!challenge) {
+    return;
+  }
+
+  const modules =
+    JSON.parse(
+      challenge.module_ids_json,
+    ) as string[];
+
+  const telegramResult =
+    await sendChallengeMessage(
+      env,
+      result.challengeId,
+      time.date,
+      time.hour,
+      challenge.day_number,
+      modules,
+      challenge.total_questions,
+    );
+
+  if (
+    !telegramResult.ok
+  ) {
+    console.error(
+      "[CRON] Telegramga challenge yuborilmadi",
+      telegramResult.description,
+    );
+  }
+}
+
+/* =========================================================
+   DAILY RESULTS
+========================================================= */
+
+async function buildDailyResults(
+  env: Env,
+  date: string,
+) {
+  /*
+   * Shu kunning barcha tugallangan
+   * challenge'larini umumlashtiramiz.
+   */
+
+  const rows =
+    await env.DB
+      .prepare(
+        `
+        SELECT
+          telegram_id,
+          COUNT(*) AS challenges_count,
+          SUM(correct) AS total_correct,
+          SUM(total) AS total_questions,
+          SUM(score) AS total_score,
+          SUM(duration_sec) AS total_duration_sec,
+          MAX(score) AS best_score
+        FROM challenge_participants
+        WHERE status = 'submitted'
+          AND challenge_id IN (
+            SELECT id
+            FROM daily_challenges
+            WHERE challenge_date = ?
+          )
+        GROUP BY telegram_id
+        ORDER BY total_score DESC,
+                 total_correct DESC,
+                 total_duration_sec ASC
+        LIMIT 30
+        `,
+      )
+      .bind(date)
+      .all();
+
+  const now =
+    Date.now();
+
+  let rank = 1;
+
+  for (
+    const row
+    of rows.results as Array<Record<string, unknown>>
+  ) {
+    const telegramId =
+      String(
+        row.telegram_id,
+      );
+
+    await env.DB
+      .prepare(
+        `
+        INSERT INTO daily_leaderboard (
+          challenge_date,
+          telegram_id,
+          challenges_count,
+          total_correct,
+          total_questions,
+          total_score,
+          total_duration_sec,
+          best_score,
+          rank,
+          created_at,
+          updated_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(
+          challenge_date,
+          telegram_id
+        )
+        DO UPDATE SET
+          challenges_count =
+            excluded.challenges_count,
+          total_correct =
+            excluded.total_correct,
+          total_questions =
+            excluded.total_questions,
+          total_score =
+            excluded.total_score,
+          total_duration_sec =
+            excluded.total_duration_sec,
+          best_score =
+            excluded.best_score,
+          rank =
+            excluded.rank,
+          updated_at =
+            excluded.updated_at
+        `,
+      )
+      .bind(
+        date,
+        telegramId,
+        Number(
+          row.challenges_count ?? 0,
+        ),
+        Number(
+          row.total_correct ?? 0,
+        ),
+        Number(
+          row.total_questions ?? 0,
+        ),
+        Number(
+          row.total_score ?? 0,
+        ),
+        Number(
+          row.total_duration_sec ?? 0,
+        ),
+        Number(
+          row.best_score ?? 0,
+        ),
+        rank,
+        now,
+        now,
+      )
+      .run();
+
+    rank++;
+  }
+
+  return rows.results;
+}
+
+/* =========================================================
+   DAILY TELEGRAM SUMMARY
+========================================================= */
+
+async function sendDailySummary(
+  env: Env,
+  date: string,
+) {
+  const rows =
+    await buildDailyResults(
+      env,
+      date,
+    );
+
+  if (!rows.length) {
+    console.log(
+      "[DAILY] Bugun natija yo‘q",
+    );
+
+    return;
+  }
+
+  const top =
+    rows
+      .slice(0, 10)
+      .map(
+        (
+          row: Record<string, unknown>,
+          index,
+        ) => {
+          const score =
+            Number(
+              row.total_score ?? 0,
+            );
+
+          const correct =
+            Number(
+              row.total_correct ?? 0,
+            );
+
+          const total =
+            Number(
+              row.total_questions ?? 0,
+            );
+
+          const icon =
+            index === 0
+              ? "🥇"
+              : index === 1
+                ? "🥈"
+                : index === 2
+                  ? "🥉"
+                  : `${index + 1}.`;
+
+          return (
+            `${icon} ` +
+            `${row.telegram_id} — ` +
+            `${score} ball ` +
+            `(${correct}/${total})`
+          );
+        },
+      )
+      .join("\n");
+
+  await telegramRequest(
+    env,
+    "sendMessage",
+    {
+      chat_id:
+        GROUP_CHAT_ID,
+
+      text:
+        `🌙 *BUGUNGI NATIJALAR*\n\n` +
+        `📅 ${date}\n` +
+        `🏆 Kunlik Top 10\n\n` +
+        `${top}\n\n` +
+        `📊 Natijalar haftalik reytingga qo‘shildi.\n\n` +
+        `🎓 *${BOT_NAME}*`,
+
+      parse_mode:
+        "Markdown",
+    },
+  );
+}
+
+/* =========================================================
+   WEBHOOK COMMANDS
 ========================================================= */
 
 function normalizeCommand(
@@ -398,185 +1121,65 @@ function normalizeCommand(
       .split(/\s+/)[0]
       ?.toLowerCase() ?? "";
 
-  /*
-   * /test@topmenejerbot
-   *       ↓
-   * /test
-   */
-
-  const atIndex =
+  const at =
     first.indexOf("@");
 
-  if (atIndex > 0) {
-    return first.slice(
-      0,
-      atIndex,
-    );
-  }
-
-  return first;
+  return at > 0
+    ? first.slice(
+        0,
+        at,
+      )
+    : first;
 }
-
-/* =========================================================
-   MESSAGE EXTRACTION
-========================================================= */
 
 function extractMessage(
   update: TelegramUpdate,
-): TelegramMessage | undefined {
-  /*
-   * Oddiy private/group/supergroup message
-   */
-  if (update.message) {
-    return update.message;
-  }
-
-  /*
-   * Edited message
-   */
-  if (update.edited_message) {
-    return update.edited_message;
-  }
-
-  /*
-   * Channel post
-   */
-  if (update.channel_post) {
-    return update.channel_post;
-  }
-
-  /*
-   * Edited channel post
-   */
-  if (update.edited_channel_post) {
-    return update.edited_channel_post;
-  }
-
-  return undefined;
+) {
+  return (
+    update.message ??
+    update.edited_message ??
+    update.channel_post ??
+    update.edited_channel_post
+  );
 }
-
-/* =========================================================
-   UPDATE TYPE
-========================================================= */
 
 function getUpdateType(
   update: TelegramUpdate,
-): string {
-  if (update.message) {
+) {
+  if (update.message)
     return "message";
-  }
 
-  if (update.edited_message) {
+  if (update.edited_message)
     return "edited_message";
-  }
 
-  if (update.channel_post) {
+  if (update.channel_post)
     return "channel_post";
-  }
 
-  if (update.edited_channel_post) {
+  if (update.edited_channel_post)
     return "edited_channel_post";
-  }
 
-  if (update.callback_query) {
+  if (update.callback_query)
     return "callback_query";
-  }
-
-  if (update.my_chat_member) {
-    return "my_chat_member";
-  }
-
-  if (update.chat_member) {
-    return "chat_member";
-  }
 
   return "unknown";
 }
 
 /* =========================================================
-   TELEGRAM UPDATE HANDLER
+   WEBHOOK
 ========================================================= */
 
 async function handleTelegramUpdate(
   env: Env,
   update: TelegramUpdate,
-): Promise<Response> {
-  const updateType =
-    getUpdateType(update);
-
-  /*
-   * Diagnostika.
-   *
-   * Tokenni hech qachon logga chiqarmaymiz.
-   */
-  console.log(
-    "[WEBHOOK UPDATE]",
-    JSON.stringify({
-      update_id:
-        update.update_id,
-
-      update_type:
-        updateType,
-
-      has_message:
-        Boolean(update.message),
-
-      has_channel_post:
-        Boolean(update.channel_post),
-
-      has_callback:
-        Boolean(update.callback_query),
-
-      has_chat_member:
-        Boolean(
-          update.chat_member,
-        ),
-
-      has_my_chat_member:
-        Boolean(
-          update.my_chat_member,
-        ),
-    }),
-  );
-
+) {
   const message =
     extractMessage(update);
 
-  /*
-   * Message bo'lmagan update
-   */
   if (!message) {
-    console.log(
-      `[WEBHOOK] Message mavjud emas. ` +
-      `type=${updateType}`,
-    );
-
-    return json({
-      ok: true,
-
-      ignored: true,
-
-      reason:
-        "message_not_found",
-
-      update_id:
-        update.update_id,
-
-      update_type:
-        updateType,
-    });
+    return;
   }
 
-  const chat =
-    message.chat;
-
-  const chatId =
-    chat.id;
-
-  const chatType =
-    chat.type;
-
-  const rawText =
+  const text =
     (
       message.text ??
       message.caption ??
@@ -585,315 +1188,232 @@ async function handleTelegramUpdate(
 
   const command =
     normalizeCommand(
-      rawText,
+      text,
     );
+
+  const chatId =
+    message.chat.id;
+
+  if (
+    command === "/test"
+  ) {
+    await telegramRequest(
+      env,
+      "sendMessage",
+      {
+        chat_id:
+          chatId,
+
+        text:
+          `🚀 *Test tizimi*\n\n` +
+          `Avtomatik challenge tizimi ishlamoqda.\n\n` +
+          `Keyingi challenge bot tomonidan avtomatik yuboriladi.`,
+
+        parse_mode:
+          "Markdown",
+      },
+    );
+
+    return;
+  }
+
+  if (
+    command === "/start" ||
+    command === "/help"
+  ) {
+    await telegramRequest(
+      env,
+      "sendMessage",
+      {
+        chat_id:
+          chatId,
+
+        text:
+          `🎓 *${BOT_NAME}*\n\n` +
+          `Soatlik challenge'lar avtomatik ravishda guruhga yuboriladi.\n\n` +
+          `🚀 Test tugmasini bosib Mini App orqali ishlang.`,
+
+        parse_mode:
+          "Markdown",
+      },
+    );
+  }
+}
+
+/* =========================================================
+   CHALLENGE API
+========================================================= */
+
+async function getChallenge(
+  env: Env,
+  challengeId: string,
+) {
+  const challenge =
+    await env.DB
+      .prepare(
+        `
+        SELECT *
+        FROM daily_challenges
+        WHERE id = ?
+        LIMIT 1
+        `,
+      )
+      .bind(
+        challengeId,
+      )
+      .first();
+
+  if (!challenge) {
+    return json(
+      {
+        ok: false,
+        error:
+          "Challenge topilmadi",
+      },
+      404,
+    );
+  }
+
+  const questions =
+    await env.DB
+      .prepare(
+        `
+        SELECT
+          question_id,
+          category_id,
+          topic_id,
+          level,
+          order_index
+        FROM challenge_questions
+        WHERE challenge_id = ?
+        ORDER BY order_index ASC
+        `,
+      )
+      .bind(
+        challengeId,
+      )
+      .all();
 
   /*
-   * Muhim diagnostika.
+   * Javoblarni browserga yubormaymiz.
+   * Mini App faqat savol matni va variantlarni
+   * oladi.
+   *
+   * Buning uchun keyingi Mini App API
+   * integratsiyasida questionId bo‘yicha
+   * quiz-data'dan savol olinadi.
    */
-  console.log(
-    "[WEBHOOK MESSAGE]",
-    JSON.stringify({
-      update_id:
-        update.update_id,
 
-      update_type:
-        updateType,
+  const result =
+    questions.results.map(
+      (
+        item: Record<string, unknown>,
+      ) => {
+        const question =
+          findQuestionById(
+            String(
+              item.question_id,
+            ),
+          );
 
-      chat_id:
-        chatId,
+        if (!question) {
+          return null;
+        }
 
-      chat_type:
-        chatType,
+        return {
+          id:
+            question.id,
 
-      chat_title:
-        chat.title ?? null,
+          text:
+            question.text,
 
-      chat_username:
-        chat.username ?? null,
+          options:
+            question.options,
 
-      from_id:
-        message.from?.id ?? null,
+          topicId:
+            item.topic_id,
 
-      from_username:
-        message.from?.username ?? null,
+          level:
+            item.level,
 
-      text:
-        rawText,
-
-      command:
-        command || null,
-    }),
-  );
-
-  /* =======================================================
-     /TEST
-  ======================================================= */
-
-  if (command === "/test") {
-    console.log(
-      `[COMMAND] /test detected. ` +
-      `chat=${chatId} ` +
-      `type=${chatType}`,
-    );
-
-    const result =
-      await sendTestMessage(
-        env,
-        chatId,
-        message.from?.first_name,
-      );
-
-    console.log(
-      `[COMMAND] /test result ` +
-      `ok=${result.ok} ` +
-      `error=${result.description ?? "none"}`,
-    );
-
-    return json({
-      ok: result.ok,
-
-      action:
-        "test_button_sent",
-
-      telegram:
-        result.ok
-          ? "sent"
-          : "failed",
-
-      chat_id:
-        chatId,
-
-      chat_type:
-        chatType,
-
-      update_id:
-        update.update_id,
-    });
-  }
-
-  /* =======================================================
-     /START
-  ======================================================= */
-
-  if (command === "/start") {
-    console.log(
-      `[COMMAND] /start detected. ` +
-      `chat=${chatId} ` +
-      `type=${chatType}`,
-    );
-
-    const result =
-      await sendWelcomeMessage(
-        env,
-        chatId,
-        message.from?.first_name,
-      );
-
-    console.log(
-      `[COMMAND] /start result ` +
-      `ok=${result.ok} ` +
-      `error=${result.description ?? "none"}`,
-    );
-
-    return json({
-      ok: result.ok,
-
-      action:
-        "welcome_sent",
-
-      telegram:
-        result.ok
-          ? "sent"
-          : "failed",
-
-      chat_id:
-        chatId,
-
-      chat_type:
-        chatType,
-    });
-  }
-
-  /* =======================================================
-     /HELP
-  ======================================================= */
-
-  if (command === "/help") {
-    console.log(
-      `[COMMAND] /help detected. ` +
-      `chat=${chatId} ` +
-      `type=${chatType}`,
-    );
-
-    const result =
-      await sendHelpMessage(
-        env,
-        chatId,
-      );
-
-    return json({
-      ok: result.ok,
-
-      action:
-        "help_sent",
-
-      telegram:
-        result.ok
-          ? "sent"
-          : "failed",
-
-      chat_id:
-        chatId,
-
-      chat_type:
-        chatType,
-    });
-  }
-
-  /* =======================================================
-     PRIVATE CHAT
-  ======================================================= */
-
-  if (
-    chatType === "private" &&
-    rawText
-  ) {
-    console.log(
-      `[PRIVATE] Oddiy xabar: "${rawText}"`,
-    );
-
-    const result =
-      await sendWelcomeMessage(
-        env,
-        chatId,
-        message.from?.first_name,
-      );
-
-    return json({
-      ok: result.ok,
-
-      action:
-        "private_welcome_sent",
-    });
-  }
-
-  /* =======================================================
-     CHANNEL
-  ======================================================= */
-
-  if (
-    chatType === "channel"
-  ) {
-    console.log(
-      `[CHANNEL] Channel post received. ` +
-      `chat=${chatId}`,
-    );
-
-    return json({
-      ok: true,
-
-      ignored: true,
-
-      reason:
-        "channel_post_received",
-
-      chat_id:
-        chatId,
-
-      chat_type:
-        chatType,
-    });
-  }
-
-  /* =======================================================
-     UNSUPPORTED
-  ======================================================= */
-
-  console.log(
-    `[IGNORED] ` +
-    `chat=${chatId} ` +
-    `type=${chatType} ` +
-    `text="${rawText}"`,
-  );
+          order:
+            item.order_index,
+        };
+      },
+    ).filter(Boolean);
 
   return json({
     ok: true,
-
-    ignored: true,
-
-    reason:
-      "unsupported_message",
-
-    chat_id:
-      chatId,
-
-    chat_type:
-      chatType,
-
-    text:
-      rawText,
+    challenge,
+    questions:
+      result,
   });
 }
 
-/* =========================================================
-   D1 CRON HEARTBEAT
-========================================================= */
+function findQuestionById(
+  questionId: string,
+) {
+  /*
+   * quiz-data'dagi barcha mavzular
+   * bo‘yicha qidiramiz.
+   *
+   * Bu fallback sifatida ishlaydi.
+   */
+  for (
+    let moduleNumber = 1;
+    moduleNumber <= 10;
+    moduleNumber++
+  ) {
+    const module =
+      getModuleById(
+        `m${moduleNumber}`,
+      );
 
-async function saveCronHeartbeat(
-  env: Env,
-  time: TashkentTime,
-): Promise<void> {
-  try {
-    await env.DB.prepare(`
-      CREATE TABLE IF NOT EXISTS cron_test (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        tashkent_date TEXT NOT NULL,
-        tashkent_hour INTEGER NOT NULL,
-        created_at INTEGER NOT NULL
-      )
-    `).run();
+    if (!module)
+      continue;
 
-    await env.DB.prepare(`
-      INSERT INTO cron_test (
-        tashkent_date,
-        tashkent_hour,
-        created_at
-      )
-      VALUES (?, ?, ?)
-    `)
-      .bind(
-        time.date,
-        time.hour,
-        Date.now(),
-      )
-      .run();
+    for (
+      const topic
+      of module.topics
+    ) {
+      const questions =
+        getTopicQuestions(
+          topic.id,
+          "easy",
+        )
+          .concat(
+            getTopicQuestions(
+              topic.id,
+              "medium",
+            ),
+          )
+          .concat(
+            getTopicQuestions(
+              topic.id,
+              "hard",
+            ),
+          )
+          .concat(
+            getTopicQuestions(
+              topic.id,
+              "case",
+            ),
+          );
 
-    console.log(
-      `[CRON] Heartbeat saved: ` +
-      `${time.date} ` +
-      `${String(time.hour).padStart(2, "0")}:` +
-      `${String(time.minute).padStart(2, "0")}`,
-    );
-  } catch (error) {
-    console.error(
-      "[CRON] D1 heartbeat error:",
-      error,
-    );
+      const found =
+        questions.find(
+          (q) =>
+            q.id ===
+            questionId,
+        );
+
+      if (found) {
+        return found;
+      }
+    }
   }
-}
 
-/* =========================================================
-   CHALLENGE WINDOW
-========================================================= */
-
-function isChallengeHour(
-  hour: number,
-): boolean {
-  return (
-    hour >= DAILY_START_HOUR &&
-    hour <= DAILY_END_HOUR
-  );
+  return null;
 }
 
 /* =========================================================
@@ -909,9 +1429,9 @@ export default {
     const url =
       new URL(request.url);
 
-    /* =====================================================
-       TELEGRAM WEBHOOK POST
-    ===================================================== */
+    /* -----------------------------------------------
+       TELEGRAM WEBHOOK
+    ------------------------------------------------ */
 
     if (
       url.pathname ===
@@ -922,62 +1442,29 @@ export default {
         const update =
           (await request.json()) as TelegramUpdate;
 
-        console.log(
-          "[WEBHOOK RECEIVED]",
-          JSON.stringify({
-            update_id:
-              update.update_id,
-
-            update_type:
-              getUpdateType(update),
-
-            has_message:
-              Boolean(update.message),
-
-            has_channel_post:
-              Boolean(
-                update.channel_post,
-              ),
-          }),
-        );
-
-        /*
-         * Telegramga tezda 200 qaytaramiz.
-         *
-         * Og'irroq processing background'da.
-         */
         ctx.waitUntil(
           handleTelegramUpdate(
             env,
             update,
           ).catch(
-            (error) => {
+            (error) =>
               console.error(
-                "[WEBHOOK PROCESSING ERROR]",
+                "[WEBHOOK ERROR]",
                 error,
-              );
-            },
+              ),
           ),
         );
 
         return json({
           ok: true,
-
           received: true,
-
           update_id:
             update.update_id,
         });
-      } catch (error) {
-        console.error(
-          "[WEBHOOK JSON ERROR]",
-          error,
-        );
-
+      } catch {
         return json(
           {
             ok: false,
-
             error:
               "Invalid Telegram update",
           },
@@ -986,38 +1473,39 @@ export default {
       }
     }
 
-    /* =====================================================
-       TELEGRAM WEBHOOK GET
-    ===================================================== */
+    /* -----------------------------------------------
+       CURRENT CHALLENGE API
+    ------------------------------------------------ */
 
     if (
       url.pathname ===
-        WEBHOOK_PATH &&
-      request.method === "GET"
+      "/api/challenge"
     ) {
-      const time =
-        getTashkentTime();
+      const id =
+        url.searchParams.get(
+          "id",
+        );
 
-      return json({
-        ok: true,
+      if (!id) {
+        return json(
+          {
+            ok: false,
+            error:
+              "id kerak",
+          },
+          400,
+        );
+      }
 
-        service:
-          BOT_NAME,
-
-        webhook:
-          WEBHOOK_PATH,
-
-        miniApp:
-          MINI_APP_URL,
-
-        tashkentTime:
-          time,
-      });
+      return getChallenge(
+        env,
+        id,
+      );
     }
 
-    /* =====================================================
-       HEALTH CHECK
-    ===================================================== */
+    /* -----------------------------------------------
+       HEALTH
+    ------------------------------------------------ */
 
     if (
       url.pathname ===
@@ -1035,9 +1523,6 @@ export default {
         bot:
           BOT_NAME,
 
-        miniApp:
-          MINI_APP_URL,
-
         telegramConfigured:
           Boolean(
             env.TELEGRAM_BOT_TOKEN,
@@ -1046,35 +1531,39 @@ export default {
         databaseConfigured:
           Boolean(env.DB),
 
+        groupChatId:
+          GROUP_CHAT_ID,
+
         cron:
           "0 * * * *",
 
-        challenge:
-          {
-            startHour:
-              DAILY_START_HOUR,
+        challenge: {
+          startHour:
+            DAILY_START_HOUR,
 
-            endHour:
-              DAILY_END_HOUR,
+          endHour:
+            DAILY_END_HOUR,
 
-            questions:
-              QUESTIONS_PER_CHALLENGE,
+          resultsHour:
+            DAILY_RESULTS_HOUR,
 
-            pointsPerCorrect:
-              POINTS_PER_CORRECT,
+          questions:
+            QUESTIONS_PER_CHALLENGE,
 
-            maxScore:
-              MAX_CHALLENGE_SCORE,
-          },
+          durationMinutes:
+            50,
+
+          pointsPerCorrect:
+            POINTS_PER_CORRECT,
+
+          maxScore:
+            MAX_CHALLENGE_SCORE,
+        },
 
         tashkentTime:
           time,
       });
     }
-
-    /* =====================================================
-       DEFAULT NEXT.JS / OPENNEXT
-    ===================================================== */
 
     return nextWorker.fetch(
       request,
@@ -1084,7 +1573,7 @@ export default {
   },
 
   /* =======================================================
-     CLOUDFLARE CRON
+     CRON
   ======================================================= */
 
   async scheduled(
@@ -1100,101 +1589,57 @@ export default {
       JSON.stringify({
         date:
           time.date,
-
         hour:
           time.hour,
-
         minute:
           time.minute,
-
-        second:
-          time.second,
-
         timezone:
           "Asia/Tashkent",
       }),
     );
 
-    /* =====================================================
-       D1 HEARTBEAT
-    ===================================================== */
-
-    ctx.waitUntil(
-      saveCronHeartbeat(
-        env,
-        time,
-      ),
-    );
-
-    /* =====================================================
-       05:00–22:00 CHALLENGE WINDOW
-    ===================================================== */
-
+    /*
+     * 05:00–22:00
+     */
     if (
       isChallengeHour(
         time.hour,
       )
     ) {
-      console.log(
-        "[CRON] Challenge oynasi faol",
+      ctx.waitUntil(
+        runHourlyChallenge(
+          env,
+          time,
+        ),
       );
-
-      console.log(
-        "[CRON] Challenge config:",
-        JSON.stringify({
-          date:
-            time.date,
-
-          hour:
-            time.hour,
-
-          questions:
-            QUESTIONS_PER_CHALLENGE,
-
-          pointsPerCorrect:
-            POINTS_PER_CORRECT,
-
-          maxScore:
-            MAX_CHALLENGE_SCORE,
-        }),
-      );
-
-      /*
-       * Keyingi bosqichda shu joyga:
-       *
-       * 1. kun raqamini aniqlash
-       * 2. kerakli modullarni tanlash
-       * 3. savollarni random tanlash
-       * 4. daily_challenges yaratish
-       * 5. challenge_questions yaratish
-       *
-       * logikasini ulaymiz.
-       */
     }
 
-    /* =====================================================
-       23:00 DAILY RESULTS
-    ===================================================== */
-
+    /*
+     * 23:00
+     */
     if (
-      time.hour === 23
+      time.hour ===
+      DAILY_RESULTS_HOUR
     ) {
-      console.log(
-        "[CRON] 23:00 — kunlik natijalar oynasi",
+      ctx.waitUntil(
+        sendDailySummary(
+          env,
+          time.date,
+        ),
       );
-
-      /*
-       * Keyingi bosqich:
-       *
-       * daily_leaderboard
-       * weekly_leaderboard
-       * hourly winners
-       * daily summary
-       *
-       * shu yerda avtomatlashtiriladi.
-       */
     }
 
     void controller;
   },
 };
+
+function isChallengeHour(
+  hour: number,
+) {
+  return (
+    hour >=
+      DAILY_START_HOUR &&
+    hour <=
+      DAILY_END_HOUR
+  );
+}
