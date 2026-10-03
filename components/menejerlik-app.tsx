@@ -58,19 +58,7 @@ const INITIAL_NAVIGATION: NavigationState = {
 }
 
 export function MenejerlikApp() {
-  /*
-   * =====================================================
-   * TELEGRAM
-   * =====================================================
-   */
-
   const { user, isTelegram } = useTelegram()
-
-  /*
-   * =====================================================
-   * HISTORY / STATISTICS
-   * =====================================================
-   */
 
   const {
     history,
@@ -78,12 +66,6 @@ export function MenejerlikApp() {
     bestByCategory,
     addAttempt,
   } = useHistory()
-
-  /*
-   * =====================================================
-   * APP STATE
-   * =====================================================
-   */
 
   const [screen, setScreen] =
     useState<Screen>('home')
@@ -109,25 +91,16 @@ export function MenejerlikApp() {
    */
 
   useEffect(() => {
-    if (!isTelegram) {
-      return
-    }
+    if (!isTelegram) return
 
     const tg =
       (window as any).Telegram?.WebApp
 
-    if (!tg) {
-      return
-    }
+    if (!tg) return
 
     try {
-      if (typeof tg.ready === 'function') {
-        tg.ready()
-      }
-
-      if (typeof tg.expand === 'function') {
-        tg.expand()
-      }
+      tg.ready?.()
+      tg.expand?.()
 
       if (
         typeof tg.requestFullscreen ===
@@ -138,7 +111,7 @@ export function MenejerlikApp() {
       }
     } catch (error) {
       console.log(
-        'Fullscreen error:',
+        'Telegram fullscreen error:',
         error,
       )
     }
@@ -154,9 +127,7 @@ export function MenejerlikApp() {
     const tg =
       (window as any).Telegram?.WebApp
 
-    if (!tg) {
-      return
-    }
+    if (!tg) return
 
     try {
       if (isFullscreen) {
@@ -168,7 +139,6 @@ export function MenejerlikApp() {
         }
 
         setIsFullscreen(false)
-
         return
       }
 
@@ -178,7 +148,6 @@ export function MenejerlikApp() {
       ) {
         tg.requestFullscreen()
         setIsFullscreen(true)
-
         return
       }
 
@@ -207,9 +176,7 @@ export function MenejerlikApp() {
     const tg =
       (window as any).Telegram?.WebApp
 
-    if (!tg) {
-      return
-    }
+    if (!tg) return
 
     const handleFullscreenChanged = () => {
       setIsFullscreen(
@@ -245,7 +212,7 @@ export function MenejerlikApp() {
 
   /*
    * =====================================================
-   * GO HOME
+   * HOME
    * =====================================================
    */
 
@@ -259,7 +226,6 @@ export function MenejerlikApp() {
     )
 
     setSession(null)
-
     setResult(null)
 
     scrollToTop()
@@ -269,38 +235,36 @@ export function MenejerlikApp() {
    * =====================================================
    * CLOSE MINI APP
    *
-   * X TUGMASI SHU FUNKSIYANI ISHLATADI
+   * X tugmasi shu funksiyani ishlatadi.
    * =====================================================
    */
 
   function closeMiniApp() {
-    try {
-      setClosingConfirmation(false)
+    setClosingConfirmation(false)
 
-      const tg =
-        (window as any).Telegram?.WebApp
+    const tg =
+      (window as any).Telegram?.WebApp
 
-      if (
-        tg &&
-        typeof tg.close === 'function'
-      ) {
+    if (
+      tg &&
+      typeof tg.close === 'function'
+    ) {
+      try {
         tg.close()
         return
+      } catch (error) {
+        console.log(
+          'Telegram close error:',
+          error,
+        )
       }
-
-      /*
-       * Telegramdan tashqarida ochilgan bo‘lsa,
-       * bosh sahifaga qaytamiz.
-       */
-      goHome()
-    } catch (error) {
-      console.log(
-        'Mini App close error:',
-        error,
-      )
-
-      goHome()
     }
+
+    /*
+     * Agar Telegram tashqarisida ochilgan
+     * bo‘lsa, Home sahifaga qaytadi.
+     */
+    goHome()
   }
 
   /*
@@ -311,9 +275,7 @@ export function MenejerlikApp() {
 
   function openAI() {
     setClosingConfirmation(false)
-
     setScreen('ai')
-
     scrollToTop()
   }
 
@@ -333,7 +295,6 @@ export function MenejerlikApp() {
     )
 
     setSession(null)
-
     setResult(null)
 
     scrollToTop()
@@ -432,13 +393,11 @@ export function MenejerlikApp() {
       )
 
     setSession(newSession)
-
     setResult(null)
-
     setScreen('quiz')
 
     /*
-     * Test paytida Telegramdan chiqishda
+     * Test vaqtida chiqishga
      * confirmation yoqiladi.
      */
     setClosingConfirmation(true)
@@ -455,13 +414,9 @@ export function MenejerlikApp() {
   function finish(
     answers: AnswerRecord[],
   ) {
-    if (!session) {
-      return
-    }
+    if (!session) return
 
-    if (screen !== 'quiz') {
-      return
-    }
+    if (screen !== 'quiz') return
 
     const correct =
       answers.filter(
@@ -501,9 +456,7 @@ export function MenejerlikApp() {
     }
 
     setResult(quizResult)
-
     setScreen('result')
-
     setClosingConfirmation(false)
 
     scrollToTop()
@@ -532,9 +485,7 @@ export function MenejerlikApp() {
    */
 
   function retryQuiz() {
-    if (!result) {
-      return
-    }
+    if (!result) return
 
     startQuiz(
       result.topicId,
@@ -545,13 +496,6 @@ export function MenejerlikApp() {
   /*
    * =====================================================
    * BACK NAVIGATION
-   *
-   * BU FUNKSIYA:
-   *
-   * ← tugmasi
-   * Telegram native BackButton
-   *
-   * ikkalasi uchun ham ishlaydi.
    * =====================================================
    */
 
@@ -585,7 +529,6 @@ export function MenejerlikApp() {
       )
 
       setScreen('education')
-
       scrollToTop()
 
       return
@@ -604,7 +547,6 @@ export function MenejerlikApp() {
       )
 
       setScreen('modules')
-
       scrollToTop()
 
       return
@@ -622,7 +564,6 @@ export function MenejerlikApp() {
       )
 
       setScreen('topics')
-
       scrollToTop()
 
       return
@@ -630,15 +571,11 @@ export function MenejerlikApp() {
 
     /*
      * QUIZ
-     *
-     * Testdan ← bosib chiqilsa
-     * bosh sahifaga qaytadi.
      */
     if (screen === 'quiz') {
       setClosingConfirmation(false)
 
       setSession(null)
-
       setResult(null)
 
       setScreen('home')
@@ -657,7 +594,6 @@ export function MenejerlikApp() {
      */
     if (screen === 'result') {
       setResult(null)
-
       setSession(null)
 
       setScreen('home')
@@ -685,10 +621,8 @@ export function MenejerlikApp() {
    * =====================================================
    * TELEGRAM NATIVE BACK BUTTON
    *
-   * MUHIM:
-   *
-   * onBack = goBack
-   * enabled = screen !== 'home'
+   * Telegram ichidagi native BackButton
+   * screen home bo'lmaganda ishlaydi.
    * =====================================================
    */
 
@@ -900,7 +834,7 @@ export function MenejerlikApp() {
         )}
 
         {/* ===============================================
-            YOPISH
+            X — MINI APPNI YOPISH
         =============================================== */}
 
         <button
@@ -918,7 +852,7 @@ export function MenejerlikApp() {
             justify-center
             rounded-xl
             text-2xl
-            font-semibold
+            font-bold
             text-muted-foreground
             transition-all
             hover:bg-destructive/10
@@ -965,8 +899,6 @@ export function MenejerlikApp() {
               openEducationSelection
             }
           />
-
-          {/* AI BUTTON */}
 
           <button
             type="button"
@@ -1080,6 +1012,7 @@ export function MenejerlikApp() {
 
             </div>
           </button>
+
         </div>
       )}
 
@@ -1280,8 +1213,6 @@ function EducationScreen({
 
       <div className="grid gap-4">
 
-        {/* BOG‘CHA */}
-
         <button
           type="button"
           onClick={() =>
@@ -1395,8 +1326,6 @@ function EducationScreen({
 
           </div>
         </button>
-
-        {/* MAKTAB */}
 
         <button
           type="button"
@@ -1993,6 +1922,7 @@ function TopicScreen({
                     className="
                       mt-3
                       flex
+                      flex-wrap
                       gap-1.5
                     "
                   >
