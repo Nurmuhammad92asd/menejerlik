@@ -1,7 +1,7 @@
 ```tsx
 'use client'
 
-export function ResultScreen() {
+export default function ResultScreen() {
   return (
     <div>
       <h1>Test natijasi</h1>
