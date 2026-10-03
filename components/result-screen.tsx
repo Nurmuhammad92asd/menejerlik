@@ -51,6 +51,7 @@ TEST YAKUNLANDI </div>
           <div className="text-5xl font-black">
             {percentage}%
           </div>
+
           <div className="mt-1 text-sm font-semibold text-blue-100">
             natija
           </div>
@@ -68,6 +69,7 @@ TEST YAKUNLANDI </div>
           <div className="text-3xl font-black text-green-600">
             {correct}
           </div>
+
           <div className="mt-1 text-sm font-semibold text-slate-600">
             To‘g‘ri
           </div>
@@ -77,6 +79,7 @@ TEST YAKUNLANDI </div>
           <div className="text-3xl font-black text-red-600">
             {wrong}
           </div>
+
           <div className="mt-1 text-sm font-semibold text-slate-600">
             Noto‘g‘ri
           </div>
@@ -86,6 +89,7 @@ TEST YAKUNLANDI </div>
           <div className="text-3xl font-black text-blue-600">
             {total}
           </div>
+
           <div className="mt-1 text-sm font-semibold text-slate-600">
             Jami
           </div>
