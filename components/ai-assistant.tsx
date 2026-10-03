@@ -1,40 +1,30 @@
 'use client'
 
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 
-type Message = {
-  role: 'user' | 'assistant'
-  content: string
+type AIAssistantProps = {
+  onBack: () => void
 }
 
-export function AIAssistant({
-  onBack,
-}: {
-  onBack: () => void
-}) {
+export function AIAssistant({ onBack }: AIAssistantProps) {
   const [question, setQuestion] = useState('')
-  const [messages, setMessages] = useState<Message[]>([])
+  const [answer, setAnswer] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  async function askAI() {
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault()
+
     const text = question.trim()
 
-    if (!text || loading) {
+    if (!text) {
+      setError('Avval savolingizni yozing.')
       return
     }
 
-    const userMessage: Message = {
-      role: 'user',
-      content: text,
-    }
-
-    setMessages((previous) => [
-      ...previous,
-      userMessage,
-    ])
-
-    setQuestion('')
     setLoading(true)
+    setError('')
+    setAnswer('')
 
     try {
       const response = await fetch('/api/ai', {
@@ -52,158 +42,136 @@ export function AIAssistant({
       if (!response.ok) {
         throw new Error(
           data?.error ||
-            'AI bilan bog‘lanishda xatolik yuz berdi.',
+            `Server xatosi: ${response.status}`,
         )
       }
 
-      setMessages((previous) => [
-        ...previous,
-        {
-          role: 'assistant',
-          content:
-            data.answer ||
-            'Javob topilmadi.',
-        },
-      ])
-    } catch (error) {
-      console.error('AI error:', error)
+      if (!data?.answer) {
+        throw new Error('AI javob qaytarmadi.')
+      }
 
-      setMessages((previous) => [
-        ...previous,
-        {
-          role: 'assistant',
-          content:
-            'Kechirasiz, AI bilan bog‘lanishda xatolik yuz berdi. Birozdan keyin qayta urinib ko‘ring.',
-        },
-      ])
+      setAnswer(data.answer)
+    } catch (err) {
+      console.error('AI CLIENT ERROR:', err)
+
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'AI bilan bog‘lanishda noma’lum xatolik yuz berdi.',
+      )
     } finally {
       setLoading(false)
     }
   }
 
-  function handleKeyDown(
-    event: React.KeyboardEvent<HTMLTextAreaElement>,
-  ) {
-    if (
-      event.key === 'Enter' &&
-      !event.shiftKey
-    ) {
-      event.preventDefault()
-      void askAI()
-    }
-  }
-
   return (
-    <section className="flex min-h-[85vh] flex-col gap-4">
-      <header className="flex items-center gap-3">
+    <main className="min-h-screen bg-slate-50 px-4 py-5">
+      <div className="mx-auto max-w-2xl">
         <button
           type="button"
           onClick={onBack}
-          className="flex size-10 shrink-0 items-center justify-center rounded-2xl border bg-card text-lg shadow-sm"
+          className="mb-4 rounded-xl bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm"
         >
-          ←
+          ← Orqaga
         </button>
 
-        <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-2xl shadow-lg">
-          🤖
-        </div>
+        <div className="rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 p-6 text-white shadow-lg">
+          <div className="mb-2 text-4xl">🤖</div>
 
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
+          <h1 className="text-2xl font-bold">
             MENEJERLIK AI
-          </p>
-
-          <h1 className="text-xl font-bold">
-            AI Rahbar yordamchisi
           </h1>
+
+          <p className="mt-2 text-sm text-blue-100">
+            Ta’lim boshqaruvi va maktab rahbarligi bo‘yicha
+            savollaringizni bering.
+          </p>
         </div>
-      </header>
 
-      <div className="rounded-3xl border bg-card p-4 shadow-sm">
-        <p className="text-sm leading-6 text-muted-foreground">
-          Men ta’lim rahbarlari uchun
-          boshqaruv, ta’lim sifati,
-          jamoani boshqarish, monitoring,
-          rejalashtirish va maktabni
-          rivojlantirish bo‘yicha yordam
-          beraman.
-        </p>
-      </div>
+        <form
+          onSubmit={handleSubmit}
+          className="mt-4 rounded-3xl bg-white p-4 shadow-sm"
+        >
+          <label className="mb-2 block text-sm font-semibold text-slate-700">
+            Savolingiz
+          </label>
 
-      <div className="flex-1 space-y-3 overflow-y-auto">
-        {messages.length === 0 && (
-          <div className="rounded-3xl border border-dashed p-6 text-center">
-            <div className="text-4xl">
-              🎯
-            </div>
+          <textarea
+            value={question}
+            onChange={(event) =>
+              setQuestion(event.target.value)
+            }
+            placeholder="Masalan: Maktab direktorining ta’lim sifatini oshirishdagi asosiy vazifalari nimalardan iborat?"
+            rows={5}
+            className="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-800 outline-none focus:border-blue-500"
+            disabled={loading}
+          />
 
-            <h2 className="mt-3 font-bold">
-              Savolingizni yozing
-            </h2>
+          <button
+            type="submit"
+            disabled={loading}
+            className="mt-3 w-full rounded-2xl bg-blue-600 px-5 py-4 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {loading ? '⏳ AI javob tayyorlamoqda...' : '🤖 Savol berish'}
+          </button>
+        </form>
 
-            <p className="mt-2 text-sm leading-5 text-muted-foreground">
-              Masalan: “Maktabda ta’lim sifatini
-              oshirish uchun rahbar sifatida
-              qanday choralar ko‘rishim kerak?”
+        {loading && (
+          <div className="mt-4 rounded-2xl bg-blue-50 p-4 text-sm text-blue-700">
+            AI bilan bog‘lanilmoqda...
+          </div>
+        )}
+
+        {error && (
+          <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4">
+            <p className="font-semibold text-red-700">
+              ❌ Xatolik
+            </p>
+
+            <p className="mt-2 break-words text-sm text-red-600">
+              {error}
             </p>
           </div>
         )}
 
-        {messages.map(
-          (message, index) => (
-            <div
-              key={index}
-              className={
-                message.role === 'user'
-                  ? 'ml-8 rounded-3xl bg-primary p-4 text-sm text-primary-foreground'
-                  : 'mr-4 rounded-3xl border bg-card p-4 text-sm leading-6 shadow-sm'
-              }
-            >
-              {message.content}
+        {answer && (
+          <div className="mt-4 rounded-3xl bg-white p-5 shadow-sm">
+            <div className="mb-3 flex items-center gap-2">
+              <span className="text-2xl">🤖</span>
+
+              <h2 className="font-bold text-slate-800">
+                AI javobi
+              </h2>
             </div>
-          ),
+
+            <div className="whitespace-pre-wrap text-sm leading-7 text-slate-700">
+              {answer}
+            </div>
+          </div>
         )}
 
-        {loading && (
-          <div className="mr-16 rounded-3xl border bg-card p-4 text-sm text-muted-foreground">
-            🤖 AI javob tayyorlamoqda...
+        {!answer && !error && !loading && (
+          <div className="mt-4 rounded-2xl bg-white p-5 shadow-sm">
+            <p className="text-sm font-semibold text-slate-700">
+              💡 Masalan:
+            </p>
+
+            <div className="mt-3 space-y-2 text-sm text-slate-600">
+              <p>
+                • Maktabda ta’lim sifatini qanday oshirish mumkin?
+              </p>
+
+              <p>
+                • O‘qituvchilar motivatsiyasini qanday kuchaytirish mumkin?
+              </p>
+
+              <p>
+                • Maktab rivojlanish rejasini qanday tuzish kerak?
+              </p>
+            </div>
           </div>
         )}
       </div>
-
-      <div className="rounded-3xl border bg-card p-3 shadow-lg">
-        <textarea
-          value={question}
-          onChange={(event) =>
-            setQuestion(event.target.value)
-          }
-          onKeyDown={handleKeyDown}
-          disabled={loading}
-          placeholder="Rahbarlik bo‘yicha savolingizni yozing..."
-          rows={3}
-          className="w-full resize-none bg-transparent p-2 text-sm outline-none placeholder:text-muted-foreground"
-        />
-
-        <div className="mt-2 flex items-center justify-between gap-2">
-          <span className="text-[10px] text-muted-foreground">
-            Enter — yuborish
-          </span>
-
-          <button
-            type="button"
-            onClick={() => void askAI()}
-            disabled={
-              loading ||
-              !question.trim()
-            }
-            className="rounded-2xl bg-primary px-5 py-3 text-sm font-bold text-primary-foreground shadow-sm transition-all hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {loading
-              ? 'Yuborilmoqda...'
-              : '🤖 So‘rash'}
-          </button>
-        </div>
-      </div>
-    </section>
+    </main>
   )
 }
