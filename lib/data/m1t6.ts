@@ -9,1212 +9,1312 @@ export const M1T6_LEVELS: {
   easy: [
     {
       id: 'm1t6e01',
-      text: 'Maktab imiji nima?',
+      text: 'Maktab imiji tushunchasiga eng to‘g‘ri ta’rif qaysi?',
       options: [
-        'Faqat maktab binosining tashqi ko‘rinishi',
-        'Maktab haqida jamiyat va manfaatdor tomonlar ongida shakllangan umumiy tasavvur, obro‘ va nufuz',
-        'Faqat maktab direktorining obro‘si',
-        'Faqat ijtimoiy tarmoqlardagi sahifa'
+        'Maktab binosining tashqi ko‘rinishi',
+        'Maktabning ijtimoiy tarmoqlardagi sahifasi',
+        'Maktab haqida manfaatdor tomonlarda shakllangan umumiy tasavvur',
+        'Direktorning shaxsiy obro‘si'
       ],
-      answer: 1,
-      explanation: 'Maktab imiji — maktab haqida jamiyat, ota-onalar, o‘quvchilar, pedagoglar va hamkor tashkilotlar ongida shakllangan umumiy tasavvur, obro‘-e’tibor va nufuzdir.'
+      answer: 2,
+      explanation:
+        'Imij bitta obyekt yoki shaxs bilan cheklanmaydi; u maktab faoliyati haqida turli manfaatdor tomonlarda shakllangan umumiy tasavvurni bildiradi.'
     },
     {
       id: 'm1t6e02',
-      text: 'Maktab imiji asosan nimalar asosida shakllanadi?',
+      text: 'Maktab imiji eng avvalo nimaga tayanishi kerak?',
       options: [
-        'Faqat reklama asosida',
-        'Ta’lim sifati, muhit, xulq-atvor, tashqi ko‘rinish va muloqot madaniyati asosida',
-        'Faqat maktab binosi asosida',
-        'Faqat direktorning nutqi asosida'
+        'Real faoliyat va natijalarga',
+        'Ko‘p sonli reklama materiallariga',
+        'Tashqi bezaklarga',
+        'Ijtimoiy tarmoqdagi faollikka'
       ],
-      answer: 1,
-      explanation: 'Maktab imiji maktab faoliyati, ta’lim sifati, muhit, xulq-atvor, tashqi ko‘rinish va muloqot madaniyati bilan bog‘liq.'
+      answer: 0,
+      explanation:
+        'Barqaror imijning asosi real faoliyat, sifat va natijalardir. Kommunikatsiya esa shu asosni jamoatchilikka yetkazadi.'
     },
     {
       id: 'm1t6e03',
-      text: 'Maktab imiji qanday faoliyat natijasida shakllanadi?',
+      text: 'Ichki imij asosan qaysi muhit bilan bog‘liq?',
       options: [
-        'Tasodifiy faoliyat natijasida',
-        'Faqat bir martalik tadbir natijasida',
-        'Maqsadli, tizimli va doimiy faoliyat natijasida',
-        'Faqat reklama natijasida'
+        'Faqat OAV bilan',
+        'Maktab jamoasi ichidagi munosabat va muhit bilan',
+        'Faqat mahalla bilan',
+        'Faqat internetdagi auditoriya bilan'
       ],
-      answer: 2,
-      explanation: 'Materialga ko‘ra, imij o‘z-o‘zidan emas, balki maqsadli, tizimli va doimiy faoliyat natijasida shakllanadi.'
+      answer: 1,
+      explanation:
+        'Ichki imij maktabdagi pedagoglar, xodimlar va o‘quvchilar o‘rtasidagi munosabatlar, madaniyat va muhit bilan chambarchas bog‘liq.'
     },
     {
       id: 'm1t6e04',
-      text: 'Maktabning ijobiy imiji ota-onalar bilan munosabatga qanday ta’sir qiladi?',
+      text: 'Tashqi imij ko‘proq qaysi guruhlarning maktab haqidagi tasavvurida namoyon bo‘ladi?',
       options: [
-        'Ishonch va hamkorlikni mustahkamlaydi',
-        'Aloqalarni kamaytiradi',
-        'Ota-onalar ishtirokini cheklaydi',
-        'Hech qanday ta’sir qilmaydi'
+        'Faqat direktorlar',
+        'Faqat o‘qituvchilar',
+        'Faqat o‘quvchilar',
+        'Ota-onalar va boshqa tashqi manfaatdor tomonlar'
       ],
-      answer: 0,
-      explanation: 'Ijobiy imij ota-onalar ishonchi va hamkorligini mustahkamlashga xizmat qiladi.'
+      answer: 3,
+      explanation:
+        'Tashqi imij maktabdan tashqaridagi manfaatdor tomonlarning maktab haqidagi tasavvurida namoyon bo‘ladi.'
     },
     {
       id: 'm1t6e05',
-      text: 'Maktab imijining asosiy turlaridan biri qaysi?',
+      text: 'Maktabning ichki imijiga qaysi omil bevosita ta’sir qiladi?',
       options: [
-        'Ichki imij',
-        'Moliyaviy imij',
-        'Huquqiy imij',
-        'Texnik imij'
+        'Pedagoglar o‘rtasidagi hamkorlik',
+        'Faqat reklama banneri',
+        'Faqat maktab logotipi',
+        'Faqat OAVdagi maqola'
       ],
       answer: 0,
-      explanation: 'Maktab imiji ichki va tashqi imijga bo‘linadi.'
+      explanation:
+        'Jamoa ichidagi hamkorlik va munosabatlar ichki muhitni belgilaydi va shu sababli ichki imijga bevosita ta’sir ko‘rsatadi.'
     },
     {
       id: 'm1t6e06',
-      text: 'Ichki imij nimani anglatadi?',
+      text: 'PR qisqartmasi nimani anglatadi?',
       options: [
-        'OAVdagi maktab haqidagi ma’lumotlarni',
-        'Maktab jamoasi orasida shakllangan ichki muhit va munosabatlar tizimini',
-        'Maktab binosining tashqi ko‘rinishini',
-        'Homiylarning maktab haqidagi fikrini'
+        'Professional Ranking',
+        'Public Relations',
+        'Personal Result',
+        'Public Regulation'
       ],
       answer: 1,
-      explanation: 'Ichki imij pedagoglar, xodimlar va o‘quvchilar orasidagi ichki muhit va munosabatlar bilan bog‘liq.'
+      explanation:
+        'PR — Public Relations, ya’ni jamoatchilik bilan aloqalarni tashkil etish va boshqarish faoliyatidir.'
     },
     {
       id: 'm1t6e07',
-      text: 'Tashqi imij kimlar orasida shakllanadi?',
+      text: 'Maktab PR faoliyatining asosiy vazifalaridan biri qaysi?',
       options: [
-        'Faqat direktorlar orasida',
-        'Faqat pedagoglar orasida',
-        'Ota-onalar, mahalla, jamiyat va OAV kabi tashqi muhitda',
-        'Faqat o‘quvchilar orasida'
+        'Faqat reklama xarajatlarini oshirish',
+        'Faqat tadbirlar sonini ko‘paytirish',
+        'Maktab va jamoatchilik o‘rtasidagi ishonchli aloqani rivojlantirish',
+        'Faqat ijtimoiy tarmoqdagi obunachilarni ko‘paytirish'
       ],
       answer: 2,
-      explanation: 'Tashqi imij maktabdan tashqaridagi manfaatdor tomonlar — ota-onalar, mahalla, jamiyat va OAV orasida shakllanadi.'
+      explanation:
+        'PRning mazmuni faqat reklama emas; uning muhim vazifasi maktab va jamoatchilik o‘rtasidagi munosabatlarni mustahkamlashdir.'
     },
     {
       id: 'm1t6e08',
-      text: 'Ichki imijning tarkibiy qismiga qaysi biri kiradi?',
+      text: 'Qaysi biri zamonaviy PR vositasiga misol bo‘la oladi?',
       options: [
-        'Pedagoglarning kasbiy mahorati va obro‘si',
-        'Faqat maktab darvozasi',
-        'Faqat reklama bannerlari',
-        'Faqat maktab logotipi'
+        'Ijtimoiy tarmoq',
+        'Faqat maktab eshigi',
+        'Faqat sinf jurnali',
+        'Faqat ichki buyruq'
       ],
       answer: 0,
-      explanation: 'Pedagoglarning kasbiy mahorati va obro‘si ichki imijning muhim tarkibiy qismidir.'
+      explanation:
+        'Ijtimoiy tarmoqlar keng auditoriya bilan tezkor aloqa qilish imkonini beradigan zamonaviy kommunikatsiya vositalaridan biridir.'
     },
     {
       id: 'm1t6e09',
-      text: 'Ichki imij mustahkam bo‘lmasa, nima yuz berishi mumkin?',
+      text: 'Ochiq eshiklar kuni maktab uchun qanday imkoniyat yaratadi?',
       options: [
-        'Tashqi imij avtomatik ravishda kuchayadi',
-        'Tashqi imij barqaror bo‘la olmaydi',
-        'Maktab reytingi avtomatik oshadi',
-        'PRga ehtiyoj qolmaydi'
+        'Faqat ichki nazoratni kuchaytiradi',
+        'Jamoatchilikni maktab faoliyati bilan bevosita tanishtiradi',
+        'Faqat hujjatlar sonini oshiradi',
+        'Faqat o‘qituvchilar yig‘ilishini tashkil qiladi'
       ],
       answer: 1,
-      explanation: 'Materialda ichki imij mustahkam bo‘lmasa, tashqi imij ham barqaror bo‘la olmasligi ta’kidlangan.'
+      explanation:
+        'Ochiq eshiklar kuni tashqi manfaatdor tomonlarga maktab faoliyati va muhitini bevosita ko‘rish imkonini beradi.'
     },
     {
       id: 'm1t6e10',
-      text: 'Maktab tashqi imijini shakllantiruvchi omillardan biri qaysi?',
+      text: 'Maktab imijini shakllantirishda qaysi tamoyil real ma’lumotlarga tayanishni anglatadi?',
       options: [
-        'O‘quvchilar yutuqlari',
-        'Faqat xodimlarning shaxsiy hayoti',
-        'Faqat direktor xonasi',
-        'Faqat ichki hujjatlar'
+        'Tezkorlik',
+        'Barqarorlik',
+        'Haqiqiylik',
+        'Hamkorlik'
       ],
-      answer: 0,
-      explanation: 'Olimpiada va tanlovlardagi o‘quvchilar yutuqlari tashqi imijni shakllantiruvchi omillardan biridir.'
+      answer: 2,
+      explanation:
+        'Haqiqiylik tamoyili maktab haqidagi axborot real faoliyat va tasdiqlangan natijalarga mos bo‘lishini talab qiladi.'
     },
     {
       id: 'm1t6e11',
-      text: 'PR atamasi nimani anglatadi?',
+      text: 'Shaffoflik tamoyilining asosiy natijalaridan biri qaysi?',
       options: [
-        'Public Relations',
-        'Personal Result',
-        'Professional Ranking',
-        'Public Regulation'
+        'Ishonchning kuchayishi',
+        'Axborotning kamayishi',
+        'Muloqotning yopilishi',
+        'Faqat reklama hajmining ortishi'
       ],
       answer: 0,
-      explanation: 'PR — Public Relations, ya’ni jamoatchilik bilan aloqalar.'
+      explanation:
+        'Jarayon va mezonlar tushunarli bo‘lsa, manfaatdor tomonlar maktab faoliyatiga nisbatan ko‘proq ishonch hosil qilishi mumkin.'
     },
     {
       id: 'm1t6e12',
-      text: 'Maktab PR faoliyatining asosiy maqsadi nima?',
+      text: 'Insonparvarlik tamoyili maktab imijida nimani anglatadi?',
       options: [
+        'Faqat intizomni kuchaytirish',
+        'O‘quvchi, ota-ona va xodimga hurmat bilan munosabatda bo‘lish',
         'Faqat reklama qilish',
-        'Maktab va jamoatchilik o‘rtasida ishonch, ochiqlik va ijobiy munosabatlarni shakllantirish',
-        'Faqat tadbirlar sonini ko‘paytirish',
-        'Faqat ijtimoiy tarmoqdagi obunachilarni oshirish'
+        'Faqat rahbar fikrini ustun qo‘yish'
       ],
       answer: 1,
-      explanation: 'Maktab PRi maktab va jamoatchilik o‘rtasida o‘zaro ishonch, ochiqlik va ijobiy munosabatlarni shakllantirishga qaratilgan.'
+      explanation:
+        'Insonparvarlik maktabdagi insoniy munosabatlar, hurmat va manfaatlarni hisobga olish orqali namoyon bo‘ladi.'
     },
     {
       id: 'm1t6e13',
-      text: 'Quyidagilardan qaysi biri an’anaviy PR vositasi?',
+      text: 'Hamkorlik tamoyiliga mos faoliyatni toping.',
       options: [
-        'Ochiq eshiklar kuni',
-        'Sun’iy intellekt chatbotlari',
-        'Elektron xabarnoma',
-        'Jonli efir'
+        'Mahalla va boshqa hamkor tashkilotlar bilan aloqalarni rivojlantirish',
+        'Tashqi tashkilotlardan barcha aloqalarni uzish',
+        'Faqat ichki yig‘ilishlar o‘tkazish',
+        'Faqat reklama joylashtirish'
       ],
       answer: 0,
-      explanation: 'Ochiq eshiklar kuni an’anaviy PR vositalaridan biridir.'
+      explanation:
+        'Hamkorlik tamoyili maktabning tashqi manfaatdor tomonlar bilan tizimli munosabatlarini nazarda tutadi.'
     },
     {
       id: 'm1t6e14',
-      text: 'Quyidagilardan qaysi biri zamonaviy PR vositasidir?',
+      text: 'Tezkorlik tamoyili ayniqsa qaysi holatda muhim?',
       options: [
-        'Axborot stendi',
-        'Press-reliz',
-        'Ijtimoiy tarmoq',
-        'Marosim'
+        'Maktab logotipini tanlashda',
+        'Sinf mebellarini joylashtirishda',
+        'Muhim va bahsli axborotga javob berishda',
+        'Yillik ta’tilni belgilashda'
       ],
       answer: 2,
-      explanation: 'Telegram, Instagram va Facebook kabi ijtimoiy tarmoqlar zamonaviy PR vositalariga kiradi.'
+      explanation:
+        'Muhim axborotga kechikib javob berish noto‘g‘ri talqinlar va mish-mishlar kuchayishiga sabab bo‘lishi mumkin.'
     },
     {
       id: 'm1t6e15',
-      text: 'Maktab PR faoliyatining birinchi bosqichi qaysi?',
+      text: 'Maktab imiji faqat tashqi ko‘rinishdan iborat emasligini qaysi javob yaxshiroq ifodalaydi?',
       options: [
-        'Monitoring',
-        'Tahlil',
-        'Takomillashtirish',
-        'Amalga oshirish'
+        'Imij faqat logotipga bog‘liq',
+        'Imij sifat, qadriyat, munosabat va natijalar bilan ham bog‘liq',
+        'Imij faqat direktor faoliyatidir',
+        'Imij faqat reklama mahsulotidir'
       ],
       answer: 1,
-      explanation: 'PR faoliyati tahlildan boshlanadi: avvalo maktabning hozirgi imiji va jamoatchilik fikri o‘rganiladi.'
+      explanation:
+        'Maktab imiji ko‘rinishdan tashqari ta’lim sifati, qadriyatlar, xavfsizlik, adolat, munosabat va natijalar bilan shakllanadi.'
     },
     {
       id: 'm1t6e16',
-      text: 'PR faoliyatida monitoring bosqichining vazifasi nima?',
+      text: 'PR jarayonining dastlabki bosqichida odatda nima aniqlanadi?',
       options: [
-        'PR samaradorligini baholash',
-        'Faqat reja tuzish',
-        'Faqat tadbir o‘tkazish',
-        'Faqat xodim tayinlash'
+        'Mavjud holat va jamoatchilik fikri',
+        'Faqat reklama dizayni',
+        'Faqat tadbirlar soni',
+        'Faqat moliyaviy xarajat'
       ],
       answer: 0,
-      explanation: 'Monitoring bosqichida PR faoliyatining samaradorligi baholanadi.'
+      explanation:
+        'Samarali rejalashtirishdan oldin maktabning mavjud imiji va manfaatdor tomonlar fikri o‘rganiladi.'
     },
     {
       id: 'm1t6e17',
-      text: 'Maktab imijini shakllantirish tamoyillaridan biri qaysi?',
+      text: 'Monitoringning asosiy maqsadi nima?',
       options: [
-        'Haqiqiylik',
-        'Yashirinlik',
-        'Tasodifiylik',
-        'Kechikish'
+        'Yangi logo tanlash',
+        'PR faoliyati natijalarini kuzatish va baholash',
+        'Faqat tadbir tashkil qilish',
+        'Faqat xodimlarni almashtirish'
       ],
-      answer: 0,
-      explanation: 'Haqiqiylik maktab imijini shakllantirishning asosiy tamoyillaridan biridir.'
+      answer: 1,
+      explanation:
+        'Monitoring amalga oshirilgan ishlarning natijasi va samaradorligini kuzatish uchun xizmat qiladi.'
     },
     {
       id: 'm1t6e18',
-      text: 'Haqiqiylik tamoyili nimani anglatadi?',
+      text: 'Maktabning raqamli imiji asosan qayerlarda namoyon bo‘ladi?',
       options: [
-        'Imij faqat real faoliyatga tayanishi kerak',
-        'Har qanday ma’lumotni tarqatish mumkin',
-        'Faqat reklama qilish kerak',
-        'Salbiy ma’lumotlarni yashirish kerak'
+        'Faqat maktab hovlisida',
+        'Faqat sinf xonasida',
+        'Veb-sayt va ijtimoiy platformalarda',
+        'Faqat direktor xonasida'
       ],
-      answer: 0,
-      explanation: 'Haqiqiylik imijning real faoliyat va real natijalarga asoslanishini anglatadi.'
+      answer: 2,
+      explanation:
+        'Raqamli imij internetdagi rasmiy sahifalar, ijtimoiy tarmoqlar va boshqa raqamli kanallardagi maktab haqidagi tasavvur bilan bog‘liq.'
     },
     {
       id: 'm1t6e19',
-      text: 'Shaffoflik tamoyili nimani kuchaytiradi?',
+      text: 'O‘quvchilar yutuqlarini yoritish maktab imijiga qanday ta’sir qilishi mumkin?',
       options: [
-        'Ishonchni',
-        'Mish-mishlarni',
-        'Yopiq boshqaruvni',
-        'Axborot kechikishini'
+        'Maktabning real natijalarini jamoatchilikka ko‘rsatadi',
+        'Faqat ichki hujjatlar sonini oshiradi',
+        'Faqat bino ko‘rinishini o‘zgartiradi',
+        'Ta’lim jarayoniga aloqasi yo‘q'
       ],
       answer: 0,
-      explanation: 'Qarorlar, qoidalar va baholash mezonlari tushunarli bo‘lsa, ishonch ortadi.'
+      explanation:
+        'Tasdiqlangan o‘quvchi yutuqlari maktabdagi ta’lim natijalarining tashqi auditoriyaga ko‘rinadigan dalillaridan biridir.'
     },
     {
       id: 'm1t6e20',
-      text: 'Maktab imijining “yuragi” sifatida qaysi tamoyil ko‘rsatilgan?',
+      text: 'Maktab rahbarining imijni boshqarishdagi muhim vazifalaridan biri qaysi?',
       options: [
-        'Insonparvarlik',
-        'Raqobat',
-        'Nazorat',
-        'Reklama'
+        'Faqat tadbirlarda qatnashish',
+        'Faqat ijtimoiy tarmoqda post yozish',
+        'Sifat va kommunikatsiyani tizimli boshqarish',
+        'Faqat reklama materiallarini tasdiqlash'
       ],
-      answer: 0,
-      explanation: 'O‘quvchi va ota-onaga hurmat, pedagogga e’tibor insonparvarlik tamoyilini tashkil etadi.'
+      answer: 2,
+      explanation:
+        'Rahbar imijni alohida reklama vazifasi sifatida emas, sifat, jamoa madaniyati va kommunikatsiya bilan bog‘liq tizim sifatida boshqaradi.'
     },
     {
       id: 'm1t6e21',
-      text: 'Maktab imijida hamkorlik tamoyili kimlar bilan aloqani nazarda tutadi?',
+      text: 'Maktab imijining barqarorligi nimani talab qiladi?',
       options: [
-        'Faqat maktab xodimlari bilan',
-        'Mahalla, OTM, korxona, OAV va NNT bilan',
-        'Faqat o‘quvchilar bilan',
-        'Faqat direktorlar bilan'
+        'Faqat bir martalik yirik tadbirni',
+        'Doimiy sifat va izchil kommunikatsiyani',
+        'Faqat ko‘p sonli reklamani',
+        'Faqat tashqi bezakni'
       ],
       answer: 1,
-      explanation: 'Hamkorlik maktabning mahalla, OTM, korxona, OAV va NNT bilan aloqalarini qamrab oladi.'
+      explanation:
+        'Barqaror imij bir martalik kampaniyadan emas, muntazam sifat va izchil munosabatlardan shakllanadi.'
     },
     {
       id: 'm1t6e22',
-      text: 'Tezkorlik tamoyili nima uchun muhim?',
+      text: 'Maktab haqida salbiy xabar paydo bo‘lganda qaysi harakat asosliroq?',
       options: [
-        'Kechikkan izoh salbiy ta’sir qilishi mumkin',
-        'Rejani bekor qilish uchun',
-        'Faqat reklama xarajatlarini oshirish uchun',
-        'Hujjatlarni ko‘paytirish uchun'
+        'Faktlarni aniqlash va tegishli axborotni berish',
+        'Xabarni tekshirmasdan rad etish',
+        'Muammoni yashirish',
+        'Barcha kanallarni yopish'
       ],
       answer: 0,
-      explanation: 'Axborot muhitida kechikkan izoh salbiy ta’sir ko‘rsatishi mumkin, shuning uchun tezkorlik muhim.'
+      explanation:
+        'Avval vaziyatning faktik asosini aniqlash, keyin ishonchli va o‘z vaqtida axborot berish zarur.'
     },
     {
       id: 'm1t6e23',
-      text: 'Maktabning raqamli imiji qayerlarda shakllanadi?',
+      text: 'Maktabning ota-onalar bilan muloqoti qaysi imijga eng bevosita ta’sir qiladi?',
       options: [
-        'Faqat maktab binosida',
-        'Internet va raqamli platformalarda',
-        'Faqat sinf xonalarida',
-        'Faqat pedagogik kengashda'
+        'Faqat texnik imijga',
+        'Faqat moliyaviy imijga',
+        'Maktab haqidagi ishonch va tashqi tasavvurga',
+        'Faqat bino imijiga'
       ],
-      answer: 1,
-      explanation: 'Raqamli imij veb-sayt, ijtimoiy tarmoqlar va boshqa raqamli platformalarda shakllanadi.'
+      answer: 2,
+      explanation:
+        'Ota-onalar maktabning muhim manfaatdor tomoni bo‘lib, ularning tajribasi va fikri tashqi reputatsiyaga ta’sir qiladi.'
     },
     {
       id: 'm1t6e24',
-      text: 'Raqamli imij nimalarni aks ettiradi?',
+      text: 'Qaysi holat “soxta PR”ga yaqin?',
       options: [
-        'Ochiqlik, tezkorlik, ishonchlilik va professional boshqaruvni',
-        'Faqat reklama darajasini',
-        'Faqat bino holatini',
-        'Faqat direktorning shaxsiy fikrini'
+        'Tasdiqlangan natijani yoritish',
+        'Mavjud muammoni hal qilib, natijani ko‘rsatish',
+        'Real natijani bo‘rttirib yoki asossiz ko‘rsatish',
+        'Ota-onalar fikrini o‘rganish'
       ],
-      answer: 0,
-      explanation: 'Raqamli imij ochiqlik, tezkorlik, ishonchlilik va professional boshqaruvni aks ettiradi.'
+      answer: 2,
+      explanation:
+        'Real natijani bo‘rttirish yoki mavjud bo‘lmagan yutuqni ko‘rsatish haqiqiylik tamoyiliga zid.'
     },
     {
       id: 'm1t6e25',
-      text: 'Maktab imiji faqat tashqi ko‘rinishdan iboratmi?',
+      text: 'Maktabning rasmiy sahifasida noto‘g‘ri ma’lumot berilishi qaysi omilga zarar yetkazishi mumkin?',
       options: [
-        'Ha, faqat tashqi ko‘rinishdan iborat',
-        'Yo‘q, u sifat, qadriyat, xavfsizlik, adolat va ochiqlikning aksidir',
-        'Faqat logotipdan iborat',
-        'Faqat reklama bilan belgilanadi'
+        'Ishonchlilikka',
+        'Faqat bino holatiga',
+        'Faqat dars jadvaliga',
+        'Faqat ichki hujjatlarga'
       ],
-      answer: 1,
-      explanation: 'Materialda imij tashqi ko‘rinish emas, balki sifat, qadriyat, xavfsizlik, adolat va ochiqlikning jamiyatdagi aks-sadosi ekani ta’kidlangan.'
+      answer: 0,
+      explanation:
+        'Rasmiy manbadagi xato axborot auditoriyaning maktab haqidagi ishonchiga salbiy ta’sir qilishi mumkin.'
     },
     {
       id: 'm1t6e26',
-      text: 'Maktab imijini shakllantirishda rahbarning vazifalaridan biri qaysi?',
+      text: 'Maktabning tashqi imijiga qaysi kombinatsiya ko‘proq ta’sir qiladi?',
       options: [
-        'Kommunikatsiyani boshqarish',
-        'Barcha axborotni yashirish',
-        'Jamoa fikrini inkor etish',
-        'Faqat moliyaviy ish bilan shug‘ullanish'
+        'Faqat logo va banner',
+        'Natijalar, muloqot, tashqi ko‘rinish va hamkorlik',
+        'Faqat direktorning nutqi',
+        'Faqat ijtimoiy tarmoqdagi postlar'
       ],
-      answer: 0,
-      explanation: 'Rahbar strategik yo‘l belgilaydi, sifatni tizimlashtiradi, jamoa madaniyatini yaratadi va kommunikatsiyani boshqaradi.'
+      answer: 1,
+      explanation:
+        'Tashqi imij bir nechta omilning yig‘indisidir; faqat bitta kommunikatsiya vositasi uni to‘liq belgilamaydi.'
     },
     {
       id: 'm1t6e27',
-      text: 'Maktab imijining rivojlanish strategiyasiga ta’siri qanday?',
+      text: 'Maktab imijining rivojlanishga ta’siri qaysi javobda to‘g‘ri ifodalangan?',
       options: [
-        'Rivojlanish strategiyasiga xizmat qiladi',
-        'Strategiyaga umuman aloqasi yo‘q',
-        'Faqat moliyaviy rejani bekor qiladi',
-        'Faqat reklama xarajatlarini oshiradi'
+        'Ijobiy imij hamkorlik va ishonch uchun qulay sharoit yaratishi mumkin',
+        'Imij rivojlanishga hech qachon ta’sir qilmaydi',
+        'Imij faqat reklama xarajatini belgilaydi',
+        'Imij faqat bino ta’miriga ta’sir qiladi'
       ],
       answer: 0,
-      explanation: 'Ijobiy imij maktabning uzoq muddatli rivojlanish strategiyasiga xizmat qiladi.'
+      explanation:
+        'Ishonchli reputatsiya ota-onalar, hamkorlar va jamoatchilik bilan munosabatlarda qo‘shimcha imkoniyatlar yaratishi mumkin.'
     },
     {
       id: 'm1t6e28',
-      text: 'Maktabning ijtimoiy tarmoqlardagi faoliyati qaysi imijga ko‘proq ta’sir qiladi?',
+      text: 'Maktab imijini shakllantirishda jamoa madaniyati nima uchun muhim?',
       options: [
-        'Tashqi va raqamli imijga',
-        'Faqat ichki imijga',
-        'Faqat moliyaviy imijga',
-        'Hech qanday imijga emas'
+        'U faqat tadbirlar sonini belgilaydi',
+        'U faqat reklama mazmunini belgilaydi',
+        'U ichki munosabatlar va xizmat ko‘rsatish tajribasiga ta’sir qiladi',
+        'U faqat maktab logotipini belgilaydi'
       ],
-      answer: 0,
-      explanation: 'Ijtimoiy tarmoqlardagi faoliyat tashqi hamda raqamli imijni shakllantirishda muhim vosita hisoblanadi.'
+      answer: 2,
+      explanation:
+        'Jamoa madaniyati kundalik munosabatlarda namoyon bo‘ladi va xodimlar hamda o‘quvchilarning maktab haqidagi tajribasiga ta’sir qiladi.'
     },
     {
       id: 'm1t6e29',
-      text: 'Inqirozli vaziyatda maktabning kuchli imiji qanday yordam beradi?',
+      text: '“Imij — natija” fikrining asosiy mazmuni qaysi?',
       options: [
-        'Maktabning “himoya reputatsiyasi”ni kuchaytiradi',
-        'Muammoni avtomatik yo‘q qiladi',
-        'Barcha tanqidlarni taqiqlaydi',
-        'Axborot berishga ehtiyoj qoldirmaydi'
+        'Yaxshi ko‘rinishning o‘zi yetarli',
+        'Imij real faoliyat va natijalarning jamoatchilikdagi aksidir',
+        'Reklama natijadan ustun',
+        'Natija bo‘lmasa ham imij barqaror bo‘ladi'
       ],
-      answer: 0,
-      explanation: 'Kuchli reputatsiya mojaro, feyk xabar yoki bahsli vaziyatlarda maktabning himoya reputatsiyasini kuchaytiradi.'
+      answer: 1,
+      explanation:
+        'Barqaror reputatsiya maktabning amaliy faoliyati va natijalari bilan bog‘liq bo‘ladi.'
     },
     {
       id: 'm1t6e30',
-      text: '“Imij — natija” degan fikr nimani anglatadi?',
+      text: 'Qaysi yondashuv maktab imijini tizimli boshqarishga eng yaqin?',
       options: [
-        'Yaxshi imij avvalo maktabning real faoliyati va natijalariga asoslanadi',
-        'Imij faqat reklama orqali yaratiladi',
-        'Natija muhim emas',
-        'Faqat ijtimoiy tarmoq yetarli'
+        'Faqat ko‘proq post joylashtirish',
+        'Faqat maktabni bezash',
+        'Faqat yutuqlarni reklama qilish',
+        'Sifat, muhit, natija, muloqot va muntazam tahlilni birgalikda boshqarish'
       ],
-      answer: 0,
-      explanation: 'Barqaror yaxshi imij avvalo maktabning ichki ishlari to‘g‘ri yo‘lga qo‘yilishi va keyin to‘g‘ri axborot siyosati bilan mustahkamlanishi orqali yuzaga keladi.'
+      answer: 3,
+      explanation:
+        'Imij ko‘p omilli hodisa bo‘lgani uchun uni faqat reklama bilan emas, maktab faoliyatining asosiy yo‘nalishlari bilan birgalikda boshqarish kerak.'
     }
   ],
 
   medium: [
     {
       id: 'm1t6m01',
-      text: 'Quyidagilardan qaysi biri ichki imijni shakllantiruvchi omillar majmuasiga eng to‘g‘ri mos keladi?',
+      text: 'Maktabning ta’lim natijalari yaxshi, biroq ota-onalar maktab faoliyati haqida yetarli ma’lumotga ega emas. Muammoning ehtimoliy manbai qaysi?',
       options: [
-        'Pedagogik mahorat, psixologik muhit, ta’lim sifati, o‘quvchi intizomi',
-        'Faqat bino va hudud ko‘rinishi',
-        'Faqat OAVdagi chiqishlar',
-        'Faqat homiylik mablag‘lari'
+        'Kommunikatsiya kanallarining yetarli ishlamasligi',
+        'Faqat o‘quvchilar sonining ko‘pligi',
+        'Faqat maktab binosining kattaligi',
+        'Faqat dars jadvalining murakkabligi'
       ],
       answer: 0,
-      explanation: 'Ichki imij maktab jamoasining kasbiy, psixologik va pedagogik muhitiga bog‘liq.'
+      explanation:
+        'Real natijalar mavjud bo‘lsa-da, ular manfaatdor tomonlarga yetib bormasa, axborot va kommunikatsiya tizimida uzilish mavjud bo‘lishi mumkin.'
     },
     {
       id: 'm1t6m02',
-      text: 'Tashqi imijni shakllantirishda qaysi omillar to‘plami muhim?',
+      text: 'Rahbar PR rejasini tuzishdan oldin ota-onalar fikrini o‘rgandi. Bu harakatning asosiy qiymati nimada?',
       options: [
-        'Bino ko‘rinishi, OAV va ijtimoiy tarmoqlar, o‘quvchilar yutuqlari, ota-onalar bilan hamkorlik',
-        'Faqat o‘qituvchilar yig‘ilishi',
-        'Faqat ichki buyruqlar',
-        'Faqat dars jadvali'
+        'Reklama dizaynini tezroq tayyorlashda',
+        'Rejani mavjud tasavvur va ehtiyojlarga moslashtirishda',
+        'Faqat postlar sonini ko‘paytirishda',
+        'Faqat tadbirlar jadvalini tuzishda'
       ],
-      answer: 0,
-      explanation: 'Tashqi imijga maktabning tashqi ko‘rinishi, axborot faoliyati, yutuqlari va jamoatchilik bilan aloqalari ta’sir qiladi.'
+      answer: 1,
+      explanation:
+        'Manfaatdor tomonlar fikri PR rejasini taxminlarga emas, mavjud holat haqidagi ma’lumotlarga asoslash imkonini beradi.'
     },
     {
       id: 'm1t6m03',
-      text: 'Maktab PR faoliyatining “tahlil” bosqichida nima o‘rganiladi?',
+      text: 'Qaysi ketma-ketlik PR boshqaruvining mantiqiy sikliga mos keladi?',
       options: [
-        'Maktabning hozirgi imiji va jamoatchilik fikri',
-        'Faqat tadbirlar soni',
-        'Faqat budjet xarajatlari',
-        'Faqat o‘qituvchilar ish haqi'
+        'Reklama → tadbir → tahlil → monitoring',
+        'Monitoring → reklama → tahlil → reja',
+        'Tahlil → rejalashtirish → amalga oshirish → monitoring → takomillashtirish',
+        'Tadbir → reklama → takomillashtirish → tahlil'
       ],
-      answer: 0,
-      explanation: 'Tahlil bosqichida mavjud imij va jamoatchilikning maktab haqidagi fikri o‘rganiladi.'
+      answer: 2,
+      explanation:
+        'Avval mavjud vaziyat aniqlanadi, keyin reja tuziladi, amalga oshiriladi, natija kuzatiladi va keyingi yaxshilashlar belgilanadi.'
     },
     {
       id: 'm1t6m04',
-      text: 'PR faoliyatining rejalashtirish bosqichida nima ishlab chiqiladi?',
+      text: 'Maktabning ijtimoiy tarmog‘ida postlar ko‘p, ammo ularda aniq faktlar va natijalar kam. Qaysi ko‘rsatkichni birinchi navbatda yaxshilash kerak?',
       options: [
-        'PR strategiya va yillik reja',
-        'Faqat press-reliz',
-        'Faqat ichki buyruq',
-        'Faqat moliyaviy hisobot'
+        'Postlarning sonini yanada oshirish',
+        'Tasdiqlangan va mazmunli axborot ulushini oshirish',
+        'Faqat dizayn ranglarini o‘zgartirish',
+        'Faqat obunachilarni ko‘paytirish'
       ],
-      answer: 0,
-      explanation: 'Rejalashtirish bosqichida PR strategiyasi va yillik reja ishlab chiqiladi.'
+      answer: 1,
+      explanation:
+        'Raqamli faollikning o‘zi yetarli emas. Ishonchli va mazmunli axborot imijning sifatini belgilovchi muhim omildir.'
     },
     {
       id: 'm1t6m05',
-      text: 'PR faoliyatining amalga oshirish bosqichi nimani bildiradi?',
+      text: 'Maktabda tashqi imij yaxshi, ammo pedagoglar orasidagi ichki muhit zaif. Uzoq muddatda qanday xavf bor?',
       options: [
-        'Belgilangan tadbirlarni izchil bajarishni',
-        'Faqat muammoni aniqlashni',
-        'Faqat natijani baholashni',
-        'Faqat monitoringni'
+        'Tashqi imijning barqarorligi zaiflashishi mumkin',
+        'Bino avtomatik buziladi',
+        'O‘quvchilar soni albatta ortadi',
+        'PRga ehtiyoj butunlay yo‘qoladi'
       ],
       answer: 0,
-      explanation: 'Amalga oshirish bosqichida rejalashtirilgan PR tadbirlari izchil bajariladi.'
+      explanation:
+        'Ichki muhitdagi muammolar vaqt o‘tishi bilan xodimlar, o‘quvchilar va ota-onalar tajribasiga ta’sir qilib, tashqi reputatsiyada aks etishi mumkin.'
     },
     {
       id: 'm1t6m06',
-      text: 'PR jarayonining yakuniy takomillashtirish bosqichi nima uchun kerak?',
+      text: 'Rahbar salbiy fikrlarni faqat o‘chirib tashlash orqali imijni yaxshilamoqchi. Asosiy muammo nimada?',
       options: [
-        'Aniqlangan kamchiliklar ustida ishlash uchun',
-        'Barcha PR ishlarini to‘xtatish uchun',
-        'Faqat yangi reklama yaratish uchun',
-        'Faqat axborotni yashirish uchun'
+        'Bu harakat fikrlarning sababini bartaraf etmaydi',
+        'Bu harakat barcha muammolarni hal qiladi',
+        'Bu usul avtomatik ravishda ishonchni oshiradi',
+        'Bu usul ta’lim sifatini yaxshilaydi'
       ],
       answer: 0,
-      explanation: 'Takomillashtirish bosqichi aniqlangan kamchiliklarni bartaraf etish va faoliyatni yaxshilashga xizmat qiladi.'
+      explanation:
+        'Salbiy fikrning o‘zini yo‘qotish sababni yo‘qotmaydi. Barqaror natija uchun fikrlarning manbasi va real muammolar o‘rganilishi kerak.'
     },
     {
       id: 'm1t6m07',
-      text: 'Maktab imijida barqarorlik tamoyili nimani talab qiladi?',
+      text: 'Qaysi holatda “haqiqiylik” va “tezkorlik” birgalikda qo‘llanmoqda?',
       options: [
-        'Bir martalik tadbir emas, tizimli sifat va tizimli muloqotni',
-        'Faqat yiliga bir marta reklama qilishni',
-        'Faqat ijtimoiy tarmoqda post berishni',
-        'Faqat tadbirlar sonini oshirishni'
+        'Tekshirilmagan xabarni darhol tarqatishda',
+        'Faktlarni tekshirib, o‘z vaqtida aniq izoh berishda',
+        'Muammoni yashirib, keyin izoh berishda',
+        'Faqat reklama joylashtirishda'
       ],
-      answer: 0,
-      explanation: 'Barqaror imij bir martalik tadbirlar emas, doimiy sifat va tizimli muloqot orqali shakllanadi.'
+      answer: 1,
+      explanation:
+        'Tezkorlik axborotni o‘z vaqtida berishni, haqiqiylik esa uning faktlarga mos bo‘lishini talab qiladi.'
     },
     {
       id: 'm1t6m08',
-      text: 'Maktab rahbari uchun insonparvarlik tamoyili qanday amaliy harakatda namoyon bo‘ladi?',
+      text: 'Maktabning rasmiy sahifasida bir oy davomida faqat tadbir fotosuratlari joylashtirildi. Imijni tahlil qilishda qaysi savol muhimroq?',
       options: [
-        'O‘quvchi va ota-onaga hurmat, pedagogga e’tibor',
-        'Faqat nazoratni kuchaytirish',
-        'Faqat intizomiy choralarni oshirish',
-        'Faqat reklama tadbirlarini ko‘paytirish'
+        'Fotosuratlar soni yetarlimi?',
+        'Auditoriya maktabning real faoliyati haqida yetarli va ishonchli tasavvur olmoqdami?',
+        'Rasmlar bir xil rangdami?',
+        'Postlar soni boshqa maktablarnikidan ko‘pmi?'
       ],
-      answer: 0,
-      explanation: 'Insonparvarlik tamoyili hurmat, e’tibor va inson manfaatlarini hisobga olish orqali namoyon bo‘ladi.'
+      answer: 1,
+      explanation:
+        'PR samaradorligi faqat kontent miqdori bilan emas, auditoriyada qanday tushuncha shakllanayotgani bilan baholanadi.'
     },
     {
       id: 'm1t6m09',
-      text: 'Nima sababdan soxta PR uzoq muddatli imijni ta’minlay olmaydi?',
+      text: 'Maktabda kuchli o‘quvchi yutuqlari mavjud. Ularni PRda ishlatishda qaysi shart muhim?',
       options: [
-        'Chunki u real faoliyatga tayanmaydi va tez fosh bo‘lishi mumkin',
-        'Chunki PR umuman kerak emas',
-        'Chunki ota-onalar axborotga qiziqmaydi',
-        'Chunki ijtimoiy tarmoqlar ishlamaydi'
+        'Yutuqlarni imkon qadar bo‘rttirish',
+        'Faqat eng chiroyli fotosuratlarni tanlash',
+        'Natijalarni tasdiqlangan ma’lumotlar asosida yoritish',
+        'Boshqa maktablarni taqqoslab tanqid qilish'
       ],
-      answer: 0,
-      explanation: 'Haqiqiylik tamoyiliga ko‘ra, imij real faoliyatga asoslanishi kerak.'
+      answer: 2,
+      explanation:
+        'Yutuqlar PR uchun kuchli dalil bo‘lishi mumkin, ammo ularning ishonchliligi haqiqiylik tamoyiliga bog‘liq.'
     },
     {
       id: 'm1t6m10',
-      text: 'Maktabning rasmiy veb-sayti qaysi yo‘nalishda muhim PR vositasidir?',
+      text: 'Maktab imijini baholash uchun faqat obunachilar sonidan foydalanishning kamchiligi nimada?',
       options: [
-        'Zamonaviy PR',
-        'Faqat an’anaviy PR',
-        'Faqat ichki nazorat',
-        'Faqat moliyaviy boshqaruv'
+        'Obunachilar soni imijning barcha jihatlarini aks ettirmaydi',
+        'Obunachilar soni hech qanday ma’lumot bermaydi',
+        'Obunachilar soni ta’lim sifatini to‘liq ko‘rsatadi',
+        'Obunachilar soni ichki muhitni to‘liq o‘lchaydi'
       ],
       answer: 0,
-      explanation: 'Rasmiy veb-sayt zamonaviy PR vositalaridan biri sifatida ko‘rsatilgan.'
+      explanation:
+        'Auditoriya hajmi foydali ko‘rsatkich bo‘lishi mumkin, ammo ishonch, qoniqish, natija va munosabatlarni o‘zi bilan to‘liq o‘lchab bo‘lmaydi.'
     },
     {
       id: 'm1t6m11',
-      text: 'Ochiq eshiklar kuni maktab imijiga qanday xizmat qilishi mumkin?',
+      text: 'Ota-onalar maktab qarorlarining sabablarini tushunmayapti. Qaysi tamoyilni kuchaytirish maqsadga muvofiq?',
       options: [
-        'Maktab faoliyati bilan jamoatchilikni bevosita tanishtirishga',
-        'Faqat xodimlar ishini nazorat qilishga',
-        'Faqat moliyaviy hisobot tuzishga',
-        'Faqat ichki hujjatlarni rasmiylashtirishga'
+        'Faqat reklama',
+        'Shaffoflik',
+        'Faqat dizayn',
+        'Faqat tezkorlik'
       ],
-      answer: 0,
-      explanation: 'Ochiq eshiklar kuni jamoatchilikka maktab faoliyatini bevosita ko‘rsatish imkonini beruvchi PR vositasidir.'
+      answer: 1,
+      explanation:
+        'Qarorlarning mazmuni va asoslarini tushunarli qilish shaffoflikni kuchaytiradi va ishonch uchun asos yaratadi.'
     },
     {
       id: 'm1t6m12',
-      text: 'Ota-onalar bilan samarali hamkorlik maktab imijining qaysi jihatini mustahkamlaydi?',
+      text: 'Maktab rahbari salbiy xabarni tekshirmasdan rad etdi. Bu qarorning asosiy zaif tomoni qaysi?',
       options: [
-        'Ishonch va tashqi reputatsiyani',
-        'Faqat texnik jihozlarni',
-        'Faqat ichki hujjatlarni',
-        'Faqat dars jadvalini'
+        'Faktga asoslanganlik yetishmasligi',
+        'Reklama yetishmasligi',
+        'Tashqi ko‘rinishning zaifligi',
+        'Tadbirlar sonining kamligi'
       ],
       answer: 0,
-      explanation: 'Ota-onalar bilan hamkorlik ishonchni mustahkamlaydi va tashqi imijga ijobiy ta’sir qiladi.'
+      explanation:
+        'Inqirozli kommunikatsiyada avval vaziyatni aniqlash zarur. Tekshirilmagan rad javobi keyingi ishonch muammolarini kuchaytirishi mumkin.'
     },
     {
       id: 'm1t6m13',
-      text: 'O‘quvchilarning olimpiada va tanlovlardagi yutuqlari qaysi imijga bevosita ta’sir qiladi?',
+      text: 'Ichki imijni yaxshilash uchun qaysi kombinatsiya eng maqsadga muvofiq?',
       options: [
-        'Tashqi imijga',
-        'Faqat moliyaviy imijga',
-        'Faqat texnik imijga',
-        'Faqat ichki hujjatlar imijiga'
+        'Bannerlar + reklama + ko‘proq post',
+        'Kasbiy rivojlanish + jamoa madaniyati + ochiq muloqot',
+        'Logo + bino bezagi + fotosurat',
+        'Faqat tadbirlar + sovg‘alar'
       ],
-      answer: 0,
-      explanation: 'O‘quvchilar yutuqlari jamoatchilik orasida maktabning ta’limiy natijalarini namoyon qiladi.'
+      answer: 1,
+      explanation:
+        'Ichki imij kundalik ish va munosabatlardan shakllangani uchun xodimlarning rivojlanishi, jamoa madaniyati va muloqoti muhim.'
     },
     {
       id: 'm1t6m14',
-      text: 'Maktab rahbari salbiy xabar tarqalganini aniqladi. Birinchi navbatda qaysi yondashuv muhim?',
+      text: 'Tashqi imijni kuchaytirishda hamkor tashkilotlar bilan ishlashning asosiy foydasi nimada?',
       options: [
-        'Tezkor va aniq axborot berish',
-        'Muammoni butunlay inkor qilish',
-        'Axborot berishni kechiktirish',
-        'Mish-mishni boshqa mavzu bilan yopish'
+        'Faqat hujjatlar sonini ko‘paytiradi',
+        'Maktabning ijtimoiy aloqalari va ishonch kapitalini kengaytirishi mumkin',
+        'Faqat reklama xarajatini oshiradi',
+        'Faqat ichki nazoratni kuchaytiradi'
       ],
-      answer: 0,
-      explanation: 'Muammoli vaziyatlarda tezkor va aniq axborot berish muhim yondashuvlardan biridir.'
+      answer: 1,
+      explanation:
+        'Hamkorlik maktabning ijtimoiy tarmog‘ini kengaytiradi va turli manfaatdor tomonlar bilan ishonchli munosabatlar yaratishi mumkin.'
     },
     {
       id: 'm1t6m15',
-      text: 'Feyk xabarlar tarqalishining oldini olishda qaysi harakat muhim?',
+      text: 'Maktab imijini yaxshilash uchun rahbar avval tashqi reklama, keyin ichki muammolar bilan shug‘ullanishni rejalashtirdi. Qaysi jihat qayta ko‘rib chiqilishi kerak?',
       options: [
-        'Rasmiy pozitsiyani ochiq bayon etish va aniq axborot berish',
-        'Barcha savollarga javob bermaslik',
-        'Ijtimoiy tarmoqlarni yopish',
-        'Har qanday xabarni o‘chirib tashlash'
+        'Real faoliyatni yaxshilash imij boshqaruvining asosiy qismi ekanligi',
+        'Reklama har doim zararli ekanligi',
+        'Ichki muhitning imijga aloqasi yo‘qligi',
+        'Tashqi auditoriyaning ahamiyatsizligi'
       ],
       answer: 0,
-      explanation: 'Rasmiy pozitsiyani ochiq bayon qilish va aniq axborot berish mish-mishlarning oldini olishga yordam beradi.'
+      explanation:
+        'Reklama real faoliyatni almashtirmaydi. U mavjud sifat va natijalarni kommunikatsiya qilish vositasi sifatida ishlashi kerak.'
     },
     {
       id: 'm1t6m16',
-      text: 'Maktab PR faoliyatining samaradorligini aniqlashda qaysi bosqich asosiy?',
+      text: 'PR monitoringida qaysi ikki ko‘rsatkichni birga ko‘rish mantiqan kuchliroq?',
       options: [
-        'Monitoring',
-        'Faqat reklama',
-        'Faqat tadbir',
-        'Faqat rejalashtirish'
+        'Postlar soni va bannerlar soni',
+        'Tadbirlar soni va fotosuratlar soni',
+        'Axborot qamrovi va auditoriyaning munosabati',
+        'Logo variantlari va dizaynlar soni'
       ],
-      answer: 0,
-      explanation: 'Monitoring orqali amalga oshirilgan PR faoliyatining natijasi va samaradorligi baholanadi.'
+      answer: 2,
+      explanation:
+        'Faoliyat hajmi bilan birga auditoriyada yuzaga kelgan munosabatni ko‘rish PRning amaliy ta’sirini yaxshiroq tushuntiradi.'
     },
     {
       id: 'm1t6m17',
-      text: 'Maktabning raqamli imijini mustahkamlash uchun eng muhim talablardan biri qaysi?',
+      text: 'Maktabning raqamli imijida muntazamlik nima uchun kerak?',
       options: [
-        'Axborotning ishonchli va tezkor bo‘lishi',
-        'Faqat ko‘p post joylashtirish',
-        'Faqat chiroyli rasmlar qo‘yish',
-        'Faqat obunachilar sonini oshirish'
+        'Auditoriyada maktab faoliyati haqida izchil tasavvur shakllanishi uchun',
+        'Faqat postlar sonini oshirish uchun',
+        'Faqat reklama daromadini oshirish uchun',
+        'Faqat sahifani band qilish uchun'
       ],
       answer: 0,
-      explanation: 'Raqamli imijda ochiqlik, tezkorlik, ishonchlilik va professional boshqaruv muhim.'
+      explanation:
+        'Muntazam kommunikatsiya maktab faoliyati haqida uzluksiz va izchil tasavvur shakllanishiga yordam beradi.'
     },
     {
       id: 'm1t6m18',
-      text: 'Maktabning raqamli imiji ota-onalar bilan aloqada qanday imkoniyat yaratadi?',
+      text: 'Qaysi vaziyatda raqamli imijning mazmuni va real faoliyat o‘rtasida tafovut paydo bo‘ladi?',
       options: [
-        'Axborot almashuvini tezlashtiradi',
-        'Aloqalarni kamaytiradi',
-        'Faqat reklama xarajatlarini oshiradi',
-        'Faqat ichki nazoratni kuchaytiradi'
+        'Maktabda real natijalar bo‘lib, ular aniq yoritilsa',
+        'Sahifada maktab imkoniyatlari mavjud holatdan ancha yuqori ko‘rsatilsa',
+        'Ota-onalar bilan ochiq muloqot qilinsa',
+        'Natijalar tasdiqlangan holda berilsa'
       ],
-      answer: 0,
-      explanation: 'Raqamli platformalar ota-onalar va jamoatchilik bilan tezkor axborot almashish imkonini beradi.'
+      answer: 1,
+      explanation:
+        'Raqamli kommunikatsiya real holatdan uzoqlashsa, auditoriyada noto‘g‘ri kutilmalar shakllanishi mumkin.'
     },
     {
       id: 'm1t6m19',
-      text: 'Maktab imijining raqobatbardoshlikka ta’siri qanday?',
+      text: 'Maktab imijini boshqarishda “monitoring → takomillashtirish” bog‘liqligi nimani bildiradi?',
       options: [
-        'Ijobiy imij maktabning raqobatbardoshligini kuchaytiradi',
-        'Imij raqobatga ta’sir qilmaydi',
-        'Faqat reklama xarajatini oshiradi',
-        'Faqat bino qiymatini oshiradi'
+        'Monitoring natijalari keyingi boshqaruv choralariga asos bo‘ladi',
+        'Monitoring faqat hisobot uchun kerak',
+        'Takomillashtirish monitoringdan mustaqil amalga oshiriladi',
+        'Monitoring faqat reklama materiallarini sanaydi'
       ],
       answer: 0,
-      explanation: 'Maktab imijining ahamiyatli natijalaridan biri raqobatbardoshlikni kuchaytirishdir.'
+      explanation:
+        'Monitoring ma’lumotlari qaysi jihatni o‘zgartirish yoki kuchaytirish kerakligini aniqlashga yordam beradi.'
     },
     {
       id: 'm1t6m20',
-      text: 'Maktabning hamkor tashkilotlar bilan aloqalari imijga qanday ta’sir qiladi?',
+      text: 'Maktabning salbiy imijini o‘zgartirish uchun qaysi strategiya mantiqan to‘g‘riroq?',
       options: [
-        'Ijtimoiy hamkorlik va qo‘llab-quvvatlash imkoniyatlarini kengaytiradi',
-        'Faqat ichki muhitga ta’sir qiladi',
-        'Imijga umuman ta’sir qilmaydi',
-        'Faqat hujjatlar sonini oshiradi'
+        'Tanqidchilarni cheklash va reklama hajmini oshirish',
+        'Muammolar sababini aniqlash, real yaxshilanish va izchil kommunikatsiya',
+        'Faqat yangi logo yaratish',
+        'Faqat ko‘proq tadbir o‘tkazish'
       ],
-      answer: 0,
-      explanation: 'Hamkorlik maktabning ijtimoiy sheriklik va homiylik imkoniyatlarini kengaytirishi mumkin.'
+      answer: 1,
+      explanation:
+        'Salbiy reputatsiyani faqat tashqi ko‘rinish bilan o‘zgartirish qiyin; real muammo va uning kommunikatsiyasi birgalikda boshqarilishi kerak.'
     },
     {
       id: 'm1t6m21',
-      text: 'Maktab rahbari imijni boshqarishda avvalo nimaga e’tibor qaratishi kerak?',
+      text: 'Maktab jamoasida xodimlar rahbariyat qarorlaridan norozi, lekin tashqi reklama juda faol. Qaysi xulosa ehtiyotkorlik bilan chiqariladi?',
       options: [
-        'Real ta’lim sifati, jamoa madaniyati va kommunikatsiyaga',
-        'Faqat reklama dizayniga',
-        'Faqat logotipga',
-        'Faqat tashqi ko‘rinishga'
+        'Tashqi kommunikatsiya ichki muammolarni avtomatik hal qilmaydi',
+        'Reklama ichki muhitni har doim yaxshilaydi',
+        'Ichki imij tashqi imijga ta’sir qilmaydi',
+        'Xodimlar fikri imij uchun ahamiyatsiz'
       ],
       answer: 0,
-      explanation: 'Barqaror imij ichki faoliyat, sifat, qadriyat va to‘g‘ri kommunikatsiyaga asoslanadi.'
+      explanation:
+        'Tashqi PR ichki boshqaruvdagi muammolarning o‘rnini bosa olmaydi. Ichki tajriba ham umumiy reputatsiyaga ta’sir qiladi.'
     },
     {
       id: 'm1t6m22',
-      text: 'Maktab imijini shakllantirishda jamoa madaniyatining ahamiyati nimada?',
+      text: 'Maktabning OAV bilan ishlashida qaysi yondashuv ishonchlilikni kuchaytiradi?',
       options: [
-        'Ichki muhit va tashqi munosabatlarning sifatiga ta’sir qiladi',
-        'Faqat tadbirlarni ko‘paytiradi',
-        'Faqat hujjatlarni kamaytiradi',
-        'Faqat moddiy bazani yaxshilaydi'
+        'Faqat ijobiy xabarlarni berish',
+        'Tasdiqlangan ma’lumotlarni aniq va tushunarli yetkazish',
+        'Har qanday xabarni tezroq tarqatish',
+        'Muammoli mavzulardan butunlay qochish'
       ],
-      answer: 0,
-      explanation: 'Jamoa madaniyati ichki imijning asosiy tarkibiy qismlaridan bo‘lib, umumiy reputatsiyaga ta’sir qiladi.'
+      answer: 1,
+      explanation:
+        'OAV bilan ishlashda aniqlik va faktlarga tayangan axborot maktabning ishonchliligini saqlashga yordam beradi.'
     },
     {
       id: 'm1t6m23',
-      text: 'Maktab imijining shakllanishida muloqot madaniyati nima uchun muhim?',
+      text: 'Maktab imijini baholashda ota-onalar so‘rovi qanday ma’lumot beradi?',
       options: [
-        'Chunki u maktab haqida manfaatdor tomonlarning tasavvuriga ta’sir qiladi',
-        'Chunki u faqat hujjatlarni tartibga soladi',
-        'Chunki u faqat reklama beradi',
-        'Chunki u faqat o‘quv jadvalini tuzadi'
+        'Faqat maktab binosining texnik holatini',
+        'Manfaatdor tomonning maktab faoliyatini qanday qabul qilayotganini',
+        'Faqat o‘quvchilar baholarini',
+        'Faqat direktor faoliyatini'
       ],
-      answer: 0,
-      explanation: 'Muloqot madaniyati maktab jamoasi va tashqi manfaatdor tomonlar bilan munosabatlarga bevosita ta’sir qiladi.'
+      answer: 1,
+      explanation:
+        'Ota-onalar fikri maktab xizmatlari va kommunikatsiyasi qanday qabul qilinayotganini tushunishga yordam beradi.'
     },
     {
       id: 'm1t6m24',
-      text: 'Maktab imijini baholashda jamoatchilik fikrini o‘rganish qaysi bosqichga tegishli?',
+      text: 'Qaysi holat shaffoflikni ko‘proq ifodalaydi?',
       options: [
-        'Tahlil',
-        'Amalga oshirish',
-        'Takomillashtirish',
-        'Faqat monitoring'
+        'Qarorlar mezonlarini manfaatdor tomonlarga tushunarli tarzda izohlash',
+        'Savollarni javobsiz qoldirish',
+        'Faqat natijani e’lon qilish',
+        'Barcha ma’lumotni faqat rahbariyatda saqlash'
       ],
       answer: 0,
-      explanation: 'Jamoatchilik fikrini o‘rganish PR faoliyatining tahlil bosqichida amalga oshiriladi.'
+      explanation:
+        'Shaffoflik qaror va jarayonlarning tushunarli bo‘lishini, manfaatdor tomonlar zarur axborotni olish imkoniga ega bo‘lishini anglatadi.'
     },
     {
       id: 'm1t6m25',
-      text: 'Maktab axborot siyosatining asosiy vazifalaridan biri nima?',
+      text: 'Maktab imijida “hamkorlik” va “ochiqlik” birga ishlatilganda qanday natija kutiladi?',
       options: [
-        'Ochiq, tezkor va ishonchli axborot almashinuvini ta’minlash',
-        'Axborotni imkon qadar yashirish',
-        'Faqat reklama qilish',
-        'Faqat rahbariyatga ma’lumot berish'
+        'Tashqi aloqalar va ishonch uchun qulayroq muhit',
+        'Faqat tadbirlar sonining ortishi',
+        'Faqat reklama xarajatlarining ko‘payishi',
+        'Faqat ichki nazoratning kuchayishi'
       ],
       answer: 0,
-      explanation: 'Raqamli imij va axborot siyosati ochiqlik, shaffoflik, tezkorlik va ishonchlilikni kuchaytiradi.'
+      explanation:
+        'Ochiq muloqot va faol hamkorlik tashqi manfaatdor tomonlar bilan ishonchli munosabatlarni rivojlantirishga xizmat qilishi mumkin.'
     },
     {
       id: 'm1t6m26',
-      text: 'Maktabning salbiy imijini yaxshilashda eng to‘g‘ri yondashuv qaysi?',
+      text: 'Maktabning yaxshi natijalari bor, lekin kommunikatsiyada faqat umumiy shiorlar ishlatilmoqda. Qaysi o‘zgarish foydaliroq?',
       options: [
-        'Muammoning sababini aniqlash, real faoliyatni yaxshilash va to‘g‘ri kommunikatsiya qilish',
-        'Faqat reklama hajmini oshirish',
-        'Salbiy fikr bildiruvchilarni bloklash',
-        'Muammoni inkor qilish'
+        'Shiorlarni ko‘paytirish',
+        'Natijalarni aniq dalillar va tushunarli ma’lumotlar bilan yoritish',
+        'Postlarni butunlay to‘xtatish',
+        'Faqat dizaynni almashtirish'
       ],
-      answer: 0,
-      explanation: 'Barqaror imij real muammolarni hal qilish va ochiq, madaniyatli kommunikatsiya orqali shakllanadi.'
+      answer: 1,
+      explanation:
+        'Aniq faktlar auditoriyaga maktabning real faoliyatini baholash uchun ko‘proq asos beradi.'
     },
     {
       id: 'm1t6m27',
-      text: 'Maktab PR faoliyatida OAV bilan hamkorlik qanday maqsadga xizmat qiladi?',
+      text: 'Rahbar “imijni yaxshilash”ni faqat bino ta’miri bilan bog‘ladi. Qaysi omil uning yondashuvida yetishmayapti?',
       options: [
-        'Maktab faoliyati haqida to‘g‘ri va ishonchli axborot yetkazishga',
-        'Faqat reklama xarajatini oshirishga',
-        'Faqat ichki hujjatlarni yuritishga',
-        'Faqat tadbirlar sonini ko‘paytirishga'
+        'Imijning ko‘p omilli ekanligi',
+        'Faqat reklama',
+        'Faqat logo',
+        'Faqat tadbirlar'
       ],
       answer: 0,
-      explanation: 'OAV bilan to‘g‘ri hamkorlik maktab haqidagi ishonchli axborotni jamoatchilikka yetkazishda muhim.'
+      explanation:
+        'Bino ko‘rinishi muhim bo‘lishi mumkin, ammo imij ta’lim sifati, muhit, munosabat, natija va kommunikatsiyani ham qamrab oladi.'
     },
     {
       id: 'm1t6m28',
-      text: 'Maktab imijini shakllantirishda ota-onalar fikrini o‘rganishning foydasi nimada?',
+      text: 'Maktabning tashqi imijini baholashda qaysi manbalarni birgalikda ko‘rish foydaliroq?',
       options: [
-        'Maktab faoliyatining jamoatchilik tomonidan qanday qabul qilinayotganini aniqlashga yordam beradi',
-        'Faqat tadbirlarni ko‘paytiradi',
-        'Faqat baholarni o‘zgartiradi',
-        'Faqat reklama yaratadi'
+        'Faqat ijtimoiy tarmoq statistikasi',
+        'Ota-onalar fikri, hamkorlar fikri va kommunikatsiya natijalari',
+        'Faqat tadbirlar ro‘yxati',
+        'Faqat direktor hisoboti'
       ],
-      answer: 0,
-      explanation: 'Ota-onalar fikri tashqi imij va jamoatchilik munosabatini tahlil qilish uchun muhim manbadir.'
+      answer: 1,
+      explanation:
+        'Bir nechta manfaatdor tomonning fikri va kommunikatsiya natijalari imij haqida bir tomonlama statistikaga qaraganda kengroq tasavvur beradi.'
     },
     {
       id: 'm1t6m29',
-      text: '“Tezkorlik” va “haqiqiylik” tamoyillari birgalikda nimani ta’minlashga yordam beradi?',
+      text: 'Qaysi javob “raqamli imij”ni eng aniq ifodalaydi?',
       options: [
-        'O‘z vaqtida berilgan ishonchli axborotni',
-        'Faqat reklama samaradorligini',
-        'Faqat tadbirlar sonini',
-        'Faqat ichki nazoratni'
+        'Maktabning faqat kompyuterlar bilan ta’minlanganlik darajasi',
+        'Maktab haqidagi internetdagi axborot va auditoriyada shakllangan raqamli tasavvur',
+        'Faqat Telegram obunachilari soni',
+        'Faqat veb-sayt dizayni'
       ],
-      answer: 0,
-      explanation: 'Tezkor va real faktlarga asoslangan axborot ishonchni mustahkamlashga xizmat qiladi.'
+      answer: 1,
+      explanation:
+        'Raqamli imij texnik jihoz emas; internetdagi axborot, kommunikatsiya sifati va auditoriya tasavvurining yig‘indisi sifatida qaraladi.'
     },
     {
       id: 'm1t6m30',
-      text: 'Maktab imijining uzoq muddatli barqarorligi nimaga ko‘proq bog‘liq?',
+      text: 'Maktab PR faoliyatining natijasi yaxshi ko‘rinsa-da, ota-onalar ishonchi oshmagan. Eng to‘g‘ri tahliliy savol qaysi?',
       options: [
-        'Real sifat, qadriyatlar, xavfsizlik, adolat, ochiqlik va tizimli kommunikatsiyaga',
-        'Faqat reklama soniga',
-        'Faqat logotipga',
-        'Faqat ijtimoiy tarmoqdagi obunachilar soniga'
+        'Yana nechta post joylashtirish kerak?',
+        'Nega kommunikatsiya faoliyati auditoriya tajribasi va ehtiyojlari bilan moslashmagan?',
+        'Qaysi rangdagi banner chiroyliroq?',
+        'Obunachilar sonini qanday ikki baravar oshirish mumkin?'
       ],
-      answer: 0,
-      explanation: 'Barqaror imij maktabning real faoliyati va tizimli kommunikatsiyasi uyg‘unligida shakllanadi.'
+      answer: 1,
+      explanation:
+        'Kommunikatsiya faolligi va ishonch bir xil tushuncha emas. Auditoriyaning real tajribasi va ehtiyojlarini tahlil qilish muhim.'
     }
   ],
 
   hard: [
     {
       id: 'm1t6h01',
-      text: 'Maktab imijini boshqarishda “imij — natija” tamoyilining strategik mazmuni nimada?',
+      text: 'Maktab rahbari reklama kampaniyasini kuchaytirdi, ammo ota-onalar shikoyatlari kamaymadi. Qaysi tahlil eng asosli?',
       options: [
-        'Avvalo ichki faoliyat va ta’lim sifati yaxshilanib, keyin kommunikatsiya orqali reputatsiya mustahkamlanadi',
-        'Imijni faqat reklama orqali yaratish mumkin',
-        'Tashqi ko‘rinish ichki sifatdan muhimroq',
-        'Natijalar bo‘lmasa ham PR yetarli'
+        'Reklama yetarlicha chiroyli bo‘lmagan',
+        'Shikoyatlarning real sababi PRdan tashqarida qolayotgan bo‘lishi mumkin',
+        'Postlar sonini ikki baravar oshirish kerak',
+        'Logo yangilansa muammo hal bo‘ladi'
       ],
-      answer: 0,
-      explanation: 'Barqaror imijning asosi real natija va sifatdir; PR esa ushbu natijalarni to‘g‘ri va madaniyatli tarzda yetkazadi.'
+      answer: 1,
+      explanation:
+        'Agar auditoriyaning muammosi real xizmat yoki boshqaruv tajribasi bilan bog‘liq bo‘lsa, kommunikatsiyani kuchaytirishning o‘zi sababni bartaraf etmaydi.'
     },
     {
       id: 'm1t6h02',
-      text: 'Ichki imij va tashqi imij o‘rtasidagi eng to‘g‘ri bog‘liqlik qaysi?',
+      text: 'Maktab sahifasida juda ijobiy kontent beriladi, lekin ota-onalar kundalik tajribani boshqacha baholaydi. Eng katta xavf nima?',
       options: [
-        'Ichki imij mustahkamligi tashqi imijning barqarorligiga asos yaratadi',
-        'Ular bir-biridan butunlay mustaqil',
-        'Faqat tashqi imij muhim',
-        'Ichki imij tashqi imijga salbiy ta’sir qiladi'
+        'Kontent hajmining kamayishi',
+        'Imij va real tajriba o‘rtasida ishonch tafovuti paydo bo‘lishi',
+        'Obunachilar sonining avtomatik ortishi',
+        'Tadbirlar sonining ko‘payishi'
       ],
-      answer: 0,
-      explanation: 'Ichki muhitdagi sifat, munosabat va boshqaruv tashqi manfaatdor tomonlarning maktab haqidagi tasavvuriga ta’sir qiladi.'
+      answer: 1,
+      explanation:
+        'Kommunikatsiya va real tajriba o‘rtasidagi katta farq auditoriyada ishonchsizlik paydo qilishi mumkin.'
     },
     {
       id: 'm1t6h03',
-      text: 'Maktab rahbari ijtimoiy tarmoqlarda juda faol, ammo ta’lim sifati bilan bog‘liq muammolar mavjud. Qaysi xulosa eng asosli?',
+      text: 'Rahbar imijni boshqarish uchun faqat tashqi auditoriya fikrini o‘rgandi, xodimlar fikrini esa hisobga olmadi. Qaysi jihat zaif qoladi?',
       options: [
-        'Faqat faol PR barqaror ijobiy imijni kafolatlamaydi',
-        'Ko‘p post muammolarni avtomatik hal qiladi',
-        'Ijtimoiy tarmoq ta’lim sifatidan muhimroq',
-        'Muammolarni yashirish imijni mustahkamlaydi'
+        'Ichki imij va jamoa tajribasi',
+        'Faqat tashqi reklama',
+        'Faqat logo dizayni',
+        'Faqat tadbirlar soni'
       ],
       answer: 0,
-      explanation: 'Materialga ko‘ra, imij real sifat va natijaga tayanishi kerak.'
+      explanation:
+        'Xodimlarning tajribasi ichki imijning muhim qismidir va u tashqi kommunikatsiyaga ham ta’sir qilishi mumkin.'
     },
     {
       id: 'm1t6h04',
-      text: 'Maktab PR strategiyasini ishlab chiqishda eng maqbul ketma-ketlik qaysi?',
+      text: 'PR strategiyasida monitoring natijalari yaxshi, ammo keyingi rejalarda ular hisobga olinmayapti. Qaysi boshqaruv elementi yetishmayapti?',
       options: [
-        'Tahlil → rejalashtirish → amalga oshirish → monitoring → takomillashtirish',
-        'Rejalashtirish → monitoring → tahlil → amalga oshirish',
-        'Amalga oshirish → reklama → tahlil → monitoring',
-        'Monitoring → tadbir → reklama → reja'
+        'Takomillashtirish va qayta rejalashtirish',
+        'Faqat reklama',
+        'Faqat tashqi bezak',
+        'Faqat tadbirlar'
       ],
       answer: 0,
-      explanation: 'Materialda PR faoliyatining besh bosqichli tizimi aynan shu ketma-ketlikda berilgan.'
+      explanation:
+        'Monitoring ma’lumotlari qarorlar va keyingi rejalarga ta’sir qilmasa, boshqaruv siklining qayta aloqa qismi ishlamaydi.'
     },
     {
       id: 'm1t6h05',
-      text: 'Maktabda feyk xabar tarqaldi. Rahbarning qaysi yondashuvi PR nuqtayi nazaridan eng tizimli?',
+      text: 'Maktabda jiddiy muammo yuzaga kelgan. Rahbar avval rasmiy axborot bermay, ko‘p sonli ijobiy postlar chiqarishni buyurdi. Bu qaysi xatoni ko‘rsatadi?',
       options: [
-        'Faktlarni aniqlash, rasmiy pozitsiyani shakllantirish va tezkor aniq axborot berish',
-        'Xabarni izohsiz qoldirish',
-        'Mish-mishni boshqa mish-mish bilan rad etish',
-        'Barcha ijtimoiy tarmoqlarni yopish'
+        'Muammoni kommunikatsion shovqin bilan almashtirishga urinish',
+        'Monitoringni kuchaytirish',
+        'Shaffoflikni oshirish',
+        'Haqiqiylikni ta’minlash'
       ],
       answer: 0,
-      explanation: 'Inqirozli vaziyatlarda faktga asoslangan, tezkor va rasmiy kommunikatsiya muhim.'
+      explanation:
+        'Ko‘p ijobiy post muhim savolga javob bermasa, auditoriya asosiy muammoni yanada keskin qabul qilishi mumkin.'
     },
     {
       id: 'm1t6h06',
-      text: 'Shaffoflik tamoyili maktab imijiga qaysi mexanizm orqali ta’sir qiladi?',
+      text: 'Maktab imijini o‘lchashda qaysi yondashuv bir tomonlama baholash xavfini kamaytiradi?',
       options: [
-        'Qarorlar, qoidalar va baholash mezonlarining tushunarliligi orqali ishonchni oshiradi',
-        'Barcha ma’lumotlarni cheklash orqali',
-        'Faqat reklama orqali',
-        'Faqat tadbirlar orqali'
+        'Faqat obunachilar sonini olish',
+        'Bir nechta manfaatdor tomon fikri va faoliyat natijalarini birga tahlil qilish',
+        'Faqat direktor fikrini olish',
+        'Faqat tadbirlar sonini sanash'
       ],
-      answer: 0,
-      explanation: 'Shaffof boshqaruv manfaatdor tomonlarda ishonchni kuchaytiradi.'
+      answer: 1,
+      explanation:
+        'Turli manbalardan ma’lumot olish imijning faqat bitta ko‘rsatkichga bog‘lanib qolishining oldini oladi.'
     },
     {
       id: 'm1t6h07',
-      text: 'Maktab raqamli imijining ishonchliligini baholashda qaysi mezonlar majmuasi muhimroq?',
+      text: 'Maktabda ta’lim sifati yaxshilandi, ammo raqamli kanallarda eski salbiy tasavvur saqlanib qolgan. Qaysi yondashuv mantiqan to‘g‘ri?',
       options: [
-        'Axborotning aniqligi, tezkorligi, muntazamligi va professional taqdimoti',
-        'Faqat postlar soni',
-        'Faqat obunachilar soni',
-        'Faqat dizayn sifati'
+        'Eski salbiy fikrlarni yashirish',
+        'Yangi real natijalarni izchil va dalillarga tayangan holda kommunikatsiya qilish',
+        'Faqat yangi logo yaratish',
+        'Raqamli kanallardan foydalanishni to‘xtatish'
       ],
-      answer: 0,
-      explanation: 'Raqamli imij faqat faollik emas, balki ishonchli, tezkor va professional axborotga tayanadi.'
+      answer: 1,
+      explanation:
+        'Reputatsiya darhol o‘zgarmasligi mumkin. Real yaxshilanishlarni muntazam va ishonchli tarzda yetkazish vaqt o‘tishi bilan yangi tasavvur shakllanishiga yordam beradi.'
     },
     {
       id: 'm1t6h08',
-      text: 'Maktabda yaxshi natijalar bor, lekin ular jamoatchilikka yetkazilmaydi. Qaysi muammo yuzaga kelishi mumkin?',
+      text: 'Maktabning kuchli ichki madaniyati bor, ammo u tashqi kommunikatsiyada umuman aks etmaydi. Qanday imkoniyat yo‘qolmoqda?',
       options: [
-        'Real yutuqlar bilan jamoatchilik tasavvuri o‘rtasida tafovut paydo bo‘lishi',
-        'Ta’lim sifati avtomatik pasayishi',
-        'O‘quvchilar soni avtomatik kamayishi',
-        'Ichki imij darhol yo‘qolishi'
+        'Real kuchli jihatlarni manfaatdor tomonlarga ko‘rsatish imkoniyati',
+        'Ichki muhitni avtomatik ravishda yo‘qotish',
+        'Ta’lim sifatini avtomatik pasaytirish',
+        'Jamoa sonini kamaytirish'
       ],
       answer: 0,
-      explanation: 'Axborot yetarli bo‘lmasa, jamoatchilik maktabning real natijalaridan bexabar qolishi mumkin.'
+      explanation:
+        'Ichki kuchli tomonlar kommunikatsiya orqali manfaatdor tomonlarga yetkazilmasa, tashqi auditoriya ularni to‘liq bilmasligi mumkin.'
     },
     {
       id: 'm1t6h09',
-      text: 'Maktab imijini kuchaytirishda hamkorlik tamoyilining strategik ahamiyati nimada?',
+      text: '“Imij — natija” tamoyili bilan “PR — kommunikatsiya” tamoyilini birlashtirganda qanday model kelib chiqadi?',
       options: [
-        'Maktabning ijtimoiy kapitali va hamkorlik imkoniyatlarini kengaytiradi',
-        'Faqat tadbirlar sonini oshiradi',
-        'Faqat moliyaviy xarajatlarni ko‘paytiradi',
-        'Faqat ichki intizomni nazorat qiladi'
+        'Avval real sifat va natija, keyin uni ishonchli kommunikatsiya qilish',
+        'Avval reklama, keyin natija yaratish',
+        'Natijani kommunikatsiya bilan almashtirish',
+        'Faqat tashqi ko‘rinishga tayanish'
       ],
       answer: 0,
-      explanation: 'Mahalla, OTM, korxona, OAV va NNT bilan hamkorlik maktabning ijtimoiy sheriklik imkoniyatlarini kengaytiradi.'
+      explanation:
+        'Barqaror model real faoliyatni yaxshilash va uning natijalarini ishonchli, izchil kommunikatsiya qilishni birlashtiradi.'
     },
     {
       id: 'm1t6h10',
-      text: 'Maktab imijini boshqarishda insonparvarlik tamoyili buzilsa, qanday xavf yuzaga kelishi mumkin?',
+      text: 'Rahbar “salbiy fikrlarning barchasi asossiz” deb hisoblaydi. Menejer sifatida birinchi qadam qaysi bo‘lishi kerak?',
       options: [
-        'Ishonch va ijobiy munosabatlar zaiflashishi mumkin',
-        'Reklama samaradorligi avtomatik oshadi',
-        'Raqamli imij kuchayadi',
-        'Maktabning yutuqlari ko‘payadi'
+        'Fikrlarni darhol o‘chirish',
+        'Fikrlarning manbasi va faktik asosini tahlil qilish',
+        'Reklama hajmini oshirish',
+        'Tanqidchilarni bloklash'
       ],
-      answer: 0,
-      explanation: 'Hurmat va e’tiborning yetishmasligi maktab jamoasi va ota-onalar ishonchiga salbiy ta’sir qilishi mumkin.'
+      answer: 1,
+      explanation:
+        'Har qanday salbiy fikr avtomatik ravishda to‘g‘ri yoki noto‘g‘ri deb qabul qilinmasligi kerak; avval dalil va sabablar o‘rganiladi.'
     },
     {
       id: 'm1t6h11',
-      text: 'PR strategiyasining monitoring bosqichida qaysi savol eng muhim?',
+      text: 'Maktab imijining barqarorligi uchun qaysi uchlik eng muhim boshqaruv mantiqini beradi?',
       options: [
-        'Amalga oshirilgan kommunikatsiya va tadbirlar qanday natija berdi?',
-        'Yana qancha banner chiqarish kerak?',
-        'Qaysi xodimni boshqa ishga o‘tkazish kerak?',
-        'Faqat nechta tadbir o‘tkazildi?'
+        'Logo + banner + reklama',
+        'Natija + ishonchli kommunikatsiya + qayta aloqa',
+        'Tadbir + fotosurat + video',
+        'Obunachi + post + ko‘rishlar'
       ],
-      answer: 0,
-      explanation: 'Monitoringning asosiy maqsadi PR faoliyatining natijasi va samaradorligini aniqlashdir.'
+      answer: 1,
+      explanation:
+        'Real natija imijning mazmunini beradi, kommunikatsiya uni yetkazadi, qayta aloqa esa auditoriya reaksiyasini tushunishga yordam beradi.'
     },
     {
       id: 'm1t6h12',
-      text: 'Maktab imijini shakllantirishda “barqarorlik” va “tezkorlik” o‘rtasidagi munosabat qanday?',
+      text: 'Maktab rahbari tashqi imijni yaxshilash uchun juda ko‘p tadbir rejalashtirdi. Boshqaruv nuqtayi nazaridan qaysi savol muhimroq?',
       options: [
-        'Barqaror tizim doimiy kommunikatsiyani, tezkorlik esa muhim axborotga o‘z vaqtida javob berishni ta’minlaydi',
-        'Ular bir-biriga zid va bir vaqtda qo‘llanmaydi',
-        'Faqat tezkorlik yetarli',
-        'Faqat barqarorlik yetarli'
+        'Tadbirlar soni qancha bo‘ladi?',
+        'Har bir tadbir qaysi aniq imij muammosi yoki maqsadiga xizmat qiladi?',
+        'Qaysi tadbirda ko‘proq fotosurat olinadi?',
+        'Qaysi tadbir eng ko‘p post beradi?'
       ],
-      answer: 0,
-      explanation: 'Barqarorlik tizimlilikni, tezkorlik esa axborot muhitidagi o‘z vaqtida javobni ta’minlaydi.'
+      answer: 1,
+      explanation:
+        'Faoliyat hajmi emas, uning strategik maqsad bilan bog‘liqligi muhim. Har bir tadbir aniq kommunikatsion yoki boshqaruv vazifasiga ega bo‘lishi kerak.'
     },
     {
       id: 'm1t6h13',
-      text: 'Maktab rahbari jamoatchilik fikrini o‘rganmasdan PR reja tuzdi. Qaysi bosqich e’tibordan chetda qolgan?',
+      text: 'Maktabdagi real muammo hal qilindi, lekin bu o‘zgarish manfaatdor tomonlarga tushuntirilmadi. Qaysi natija ehtimoliy?',
       options: [
-        'Tahlil',
-        'Amalga oshirish',
-        'Monitoring',
-        'Takomillashtirish'
+        'Real yaxshilanish mavjud bo‘lsa-da, uning tashqi imijdagi aks-sadosi kechikishi',
+        'Imij darhol maksimal darajaga chiqishi',
+        'Muammo avtomatik qaytishi',
+        'Kommunikatsiyaga ehtiyoj qolmasligi'
       ],
       answer: 0,
-      explanation: 'PR strategiyasidan oldin maktabning hozirgi imiji va jamoatchilik fikri tahlil qilinishi kerak.'
+      explanation:
+        'Reputatsiya faqat ichki natija bilan emas, auditoriyaning bu natijadan xabardorligi va uni qanday qabul qilishi bilan ham bog‘liq.'
     },
     {
       id: 'm1t6h14',
-      text: 'Maktabning tashqi imijini yaxshilash uchun faqat binoni ta’mirlash yetarlimi?',
+      text: 'Maktab rahbari ijtimoiy tarmoqda faqat o‘ziga qulay savollarga javob beradi. Bu holat qaysi tamoyilga ko‘proq xavf tug‘diradi?',
       options: [
-        'Yo‘q, ta’lim sifati, yutuqlar, ota-onalar bilan hamkorlik va kommunikatsiya ham muhim',
-        'Ha, bino imijning yagona omili',
-        'Ha, boshqa omillar kerak emas',
-        'Faqat reklama bilan almashtirish kerak'
+        'Shaffoflik',
+        'Faqat barqarorlik',
+        'Faqat tashqi ko‘rinish',
+        'Faqat hamkorlik'
       ],
       answer: 0,
-      explanation: 'Tashqi imij ko‘plab omillarning yig‘indisi: bino, ta’lim natijalari, hamkorlik va axborot faoliyati.'
+      explanation:
+        'Savollarni tizimli ravishda chetlab o‘tish auditoriyada ochiqlik va javobgarlik bo‘yicha shubha uyg‘otishi mumkin.'
     },
     {
       id: 'm1t6h15',
-      text: 'Maktabning ichki imijini kuchaytirishning eng tizimli yo‘li qaysi?',
+      text: 'Qaysi holatda raqamli faollik yuqori bo‘lsa ham imij boshqaruvi zaif bo‘lishi mumkin?',
       options: [
-        'Kasbiy rivojlanish, sog‘lom psixologik muhit, sifatli ta’lim va hurmatga asoslangan muloqotni rivojlantirish',
-        'Faqat tashqi reklama',
-        'Faqat bino dizaynini o‘zgartirish',
-        'Faqat ijtimoiy tarmoqda post berish'
+        'Postlar muntazam, ammo ma’lumotlar ishonchsiz va real faoliyatga mos emas',
+        'Postlar kam, ammo tasdiqlangan',
+        'Natijalar aniq berilgan',
+        'Savollarga muntazam javob berilgan'
       ],
       answer: 0,
-      explanation: 'Ichki imij jamoa va ta’lim jarayonining real sifatiga tayanadi.'
+      explanation:
+        'Faollik hajmi sifat va ishonchlilik o‘rnini bosa olmaydi. Raqamli kommunikatsiya real faoliyatga mos bo‘lishi kerak.'
     },
     {
       id: 'm1t6h16',
-      text: 'Maktab rahbari uchun raqamli imijni boshqarishning eng muhim jihatlaridan biri qaysi?',
+      text: 'Maktab imijining kuchli va zaif tomonlarini aniqlash uchun qaysi usul tahliliy jihatdan kuchliroq?',
       options: [
-        'Axborot siyosatini aniq va tizimli tashkil etish',
-        'Faqat ko‘proq reklama joylashtirish',
-        'Faqat video sonini oshirish',
-        'Faqat obunachilarni ko‘paytirish'
+        'Faqat rahbarning shaxsiy fikri',
+        'Bir nechta manfaatdor tomon fikri, natijalar va kommunikatsiya ko‘rsatkichlarini taqqoslash',
+        'Faqat postlar sonini sanash',
+        'Faqat tadbirlar sonini aniqlash'
       ],
-      answer: 0,
-      explanation: 'Raqamli imij axborot siyosatining ochiqligi, tezkorligi, ishonchliligi va xavfsizligiga bog‘liq.'
+      answer: 1,
+      explanation:
+        'Turli manbalarni solishtirish imij haqida muvozanatliroq tasavvur beradi va bitta subyektiv fikrga bog‘lanishni kamaytiradi.'
     },
     {
       id: 'm1t6h17',
-      text: 'Maktabdagi salbiy fikrlar ko‘paydi, ammo rahbariyat muammoni tan olmayapti. Qaysi tamoyil eng avvalo buzilgan?',
+      text: 'Maktabning ichki muhitida ishonch past, tashqi reklama esa kuchli. Qaysi strategik xavf mavjud?',
       options: [
-        'Haqiqiylik va shaffoflik',
-        'Faqat hamkorlik',
-        'Faqat barqarorlik',
-        'Faqat dizayn'
+        'Tashqi va ichki tasavvur o‘rtasidagi tafovut kengayishi',
+        'Reklamaning avtomatik kuchayishi',
+        'Obunachilar sonining kamayishi shartligi',
+        'Bino holatining yomonlashishi'
       ],
       answer: 0,
-      explanation: 'Muammoni inkor qilish real vaziyatni tan olish va ochiq kommunikatsiya tamoyillariga zid.'
+      explanation:
+        'Ichki tajriba va tashqi va’dalar o‘rtasidagi farq uzoq muddatda reputatsiya barqarorligiga zarar yetkazishi mumkin.'
     },
     {
       id: 'm1t6h18',
-      text: 'Maktab yutuqlarini ijtimoiy tarmoqlarda yoritishning eng to‘g‘ri usuli qaysi?',
+      text: 'Maktabda salbiy fikrlar ko‘paygan. Rahbar muammoni faqat PR xodimining vazifasi deb hisoblaydi. Qaysi yondashuv to‘g‘riroq?',
       options: [
-        'Tasdiqlangan natijalarni aniq, muntazam va professional tarzda yoritish',
-        'Har qanday natijani bo‘rttirish',
-        'Faqat reklama shiorlaridan foydalanish',
-        'Tasdiqlanmagan ma’lumotlarni tezroq chiqarish'
+        'Imij butun maktab faoliyatining natijasi bo‘lgani uchun muammoni tizimli ko‘rib chiqish',
+        'Faqat yangi banner tayyorlash',
+        'Faqat postlar sonini oshirish',
+        'Faqat PR xodimini almashtirish'
       ],
       answer: 0,
-      explanation: 'PRda haqiqiylik va ishonchlilik muhim. Yutuqlar tasdiqlangan faktlar asosida yoritilishi kerak.'
+      explanation:
+        'Imij ta’lim sifati, xizmat, muhit, boshqaruv va kommunikatsiyaning umumiy natijasi bo‘lgani uchun muammoni faqat bitta xodimga yuklash yetarli emas.'
     },
     {
       id: 'm1t6h19',
-      text: 'Maktab imijining “himoya reputatsiyasi” qaysi vaziyatda ayniqsa muhim?',
+      text: 'Maktab rahbari “bizda muammo yo‘q” degan umumiy xabar berdi, lekin faktlar boshqacha. Qaysi tamoyil eng jiddiy zarar ko‘rishi mumkin?',
       options: [
-        'Mojaro, feyk xabar yoki bahsli vaziyatlarda',
-        'Faqat sport musobaqalarida',
-        'Faqat dars jadvalini tuzishda',
-        'Faqat moliyaviy hisobotda'
+        'Haqiqiylik',
+        'Hamkorlik',
+        'Barqarorlik',
+        'Dizayn'
       ],
       answer: 0,
-      explanation: 'Kuchli reputatsiya inqirozli va bahsli vaziyatlarda manfaatdor tomonlarning ishonchini saqlashga yordam beradi.'
+      explanation:
+        'Axborot real vaziyatga mos kelmasa, auditoriya rasmiy kommunikatsiyaning ishonchliligini shubha ostiga qo‘yishi mumkin.'
     },
     {
       id: 'm1t6h20',
-      text: 'Maktabning imijini boshqarish jarayonida rahbarning kommunikativ roli nimadan iborat?',
+      text: 'PR strategiyasida “auditoriya” tushunchasini hisobga olmaslik qanday muammoga olib kelishi mumkin?',
       options: [
-        'Ichki va tashqi manfaatdor tomonlar bilan izchil, ochiq va madaniyatli muloqotni tashkil etish',
-        'Faqat buyruq berish',
-        'Faqat ijtimoiy tarmoqni yuritish',
-        'Faqat OAVga intervyu berish'
+        'Xabar mazmuni va kanali manfaatdor tomon ehtiyojiga mos kelmasligi',
+        'Logo avtomatik o‘zgarishi',
+        'Tadbirlar soni kamayishi shartligi',
+        'Maktab binosi yomonlashishi'
       ],
       answer: 0,
-      explanation: 'Rahbar kommunikatsiyani tizimli boshqarib, maktabning ichki va tashqi aloqalarini uyg‘unlashtiradi.'
+      explanation:
+        'Turli auditoriyalarning ehtiyoji va axborot qabul qilish usuli farq qiladi. Buni hisobga olmaslik kommunikatsiya samaradorligini pasaytirishi mumkin.'
     },
     {
       id: 'm1t6h21',
-      text: 'Maktab PR faoliyatida “monitoring” va “takomillashtirish” o‘rtasidagi bog‘liqlik nimada?',
+      text: 'Maktab imijini boshqarishda “hamkorlik”ni faqat homiylik olish bilan cheklashning kamchiligi nimada?',
       options: [
-        'Monitoring kamchilik va natijalarni aniqlaydi, takomillashtirish esa shu ma’lumotlar asosida choralar belgilaydi',
-        'Ikkalasi bir xil jarayon',
-        'Takomillashtirish monitoringdan oldin bo‘ladi',
-        'Monitoring faqat reklama uchun kerak'
+        'Hamkorlikning ta’limiy va ijtimoiy imkoniyatlari torayib qoladi',
+        'Homiylik har doim imijni buzadi',
+        'Hamkorlar bilan aloqa qilish shart emas',
+        'PR faoliyati to‘liq to‘xtaydi'
       ],
       answer: 0,
-      explanation: 'Monitoring natijalari keyingi takomillashtirish choralarini belgilash uchun asos bo‘ladi.'
+      explanation:
+        'Hamkorlik faqat mablag‘ emas; tajriba, loyiha, kasbiy yo‘naltirish, axborot va ijtimoiy sheriklik kabi imkoniyatlarni ham qamrab olishi mumkin.'
     },
     {
       id: 'm1t6h22',
-      text: 'Maktabning tashqi imijini kuchaytirishda o‘quvchi yutuqlari nima uchun muhim?',
+      text: 'Maktab imijini shakllantirishda qaysi qaror “simptom” emas, “sabab”ga yo‘naltirilgan?',
       options: [
-        'Ular ta’lim natijalarining jamoatchilik uchun ko‘rinadigan dalillaridan biridir',
-        'Faqat reklama uchun kerak',
-        'Ichki imijga hech qanday aloqasi yo‘q',
-        'Faqat moliyaviy natijani ko‘rsatadi'
+        'Shikoyatlar ko‘payganda postlarni ko‘paytirish',
+        'Ota-onalar noroziligining sabablarini o‘rganib, xizmat sifatini yaxshilash',
+        'Salbiy izohlarni o‘chirish',
+        'Yangi banner tayyorlash'
       ],
-      answer: 0,
-      explanation: 'O‘quvchi yutuqlari maktabning ta’limiy salohiyati haqida jamoatchilikka real signal beradi.'
+      answer: 1,
+      explanation:
+        'Norozilik sababini aniqlash va real faoliyatni yaxshilash muammoning ildiziga ta’sir qiladi; faqat kommunikatsiya hajmini oshirish esa simptomni yashirishi mumkin.'
     },
     {
       id: 'm1t6h23',
-      text: 'Maktab imijida “raqamli” va “an’anaviy” PR vositalarini birlashtirishning afzalligi nimada?',
+      text: 'Maktabning ijobiy imiji inqiroz paytida nima uchun foydali bo‘lishi mumkin?',
       options: [
-        'Turli auditoriyalarga turli kanallar orqali izchil axborot yetkazish imkonini beradi',
-        'Faqat xarajatlarni oshiradi',
-        'An’anaviy vositalarni butunlay yo‘q qiladi',
-        'Faqat ijtimoiy tarmoqqa bog‘lab qo‘yadi'
+        'U barcha muammolarni avtomatik yo‘q qiladi',
+        'Oldindan shakllangan ishonch axborotni qabul qilishga ta’sir qilishi mumkin',
+        'U tanqidni taqiqlaydi',
+        'U rahbarni javob berishdan ozod qiladi'
       ],
-      answer: 0,
-      explanation: 'An’anaviy va zamonaviy PR vositalarini uyg‘unlashtirish kommunikatsiya qamrovini kengaytiradi.'
+      answer: 1,
+      explanation:
+        'Oldindan mavjud bo‘lgan ishonch inqirozli vaziyatda auditoriyaning maktab axborotini qanday qabul qilishiga ta’sir qilishi mumkin, ammo muammoni o‘zi hal qilmaydi.'
     },
     {
       id: 'm1t6h24',
-      text: 'Maktabning imijiy materiali qanday xususiyatga ega bo‘lishi kerak?',
+      text: 'Maktab imijini boshqarishda eng kuchli qayta aloqa manbalaridan biri qaysi?',
       options: [
-        'Aniq, ishonchli, maktab faoliyatini real aks ettiruvchi va tushunarli',
-        'Bo‘rttirilgan va tekshirilmagan',
-        'Faqat reklama shiorlaridan iborat',
-        'Faqat rasmiy atamalardan iborat'
+        'Faqat bannerlar soni',
+        'Manfaatdor tomonlarning muntazam fikri va real tajribasi',
+        'Faqat post ko‘rishlari',
+        'Faqat tadbir fotosuratlari'
       ],
-      answer: 0,
-      explanation: 'Imijiy materiallar maktabning real faoliyatini ishonchli va tushunarli tarzda aks ettirishi kerak.'
+      answer: 1,
+      explanation:
+        'Manfaatdor tomonlarning real tajribasi imijning amalda qanday qabul qilinayotganini tushunishga yordam beradi.'
     },
     {
       id: 'm1t6h25',
-      text: 'Maktab imijining jamiyatdagi nufuzga ta’sirini qanday tushuntirish mumkin?',
+      text: 'Maktabning yaxshi imijini “saqlab qolish” bilan “rivojlantirish” o‘rtasidagi farq nimada?',
       options: [
-        'Maktab haqidagi ijobiy va ishonchli tasavvur uning ijtimoiy nufuzini mustahkamlaydi',
-        'Imij nufuzga ta’sir qilmaydi',
-        'Faqat bino nufuzni belgilaydi',
-        'Faqat reklama nufuzni belgilaydi'
+        'Saqlash mavjud ishonchni barqarorlashtiradi, rivojlantirish esa yangi ehtiyoj va imkoniyatlarga moslashishni ham talab qiladi',
+        'Ular mutlaqo bir xil',
+        'Rivojlantirish faqat reklama qilishdir',
+        'Saqlash faqat logo bilan bog‘liq'
       ],
       answer: 0,
-      explanation: 'Imij maktab haqida jamiyatda shakllangan tasavvur bo‘lib, u nufuz bilan bevosita bog‘liq.'
+      explanation:
+        'Imij doimiy jarayon bo‘lgani uchun mavjud ishonchni saqlash bilan birga o‘zgarayotgan muhitga moslashish ham zarur.'
     },
     {
       id: 'm1t6h26',
-      text: 'Maktab rahbari jamoatchilikka faqat ijobiy xabarlarni berib, muammolar haqida hech qachon axborot bermasa, qaysi xavf paydo bo‘lishi mumkin?',
+      text: 'Maktabning ijtimoiy tarmog‘ida yutuqlar juda ko‘p, ammo muammoli savollarga javob berilmaydi. Bu nimani ko‘rsatishi mumkin?',
       options: [
-        'Ishonch pasayishi va axborotga nisbatan shubha paydo bo‘lishi',
-        'Shaffoflik kuchayishi',
-        'Haqiqiylik ortishi',
-        'Jamoatchilik ishonchi avtomatik oshishi'
+        'Kommunikatsiya selektiv bo‘lib, shaffoflik yetarli emasligi ehtimolini',
+        'Ta’lim sifati albatta yuqori ekanini',
+        'Raqamli imij avtomatik mukammal ekanini',
+        'Ota-onalar fikri ahamiyatsizligini'
       ],
       answer: 0,
-      explanation: 'Faqat ijobiy axborotni berish va muammolarni yashirish shaffoflik va ishonchlilikka salbiy ta’sir qilishi mumkin.'
+      explanation:
+        'Faqat qulay axborotni berish va muhim savollardan qochish auditoriyada kommunikatsiyaning bir tomonlama ekanligi haqidagi tasavvurni kuchaytirishi mumkin.'
     },
     {
       id: 'm1t6h27',
-      text: 'Maktab PR strategiyasida jamoatchilik fikri salbiy ekanligi aniqlansa, keyingi eng maqbul qadam qaysi?',
+      text: 'Rahbar PR samaradorligini faqat “qancha tadbir o‘tkazildi?” savoli bilan baholamoqda. Qaysi yondashuv yetishmayapti?',
       options: [
-        'Salbiy fikrlarning sabablarini tahlil qilib, real muammolar bo‘yicha yechim ishlab chiqish',
-        'Jamoatchilik fikrini inkor qilish',
-        'Faqat reklama hajmini oshirish',
-        'Tanqidlarni o‘chirish'
+        'Natija va auditoriya reaksiyasini baholash',
+        'Tadbirlarni ko‘paytirish',
+        'Bannerlarni almashtirish',
+        'Fotosuratlar sonini oshirish'
       ],
       answer: 0,
-      explanation: 'PR strategiyasi real muammolarni aniqlash va ularni bartaraf etishga yo‘naltirilishi kerak.'
+      explanation:
+        'Faoliyat soni jarayon ko‘rsatkichidir. Samaradorlikni tushunish uchun uning auditoriyaga ta’siri va maqsadga erishish darajasi ham ko‘rilishi kerak.'
     },
     {
       id: 'm1t6h28',
-      text: 'Maktab imijini boshqarishda “hamkorlik” tamoyilining amaliy ko‘rsatkichi qaysi?',
+      text: 'Maktab imiji bo‘yicha qaror qabul qilishda qaysi ma’lumot kombinatsiyasi kuchliroq dalil beradi?',
       options: [
-        'Mahalla, OTM, korxona, OAV va NNT bilan tizimli loyihalar va aloqalar',
-        'Faqat maktab ichidagi yig‘ilishlar',
-        'Faqat direktorning qarorlari',
-        'Faqat reklama postlari'
+        'Faqat direktor fikri + reklama soni',
+        'Ota-onalar fikri + xodimlar fikri + real natijalar + kommunikatsiya ko‘rsatkichlari',
+        'Faqat obunachilar soni + postlar soni',
+        'Faqat tadbirlar soni + fotosuratlar'
       ],
-      answer: 0,
-      explanation: 'Hamkorlik tamoyili tashqi manfaatdor tomonlar bilan tizimli aloqalarni nazarda tutadi.'
+      answer: 1,
+      explanation:
+        'Turli manfaatdor tomonlar fikri, real natijalar va kommunikatsiya ma’lumotlari birgalikda qaror uchun kengroq daliliy baza yaratadi.'
     },
     {
       id: 'm1t6h29',
-      text: 'Maktab imijini boshqarishda eng xavfli yondashuvlardan biri qaysi?',
+      text: 'Maktab rahbari salbiy reputatsiyani tezda o‘zgartirish uchun bo‘rttirilgan yutuqlarni e’lon qilmoqchi. Menejerlik nuqtayi nazaridan asosiy xavf qaysi?',
       options: [
-        'Real muammolarni hal qilmasdan, faqat tashqi ko‘rinishni yaxshilashga urinish',
-        'Ta’lim sifatini oshirish',
-        'Jamoa bilan ishlash',
-        'Jamoatchilik fikrini o‘rganish'
+        'Qisqa muddatli e’tibor ortishi mumkin, ammo ishonchga uzoq muddatli zarar yetishi ehtimoli bor',
+        'Obunachilar albatta kamayadi',
+        'Barcha reklama vositalari ishlamay qoladi',
+        'Tadbirlar o‘tkazish imkoni yo‘qoladi'
       ],
       answer: 0,
-      explanation: 'Faqat tashqi PRga tayanish real muammolarni bartaraf etmasa, imij uzoq muddatli barqaror bo‘lmaydi.'
+      explanation:
+        'Bo‘rttirilgan axborot keyinchalik aniqlansa, auditoriya faqat bitta xabarga emas, maktabning umumiy kommunikatsiyasiga ham shubha bilan qarashi mumkin.'
     },
     {
       id: 'm1t6h30',
-      text: 'Zamonaviy maktab menejeri uchun imij boshqaruvining eng kompleks modeli qaysi?',
+      text: 'Quyidagi model qaysi biri maktab imijini strategik boshqarishga eng yaqin?',
       options: [
-        'Sifat + qadriyat + xavfsizlik + adolat + ochiqlik + kommunikatsiya + monitoring',
-        'Reklama + banner + logo',
-        'Faqat ijtimoiy tarmoq + video',
-        'Faqat bino + tadbir'
+        'Reklama → post → tadbir → banner',
+        'Natijani yaxshilash → manfaatdor tomon fikrini o‘rganish → kommunikatsiya → monitoring → takomillashtirish',
+        'Logo → video → fotosurat → reklama',
+        'Tadbir → fotosurat → post → obunachi'
       ],
-      answer: 0,
-      explanation: 'Materialda imij maktabning sifat, qadriyat, xavfsizlik, adolat va ochiqligi bilan bog‘langan kompleks natija sifatida ko‘rsatilgan.'
+      answer: 1,
+      explanation:
+        'Strategik model real faoliyatni yaxshilashdan boshlanib, manfaatdor tomon fikri, kommunikatsiya, monitoring va takomillashtirish orqali davom etadi.'
     }
   ],
 
   case: [
     {
       id: 'm1t6c01',
-      text: 'Maktabda o‘quvchilar yutuqlari ko‘p, ammo Telegram sahifasi oylar davomida yangilanmagan. Ota-onalar maktabdagi natijalardan bexabar. Rahbarning birinchi strategik harakati qaysi?',
+      text: 'Maktabda ta’lim natijalari yaxshilandi, ammo ota-onalar buni sezmayapti. Rahbarning eng maqbul birinchi qarori qaysi?',
       options: [
-        'Maktabning hozirgi axborot holatini tahlil qilib, muntazam PR rejasini ishlab chiqish',
-        'Faqat bitta katta reklama tadbiri o‘tkazish',
-        'Barcha eski postlarni o‘chirish',
-        'Ota-onalarga axborot bermaslik'
+        'Faqat reklama bannerlarini ko‘paytirish',
+        'Natijalar qanday qabul qilinayotganini aniqlab, kommunikatsiya bo‘shlig‘ini tahlil qilish',
+        'Ota-onalar bilan aloqani kamaytirish',
+        'Faqat yangi logo ishlab chiqish'
       ],
-      answer: 0,
-      explanation: 'Avval mavjud holat va muammo tahlil qilinadi, keyin tizimli PR reja ishlab chiqiladi.'
+      answer: 1,
+      explanation:
+        'Muammo avval kommunikatsiyadami yoki auditoriya tajribasidami — aniqlanishi kerak. Shundan keyin mos chora tanlanadi.'
     },
     {
       id: 'm1t6c02',
-      text: 'Ijtimoiy tarmoqda maktab haqida tasdiqlanmagan salbiy xabar tarqaldi. Rahbar qanday yo‘l tutishi maqsadga muvofiq?',
+      text: 'Telegram kanalida maktab haqida tasdiqlanmagan salbiy xabar tarqaldi. Rahbar nima qilishi kerak?',
       options: [
-        'Faktlarni tekshirib, rasmiy pozitsiyani shakllantirib, tezkor va aniq axborot berish',
-        'Xabarni darhol boshqa xabar bilan yopish',
-        'Muammoni butunlay inkor qilish',
-        'Hech qanday izoh bermaslik'
+        'Darhol xabarni o‘chirib tashlashni talab qilish',
+        'Tekshirmasdan xabarni yolg‘on deb e’lon qilish',
+        'Faktlarni tekshirib, zarur bo‘lsa rasmiy va aniq izoh berish',
+        'Ko‘proq ijobiy fotosuratlar joylashtirish'
       ],
-      answer: 0,
-      explanation: 'Inqirozli vaziyatda tezkor, aniq va faktlarga asoslangan rasmiy kommunikatsiya zarur.'
+      answer: 2,
+      explanation:
+        'Inqirozli kommunikatsiyada hissiy javobdan ko‘ra faktlarni aniqlash va asoslangan axborot berish ishonchliroq yondashuvdir.'
     },
     {
       id: 'm1t6c03',
-      text: 'Maktabning tashqi ko‘rinishi juda yaxshi, lekin jamoada pedagoglar o‘rtasida nizolar va noroziliklar mavjud. Imijni barqarorlashtirish uchun nimadan boshlash kerak?',
+      text: 'Maktab tashqi tomondan juda chiroyli, lekin pedagoglar o‘rtasida doimiy nizolar mavjud. Imijni barqarorlashtirishda ustuvor yo‘nalish qaysi?',
       options: [
-        'Ichki imij va jamoa psixologik muhitini yaxshilashdan',
-        'Yangi reklama bannerlarini tayyorlashdan',
-        'Faqat ijtimoiy tarmoqdagi postlarni ko‘paytirishdan',
-        'Faqat maktab logotipini yangilashdan'
+        'Yana reklama kampaniyasi boshlash',
+        'Ichki muhit va jamoa munosabatlarini yaxshilash',
+        'Faqat ijtimoiy tarmoq postlarini ko‘paytirish',
+        'Logotipni yangilash'
       ],
-      answer: 0,
-      explanation: 'Ichki imij mustahkam bo‘lmasa, tashqi imij barqaror bo‘la olmaydi.'
+      answer: 1,
+      explanation:
+        'Ichki muhitdagi muammolar uzoq muddatda xodimlar va o‘quvchilar tajribasiga ta’sir qiladi. Shu sababli ichki sababni bartaraf etish muhim.'
     },
     {
       id: 'm1t6c04',
-      text: 'Maktab rahbari barcha qarorlarni ochiq e’lon qilmaydi, ota-onalar baholash mezonlarini tushunmaydi. Ishonch pasaymoqda. Qaysi tamoyilni kuchaytirish kerak?',
+      text: 'Ota-onalar maktabdagi ayrim qarorlarning nima sababdan qabul qilinganini tushunmayapti. Ishonch ham pasaygan. Qaysi chora mos?',
       options: [
-        'Shaffoflik',
-        'Faqat reklama',
-        'Faqat tezkorlik',
-        'Faqat dizayn'
+        'Qarorlarning mezon va sabablarini tushunarli tarzda izohlash',
+        'Savollarni cheklash',
+        'Faqat ijobiy postlarni chiqarish',
+        'Ota-onalar bilan muloqotni vaqtincha to‘xtatish'
       ],
       answer: 0,
-      explanation: 'Qarorlar va baholash mezonlarining tushunarli bo‘lishi shaffoflik va ishonchni ta’minlaydi.'
+      explanation:
+        'Muammo axborotning tushunarliligi bilan bog‘liq bo‘lsa, shaffof va izohli kommunikatsiya ishonchni tiklash uchun asos yaratadi.'
     },
     {
       id: 'm1t6c05',
-      text: 'Maktab rahbari PR rejasini tuzmoqchi. Jamoatchilik fikri o‘rganilmagan. Qaysi ketma-ketlik to‘g‘ri?',
+      text: 'Rahbar PR rejasini tuzmoqchi, ammo maktabning hozirgi imiji bo‘yicha hech qanday ma’lumot yig‘ilmagan. Qaysi ketma-ketlik to‘g‘ri?',
       options: [
-        'Avval tahlil, keyin rejalashtirish',
-        'Avval reklama, keyin tahlil',
-        'Avval monitoring, keyin muammo',
-        'Avval takomillashtirish, keyin tahlil'
+        'Avval reklama → keyin tahlil',
+        'Avval tadbir → keyin reja',
+        'Avval tahlil → keyin maqsad va reja',
+        'Avval monitoring → keyin mavjud holat'
       ],
-      answer: 0,
-      explanation: 'PR faoliyatida avval mavjud imij va jamoatchilik fikri tahlil qilinadi, keyin strategiya va reja ishlab chiqiladi.'
+      answer: 2,
+      explanation:
+        'Reja muammo va mavjud holatga mos bo‘lishi uchun avval boshlang‘ich vaziyatni tahlil qilish kerak.'
     },
     {
       id: 'm1t6c06',
-      text: 'Maktabning ta’lim sifati yaxshi, lekin ota-onalar bilan aloqa sust. Qaysi chora tashqi imijni mustahkamlashga ko‘proq xizmat qiladi?',
+      text: 'Maktab sahifasida bir oyda 50 ta post joylashtirildi, ammo ota-onalar ishonchi o‘zgarmadi. Rahbar qaysi savolni berishi kerak?',
       options: [
-        'Ota-onalar bilan muntazam, ochiq va ikki tomonlama kommunikatsiya tizimini yo‘lga qo‘yish',
-        'Faqat reklama bannerlarini ko‘paytirish',
-        'Faqat maktab binosini bezash',
-        'Faqat o‘quvchilar rasmlarini joylashtirish'
+        'Keyingi oy 100 ta post qilish kerakmi?',
+        'Postlar auditoriya ehtiyoji va real muammolarga javob berdimi?',
+        'Qaysi rang ko‘proq ishlatilgan?',
+        'Qaysi postga ko‘proq emoji qo‘shish kerak?'
       ],
-      answer: 0,
-      explanation: 'Ota-onalar bilan hamkorlik va ochiq muloqot tashqi imij hamda ishonchni mustahkamlaydi.'
+      answer: 1,
+      explanation:
+        'Kontent miqdori natijani kafolatlamaydi. Uning auditoriya ehtiyoji va real muammolarga mosligi muhim.'
     },
     {
       id: 'm1t6c07',
-      text: 'Maktabda yaxshi yutuqlar mavjud, ammo ijtimoiy tarmoqda natijalar bo‘rttirib ko‘rsatilmoqda. Rahbar nima qilishi kerak?',
+      text: 'Maktabda o‘quvchi yutuqlari bor, ammo sahifada ular bo‘rttirib ko‘rsatilmoqda. Rahbar qanday qaror qabul qilishi kerak?',
       options: [
-        'Faqat tasdiqlangan va real natijalarni professional tarzda yoritish',
-        'Bo‘rttirishni davom ettirish',
-        'Yana ko‘proq reklama qilish',
-        'Natijalarni umuman e’lon qilmaslik'
+        'Bo‘rttirishni yanada kuchaytirish',
+        'Faqat reklama shiorlarini qoldirish',
+        'Yutuqlarni tekshirilgan ma’lumotlar asosida qayta yoritish',
+        'Yutuqlarni umuman e’lon qilmaslik'
       ],
-      answer: 0,
-      explanation: 'Haqiqiylik tamoyiliga ko‘ra, imij real faoliyat va tasdiqlangan natijalarga tayanishi kerak.'
+      answer: 2,
+      explanation:
+        'Yutuqlar PR uchun foydali dalil, lekin ular ishonchni saqlash uchun tasdiqlangan va aniq bo‘lishi kerak.'
     },
     {
       id: 'm1t6c08',
-      text: 'Maktab PR faoliyati bir yil davomida olib borildi. Rahbar uning samaradorligini aniqlamoqchi. Nima qilishi kerak?',
+      text: 'Bir yil davomida PR faoliyati olib borildi. Rahbar keyingi yil rejasini tuzmoqda. Eng foydali yondashuv qaysi?',
       options: [
-        'Monitoring o‘tkazib, natijalarni baholashi va keyingi takomillashtirish choralarini belgilashi kerak',
-        'Faqat postlar sonini sanashi kerak',
-        'Faqat tadbirlar sonini ko‘rishi kerak',
-        'PR faoliyatini to‘xtatishi kerak'
+        'Eski rejani o‘zgartirmasdan takrorlash',
+        'Faqat tadbirlar sonini oshirish',
+        'Monitoring natijalarini tahlil qilib, keyingi rejani shu asosda yangilash',
+        'Faqat reklama budjetini oshirish'
       ],
-      answer: 0,
-      explanation: 'Monitoring natijalarni baholash, keyingi takomillashtirish esa aniqlangan kamchiliklar asosida chora ko‘rishni anglatadi.'
+      answer: 2,
+      explanation:
+        'Oldingi faoliyat natijalari keyingi rejalashtirishga qayta aloqa sifatida xizmat qilishi kerak.'
     },
     {
       id: 'm1t6c09',
-      text: 'Maktab rahbari mahalla, OTM va korxonalar bilan hamkorlikni yo‘lga qo‘ydi. Bu qaysi imij tamoyilini kuchaytiradi?',
+      text: 'Mahalla, OTM va korxonalar bilan muntazam loyihalar tashkil etildi. Bu faoliyatni imij nuqtayi nazaridan qanday baholash mumkin?',
       options: [
-        'Hamkorlik',
-        'Faqat tezkorlik',
-        'Faqat barqarorlik',
-        'Faqat nazorat'
+        'Hamkorlik tamoyilining amaliy ko‘rinishi sifatida',
+        'Faqat reklama sifatida',
+        'Faqat ichki nazorat sifatida',
+        'Faqat moliyaviy faoliyat sifatida'
       ],
       answer: 0,
-      explanation: 'Mahalla, OTM va korxonalar bilan hamkorlik maktab imijini shakllantirishdagi hamkorlik tamoyilining amaliy ko‘rinishidir.'
+      explanation:
+        'Turli tashqi manfaatdor tomonlar bilan tizimli aloqalar hamkorlik tamoyilini amalda namoyon qiladi.'
     },
     {
       id: 'm1t6c10',
-      text: 'Maktabda salbiy imij shakllangan. Rahbar muammoni faqat reklama orqali bartaraf etmoqchi. Qaysi yondashuv to‘g‘riroq?',
+      text: 'Maktab haqida salbiy tasavvur shakllangan. Rahbar faqat reklama hajmini oshirmoqchi. Qaysi qaror strategik jihatdan asosliroq?',
       options: [
-        'Avval salbiy imijning real sabablarini aniqlash va ichki muammolarni hal qilish, keyin kommunikatsiyani kuchaytirish',
+        'Avval salbiy tasavvurning sabablarini o‘rganish, real muammolarni bartaraf etish va keyin kommunikatsiyani kuchaytirish',
         'Faqat reklama budjetini oshirish',
-        'Salbiy fikrlarni o‘chirish',
-        'Jamoatchilik bilan aloqani to‘xtatish'
+        'Salbiy fikrlarni imkon qadar yashirish',
+        'Tanqidiy savollarga javob bermaslik'
       ],
       answer: 0,
-      explanation: 'Barqaror ijobiy imij real muammolarni hal qilishdan boshlanadi. PR esa bu natijalarni to‘g‘ri yetkazish bilan uni mustahkamlaydi.'
+      explanation:
+        'Barqaror reputatsiya sabablarni bartaraf etishdan boshlanadi. Kommunikatsiya esa real o‘zgarishlarni tushuntirish va ishonchni tiklashga xizmat qiladi.'
     }
   ]
 }
