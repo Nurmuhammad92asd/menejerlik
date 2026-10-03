@@ -1,147 +1,144 @@
-export type TelegramUser = {
-  id: number
-  first_name?: string
-  last_name?: string
-  username?: string
-  language_code?: string
-  is_premium?: boolean
-  photo_url?: string
-}
+// src/hooks/use-telegram.ts
 
-export type TelegramWebApp = {
-  initData: string
-  initDataUnsafe: {
-    user?: TelegramUser
-    query_id?: string
-    auth_date?: number
-    hash?: string
-    [key: string]: unknown
-  }
+'use client'
 
-  colorScheme: 'light' | 'dark'
-  platform: string
-  version: string
+import { useCallback, useEffect, useState } from 'react'
+import {
+  getTelegramUser,
+  getWebApp,
+  initTelegram,
+  type TelegramUser,
+  type TelegramWebApp,
+} from '@/lib/telegram'
 
-  ready: () => void
-  expand: () => void
-  close: () => void
+/**
+ * Telegram WebApp bilan ishlash uchun asosiy hook
+ */
+export function useTelegram() {
+  const [webApp, setWebApp] = useState<TelegramWebApp | null>(null)
+  const [user, setUser] = useState<TelegramUser | null>(null)
+  const [isReady, setIsReady] = useState(false)
 
-  setHeaderColor?: (color: string) => void
-  setBackgroundColor?: (color: string) => void
+  useEffect(() => {
+    const app = getWebApp()
 
-  MainButton?: {
-    text: string
-    color: string
-    textColor: string
-    isVisible: boolean
-    isActive: boolean
-    show: () => void
-    hide: () => void
-    enable: () => void
-    disable: () => void
-    setText: (text: string) => void
-    onClick: (callback: () => void) => void
-    offClick: (callback: () => void) => void
-  }
-
-  BackButton?: {
-    isVisible: boolean
-    show: () => void
-    hide: () => void
-    onClick: (callback: () => void) => void
-    offClick: (callback: () => void) => void
-  }
-
-  HapticFeedback?: {
-    impactOccurred: (
-      style: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft'
-    ) => void
-    notificationOccurred: (
-      type: 'error' | 'success' | 'warning'
-    ) => void
-    selectionChanged: () => void
-  }
-
-  [key: string]: unknown
-}
-
-declare global {
-  interface Window {
-    Telegram?: {
-      WebApp?: TelegramWebApp
-    }
-  }
-}
-
-export function getWebApp(): TelegramWebApp | null {
-  if (typeof window === 'undefined') {
-    return null
-  }
-
-  return window.Telegram?.WebApp ?? null
-}
-
-export function getTelegramUser(): TelegramUser | null {
-  const webApp = getWebApp()
-
-  if (!webApp) {
-    return null
-  }
-
-  return webApp.initDataUnsafe?.user ?? null
-}
-
-export function getInitData(): string {
-  const webApp = getWebApp()
-
-  return webApp?.initData ?? ''
-}
-
-export function isTelegramWebApp(): boolean {
-  return getWebApp() !== null
-}
-
-export function supports(version: string): boolean {
-  const webApp = getWebApp()
-
-  if (!webApp?.version) {
-    return false
-  }
-
-  const current = webApp.version.split('.').map(Number)
-  const required = version.split('.').map(Number)
-
-  const maxLength = Math.max(current.length, required.length)
-
-  for (let i = 0; i < maxLength; i++) {
-    const currentPart = current[i] ?? 0
-    const requiredPart = required[i] ?? 0
-
-    if (currentPart > requiredPart) {
-      return true
+    if (!app) {
+      setIsReady(true)
+      return
     }
 
-    if (currentPart < requiredPart) {
-      return false
-    }
-  }
+    try {
+      initTelegram()
 
-  return true
+      setWebApp(app)
+      setUser(getTelegramUser())
+      setIsReady(true)
+    } catch (error) {
+      console.error(
+        'Telegram initialization error:',
+        error
+      )
+
+      setIsReady(true)
+    }
+  }, [])
+
+  return {
+    webApp,
+    user,
+    isReady,
+    isTelegram: webApp !== null,
+  }
 }
 
-export function initTelegram(): TelegramWebApp | null {
-  const webApp = getWebApp()
+/**
+ * Telegram BackButton bilan ishlash
+ */
+export function useBackButton(
+  onBack?: () => void,
+  enabled: boolean = true
+) {
+  const [isVisible, setIsVisible] = useState(false)
 
-  if (!webApp) {
-    return null
-  }
+  const handleBack = useCallback(() => {
+    if (onBack) {
+      onBack()
+    }
+  }, [onBack])
 
-  try {
-    webApp.ready()
-    webApp.expand()
-  } catch (error) {
-    console.error('Telegram WebApp initialization error:', error)
+  useEffect(() => {
+    const app = getWebApp()
+
+    if (!app?.BackButton) {
+      return
+    }
+
+    const backButton = app.BackButton
+
+    if (!enabled) {
+      backButton.hide()
+      setIsVisible(false)
+
+      return
+    }
+
+    backButton.show()
+    setIsVisible(true)
+
+    backButton.onClick(handleBack)
+
+    return () => {
+      backButton.offClick(handleBack)
+      backButton.hide()
+      setIsVisible(false)
+    }
+  }, [enabled, handleBack])
+
+  return {
+    isVisible,
+    show: () => {
+      const app = getWebApp()
+
+      if (app?.BackButton) {
+        app.BackButton.show()
+        setIsVisible(true)
+      }
+    },
+    hide: () => {
+      const app = getWebApp()
+
+      if (app?.BackButton) {
+        app.BackButton.hide()
+        setIsVisible(false)
+      }
+    },
   }
+}
+
+/**
+ * Telegram foydalanuvchisini olish
+ */
+export function useTelegramUser() {
+  const [user, setUser] = useState<TelegramUser | null>(null)
+
+  useEffect(() => {
+    const telegramUser = getTelegramUser()
+
+    setUser(telegramUser)
+  }, [])
+
+  return user
+}
+
+/**
+ * Telegram WebApp obyektini olish
+ */
+export function useTelegramWebApp() {
+  const [webApp, setWebApp] = useState<TelegramWebApp | null>(null)
+
+  useEffect(() => {
+    setWebApp(getWebApp())
+  }, [])
 
   return webApp
 }
