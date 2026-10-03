@@ -2,6 +2,8 @@ import { M1T1_LEVELS } from './data/m1t1'
 import { M1T2_LEVELS } from './data/m1t2'
 import { M1T3_LEVELS } from './data/m1t3'
 import { M1T4_LEVELS } from './data/m1t4'
+import { M1T5_LEVELS } from './data/m1t5'
+import { M1T6_LEVELS } from './data/m1t6'
 
 /*
  * =========================================================
@@ -68,7 +70,7 @@ const MODULE_1: Category = {
   title: '1-MODUL. Umumiy ta’lim muassasasini boshqarish',
 
   description:
-    'Ta’lim muassasasini samarali boshqarish, strategik menejment, boshqaruv psixologiyasi va rahbarlik qarorlarini qabul qilish.',
+    'Ta’lim muassasasini samarali boshqarish, strategik menejment, boshqaruv psixologiyasi, korrupsiyaviy xavflar, boshqaruv qarorlari va maktab imijini boshqarish.',
 
   topics: [
     {
@@ -121,9 +123,9 @@ const MODULE_1: Category = {
       title: 'Boshqaruv qarorlari',
 
       description:
-        'Ma’lumotlarga asoslangan boshqaruv qarorlarini ishlab chiqish va amalga oshirish.',
+        'Boshqaruv qarorlarini qabul qilish, amalga oshirish, nazorat qilish, baholash va tuzatishlar kiritish.',
 
-      levels: EMPTY_LEVELS,
+      levels: M1T5_LEVELS,
     },
 
     {
@@ -132,9 +134,9 @@ const MODULE_1: Category = {
       title: 'Maktab imijini shakllantirish',
 
       description:
-        'Maktabning ijobiy imiji, kommunikatsiya va jamoatchilik bilan aloqalarni rivojlantirish.',
+        'Maktab imiji, ichki va tashqi imij, PR faoliyati, raqamli imij, axborot siyosati va jamoatchilik bilan aloqalarni samarali boshqarish.',
 
-      levels: EMPTY_LEVELS,
+      levels: M1T6_LEVELS,
     },
   ],
 }
@@ -666,7 +668,11 @@ export const PRESCHOOL_CATEGORIES: Category[] = []
  * =========================================================
  */
 
-type LevelKey = 'easy' | 'medium' | 'hard' | 'case'
+type LevelKey =
+  | 'easy'
+  | 'medium'
+  | 'hard'
+  | 'case'
 
 const LEVEL_KEYS: LevelKey[] = [
   'easy',
@@ -675,7 +681,9 @@ const LEVEL_KEYS: LevelKey[] = [
   'case',
 ]
 
-function allTopicQuestions(topic: Topic): Question[] {
+function allTopicQuestions(
+  topic: Topic,
+): Question[] {
   return LEVEL_KEYS.flatMap(
     (level) => topic.levels[level],
   )
@@ -762,7 +770,9 @@ export function getModuleQuestions(
   const module = getModuleById(moduleId)
 
   return module
-    ? module.topics.flatMap(allTopicQuestions)
+    ? module.topics.flatMap(
+        allTopicQuestions,
+      )
     : []
 }
 
@@ -806,9 +816,8 @@ export const MIXED_ID = 'aralash'
 export const MIXED_COUNT = 30
 
 export const MIXED_QUESTIONS: Question[] =
-  CATEGORIES.flatMap(
-    (module) =>
-      module.topics.flatMap(
-        allTopicQuestions,
-      ),
+  CATEGORIES.flatMap((module) =>
+    module.topics.flatMap(
+      allTopicQuestions,
+    ),
   )
