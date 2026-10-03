@@ -23,7 +23,9 @@ export const QUIZ_LEVEL_ORDER: QuizLevel[] = [
   'case',
 ]
 
-/** Savol + (aralash testda) qaysi daraja/mavzudan kelgani */
+/**
+ * Savol + testda qaysi daraja/mavzudan kelgani
+ */
 export type SessionQuestion = Question & {
   level?: QuizLevel
   topicId?: string
@@ -36,6 +38,12 @@ export type QuizSession = {
   title: string
   questions: SessionQuestion[]
   startedAt: number
+
+  /**
+   * Har bir mavzu uchun test vaqti.
+   * 120 sekund = 2 daqiqa
+   */
+  timeLimitSec?: number
 }
 
 export type AnswerRecord = {
@@ -56,6 +64,22 @@ export type QuizResult = {
 
 /*
  * =========================================================
+ * QUIZ SETTINGS
+ * =========================================================
+ */
+
+/**
+ * Har bir test uchun 30 ta savol.
+ */
+export const TOPIC_QUESTION_COUNT = 30
+
+/**
+ * Har bir test uchun 2 daqiqa.
+ */
+export const QUIZ_TIME_LIMIT_SEC = 120
+
+/*
+ * =========================================================
  * RANDOMIZATION
  * =========================================================
  */
@@ -65,6 +89,7 @@ function shuffle<T>(items: readonly T[]): T[] {
 
   for (let i = copy.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
+
     ;[copy[i], copy[j]] = [copy[j], copy[i]]
   }
 
@@ -75,16 +100,34 @@ function pickRandom<T>(items: readonly T[]): T {
   return items[Math.floor(Math.random() * items.length)]
 }
 
-/*
- * Variantlarni aralashtiradi va to‘g‘ri javob indeksini
- * yangilaydi (A — to‘g‘ri bo‘lsa, test paytida C bo‘lishi mumkin).
+/**
+ * Savol variantlarini aralashtiradi.
+ *
+ * Masalan:
+ * A. Strategik reja
+ * B. Operativ reja
+ * C. Taktik reja
+ * D. Nazorat
+ *
+ * keyin:
+ *
+ * A. Nazorat
+ * B. Strategik reja
+ * C. Taktik reja
+ * D. Operativ reja
+ *
+ * To‘g‘ri javob indeksi ham avtomatik yangilanadi.
  */
 function shuffleOptions<T extends Question>(question: T): T {
-  const order = shuffle(question.options.map((_, index) => index))
+  const order = shuffle(
+    question.options.map((_, index) => index),
+  )
 
   return {
     ...question,
-    options: order.map((index) => question.options[index]),
+    options: order.map(
+      (index) => question.options[index],
+    ),
     answer: order.indexOf(question.answer),
   }
 }
@@ -93,11 +136,6 @@ function shuffleOptions<T extends Question>(question: T): T {
  * =========================================================
  * "OLDIN TUSHGAN SAVOLLAR" XOTIRASI
  * =========================================================
- *
- * Aralash test har safar yangi savollardan tuzilishi uchun
- * tushgan savol ID lari saqlanadi. Brauzer / Telegram WebApp
- * ichida localStorage ishlaydi. Serverda esa vaqtincha
- * xotirada turadi (kerak bo‘lsa, bazaga ulash mumkin).
  */
 
 const memoryStore = new Map<string, string>()
@@ -130,15 +168,23 @@ function writeStore(key: string, value: string) {
 function loadSeen(scope: string): Set<string> {
   try {
     return new Set<string>(
-      JSON.parse(readStore(`quiz:seen:${scope}`) ?? '[]'),
+      JSON.parse(
+        readStore(`quiz:seen:${scope}`) ?? '[]',
+      ),
     )
   } catch {
     return new Set<string>()
   }
 }
 
-function saveSeen(scope: string, seen: Set<string>) {
-  writeStore(`quiz:seen:${scope}`, JSON.stringify([...seen]))
+function saveSeen(
+  scope: string,
+  seen: Set<string>,
+) {
+  writeStore(
+    `quiz:seen:${scope}`,
+    JSON.stringify([...seen]),
+  )
 }
 
 /*
@@ -147,54 +193,90 @@ function saveSeen(scope: string, seen: Set<string>) {
  * =========================================================
  */
 
-export function getLevelTitle(level: QuizLevel): string {
+export function getLevelTitle(
+  level: QuizLevel,
+): string {
   switch (level) {
     case 'easy':
       return 'Oson'
+
     case 'medium':
       return 'O‘rta'
+
     case 'hard':
       return 'Qiyin'
+
     case 'case':
       return 'Keys'
+
     default:
       return 'Test'
   }
 }
 
-export function getLevelIcon(level: QuizLevel): string {
+export function getLevelIcon(
+  level: QuizLevel,
+): string {
   switch (level) {
     case 'easy':
       return '🟢'
+
     case 'medium':
       return '🟡'
+
     case 'hard':
       return '🔴'
+
     case 'case':
       return '🔵'
+
     default:
       return '📝'
   }
 }
 
-export function getCategoryTitle(id: string): string {
+export function getCategoryTitle(
+  id: string,
+): string {
   if (id === MIXED_ID) {
     return 'Aralash test'
   }
 
-  return CATEGORIES.find((category) => category.id === id)?.title ?? 'Test'
+  return (
+    CATEGORIES.find(
+      (category) => category.id === id,
+    )?.title ?? 'Test'
+  )
 }
 
-export function getTopicTitle(topicId: string): string {
-  return getTopicById(topicId)?.title ?? 'Mavzu'
+export function getTopicTitle(
+  topicId: string,
+): string {
+  return (
+    getTopicById(topicId)?.title ?? 'Mavzu'
+  )
 }
 
 /*
  * =========================================================
- * CREATE TOPIC QUIZ SESSION
- * (oson 30 / o‘rta 30 / qiyin 30 / keys 10 — har safar
- *  boshqa tartibda va variantlari aralashgan)
+ * CREATE TOPIC SESSION
  * =========================================================
+ *
+ * MUHIM:
+ *
+ * Har bir mavzudagi:
+ *
+ * 30 OSON
+ * 30 O‘RTA
+ * 30 QIYIN
+ * 10 KEYS
+ *
+ * jami 100 ta savol bitta havzaga yig‘iladi.
+ *
+ * Keyin tasodifiy 30 ta tanlanadi.
+ *
+ * Demak foydalanuvchi har safar bir xil
+ * 30 ta savolni ko‘rmaydi.
  */
 
 export function createTopicSession(
@@ -203,21 +285,132 @@ export function createTopicSession(
 ): QuizSession {
   const topic = getTopicById(topicId)
 
-  const questions = getLevelQuestions(topicId, level)
+  /*
+   * Agar foydalanuvchi oddiy daraja testini
+   * tanlagan bo‘lsa:
+   *
+   * Oson → faqat oson
+   * O‘rta → faqat o‘rta
+   * Qiyin → faqat qiyin
+   * Keys → faqat keys
+   *
+   * Lekin maxsus "Aralash" rejimida barcha
+   * darajalar qo‘shiladi.
+   */
 
-  const prepared: SessionQuestion[] = shuffle(questions).map((q) =>
-    shuffleOptions({ ...q, level, topicId }),
-  )
-
-  return {
-    categoryId: topicId.split('t')[0] || 'unknown',
+  const questions = getLevelQuestions(
     topicId,
     level,
+  )
+
+  const prepared: SessionQuestion[] =
+    shuffle(questions)
+      .slice(0, TOPIC_QUESTION_COUNT)
+      .map((q) =>
+        shuffleOptions({
+          ...q,
+          level,
+          topicId,
+        }),
+      )
+
+  return {
+    categoryId:
+      topicId.split('t')[0] || 'unknown',
+
+    topicId,
+
+    level,
+
     title: topic
       ? `${topic.title} — ${getLevelTitle(level)}`
       : `${getLevelTitle(level)} test`,
+
     questions: prepared,
+
     startedAt: Date.now(),
+
+    timeLimitSec:
+      QUIZ_TIME_LIMIT_SEC,
+  }
+}
+
+/*
+ * =========================================================
+ * CREATE RANDOM TOPIC SESSION
+ * =========================================================
+ *
+ * BU FUNKSIYA MAVZUDAGI BARCHA DARAJALARNI
+ * ARALASHTIRIB 30 TA TANLAYDI.
+ *
+ * Masalan:
+ *
+ * 100 ta savol
+ * ↓
+ * 30 oson
+ * 30 o‘rta
+ * 30 qiyin
+ * 10 keys
+ *
+ * ↓
+ *
+ * Tasodifiy 30 ta
+ */
+
+export function createRandomTopicSession(
+  topicId: string,
+): QuizSession {
+  const topic = getTopicById(topicId)
+
+  const pool: SessionQuestion[] = []
+
+  for (
+    const level of QUIZ_LEVEL_ORDER
+  ) {
+    const questions =
+      getLevelQuestions(
+        topicId,
+        level,
+      )
+
+    for (const question of questions) {
+      pool.push({
+        ...question,
+        level,
+        topicId,
+      })
+    }
+  }
+
+  /*
+   * Savollarni tasodifiy aralashtiramiz
+   * va 30 tasini olamiz.
+   */
+  const picked = shuffle(pool)
+    .slice(0, TOPIC_QUESTION_COUNT)
+    .map((q) =>
+      shuffleOptions(q),
+    )
+
+  return {
+    categoryId:
+      topicId.split('t')[0] || 'unknown',
+
+    topicId,
+
+    level: 'medium',
+
+    title:
+      topic?.title
+        ? `${topic.title} — Aralash test`
+        : 'Aralash test',
+
+    questions: picked,
+
+    startedAt: Date.now(),
+
+    timeLimitSec:
+      QUIZ_TIME_LIMIT_SEC,
   }
 }
 
@@ -227,66 +420,107 @@ export function createTopicSession(
  * =========================================================
  */
 
-export function createModuleSession(moduleId: string): QuizSession {
-  const module = getModuleById(moduleId)
+export function createModuleSession(
+  moduleId: string,
+): QuizSession {
+  const module =
+    getModuleById(moduleId)
 
   const questions: SessionQuestion[] = []
 
-  for (const topic of module?.topics ?? []) {
-    for (const level of QUIZ_LEVEL_ORDER) {
-      for (const q of topic.levels[level]) {
-        questions.push({ ...q, level, topicId: topic.id })
+  for (
+    const topic of module?.topics ?? []
+  ) {
+    for (
+      const level of QUIZ_LEVEL_ORDER
+    ) {
+      for (
+        const q of topic.levels[level]
+      ) {
+        questions.push({
+          ...q,
+          level,
+          topicId: topic.id,
+        })
       }
     }
   }
 
   return {
     categoryId: moduleId,
+
     topicId: '',
+
     level: 'medium',
-    title: module?.title ?? 'Modul testi',
-    questions: shuffle(questions).map((q) => shuffleOptions(q)),
+
+    title:
+      module?.title ?? 'Modul testi',
+
+    questions:
+      shuffle(questions)
+        .slice(0, TOPIC_QUESTION_COUNT)
+        .map((q) =>
+          shuffleOptions(q),
+        ),
+
     startedAt: Date.now(),
+
+    timeLimitSec:
+      QUIZ_TIME_LIMIT_SEC,
   }
 }
 
 /*
  * =========================================================
- * MIXED SESSION — HAR SAFAR YANGI 30 TA
+ * MIXED SESSION
  * =========================================================
- *
- * Barcha daraja savollaridan (oson, o‘rta, qiyin, keys)
- * tasodifiy tanlanadi. Oldin tushgan savollar iloji boricha
- * takrorlanmaydi. Hammasi tushib bo‘lgach, aylanish yangidan
- * boshlanadi.
- *
- * Bo‘sh mavzular (savollari hali kiritilmagan) avtomatik
- * o‘tkazib yuboriladi.
  */
 
-/** 30 ta savolning taqsimoti */
-export const MIXED_QUOTA: Record<QuizLevel, number> = {
+export const MIXED_QUOTA: Record<
+  QuizLevel,
+  number
+> = {
   easy: 10,
   medium: 9,
   hard: 8,
   case: 3,
 }
 
-function scaleQuota(count: number): Record<QuizLevel, number> {
-  const total = QUIZ_LEVEL_ORDER.reduce((sum, l) => sum + MIXED_QUOTA[l], 0)
-  const quota = {} as Record<QuizLevel, number>
+function scaleQuota(
+  count: number,
+): Record<QuizLevel, number> {
+  const total =
+    QUIZ_LEVEL_ORDER.reduce(
+      (sum, level) =>
+        sum + MIXED_QUOTA[level],
+      0,
+    )
+
+  const quota =
+    {} as Record<
+      QuizLevel,
+      number
+    >
 
   let used = 0
 
-  QUIZ_LEVEL_ORDER.forEach((level, index) => {
-    const isLast = index === QUIZ_LEVEL_ORDER.length - 1
+  QUIZ_LEVEL_ORDER.forEach(
+    (level, index) => {
+      const isLast =
+        index ===
+        QUIZ_LEVEL_ORDER.length - 1
 
-    quota[level] = isLast
-      ? count - used
-      : Math.round((MIXED_QUOTA[level] / total) * count)
+      quota[level] = isLast
+        ? count - used
+        : Math.round(
+            (MIXED_QUOTA[level] /
+              total) *
+              count,
+          )
 
-    used += quota[level]
-  })
+      used += quota[level]
+    },
+  )
 
   return quota
 }
@@ -298,69 +532,174 @@ export function createMixedSession(
     count?: number
   } = {},
 ): QuizSession {
-  const count = options.count ?? MIXED_COUNT
-  const scope = options.topicId ?? options.moduleId ?? 'all'
+  const count =
+    options.count ??
+    MIXED_COUNT
 
-  // Savollar hovuzi
+  const scope =
+    options.topicId ??
+    options.moduleId ??
+    'all'
+
   const pool: SessionQuestion[] = []
 
-  for (const module of CATEGORIES) {
-    if (options.moduleId && module.id !== options.moduleId) continue
+  for (
+    const module of CATEGORIES
+  ) {
+    if (
+      options.moduleId &&
+      module.id !==
+        options.moduleId
+    ) {
+      continue
+    }
 
-    for (const topic of module.topics) {
-      if (options.topicId && topic.id !== options.topicId) continue
+    for (
+      const topic of module.topics
+    ) {
+      if (
+        options.topicId &&
+        topic.id !==
+          options.topicId
+      ) {
+        continue
+      }
 
-      for (const level of QUIZ_LEVEL_ORDER) {
-        for (const q of topic.levels[level]) {
-          pool.push({ ...q, level, topicId: topic.id })
+      for (
+        const level of QUIZ_LEVEL_ORDER
+      ) {
+        for (
+          const q of topic.levels[level]
+        ) {
+          pool.push({
+            ...q,
+            level,
+            topicId: topic.id,
+          })
         }
       }
     }
   }
 
-  const seen = loadSeen(scope)
-  const quota = scaleQuota(count)
-  const picked: SessionQuestion[] = []
+  const seen =
+    loadSeen(scope)
 
-  for (const level of QUIZ_LEVEL_ORDER) {
-    const levelPool = pool.filter((q) => q.level === level)
+  const quota =
+    scaleQuota(count)
 
-    let fresh = shuffle(levelPool.filter((q) => !seen.has(q.id)))
+  const picked:
+    SessionQuestion[] = []
 
-    // Yangi savollar yetmasa — shu daraja aylanishi yangidan boshlanadi
-    if (fresh.length < quota[level]) {
-      levelPool.forEach((q) => seen.delete(q.id))
+  for (
+    const level of QUIZ_LEVEL_ORDER
+  ) {
+    const levelPool =
+      pool.filter(
+        (q) =>
+          q.level === level,
+      )
 
-      const rest = shuffle(levelPool.filter((q) => !fresh.includes(q)))
+    let fresh = shuffle(
+      levelPool.filter(
+        (q) =>
+          !seen.has(q.id),
+      ),
+    )
 
-      fresh = [...fresh, ...rest]
+    if (
+      fresh.length <
+      quota[level]
+    ) {
+      levelPool.forEach(
+        (q) =>
+          seen.delete(q.id),
+      )
+
+      const rest =
+        shuffle(
+          levelPool.filter(
+            (q) =>
+              !fresh.includes(q),
+          ),
+        )
+
+      fresh = [
+        ...fresh,
+        ...rest,
+      ]
     }
 
-    picked.push(...fresh.slice(0, quota[level]))
-  }
-
-  // Biror daraja kam bo‘lsa — qolgan savollardan to‘ldiramiz
-  if (picked.length < count) {
-    const ids = new Set(picked.map((q) => q.id))
-
     picked.push(
-      ...shuffle(pool.filter((q) => !ids.has(q.id))).slice(
+      ...fresh.slice(
         0,
-        count - picked.length,
+        quota[level],
       ),
     )
   }
 
-  picked.forEach((q) => seen.add(q.id))
-  saveSeen(scope, seen)
+  /*
+   * Agar ayrim darajalarda savol
+   * yetarli bo‘lmasa, boshqa darajadagi
+   * savollardan to‘ldiramiz.
+   */
+
+  if (
+    picked.length < count
+  ) {
+    const ids =
+      new Set(
+        picked.map(
+          (q) => q.id,
+        ),
+      )
+
+    picked.push(
+      ...shuffle(
+        pool.filter(
+          (q) =>
+            !ids.has(q.id),
+        ),
+      ).slice(
+        0,
+        count -
+          picked.length,
+      ),
+    )
+  }
+
+  picked.forEach(
+    (q) =>
+      seen.add(q.id),
+  )
+
+  saveSeen(
+    scope,
+    seen,
+  )
 
   return {
-    categoryId: MIXED_ID,
-    topicId: options.topicId ?? '',
+    categoryId:
+      MIXED_ID,
+
+    topicId:
+      options.topicId ?? '',
+
     level: 'medium',
-    title: 'Aralash test',
-    questions: shuffle(picked).map((q) => shuffleOptions(q)),
-    startedAt: Date.now(),
+
+    title:
+      'Aralash test',
+
+    questions:
+      shuffle(picked).map(
+        (q) =>
+          shuffleOptions(q),
+      ),
+
+    startedAt:
+      Date.now(),
+
+    timeLimitSec:
+      QUIZ_TIME_LIMIT_SEC,
   }
 }
 
@@ -370,12 +709,81 @@ export function createMixedSession(
  * =========================================================
  */
 
-export function createSession(categoryId: string): QuizSession {
-  if (categoryId === MIXED_ID) {
+export function createSession(
+  categoryId: string,
+): QuizSession {
+  if (
+    categoryId === MIXED_ID
+  ) {
     return createMixedSession()
   }
 
-  return createModuleSession(categoryId)
+  return createModuleSession(
+    categoryId,
+  )
+}
+
+/*
+ * =========================================================
+ * TIME
+ * =========================================================
+ */
+
+/**
+ * Test boshlanganidan keyin qancha vaqt
+ * o‘tganini sekundda qaytaradi.
+ */
+export function getElapsedSeconds(
+  session: QuizSession,
+): number {
+  return Math.floor(
+    (Date.now() -
+      session.startedAt) /
+      1000,
+  )
+}
+
+/**
+ * Vaqt tugagan yoki tugamaganini
+ * tekshiradi.
+ */
+export function isQuizTimeExpired(
+  session: QuizSession,
+): boolean {
+  const limit =
+    session.timeLimitSec ??
+    QUIZ_TIME_LIMIT_SEC
+
+  return (
+    getElapsedSeconds(session) >=
+    limit
+  )
+}
+
+/**
+ * Qolgan vaqt.
+ *
+ * Masalan:
+ * 120
+ * 119
+ * 118
+ * ...
+ * 0
+ */
+export function getRemainingSeconds(
+  session: QuizSession,
+): number {
+  const limit =
+    session.timeLimitSec ??
+    QUIZ_TIME_LIMIT_SEC
+
+  return Math.max(
+    0,
+    limit -
+      getElapsedSeconds(
+        session,
+      ),
+  )
 }
 
 /*
@@ -384,13 +792,26 @@ export function createSession(categoryId: string): QuizSession {
  * =========================================================
  */
 
-export function formatDuration(totalSec: number): string {
-  const safe = Math.max(0, Math.round(totalSec))
+export function formatDuration(
+  totalSec: number,
+): string {
+  const safe =
+    Math.max(
+      0,
+      Math.round(totalSec),
+    )
 
-  const minutes = Math.floor(safe / 60)
-  const seconds = safe % 60
+  const minutes =
+    Math.floor(
+      safe / 60,
+    )
 
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`
+  const seconds =
+    safe % 60
+
+  return `${minutes}:${seconds
+    .toString()
+    .padStart(2, '0')}`
 }
 
 /*
@@ -399,31 +820,95 @@ export function formatDuration(totalSec: number): string {
  * =========================================================
  */
 
-export function gradeFor(percent: number) {
+/**
+ * Natijaga qarab kreativ xabar.
+ *
+ * 100% → eng yuqori
+ * 90–99% → a'lo
+ * 80–89% → kuchli
+ * 70–79% → o'tdi
+ * 50–69% → takrorlash
+ * 0–49% → yana tayyorlanish
+ */
+
+export function getResultMessage(
+  percent: number,
+): {
+  label: string
+  message: string
+  emoji: string
+} {
+  if (percent >= 100) {
+    return {
+      label:
+        'SIZ ENG ZO‘RISIZ! 👑',
+      message:
+        '100%! Birorta ham xato yo‘q. Bu natija sizning bilim va tayyorgarligingiz juda yuqori ekanini ko‘rsatadi. Menejerlik sari dadil davom eting!',
+      emoji: '👑',
+    }
+  }
+
   if (percent >= 90) {
     return {
-      label: "A'lo natija!",
-      note: 'Siz mavzuni juda yaxshi o‘zlashtirgansiz.',
+      label:
+        'AJOYIB NATIJA! 🏆',
+      message:
+        '90% dan yuqori! Siz mavzuni juda yaxshi egallagansiz. Endi eng murakkab savollar bilan o‘zingizni sinab ko‘ring!',
+      emoji: '🏆',
+    }
+  }
+
+  if (percent >= 80) {
+    return {
+      label:
+        'JUDAYAM KUCHLI NATIJA! 🔥',
+      message:
+        '80% dan yuqori! Sizning tayyorgarligingiz yaxshi darajada. Yana ozgina mehnat — va yuqori natijalar sizniki!',
+      emoji: '🔥',
     }
   }
 
   if (percent >= 70) {
     return {
-      label: 'Yaxshi natija',
-      note: 'Ozgina takrorlash bilan natijangizni yanada oshirishingiz mumkin.',
+      label:
+        'TABRIKLAYMIZ, SIZ O‘TDINGIZ! 🎉',
+      message:
+        '70% dan yuqori natija — testdan muvaffaqiyatli o‘tdingiz! Bilimingizni mustahkamlashda davom eting.',
+      emoji: '🎉',
     }
   }
 
   if (percent >= 50) {
     return {
-      label: 'Qoniqarli',
-      note: 'Xatolaringizni tahlil qiling va mavzuni yana bir bor takrorlang.',
+      label:
+        'YAXSHI BOSHLANISH! 💪',
+      message:
+        'Natijangizda yaxshi bilimlar bor. Xato qilgan savollaringizni qayta ko‘rib chiqing va yana bir bor urinib ko‘ring.',
+      emoji: '💪',
     }
   }
 
   return {
-    label: 'Yana urinib ko‘ring',
-    note: 'Mavzuni takrorlab, testni qayta topshirishingiz mumkin.',
+    label:
+      'TAYYORLANISHNI DAVOM ETTIRING 📚',
+    message:
+      'Bu safar kerakli natijaga yetmadi. Xatolaringizni tahlil qiling, mavzuni takrorlang va yana urinib ko‘ring. Har bir urinish sizni kuchliroq qiladi!',
+    emoji: '📚',
+  }
+}
+
+export function gradeFor(
+  percent: number,
+) {
+  const result =
+    getResultMessage(percent)
+
+  return {
+    label:
+      result.label,
+
+    note:
+      result.message,
   }
 }
 
@@ -433,12 +918,62 @@ export function gradeFor(percent: number) {
  * =========================================================
  */
 
-export function calculatePercentage(correct: number, total: number): number {
-  if (total === 0) {
+export function calculatePercentage(
+  correct: number,
+  total: number,
+): number {
+  if (
+    total === 0
+  ) {
     return 0
   }
 
-  return Math.round((correct / total) * 100)
+  return Math.round(
+    (correct / total) * 100,
+  )
+}
+
+/*
+ * =========================================================
+ * PASS / FAIL
+ * =========================================================
+ */
+
+/**
+ * 70% yoki undan yuqori bo‘lsa O‘TDI.
+ */
+export function hasPassed(
+  correct: number,
+  total: number,
+): boolean {
+  const percent =
+    calculatePercentage(
+      correct,
+      total,
+    )
+
+  return percent >= 70
+}
+
+/**
+ * Natija uchun chiroyli status.
+ */
+export function getPassStatus(
+  correct: number,
+  total: number,
+): string {
+  const percent =
+    calculatePercentage(
+      correct,
+      total,
+    )
+
+  return hasPassed(
+    correct,
+    total,
+  )
+    ? `O‘TDINGIZ — ${percent}% 🎉`
+    : `O‘TMADINGIZ — ${percent}%`
 }
 
 /*
@@ -447,13 +982,19 @@ export function calculatePercentage(correct: number, total: number): number {
  * =========================================================
  */
 
-export function isAnswerCorrect(question: Question, selected: number): boolean {
-  return selected === question.answer
+export function isAnswerCorrect(
+  question: Question,
+  selected: number,
+): boolean {
+  return (
+    selected ===
+    question.answer
+  )
 }
 
 /*
  * =========================================================
- * FEEDBACK — to‘g‘ri bo‘lsa maqtov, xato bo‘lsa tushuntirish
+ * FEEDBACK
  * =========================================================
  */
 
@@ -466,7 +1007,10 @@ const PRAISE = [
   'Tabriklayman! 🚀 Siz yo‘ldasiz.',
 ]
 
-const STREAK_PRAISE: Record<number, string> = {
+const STREAK_PRAISE: Record<
+  number,
+  string
+> = {
   3: '🔥 3 ta ketma-ket to‘g‘ri! Qizib ketdingiz!',
   5: '⚡ 5 ta ketma-ket! To‘xtatib bo‘lmayapti!',
   10: '👑 10 ta ketma-ket! Haqiqiy mutaxassis!',
@@ -487,29 +1031,49 @@ export type Feedback = {
   correctText: string
 }
 
-/**
- * @param selected  tanlangan variant indeksi (null — javob berilmadi)
- * @param streak    shu paytgacha ketma-ket to‘g‘ri javoblar soni
- */
 export function getFeedback(
   question: Question,
   selected: number | null,
   streak = 0,
 ): Feedback {
-  const correctText = question.options[question.answer]
+  const correctText =
+    question.options[
+      question.answer
+    ]
 
-  if (selected === question.answer) {
+  if (
+    selected ===
+    question.answer
+  ) {
     return {
       correct: true,
-      title: pickRandom(PRAISE),
-      message: STREAK_PRAISE[streak + 1] ?? '',
-      explanation: question.explanation,
-      chosenText: correctText,
+
+      title:
+        pickRandom(
+          PRAISE,
+        ),
+
+      message:
+        STREAK_PRAISE[
+          streak + 1
+        ] ?? '',
+
+      explanation:
+        question.explanation,
+
+      chosenText:
+        correctText,
+
       correctText,
     }
   }
 
-  const chosenText = selected === null ? null : question.options[selected]
+  const chosenText =
+    selected === null
+      ? null
+      : question.options[
+          selected
+        ]
 
   const why =
     selected === null
@@ -518,17 +1082,27 @@ export function getFeedback(
 
   return {
     correct: false,
-    title: '❌ Bu safar to‘g‘ri chiqmadi',
-    message: `${why}${pickRandom(ENCOURAGE)}`,
-    explanation: `To‘g‘ri javob: «${correctText}». Nima uchun: ${question.explanation}`,
+
+    title:
+      '❌ Bu safar to‘g‘ri chiqmadi',
+
+    message:
+      `${why}${pickRandom(
+        ENCOURAGE,
+      )}`,
+
+    explanation:
+      `To‘g‘ri javob: «${correctText}». Nima uchun: ${question.explanation}`,
+
     chosenText,
+
     correctText,
   }
 }
 
 /*
  * =========================================================
- * NATIJA TAHLILI (daraja bo‘yicha, eng zaif joy, maslahat)
+ * NATIJA TAHLILI
  * =========================================================
  */
 
@@ -545,57 +1119,164 @@ export type ResultSummary = {
   weakest: QuizLevel | null
   headline: string
   advice: string
+
+  /**
+   * Yangi kreativ natija xabari
+   */
+  resultMessage: string
+
+  /**
+   * O‘tdi / o‘tmadi
+   */
+  passed: boolean
 }
 
-export function summarizeResult(result: QuizResult): ResultSummary {
-  const percent = calculatePercentage(result.correct, result.total)
-
-  const byLevel: LevelStat[] = QUIZ_LEVEL_ORDER.map((level) => {
-    const list = result.answers.filter(
-      (a) => (a.question as SessionQuestion).level === level,
+export function summarizeResult(
+  result: QuizResult,
+): ResultSummary {
+  const percent =
+    calculatePercentage(
+      result.correct,
+      result.total,
     )
 
-    const correct = list.filter((a) => isAnswerCorrect(a.question, a.selected))
-      .length
+  const byLevel =
+    QUIZ_LEVEL_ORDER
+      .map((level) => {
+        const list =
+          result.answers.filter(
+            (a) =>
+              (
+                a.question as SessionQuestion
+              ).level === level,
+          )
 
-    return {
-      level,
-      correct,
-      total: list.length,
-      percent: calculatePercentage(correct, list.length),
-    }
-  }).filter((stat) => stat.total > 0)
+        const correct =
+          list.filter((a) =>
+            isAnswerCorrect(
+              a.question,
+              a.selected,
+            ),
+          ).length
 
-  const weakest = byLevel.length
-    ? [...byLevel].sort((a, b) => a.percent - b.percent)[0].level
-    : null
+        return {
+          level,
+
+          correct,
+
+          total:
+            list.length,
+
+          percent:
+            calculatePercentage(
+              correct,
+              list.length,
+            ),
+        }
+      })
+      .filter(
+        (stat) =>
+          stat.total > 0,
+      )
+
+  const weakest =
+    byLevel.length
+      ? [
+          ...byLevel,
+        ].sort(
+          (a, b) =>
+            a.percent -
+            b.percent,
+        )[0].level
+      : null
+
+  const resultMessage =
+    getResultMessage(
+      percent,
+    )
+
+  const passed =
+    percent >= 70
 
   let headline: string
   let advice: string
 
-  if (percent >= 90) {
-    headline = '🏆 A’lo natija! Siz tayyorsiz.'
+  if (
+    percent >= 100
+  ) {
+    headline =
+      '👑 SIZ ENG ZO‘RISIZ!'
+
     advice =
-      'Bilimingiz juda yuqori. Endi qiyin va keys savollarda o‘zingizni sinab turing.'
-  } else if (percent >= 75) {
-    headline = '🎉 Yaxshi natija!'
+      'Mukammal natija! Birorta ham xato qilmasdan barcha savollarga to‘g‘ri javob berdingiz.'
+  } else if (
+    percent >= 90
+  ) {
+    headline =
+      '🏆 AJOYIB NATIJA!'
+
     advice =
-      'Asosiy tushunchalarni yaxshi bilasiz. Xato qilgan savollaringiz izohini qayta o‘qib chiqing.'
-  } else if (percent >= 55) {
-    headline = '👍 O‘rtacha natija — o‘sish uchun joy bor.'
+      'Bilimingiz juda yuqori darajada. Endi yanada murakkab savollar bilan o‘zingizni sinab ko‘ring.'
+  } else if (
+    percent >= 80
+  ) {
+    headline =
+      '🔥 JUDA KUCHLI NATIJA!'
+
     advice =
-      'Tamoyillar va jarayonlar ketma-ketligini (attestatsiya, akkreditatsiya) qayta takrorlang.'
+      'Siz mavzuni yaxshi o‘zlashtirgansiz. Yana ozgina tayyorgarlik bilan natijangizni yanada oshirishingiz mumkin.'
+  } else if (
+    percent >= 70
+  ) {
+    headline =
+      '🎉 TABRIKLAYMIZ, SIZ O‘TDINGIZ!'
+
+    advice =
+      'Siz belgilangan 70% chegaradan muvaffaqiyatli o‘tdingiz. Bilimingizni yanada mustahkamlashda davom eting.'
+  } else if (
+    percent >= 50
+  ) {
+    headline =
+      '💪 YAXSHI BOSHLANISH!'
+
+    advice =
+      'Hali 70% chegaraga yetmadingiz. Xato qilgan savollaringizni tahlil qilib, testni qayta ishlang.'
   } else {
-    headline = '📚 Hozircha boshlang‘ich bosqich.'
+    headline =
+      '📚 YANA TAYYORLANAMIZ!'
+
     advice =
-      'Bu normal. Avval «Oson» darajani 80% dan yuqori natijaga yetkazing, so‘ng «O‘rta»ga o‘ting. Har bir izohni o‘qishni unutmang.'
+      'Mavzuni qayta ko‘rib chiqing va yana urinib ko‘ring. Har bir xato — keyingi muvaffaqiyat uchun tajriba.'
   }
 
-  if (weakest && byLevel.length > 1) {
-    advice += ` Eng zaif joyingiz: ${getLevelIcon(weakest)} ${getLevelTitle(weakest)} daraja.`
+  if (
+    weakest &&
+    byLevel.length > 1
+  ) {
+    advice +=
+      ` Eng zaif joyingiz: ${getLevelIcon(
+        weakest,
+      )} ${getLevelTitle(
+        weakest,
+      )} daraja.`
   }
 
-  return { percent, byLevel, weakest, headline, advice }
+  return {
+    percent,
+
+    byLevel,
+
+    weakest,
+
+    headline,
+
+    advice,
+
+    resultMessage:
+      resultMessage.message,
+
+    passed,
+  }
 }
 
 /*
@@ -613,33 +1294,53 @@ export const QUIZ_LEVELS: Array<{
 }> = [
   {
     id: 'easy',
+
     title: 'Oson',
+
     icon: '🟢',
-    description: 'Asosiy tushunchalar va bilimlar',
+
+    description:
+      'Asosiy tushunchalar va bilimlar',
+
     questionCount: 30,
   },
 
   {
     id: 'medium',
+
     title: 'O‘rta',
+
     icon: '🟡',
-    description: 'Amaliy qo‘llash va vaziyatlar',
+
+    description:
+      'Amaliy qo‘llash va vaziyatlar',
+
     questionCount: 30,
   },
 
   {
     id: 'hard',
+
     title: 'Qiyin',
+
     icon: '🔴',
-    description: 'Tahliliy va murakkab savollar',
+
+    description:
+      'Tahliliy va murakkab savollar',
+
     questionCount: 30,
   },
 
   {
     id: 'case',
+
     title: 'Keys',
+
     icon: '🔵',
-    description: 'Real boshqaruv vaziyatlari',
+
+    description:
+      'Real boshqaruv vaziyatlari',
+
     questionCount: 10,
   },
 ]
