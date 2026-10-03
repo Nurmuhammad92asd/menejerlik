@@ -31,13 +31,18 @@ import {
   useTelegram,
 } from '@/hooks/use-telegram'
 
-import { setClosingConfirmation } from '@/lib/telegram'
+import {
+  getTelegramUser,
+  setClosingConfirmation,
+} from '@/lib/telegram'
 
 /* =========================================================
    TYPES
 ========================================================= */
 
-type EducationType = 'preschool' | 'school'
+type EducationType =
+  | 'preschool'
+  | 'school'
 
 type Screen =
   | 'home'
@@ -51,8 +56,12 @@ type Screen =
   | 'ai'
 
 type NavigationState = {
-  educationType: EducationType | null
+  educationType:
+    | EducationType
+    | null
+
   moduleId: string | null
+
   topicId: string | null
 }
 
@@ -67,27 +76,40 @@ const INITIAL_NAVIGATION: NavigationState = {
 ========================================================= */
 
 export function MenejerlikApp() {
-  const { isTelegram, webApp } = useTelegram()
+  const {
+    isTelegram,
+    webApp,
+  } = useTelegram()
 
   const [screen, setScreen] =
     useState<Screen>('home')
 
-  const [navigation, setNavigation] =
-    useState<NavigationState>(
-      INITIAL_NAVIGATION,
-    )
+  const [
+    navigation,
+    setNavigation,
+  ] = useState<NavigationState>(
+    INITIAL_NAVIGATION,
+  )
 
-  const [quizSession, setQuizSession] =
-    useState<QuizSession | null>(null)
+  const [
+    quizSession,
+    setQuizSession,
+  ] = useState<QuizSession | null>(null)
 
-  const [quizResult, setQuizResult] =
-    useState<QuizResult | null>(null)
+  const [
+    quizResult,
+    setQuizResult,
+  ] = useState<QuizResult | null>(null)
 
-  const [isFullscreen, setIsFullscreen] =
-    useState(false)
+  const [
+    isFullscreen,
+    setIsFullscreen,
+  ] = useState(false)
 
-  const [isClosingConfirmation, setIsClosingConfirmation] =
-    useState(false)
+  const [
+    isClosingConfirmation,
+    setIsClosingConfirmation,
+  ] = useState(false)
 
   const history = useHistory()
 
@@ -101,7 +123,10 @@ export function MenejerlikApp() {
     try {
       webApp.ready()
 
-      if (webApp.expand) {
+      if (
+        typeof webApp.expand ===
+        'function'
+      ) {
         webApp.expand()
       }
 
@@ -112,8 +137,11 @@ export function MenejerlikApp() {
         webApp.requestFullscreen()
         setIsFullscreen(true)
       }
-    } catch {
-      // Telegram fullscreen barcha versiyalarda mavjud emas
+    } catch (error) {
+      console.error(
+        'Telegram fullscreen error:',
+        error,
+      )
     }
   }, [webApp])
 
@@ -124,20 +152,21 @@ export function MenejerlikApp() {
   useEffect(() => {
     if (!webApp) return
 
-    const handleFullscreenChanged = () => {
-      try {
-        if (
-          typeof webApp.isFullscreen ===
-          'boolean'
-        ) {
-          setIsFullscreen(
-            webApp.isFullscreen,
-          )
+    const handleFullscreenChanged =
+      () => {
+        try {
+          if (
+            typeof webApp.isFullscreen ===
+            'boolean'
+          ) {
+            setIsFullscreen(
+              webApp.isFullscreen,
+            )
+          }
+        } catch {
+          // Telegram versiyasiga bog‘liq
         }
-      } catch {
-        // ignore
       }
-    }
 
     window.addEventListener(
       'fullscreenchange',
@@ -157,12 +186,17 @@ export function MenejerlikApp() {
   ========================================================= */
 
   const scrollToTop = () => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      })
+    if (
+      typeof window ===
+      'undefined'
+    ) {
+      return
     }
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   }
 
   /* =========================================================
@@ -172,9 +206,12 @@ export function MenejerlikApp() {
   const goHome = () => {
     setScreen('home')
 
-    setNavigation(INITIAL_NAVIGATION)
+    setNavigation(
+      INITIAL_NAVIGATION,
+    )
 
     setQuizSession(null)
+
     setQuizResult(null)
 
     scrollToTop()
@@ -190,20 +227,6 @@ export function MenejerlikApp() {
   }
 
   /* =========================================================
-     CLOSE MINI APP
-  ========================================================= */
-
-  const closeMiniApp = () => {
-    try {
-      if (webApp?.close) {
-        webApp.close()
-      }
-    } catch {
-      // ignore
-    }
-  }
-
-  /* =========================================================
      AI
   ========================================================= */
 
@@ -213,13 +236,34 @@ export function MenejerlikApp() {
   }
 
   /* =========================================================
+     CLOSE MINI APP
+  ========================================================= */
+
+  const closeMiniApp = () => {
+    try {
+      if (
+        typeof webApp?.close ===
+        'function'
+      ) {
+        webApp.close()
+      }
+    } catch (error) {
+      console.error(
+        'Mini App close error:',
+        error,
+      )
+    }
+  }
+
+  /* =========================================================
      EDUCATION
   ========================================================= */
 
-  const openEducationSelection = () => {
-    setScreen('education')
-    scrollToTop()
-  }
+  const openEducationSelection =
+    () => {
+      setScreen('education')
+      scrollToTop()
+    }
 
   const selectEducation = (
     educationType: EducationType,
@@ -242,11 +286,13 @@ export function MenejerlikApp() {
   const selectModule = (
     moduleId: string,
   ) => {
-    setNavigation((previous) => ({
-      ...previous,
-      moduleId,
-      topicId: null,
-    }))
+    setNavigation(
+      (previous) => ({
+        ...previous,
+        moduleId,
+        topicId: null,
+      }),
+    )
 
     setScreen('topics')
 
@@ -260,10 +306,12 @@ export function MenejerlikApp() {
   const selectTopic = (
     topicId: string,
   ) => {
-    setNavigation((previous) => ({
-      ...previous,
-      topicId,
-    }))
+    setNavigation(
+      (previous) => ({
+        ...previous,
+        topicId,
+      }),
+    )
 
     setScreen('levels')
 
@@ -277,7 +325,11 @@ export function MenejerlikApp() {
   const selectLevel = (
     level: QuizLevel,
   ) => {
-    if (!navigation.topicId) return
+    if (
+      !navigation.topicId
+    ) {
+      return
+    }
 
     startQuiz(
       navigation.topicId,
@@ -302,8 +354,18 @@ export function MenejerlikApp() {
 
       if (
         !session ||
-        !session.questions?.length
+        !session.questions ||
+        session.questions.length ===
+          0
       ) {
+        console.error(
+          'Test savollari topilmadi:',
+          {
+            topicId,
+            level,
+          },
+        )
+
         return
       }
 
@@ -323,13 +385,169 @@ export function MenejerlikApp() {
   }
 
   /* =========================================================
+     SAVE RESULT TO D1
+  ========================================================= */
+
+  const saveResultToDatabase =
+    async ({
+      correct,
+      total,
+      durationSec,
+    }: {
+      correct: number
+      total: number
+      durationSec: number
+    }) => {
+      try {
+        const telegramUser =
+          getTelegramUser()
+
+        /*
+         * Telegram ichidan ochilmagan holatda
+         * foydalanuvchi bo‘lmasligi mumkin.
+         *
+         * Bunday holatda test ishlashi davom etadi,
+         * lekin global D1 statistikaga yuborilmaydi.
+         */
+
+        if (!telegramUser) {
+          console.warn(
+            'Telegram user topilmadi. D1 saqlash o‘tkazib yuborildi.',
+          )
+
+          return null
+        }
+
+        const response =
+          await fetch(
+            '/api/results',
+            {
+              method: 'POST',
+
+              headers: {
+                'Content-Type':
+                  'application/json',
+              },
+
+              body: JSON.stringify({
+                telegramUser: {
+                  id: telegramUser.id,
+
+                  first_name:
+                    telegramUser.first_name,
+
+                  last_name:
+                    telegramUser.last_name,
+
+                  username:
+                    telegramUser.username,
+                },
+
+                categoryId:
+                  navigation.moduleId,
+
+                topicId:
+                  navigation.topicId,
+
+                level:
+                  quizSession?.level ??
+                  null,
+
+                correct,
+
+                total,
+
+                durationSec,
+              }),
+            },
+          )
+
+        if (!response.ok) {
+          const errorText =
+            await response.text()
+
+          console.error(
+            'D1 API xatosi:',
+            response.status,
+            errorText,
+          )
+
+          return null
+        }
+
+        const data =
+          await response.json()
+
+        console.log(
+          '✅ Natija D1 ga saqlandi:',
+          data,
+        )
+
+        return data
+      } catch (error) {
+        /*
+         * D1 ishlamasa ham ResultScreen ochilishi kerak.
+         * Foydalanuvchi test natijasini ko‘rishi shart.
+         */
+
+        console.error(
+          'D1 ga natija yuborishda xatolik:',
+          error,
+        )
+
+        return null
+      }
+    }
+
+  /* =========================================================
+     SAVE LOCAL HISTORY
+  ========================================================= */
+
+  const saveLocalHistory =
+    async ({
+      correct,
+      total,
+      durationSec,
+    }: {
+      correct: number
+      total: number
+      durationSec: number
+    }) => {
+      try {
+        await history.addAttempt({
+          id: crypto.randomUUID(),
+
+          categoryId:
+            navigation.topicId ??
+            navigation.moduleId ??
+            'unknown',
+
+          correct,
+
+          total,
+
+          durationSec,
+
+          at: Date.now(),
+        })
+      } catch (error) {
+        console.error(
+          'Lokal tarixni saqlashda xatolik:',
+          error,
+        )
+      }
+    }
+
+  /* =========================================================
      FINISH QUIZ
   ========================================================= */
 
-  const finish = (
+  const finish = async (
     answers: AnswerRecord[],
   ) => {
-    if (!quizSession) return
+    if (!quizSession) {
+      return
+    }
 
     const total =
       quizSession.questions.length
@@ -337,11 +555,14 @@ export function MenejerlikApp() {
     const correct =
       answers.filter(
         (answer) =>
-          answer.isCorrect,
+          answer.isCorrect === true,
       ).length
 
     const wrong =
-      total - correct
+      Math.max(
+        0,
+        total - correct,
+      )
 
     const percentage =
       total > 0
@@ -350,20 +571,61 @@ export function MenejerlikApp() {
           )
         : 0
 
+    /* -------------------------------------------------------
+       RESULT OBJECT
+    ------------------------------------------------------- */
+
     const result = {
       ...quizSession,
+
       answers,
+
       total,
+
       correct,
+
       wrong,
+
       percentage,
     } as unknown as QuizResult
+
+    /*
+     * -------------------------------------------------------
+     * MUHIM:
+     *
+     * Avval natijani ekranga chiqaramiz.
+     * Keyin ma'lumotlarni saqlaymiz.
+     *
+     * Shu sababli D1 serverida vaqtinchalik xato bo‘lsa,
+     * foydalanuvchi natijasiz qolmaydi.
+     * -------------------------------------------------------
+     */
 
     setQuizResult(result)
 
     setScreen('result')
 
     scrollToTop()
+
+    /*
+     * -------------------------------------------------------
+     * DATABASE
+     * -------------------------------------------------------
+     */
+
+    await Promise.allSettled([
+      saveResultToDatabase({
+        correct,
+        total,
+        durationSec: 0,
+      }),
+
+      saveLocalHistory({
+        correct,
+        total,
+        durationSec: 0,
+      }),
+    ])
   }
 
   /* =========================================================
@@ -392,31 +654,34 @@ export function MenejerlikApp() {
   ========================================================= */
 
   const goBack = () => {
+    /* HOME */
+
     if (screen === 'home') {
       return
     }
 
-    /* =========================
-       RANKING
-    ========================= */
+    /* RANKING */
 
     if (screen === 'ranking') {
       goHome()
       return
     }
 
-    /* =========================
-       EDUCATION
-    ========================= */
+    /* AI */
+
+    if (screen === 'ai') {
+      goHome()
+      return
+    }
+
+    /* EDUCATION */
 
     if (screen === 'education') {
       goHome()
       return
     }
 
-    /* =========================
-       MODULES
-    ========================= */
+    /* MODULES */
 
     if (screen === 'modules') {
       setScreen('education')
@@ -424,9 +689,7 @@ export function MenejerlikApp() {
       return
     }
 
-    /* =========================
-       TOPICS
-    ========================= */
+    /* TOPICS */
 
     if (screen === 'topics') {
       setScreen('modules')
@@ -434,9 +697,7 @@ export function MenejerlikApp() {
       return
     }
 
-    /* =========================
-       LEVELS
-    ========================= */
+    /* LEVELS */
 
     if (screen === 'levels') {
       setScreen('topics')
@@ -444,9 +705,7 @@ export function MenejerlikApp() {
       return
     }
 
-    /* =========================
-       QUIZ
-    ========================= */
+    /* QUIZ */
 
     if (screen === 'quiz') {
       setScreen('levels')
@@ -454,23 +713,15 @@ export function MenejerlikApp() {
       return
     }
 
-    /* =========================
-       RESULT
-    ========================= */
+    /* RESULT */
 
     if (screen === 'result') {
       setScreen('levels')
+
       setQuizResult(null)
+
       scrollToTop()
-      return
-    }
 
-    /* =========================
-       AI
-    ========================= */
-
-    if (screen === 'ai') {
-      goHome()
       return
     }
   }
@@ -500,8 +751,11 @@ export function MenejerlikApp() {
       setClosingConfirmation(
         shouldConfirm,
       )
-    } catch {
-      // ignore
+    } catch (error) {
+      console.error(
+        'Closing confirmation error:',
+        error,
+      )
     }
 
     return () => {
@@ -516,7 +770,7 @@ export function MenejerlikApp() {
   }, [screen])
 
   /* =========================================================
-     ACTIVE DATA
+     ACTIVE CATEGORIES
   ========================================================= */
 
   const activeCategories =
@@ -533,9 +787,15 @@ export function MenejerlikApp() {
       navigation.educationType,
     ])
 
+  /* =========================================================
+     ACTIVE MODULE
+  ========================================================= */
+
   const activeModule =
     useMemo(() => {
-      if (!navigation.moduleId) {
+      if (
+        !navigation.moduleId
+      ) {
         return undefined
       }
 
@@ -546,9 +806,15 @@ export function MenejerlikApp() {
       navigation.moduleId,
     ])
 
+  /* =========================================================
+     ACTIVE TOPIC
+  ========================================================= */
+
   const activeTopic =
     useMemo(() => {
-      if (!navigation.topicId) {
+      if (
+        !navigation.topicId
+      ) {
         return undefined
       }
 
@@ -768,6 +1034,9 @@ export function MenejerlikApp() {
               session={
                 quizSession
               }
+              showCloseButton={
+                true
+              }
               onFinish={
                 finish
               }
@@ -825,6 +1094,7 @@ function EducationScreen({
   onSelect,
 }: {
   onBack: () => void
+
   onSelect: (
     educationType: EducationType,
   ) => void
@@ -944,8 +1214,13 @@ function ModuleScreen({
   onSelect,
 }: {
   categories: Category[]
-  educationType: EducationType | null
+
+  educationType:
+    | EducationType
+    | null
+
   onBack: () => void
+
   onSelect: (
     moduleId: string,
   ) => void
@@ -983,7 +1258,8 @@ function ModuleScreen({
         </h1>
 
         <p className="mt-2 text-sm text-muted-foreground">
-          {educationType === 'preschool'
+          {educationType ===
+          'preschool'
             ? 'Maktabgacha ta’lim'
             : 'Umumiy o‘rta ta’lim'}
         </p>
@@ -991,9 +1267,14 @@ function ModuleScreen({
 
       <div className="flex flex-col gap-3">
         {categories.map(
-          (category, index) => (
+          (
+            category,
+            index,
+          ) => (
             <button
-              key={category.id}
+              key={
+                category.id
+              }
               type="button"
               onClick={() =>
                 onSelect(
@@ -1036,7 +1317,9 @@ function ModuleScreen({
 
               <div className="min-w-0 flex-1">
                 <h2 className="font-bold">
-                  {category.title}
+                  {
+                    category.title
+                  }
                 </h2>
 
                 {'description' in
@@ -1065,7 +1348,8 @@ function ModuleScreen({
         )}
       </div>
 
-      {categories.length === 0 && (
+      {categories.length ===
+        0 && (
         <EmptyState
           icon="📚"
           title="Modullar mavjud emas"
@@ -1090,7 +1374,9 @@ function TopicScreen({
         typeof getModuleById
       >
     | undefined
+
   onBack: () => void
+
   onSelect: (
     topicId: string,
   ) => void
@@ -1155,10 +1441,13 @@ function TopicScreen({
         </p>
 
         <h1 className="mt-2 text-2xl font-bold">
-          {module.title}
+          {
+            module.title
+          }
         </h1>
 
-        {'description' in module &&
+        {'description' in
+          module &&
           module.description && (
             <p className="mt-2 text-sm leading-5 text-muted-foreground">
               {
@@ -1170,9 +1459,14 @@ function TopicScreen({
 
       <div className="flex flex-col gap-3">
         {topics.map(
-          (topic, index) => (
+          (
+            topic,
+            index,
+          ) => (
             <button
-              key={topic.id}
+              key={
+                topic.id
+              }
               type="button"
               onClick={() =>
                 onSelect(
@@ -1218,7 +1512,9 @@ function TopicScreen({
 
               <div className="min-w-0 flex-1">
                 <h2 className="font-bold">
-                  {topic.title}
+                  {
+                    topic.title
+                  }
                 </h2>
 
                 {topic.description && (
@@ -1245,7 +1541,8 @@ function TopicScreen({
         )}
       </div>
 
-      {topics.length === 0 && (
+      {topics.length ===
+        0 && (
         <EmptyState
           icon="📝"
           title="Mavzular mavjud emas"
@@ -1270,7 +1567,9 @@ function LevelScreen({
         typeof getTopicById
       >
     | undefined
+
   onBack: () => void
+
   onSelect: (
     level: QuizLevel,
   ) => void
@@ -1314,8 +1613,10 @@ function LevelScreen({
       description:
         'Asosiy tushunchalar va bilimlar',
       questions:
-        topic.levels.easy.length,
+        topic.levels.easy
+          .length,
     },
+
     {
       id: 'medium',
       icon: '🟡',
@@ -1323,8 +1624,10 @@ function LevelScreen({
       description:
         'Amaliy qo‘llash va vaziyatlar',
       questions:
-        topic.levels.medium.length,
+        topic.levels.medium
+          .length,
     },
+
     {
       id: 'hard',
       icon: '🔴',
@@ -1332,8 +1635,10 @@ function LevelScreen({
       description:
         'Tahliliy va murakkab savollar',
       questions:
-        topic.levels.hard.length,
+        topic.levels.hard
+          .length,
     },
+
     {
       id: 'case',
       icon: '🔵',
@@ -1341,8 +1646,10 @@ function LevelScreen({
       description:
         'Real boshqaruv vaziyatlari',
       questions:
-        topic.levels.case.length,
+        topic.levels.case
+          .length,
     },
+
     {
       id: 'mixed',
       icon: '🟣',
@@ -1382,7 +1689,9 @@ function LevelScreen({
         </p>
 
         <h1 className="mt-2 text-2xl font-bold">
-          {topic.title}
+          {
+            topic.title
+          }
         </h1>
 
         <p className="mt-2 text-sm text-muted-foreground">
@@ -1392,9 +1701,13 @@ function LevelScreen({
 
       <div className="flex flex-col gap-3">
         {levels.map(
-          (level) => (
+          (
+            level,
+          ) => (
             <button
-              key={level.id}
+              key={
+                level.id
+              }
               type="button"
               onClick={() =>
                 onSelect(
@@ -1430,13 +1743,17 @@ function LevelScreen({
                   text-2xl
                 "
               >
-                {level.icon}
+                {
+                  level.icon
+                }
               </div>
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <h2 className="font-bold">
-                    {level.title}
+                    {
+                      level.title
+                    }
                   </h2>
 
                   <span
@@ -1449,7 +1766,9 @@ function LevelScreen({
                       font-semibold
                     "
                   >
-                    {level.questions}
+                    {
+                      level.questions
+                    }
                   </span>
                 </div>
 
@@ -1509,7 +1828,7 @@ function LevelScreen({
 }
 
 /* =========================================================
-   HELPERS
+   MODULE ICON
 ========================================================= */
 
 function getModuleIcon(
