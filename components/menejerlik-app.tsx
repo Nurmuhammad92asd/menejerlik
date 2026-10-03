@@ -1,6 +1,10 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 import { AIAssistant } from '@/components/ai-assistant'
 import { HomeScreen } from '@/components/home-screen'
@@ -72,6 +76,26 @@ const INITIAL_NAVIGATION: NavigationState = {
 }
 
 /* =========================================================
+   INTERNAL ANSWER TYPE
+   =========================================================
+   Biz AnswerRecord'ni quiz engine'dan olamiz.
+   Hisoblash uchun esa uning real strukturasi:
+   question + selected
+   sifatida ishlaydi.
+========================================================= */
+
+type QuizAnswerData = {
+  question: {
+    id: string
+    text: string
+    options: string[]
+    answer: number
+    explanation?: string
+  }
+  selected: number
+}
+
+/* =========================================================
    MAIN APP
 ========================================================= */
 
@@ -94,12 +118,16 @@ export function MenejerlikApp() {
   const [
     quizSession,
     setQuizSession,
-  ] = useState<QuizSession | null>(null)
+  ] = useState<QuizSession | null>(
+    null,
+  )
 
   const [
     quizResult,
     setQuizResult,
-  ] = useState<QuizResult | null>(null)
+  ] = useState<QuizResult | null>(
+    null,
+  )
 
   const [
     isFullscreen,
@@ -118,7 +146,9 @@ export function MenejerlikApp() {
   ========================================================= */
 
   useEffect(() => {
-    if (!webApp) return
+    if (!webApp) {
+      return
+    }
 
     try {
       webApp.ready()
@@ -150,7 +180,9 @@ export function MenejerlikApp() {
   ========================================================= */
 
   useEffect(() => {
-    if (!webApp) return
+    if (!webApp) {
+      return
+    }
 
     const handleFullscreenChanged =
       () => {
@@ -164,7 +196,7 @@ export function MenejerlikApp() {
             )
           }
         } catch {
-          // Telegram versiyasiga bog‘liq
+          // Telegram versiyasiga bog'liq
         }
       }
 
@@ -369,6 +401,11 @@ export function MenejerlikApp() {
         return
       }
 
+      /*
+       * Yangi test boshlanganda
+       * eski natijani tozalaymiz.
+       */
+
       setQuizSession(session)
 
       setQuizResult(null)
@@ -404,10 +441,7 @@ export function MenejerlikApp() {
 
         /*
          * Telegram ichidan ochilmagan holatda
-         * foydalanuvchi bo‘lmasligi mumkin.
-         *
-         * Bunday holatda test ishlashi davom etadi,
-         * lekin global D1 statistikaga yuborilmaydi.
+         * user bo'lmasligi mumkin.
          */
 
         if (!telegramUser) {
@@ -486,8 +520,8 @@ export function MenejerlikApp() {
         return data
       } catch (error) {
         /*
-         * D1 ishlamasa ham ResultScreen ochilishi kerak.
-         * Foydalanuvchi test natijasini ko‘rishi shart.
+         * Database xatosi test natijasini
+         * bloklamaydi.
          */
 
         console.error(
@@ -539,7 +573,7 @@ export function MenejerlikApp() {
     }
 
   /* =========================================================
-     FINISH QUIZ
+     FINISH QUIZ — PROFESSIONAL RESULT ENGINE
   ========================================================= */
 
   const finish = async (
@@ -549,83 +583,279 @@ export function MenejerlikApp() {
       return
     }
 
-    const total =
-      quizSession.questions.length
+    try {
+      /* -----------------------------------------------------
+         1. SAVOLLAR
+      ----------------------------------------------------- */
 
-    const correct =
-      answers.filter(
-        (answer) =>
-          answer.isCorrect === true,
-      ).length
+      const questions =
+        quizSession.questions ?? []
 
-    const wrong =
-      Math.max(
-        0,
-        total - correct,
+      const total =
+        questions.length
+
+      if (total === 0) {
+        console.error(
+          'Natijani hisoblash uchun savollar mavjud emas.',
+        )
+
+        return
+      }
+
+      /* -----------------------------------------------------
+         2. JAVOBLARNI REAL STRUKTURAGA O'TKAZISH
+      ----------------------------------------------------- */
+
+      const rawAnswers =
+        answers as unknown as QuizAnswerData[]
+
+      /* -----------------------------------------------------
+         3. HAR BIR JAVOBNI TEKSHIRISH
+      ----------------------------------------------------- */
+
+      const checkedAnswers =
+        rawAnswers.map(
+          (item) => {
+            const selected =
+              Number.isInteger(
+                item?.selected,
+              )
+                ? item.selected
+                : -1
+
+            const correctAnswer =
+              item?.question?.answer
+
+            const isAnswered =
+              selected >= 0
+
+            const isCorrect =
+              isAnswered &&
+              selected ===
+                correctAnswer
+
+            return {
+              ...item,
+
+              selected,
+
+              isAnswered,
+
+              isCorrect,
+
+              isWrong:
+                isAnswered &&
+                !isCorrect,
+            }
+          },
+        )
+
+      /* -----------------------------------------------------
+         4. TO'G'RI
+      ----------------------------------------------------- */
+
+      const correct =
+        checkedAnswers.filter(
+          (item) =>
+            item.isCorrect,
+        ).length
+
+      /* -----------------------------------------------------
+         5. JAVOBSIZ
+      ----------------------------------------------------- */
+
+      const unanswered =
+        checkedAnswers.filter(
+          (item) =>
+            !item.isAnswered,
+        ).length
+
+      /* -----------------------------------------------------
+         6. NOTO'G'RI
+      ----------------------------------------------------- */
+
+      const wrong =
+        checkedAnswers.filter(
+          (item) =>
+            item.isWrong,
+        ).length
+
+      /* -----------------------------------------------------
+         7. YETISHMAY QOLGAN RECORDLAR
+      ----------------------------------------------------- */
+
+      const counted =
+        correct +
+        wrong +
+        unanswered
+
+      const missing =
+        Math.max(
+          0,
+          total - counted,
+        )
+
+      const finalUnanswered =
+        unanswered + missing
+
+      /* -----------------------------------------------------
+         8. FOIZ
+      ----------------------------------------------------- */
+
+      const percentage =
+        total > 0
+          ? Math.round(
+              (correct / total) *
+                100,
+            )
+          : 0
+
+      /* -----------------------------------------------------
+         9. SCORE
+      -----------------------------------------------------
+         Oddiy test:
+         1 to'g'ri = 1 ball.
+
+         Daily Challenge uchun alohida
+         2 ballik engine keyin ulanadi.
+      ----------------------------------------------------- */
+
+      const score = correct
+
+      /* -----------------------------------------------------
+         10. NATIJA
+      ----------------------------------------------------- */
+
+      const result = {
+        ...quizSession,
+
+        questions,
+
+        answers:
+          checkedAnswers,
+
+        total,
+
+        correct,
+
+        wrong,
+
+        percentage,
+
+        score,
+
+        unanswered:
+          finalUnanswered,
+
+        durationSec: 0,
+      } as unknown as QuizResult
+
+      /* -----------------------------------------------------
+         11. DEBUG
+      ----------------------------------------------------- */
+
+      console.log(
+        '========== TEST NATIJASI ==========',
       )
 
-    const percentage =
-      total > 0
-        ? Math.round(
-            (correct / total) * 100,
-          )
-        : 0
-
-    /* -------------------------------------------------------
-       RESULT OBJECT
-    ------------------------------------------------------- */
-
-    const result = {
-      ...quizSession,
-
-      answers,
-
-      total,
-
-      correct,
-
-      wrong,
-
-      percentage,
-    } as unknown as QuizResult
-
-    /*
-     * -------------------------------------------------------
-     * MUHIM:
-     *
-     * Avval natijani ekranga chiqaramiz.
-     * Keyin ma'lumotlarni saqlaymiz.
-     *
-     * Shu sababli D1 serverida vaqtinchalik xato bo‘lsa,
-     * foydalanuvchi natijasiz qolmaydi.
-     * -------------------------------------------------------
-     */
-
-    setQuizResult(result)
-
-    setScreen('result')
-
-    scrollToTop()
-
-    /*
-     * -------------------------------------------------------
-     * DATABASE
-     * -------------------------------------------------------
-     */
-
-    await Promise.allSettled([
-      saveResultToDatabase({
-        correct,
+      console.table({
         total,
-        durationSec: 0,
-      }),
 
-      saveLocalHistory({
         correct,
+
+        wrong,
+
+        unanswered:
+          finalUnanswered,
+
+        percentage,
+
+        score,
+      })
+
+      console.log(
+        '===================================',
+      )
+
+      /* -----------------------------------------------------
+         12. NATIJANI DARHOL KO'RSATAMIZ
+      ----------------------------------------------------- */
+
+      setQuizResult(result)
+
+      setScreen('result')
+
+      scrollToTop()
+
+      /* -----------------------------------------------------
+         13. SAQLASH
+      ----------------------------------------------------- */
+
+      await Promise.allSettled([
+        saveResultToDatabase({
+          correct,
+
+          total,
+
+          durationSec: 0,
+        }),
+
+        saveLocalHistory({
+          correct,
+
+          total,
+
+          durationSec: 0,
+        }),
+      ])
+    } catch (error) {
+      /*
+       * Fallback.
+       *
+       * Hisoblashda kutilmagan xato bo'lsa ham
+       * foydalanuvchini testdan chiqarib yubormaymiz.
+       */
+
+      console.error(
+        'Test natijasini hisoblashda xatolik:',
+        error,
+      )
+
+      const total =
+        quizSession.questions
+          ?.length ?? 0
+
+      const fallbackResult = {
+        ...quizSession,
+
+        questions:
+          quizSession.questions,
+
+        answers,
+
         total,
+
+        correct: 0,
+
+        wrong: total,
+
+        percentage: 0,
+
+        score: 0,
+
+        unanswered: 0,
+
         durationSec: 0,
-      }),
-    ])
+      } as unknown as QuizResult
+
+      setQuizResult(
+        fallbackResult,
+      )
+
+      setScreen('result')
+
+      scrollToTop()
+    }
   }
 
   /* =========================================================
@@ -641,7 +871,7 @@ export function MenejerlikApp() {
     }
 
     const level =
-      quizSession.level
+      quizSession.level as QuizLevel
 
     startQuiz(
       navigation.topicId,
@@ -654,34 +884,24 @@ export function MenejerlikApp() {
   ========================================================= */
 
   const goBack = () => {
-    /* HOME */
-
     if (screen === 'home') {
       return
     }
-
-    /* RANKING */
 
     if (screen === 'ranking') {
       goHome()
       return
     }
 
-    /* AI */
-
     if (screen === 'ai') {
       goHome()
       return
     }
 
-    /* EDUCATION */
-
     if (screen === 'education') {
       goHome()
       return
     }
-
-    /* MODULES */
 
     if (screen === 'modules') {
       setScreen('education')
@@ -689,15 +909,11 @@ export function MenejerlikApp() {
       return
     }
 
-    /* TOPICS */
-
     if (screen === 'topics') {
       setScreen('modules')
       scrollToTop()
       return
     }
-
-    /* LEVELS */
 
     if (screen === 'levels') {
       setScreen('topics')
@@ -705,15 +921,11 @@ export function MenejerlikApp() {
       return
     }
 
-    /* QUIZ */
-
     if (screen === 'quiz') {
       setScreen('levels')
       scrollToTop()
       return
     }
-
-    /* RESULT */
 
     if (screen === 'result') {
       setScreen('levels')
@@ -1073,7 +1285,7 @@ export function MenejerlikApp() {
       </div>
 
       {/* =====================================================
-          CLOSE CONFIRMATION STATE
+          CLOSE CONFIRMATION
       ===================================================== */}
 
       {isClosingConfirmation && (
@@ -1441,9 +1653,7 @@ function TopicScreen({
         </p>
 
         <h1 className="mt-2 text-2xl font-bold">
-          {
-            module.title
-          }
+          {module.title}
         </h1>
 
         {'description' in
@@ -1689,9 +1899,7 @@ function LevelScreen({
         </p>
 
         <h1 className="mt-2 text-2xl font-bold">
-          {
-            topic.title
-          }
+          {topic.title}
         </h1>
 
         <p className="mt-2 text-sm text-muted-foreground">
