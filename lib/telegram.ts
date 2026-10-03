@@ -91,3 +91,28 @@ export function haptic(
     console.error('Telegram haptic error:', error)
   }
 }
+export function setClosingConfirmation(enabled: boolean): void {
+  const webApp = getWebApp()
+
+  if (!webApp) {
+    return
+  }
+
+  try {
+    const webAppWithClosing = webApp as TelegramWebApp & {
+      enableClosingConfirmation?: () => void
+      disableClosingConfirmation?: () => void
+    }
+
+    if (enabled) {
+      webAppWithClosing.enableClosingConfirmation?.()
+    } else {
+      webAppWithClosing.disableClosingConfirmation?.()
+    }
+  } catch (error) {
+    console.error(
+      'Telegram closing confirmation error:',
+      error
+    )
+  }
+}
