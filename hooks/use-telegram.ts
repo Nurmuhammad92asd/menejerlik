@@ -1,5 +1,3 @@
-// src/hooks/use-telegram.ts
-
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
@@ -11,9 +9,6 @@ import {
   type TelegramWebApp,
 } from '@/lib/telegram'
 
-/**
- * Telegram WebApp bilan ishlash uchun asosiy hook
- */
 export function useTelegram() {
   const [webApp, setWebApp] = useState<TelegramWebApp | null>(null)
   const [user, setUser] = useState<TelegramUser | null>(null)
@@ -27,20 +22,11 @@ export function useTelegram() {
       return
     }
 
-    try {
-      initTelegram()
+    initTelegram()
 
-      setWebApp(app)
-      setUser(getTelegramUser())
-      setIsReady(true)
-    } catch (error) {
-      console.error(
-        'Telegram initialization error:',
-        error
-      )
-
-      setIsReady(true)
-    }
+    setWebApp(app)
+    setUser(getTelegramUser())
+    setIsReady(true)
   }, [])
 
   return {
@@ -51,9 +37,6 @@ export function useTelegram() {
   }
 }
 
-/**
- * Telegram BackButton bilan ishlash
- */
 export function useBackButton(
   onBack?: () => void,
   enabled: boolean = true
@@ -78,13 +61,11 @@ export function useBackButton(
     if (!enabled) {
       backButton.hide()
       setIsVisible(false)
-
       return
     }
 
     backButton.show()
     setIsVisible(true)
-
     backButton.onClick(handleBack)
 
     return () => {
@@ -96,7 +77,8 @@ export function useBackButton(
 
   return {
     isVisible,
-    show: () => {
+
+    show() {
       const app = getWebApp()
 
       if (app?.BackButton) {
@@ -104,7 +86,8 @@ export function useBackButton(
         setIsVisible(true)
       }
     },
-    hide: () => {
+
+    hide() {
       const app = getWebApp()
 
       if (app?.BackButton) {
@@ -115,26 +98,19 @@ export function useBackButton(
   }
 }
 
-/**
- * Telegram foydalanuvchisini olish
- */
 export function useTelegramUser() {
   const [user, setUser] = useState<TelegramUser | null>(null)
 
   useEffect(() => {
-    const telegramUser = getTelegramUser()
-
-    setUser(telegramUser)
+    setUser(getTelegramUser())
   }, [])
 
   return user
 }
 
-/**
- * Telegram WebApp obyektini olish
- */
 export function useTelegramWebApp() {
-  const [webApp, setWebApp] = useState<TelegramWebApp | null>(null)
+  const [webApp, setWebApp] =
+    useState<TelegramWebApp | null>(null)
 
   useEffect(() => {
     setWebApp(getWebApp())
