@@ -1,5 +1,5 @@
 'use client'
-
+import { AIAssistant } from '@/components/ai-assistant'
 import { useEffect, useState } from 'react'
 
 import { HomeScreen } from '@/components/home-screen'
