@@ -656,7 +656,7 @@ function Feature({
 
       <p className="mt-2 text-sm font-semibold">
         {title}
-      </p>
+      </p> 
 
       <p className="mt-0.5 text-xs text-muted-foreground">
         {text}
@@ -664,4 +664,4 @@ function Feature({
 
     </div>
   )
-}
+} // Home screen updated
