@@ -1,367 +1,498 @@
-/* =========================================================
-   FINISH QUIZ — PROFESSIONAL RESULT ENGINE
-========================================================= */
+'use client'
 
-const finish = async (
-  answers: AnswerRecord[],
-) => {
-  if (!quizSession) {
-    return
+import { useEffect, useRef, useState } from 'react'
+import { Check, Clock, Lightbulb, X } from 'lucide-react'
+
+import type { Question } from '@/lib/quiz-data'
+
+const QUESTION_TIME = 120
+
+export type AnswerRecord = {
+  question: Question
+  selected: number
+}
+
+type QuizSession = {
+  questions: Question[]
+  topicId?: string
+  level?: string
+  title?: string
+  [key: string]: unknown
+}
+
+type QuizScreenProps = {
+  session: QuizSession
+  onFinish: (answers: AnswerRecord[]) => void
+  onExit?: () => void
+}
+
+export function QuizScreen({
+  session,
+  onFinish,
+  onExit,
+}: QuizScreenProps) {
+  const questions = session.questions ?? []
+
+  const [index, setIndex] = useState(0)
+  const [selected, setSelected] =
+    useState<number | null>(null)
+
+  const [timeLeft, setTimeLeft] =
+    useState(QUESTION_TIME)
+
+  const answersRef =
+    useRef<AnswerRecord[]>([])
+
+  const selectedRef =
+    useRef<number | null>(null)
+
+  const stoppedRef =
+    useRef(false)
+
+  const timerRef =
+    useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const question =
+    questions[index]
+
+  /*
+   * Savol mavjud bo'lmasa,
+   * xavfsiz chiqamiz.
+   */
+  if (!question) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center p-6">
+        <div className="text-center">
+          <p className="text-lg font-semibold">
+            Savollar topilmadi.
+          </p>
+
+          {onExit && (
+            <button
+              type="button"
+              onClick={onExit}
+              className="mt-4 rounded-xl px-5 py-3"
+            >
+              Orqaga
+            </button>
+          )}
+        </div>
+      </div>
+    )
   }
 
-  try {
+  /*
+   * Javobni ikkala ref va state'da saqlaymiz.
+   */
+  const chooseAnswer = (
+    optionIndex: number,
+  ) => {
+    if (
+      stoppedRef.current ||
+      selected !== null
+    ) {
+      return
+    }
+
+    selectedRef.current =
+      optionIndex
+
+    setSelected(optionIndex)
+  }
+
+  /*
+   * Joriy savol uchun javob yozish.
+   */
+  const saveCurrentAnswer = (
+    selectedAnswer: number,
+  ) => {
+    const record: AnswerRecord = {
+      question,
+      selected:
+        selectedAnswer,
+    }
+
+    const existingIndex =
+      answersRef.current.findIndex(
+        (item) =>
+          item.question.id ===
+          question.id,
+      )
+
+    if (existingIndex >= 0) {
+      answersRef.current[
+        existingIndex
+      ] = record
+    } else {
+      answersRef.current.push(
+        record,
+      )
+    }
+  }
+
+  /*
+   * Savolni o'tkazib yuborish.
+   */
+  const saveUnanswered = () => {
+    const record: AnswerRecord = {
+      question,
+      selected: -1,
+    }
+
+    const existingIndex =
+      answersRef.current.findIndex(
+        (item) =>
+          item.question.id ===
+          question.id,
+      )
+
+    if (existingIndex >= 0) {
+      answersRef.current[
+        existingIndex
+      ] = record
+    } else {
+      answersRef.current.push(
+        record,
+      )
+    }
+  }
+
+  /*
+   * Keyingi savol.
+   */
+  const nextQuestion = () => {
+    if (stoppedRef.current) {
+      return
+    }
+
+    const currentSelected =
+      selectedRef.current
+
+    if (
+      currentSelected !== null
+    ) {
+      saveCurrentAnswer(
+        currentSelected,
+      )
+    } else {
+      saveUnanswered()
+    }
+
     /*
-     * -------------------------------------------------------
-     * 1. TEST MA'LUMOTLARI
-     * -------------------------------------------------------
+     * Oxirgi savol.
      */
+    if (
+      index >=
+      questions.length - 1
+    ) {
+      stoppedRef.current =
+        true
 
-    const questions =
-      quizSession.questions ?? []
+      if (timerRef.current) {
+        clearInterval(
+          timerRef.current,
+        )
+      }
 
-    const total =
-      questions.length
-
-    if (total === 0) {
-      console.error(
-        'Natijani hisoblash uchun savollar topilmadi.',
+      onFinish(
+        [...answersRef.current],
       )
 
       return
     }
 
     /*
-     * -------------------------------------------------------
-     * 2. JAVOBLARNI NORMALIZATSIYA QILISH
-     *
-     * AnswerRecord:
-     *
-     * question  -> savol
-     * selected  -> foydalanuvchi tanlagan variant
-     *
-     * -1 = javob berilmagan
-     * -------------------------------------------------------
+     * Keyingi savolga o'tamiz.
      */
-
-    const normalizedAnswers =
-      answers.filter(
-        (item) =>
-          item &&
-          item.question &&
-          typeof item.selected ===
-            'number',
-      )
-
-    /*
-     * -------------------------------------------------------
-     * 3. HAR BIR JAVOBNI TEKSHIRISH
-     *
-     * To'g'ri javob:
-     *
-     * selected === question.answer
-     *
-     * -------------------------------------------------------
-     */
-
-    const checkedAnswers =
-      normalizedAnswers.map(
-        (item) => {
-          const selected =
-            item.selected
-
-          const correctAnswer =
-            item.question.answer
-
-          const isAnswered =
-            selected >= 0
-
-          const isCorrect =
-            isAnswered &&
-            selected ===
-              correctAnswer
-
-          return {
-            ...item,
-
-            isAnswered,
-
-            isCorrect,
-
-            isWrong:
-              isAnswered &&
-              !isCorrect,
-          }
-        },
-      )
-
-    /*
-     * -------------------------------------------------------
-     * 4. TO'G'RI JAVOBLAR
-     * -------------------------------------------------------
-     */
-
-    const correct =
-      checkedAnswers.filter(
-        (item) =>
-          item.isCorrect,
-      ).length
-
-    /*
-     * -------------------------------------------------------
-     * 5. JAVOB BERILMAGANLAR
-     * -------------------------------------------------------
-     */
-
-    const unanswered =
-      checkedAnswers.filter(
-        (item) =>
-          !item.isAnswered,
-      ).length
-
-    /*
-     * -------------------------------------------------------
-     * 6. NOTO'G'RI JAVOBLAR
-     *
-     * Faqat javob berilgan va
-     * noto'g'ri tanlangan savollar.
-     *
-     * Javobsiz savollar alohida hisoblanadi.
-     * -------------------------------------------------------
-     */
-
-    const wrong =
-      checkedAnswers.filter(
-        (item) =>
-          item.isWrong,
-      ).length
-
-    /*
-     * -------------------------------------------------------
-     * 7. XAVFSIZ HISOB
-     *
-     * correct + wrong + unanswered
-     * hech qachon totaldan oshmasligi kerak.
-     * -------------------------------------------------------
-     */
-
-    const calculatedTotal =
-      correct +
-      wrong +
-      unanswered
-
-    /*
-     * Agar qandaydir sabab bilan
-     * AnswerRecord yetishmasa,
-     * qolganlarini javobsiz deb hisoblaymiz.
-     */
-
-    const missing =
-      Math.max(
-        0,
-        total -
-          calculatedTotal,
-      )
-
-    const finalUnanswered =
-      unanswered + missing
-
-    /*
-     * -------------------------------------------------------
-     * 8. FOIZ
-     *
-     * Foiz faqat to'g'ri javoblardan hisoblanadi.
-     * -------------------------------------------------------
-     */
-
-    const percentage =
-      total > 0
-        ? Math.round(
-            (correct / total) *
-              100,
-          )
-        : 0
-
-    /*
-     * -------------------------------------------------------
-     * 9. SCORE
-     *
-     * Hozircha har bir to'g'ri javob = 1 ball.
-     *
-     * Agar keyinchalik 2 ballik Challenge tizimi
-     * qo'shilsa, alohida score engine ulaymiz.
-     * -------------------------------------------------------
-     */
-
-    const score = correct
-
-    /*
-     * -------------------------------------------------------
-     * 10. YAKUNIY ANSWERS
-     *
-     * ResultScreen xatolarni ko'rsatishi uchun
-     * original question + selected saqlanadi.
-     * -------------------------------------------------------
-     */
-
-    const finalAnswers =
-      checkedAnswers
-
-    /*
-     * -------------------------------------------------------
-     * 11. RESULT OBJECT
-     * -------------------------------------------------------
-     */
-
-    const result = {
-      ...quizSession,
-
-      questions,
-
-      answers:
-        finalAnswers,
-
-      total,
-
-      correct,
-
-      wrong:
-        wrong,
-
-      percentage,
-
-      score,
-
-      unanswered:
-        finalUnanswered,
-
-      /*
-       * Hozir vaqt o'lchagich alohida tizimda.
-       * Keyingi bosqichda haqiqiy duration ulaymiz.
-       */
-
-      durationSec: 0,
-    } as unknown as QuizResult
-
-    /*
-     * -------------------------------------------------------
-     * 12. CONSOLE DEBUG
-     *
-     * Development vaqtida natijani tekshirish uchun.
-     * -------------------------------------------------------
-     */
-
-    console.log(
-      '========== TEST NATIJASI ==========',
+    setIndex(
+      (current) => current + 1,
     )
 
-    console.log({
-      total,
-      correct,
-      wrong,
-      unanswered:
-        finalUnanswered,
-      percentage,
-      score,
-      answers:
-        finalAnswers,
-    })
+    selectedRef.current = null
 
-    console.log(
-      '===================================',
+    setSelected(null)
+
+    setTimeLeft(
+      QUESTION_TIME,
     )
-
-    /*
-     * -------------------------------------------------------
-     * 13. NATIJANI DARHOL EKRANGA CHIQARISH
-     *
-     * D1 ishlamay qolsa ham foydalanuvchi
-     * natijasini ko'rishi kerak.
-     * -------------------------------------------------------
-     */
-
-    setQuizResult(result)
-
-    setScreen('result')
-
-    scrollToTop()
-
-    /*
-     * -------------------------------------------------------
-     * 14. DATABASE + LOCAL HISTORY
-     *
-     * Natija ekrani database'dan mustaqil.
-     * -------------------------------------------------------
-     */
-
-    await Promise.allSettled([
-      saveResultToDatabase({
-        correct,
-
-        total,
-
-        durationSec: 0,
-      }),
-
-      saveLocalHistory({
-        correct,
-
-        total,
-
-        durationSec: 0,
-      }),
-    ])
-  } catch (error) {
-    /*
-     * -------------------------------------------------------
-     * 15. XAVFSIZLIK
-     *
-     * Hisoblashda kutilmagan xato bo'lsa,
-     * foydalanuvchi butunlay natijasiz qolmaydi.
-     * -------------------------------------------------------
-     */
-
-    console.error(
-      'Test natijasini hisoblashda xatolik:',
-      error,
-    )
-
-    /*
-     * Minimal fallback natija.
-     */
-
-    const total =
-      quizSession.questions?.length ??
-      0
-
-    const fallbackResult = {
-      ...quizSession,
-
-      questions:
-        quizSession.questions,
-
-      answers,
-
-      total,
-
-      correct: 0,
-
-      wrong: total,
-
-      percentage: 0,
-
-      score: 0,
-
-      unanswered: 0,
-
-      durationSec: 0,
-    } as unknown as QuizResult
-
-    setQuizResult(
-      fallbackResult,
-    )
-
-    setScreen('result')
-
-    scrollToTop()
   }
+
+  /*
+   * Timer.
+   */
+  useEffect(() => {
+    if (stoppedRef.current) {
+      return
+    }
+
+    if (timerRef.current) {
+      clearInterval(
+        timerRef.current,
+      )
+    }
+
+    timerRef.current =
+      setInterval(() => {
+        setTimeLeft(
+          (current) => {
+            if (current <= 1) {
+              /*
+               * Vaqt tugadi.
+               */
+              if (
+                timerRef.current
+              ) {
+                clearInterval(
+                  timerRef.current,
+                )
+              }
+
+              setTimeout(() => {
+                nextQuestion()
+              }, 0)
+
+              return 0
+            }
+
+            return current - 1
+          },
+        )
+      }, 1000)
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(
+          timerRef.current,
+        )
+      }
+    }
+  }, [index])
+
+  /*
+   * Timer foizi.
+   */
+  const timerPercentage =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        (timeLeft /
+          QUESTION_TIME) *
+          100,
+      ),
+    )
+
+  const progress =
+    questions.length > 0
+      ? ((index + 1) /
+          questions.length) *
+        100
+      : 0
+
+  const isAnswered =
+    selected !== null
+
+  return (
+    <div className="mx-auto w-full max-w-3xl px-4 pb-10 pt-4">
+      {/* Header */}
+      <div className="mb-5 flex items-center justify-between gap-3">
+        <div>
+          <div className="text-sm opacity-70">
+            Savol
+          </div>
+
+          <div className="text-xl font-bold">
+            {index + 1}
+            <span className="mx-1 opacity-40">
+              /
+            </span>
+            {questions.length}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 rounded-2xl border px-4 py-2">
+          <Clock
+            className="h-5 w-5"
+            aria-hidden="true"
+          />
+
+          <span className="font-semibold tabular-nums">
+            {Math.floor(
+              timeLeft / 60,
+            )
+              .toString()
+              .padStart(2, '0')}
+            :
+            {(timeLeft % 60)
+              .toString()
+              .padStart(2, '0')}
+          </span>
+        </div>
+      </div>
+
+      {/* Progress */}
+      <div className="mb-6">
+        <div className="mb-2 h-2 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+          <div
+            className="h-full rounded-full bg-current transition-all"
+            style={{
+              width: `${progress}%`,
+            }}
+          />
+        </div>
+
+        <div className="text-xs opacity-60">
+          {Math.round(progress)}% bajarildi
+        </div>
+      </div>
+
+      {/* Timer progress */}
+      <div className="mb-6">
+        <div className="h-1 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+          <div
+            className="h-full rounded-full bg-current transition-all"
+            style={{
+              width: `${timerPercentage}%`,
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Question */}
+      <div className="mb-6">
+        <div className="mb-3 flex items-start gap-3">
+          <div className="mt-1 shrink-0">
+            <Lightbulb
+              className="h-5 w-5"
+              aria-hidden="true"
+            />
+          </div>
+
+          <h1 className="text-xl font-bold leading-relaxed sm:text-2xl">
+            {question.text}
+          </h1>
+        </div>
+      </div>
+
+      {/* Options */}
+      <div className="space-y-3">
+        {question.options.map(
+          (option, i) => {
+            const isSelected =
+              selected === i
+
+            const isCorrect =
+              i === question.answer
+
+            let className =
+              'w-full rounded-2xl border p-4 text-left transition'
+
+            if (!isAnswered) {
+              className +=
+                ' hover:opacity-80'
+            }
+
+            if (
+              isAnswered &&
+              isCorrect
+            ) {
+              className +=
+                ' border-green-500 bg-green-500/10'
+            }
+
+            if (
+              isAnswered &&
+              isSelected &&
+              !isCorrect
+            ) {
+              className +=
+                ' border-red-500 bg-red-500/10'
+            }
+
+            return (
+              <button
+                key={`${question.id}-${i}`}
+                type="button"
+                disabled={isAnswered}
+                onClick={() =>
+                  chooseAnswer(i)
+                }
+                className={
+                  className
+                }
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm font-bold">
+                    {String.fromCharCode(
+                      65 + i,
+                    )}
+                  </div>
+
+                  <div className="flex-1 pt-1">
+                    {option}
+                  </div>
+
+                  {isAnswered &&
+                    isCorrect && (
+                      <Check
+                        className="mt-1 h-5 w-5 shrink-0"
+                        aria-label="To'g'ri javob"
+                      />
+                    )}
+
+                  {isAnswered &&
+                    isSelected &&
+                    !isCorrect && (
+                      <X
+                        className="mt-1 h-5 w-5 shrink-0"
+                        aria-label="Noto'g'ri javob"
+                      />
+                    )}
+                </div>
+              </button>
+            )
+          },
+        )}
+      </div>
+
+      {/* Explanation */}
+      {isAnswered &&
+        question.explanation && (
+          <div className="mt-5 rounded-2xl border p-4">
+            <div className="mb-1 font-semibold">
+              Izoh
+            </div>
+
+            <div className="text-sm leading-relaxed opacity-80">
+              {question.explanation}
+            </div>
+          </div>
+        )}
+
+      {/* Actions */}
+      <div className="mt-6 flex gap-3">
+        {onExit && (
+          <button
+            type="button"
+            onClick={onExit}
+            className="rounded-2xl border px-5 py-3 font-medium"
+          >
+            Chiqish
+          </button>
+        )}
+
+        <button
+          type="button"
+          disabled={!isAnswered}
+          onClick={nextQuestion}
+          className="flex-1 rounded-2xl border px-5 py-3 font-bold disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {index ===
+          questions.length - 1
+            ? 'Natijani ko‘rish'
+            : 'Keyingi savol'}
+        </button>
+      </div>
+    </div>
+  )
 }
