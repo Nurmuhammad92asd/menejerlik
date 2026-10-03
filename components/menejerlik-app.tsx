@@ -24,6 +24,7 @@ import {
 } from '@/lib/quiz-data'
 
 import { useHistory } from '@/hooks/use-history'
+
 import {
   useBackButton,
   useTelegram,
@@ -56,7 +57,19 @@ const INITIAL_NAVIGATION: NavigationState = {
 }
 
 export function MenejerlikApp() {
+  /*
+   * =====================================================
+   * TELEGRAM
+   * =====================================================
+   */
+
   const { user, isTelegram } = useTelegram()
+
+  /*
+   * =====================================================
+   * HISTORY / STATISTICS
+   * =====================================================
+   */
 
   const {
     history,
@@ -64,6 +77,12 @@ export function MenejerlikApp() {
     bestByCategory,
     addAttempt,
   } = useHistory()
+
+  /*
+   * =====================================================
+   * APP STATE
+   * =====================================================
+   */
 
   const [screen, setScreen] =
     useState<Screen>('home')
@@ -101,7 +120,9 @@ export function MenejerlikApp() {
     }
 
     try {
-      tg.ready()
+      if (typeof tg.ready === 'function') {
+        tg.ready()
+      }
 
       if (typeof tg.expand === 'function') {
         tg.expand()
@@ -122,6 +143,12 @@ export function MenejerlikApp() {
     }
   }, [isTelegram])
 
+  /*
+   * =====================================================
+   * FULLSCREEN TOGGLE
+   * =====================================================
+   */
+
   function toggleFullscreen() {
     const tg =
       (window as any).Telegram?.WebApp
@@ -140,6 +167,7 @@ export function MenejerlikApp() {
         }
 
         setIsFullscreen(false)
+
         return
       }
 
@@ -149,7 +177,11 @@ export function MenejerlikApp() {
       ) {
         tg.requestFullscreen()
         setIsFullscreen(true)
-      } else if (
+
+        return
+      }
+
+      if (
         typeof tg.expand ===
         'function'
       ) {
@@ -163,6 +195,12 @@ export function MenejerlikApp() {
       )
     }
   }
+
+  /*
+   * =====================================================
+   * FULLSCREEN EVENT
+   * =====================================================
+   */
 
   useEffect(() => {
     const tg =
@@ -193,7 +231,7 @@ export function MenejerlikApp() {
 
   /*
    * =====================================================
-   * BASIC HELPERS
+   * SCROLL
    * =====================================================
    */
 
@@ -203,6 +241,12 @@ export function MenejerlikApp() {
       behavior: 'smooth',
     })
   }
+
+  /*
+   * =====================================================
+   * GO HOME
+   * =====================================================
+   */
 
   function goHome() {
     setClosingConfirmation(false)
@@ -222,7 +266,7 @@ export function MenejerlikApp() {
 
   /*
    * =====================================================
-   * AI ASSISTANT
+   * AI
    * =====================================================
    */
 
@@ -241,6 +285,8 @@ export function MenejerlikApp() {
    */
 
   function openEducationSelection() {
+    setClosingConfirmation(false)
+
     setScreen('education')
 
     setNavigation(
@@ -352,6 +398,9 @@ export function MenejerlikApp() {
 
     setScreen('quiz')
 
+    /*
+     * Telegramdan chiqishda confirmation
+     */
     setClosingConfirmation(true)
 
     scrollToTop()
@@ -370,17 +419,26 @@ export function MenejerlikApp() {
       return
     }
 
-    const correct = answers.filter(
-      (answer) =>
-        answer.selected ===
-        answer.question.answer,
-    ).length
+    /*
+     * Testni qayta yakunlashning oldini olish
+     */
+    if (screen !== 'quiz') {
+      return
+    }
 
-    const durationSec = Math.round(
-      (Date.now() -
-        session.startedAt) /
-        1000,
-    )
+    const correct =
+      answers.filter(
+        (answer) =>
+          answer.selected ===
+          answer.question.answer,
+      ).length
+
+    const durationSec =
+      Math.round(
+        (Date.now() -
+          session.startedAt) /
+          1000,
+      )
 
     const quizResult: QuizResult = {
       categoryId:
@@ -405,22 +463,39 @@ export function MenejerlikApp() {
       durationSec,
     }
 
+    /*
+     * Natijani saqlaymiz
+     */
     setResult(quizResult)
 
+    /*
+     * Testdan natijaga o'tamiz
+     */
     setScreen('result')
 
+    /*
+     * Telegram close confirmationni o'chiramiz
+     */
     setClosingConfirmation(false)
 
     scrollToTop()
 
+    /*
+     * Statistikaga qo'shamiz
+     */
     void addAttempt({
       id: `${Date.now()}`,
+
       categoryId:
         session.categoryId,
+
       correct,
+
       total:
         answers.length,
+
       durationSec,
+
       at: Date.now(),
     })
   }
@@ -445,78 +520,149 @@ export function MenejerlikApp() {
   /*
    * =====================================================
    * BACK NAVIGATION
+   *
+   * ENG MUHIM QISM
    * =====================================================
    */
 
   function goBack() {
-    switch (screen) {
-      case 'ai':
-        goHome()
-        return
-
-      case 'education':
-        goHome()
-        return
-
-      case 'modules':
-        setNavigation(
-          INITIAL_NAVIGATION,
-        )
-
-        setScreen('education')
-
-        scrollToTop()
-        return
-
-      case 'topics':
-        setNavigation(
-          (previous) => ({
-            ...previous,
-            moduleId: null,
-            topicId: null,
-          }),
-        )
-
-        setScreen('modules')
-
-        scrollToTop()
-        return
-
-      case 'levels':
-        setNavigation(
-          (previous) => ({
-            ...previous,
-            topicId: null,
-          }),
-        )
-
-        setScreen('topics')
-
-        scrollToTop()
-        return
-
-      case 'quiz':
-        goHome()
-        return
-
-      case 'result':
-        goHome()
-        return
-
-      default:
-        goHome()
+    /*
+     * AI
+     */
+    if (screen === 'ai') {
+      goHome()
+      return
     }
+
+    /*
+     * EDUCATION
+     */
+    if (screen === 'education') {
+      goHome()
+      return
+    }
+
+    /*
+     * MODULES
+     */
+    if (screen === 'modules') {
+      setNavigation(
+        (previous) => ({
+          ...previous,
+          moduleId: null,
+          topicId: null,
+        }),
+      )
+
+      setScreen('education')
+
+      scrollToTop()
+
+      return
+    }
+
+    /*
+     * TOPICS
+     */
+    if (screen === 'topics') {
+      setNavigation(
+        (previous) => ({
+          ...previous,
+          moduleId: null,
+          topicId: null,
+        }),
+      )
+
+      setScreen('modules')
+
+      scrollToTop()
+
+      return
+    }
+
+    /*
+     * LEVELS
+     */
+    if (screen === 'levels') {
+      setNavigation(
+        (previous) => ({
+          ...previous,
+          topicId: null,
+        }),
+      )
+
+      setScreen('topics')
+
+      scrollToTop()
+
+      return
+    }
+
+    /*
+     * QUIZ
+     *
+     * Testdan chiqsa bosh sahifaga.
+     */
+    if (screen === 'quiz') {
+      setClosingConfirmation(false)
+
+      setSession(null)
+
+      setResult(null)
+
+      setScreen('home')
+
+      setNavigation(
+        INITIAL_NAVIGATION,
+      )
+
+      scrollToTop()
+
+      return
+    }
+
+    /*
+     * RESULT
+     */
+    if (screen === 'result') {
+      setResult(null)
+
+      setSession(null)
+
+      setScreen('home')
+
+      setNavigation(
+        INITIAL_NAVIGATION,
+      )
+
+      scrollToTop()
+
+      return
+    }
+
+    /*
+     * HOME yoki noma'lum holat
+     */
+    goHome()
   }
 
   /*
    * =====================================================
    * TELEGRAM BACK BUTTON
+   *
+   * MUHIM:
+   *
+   * OLD:
+   * useBackButton(screen !== 'home', goBack)
+   *
+   * YANGI:
+   * useBackButton(goBack, screen !== 'home')
    * =====================================================
    */
 
   useBackButton(
-    screen !== 'home',
     goBack,
+    screen !== 'home',
   )
 
   /*
@@ -533,7 +679,7 @@ export function MenejerlikApp() {
 
   /*
    * =====================================================
-   * ACTIVE DATA
+   * ACTIVE CATEGORIES
    * =====================================================
    */
 
@@ -543,12 +689,24 @@ export function MenejerlikApp() {
       ? PRESCHOOL_CATEGORIES
       : CATEGORIES
 
+  /*
+   * =====================================================
+   * ACTIVE MODULE
+   * =====================================================
+   */
+
   const activeModule =
     navigation.moduleId
       ? getModuleById(
           navigation.moduleId,
         )
       : undefined
+
+  /*
+   * =====================================================
+   * ACTIVE TOPIC
+   * =====================================================
+   */
 
   const activeTopic =
     navigation.topicId
@@ -576,7 +734,10 @@ export function MenejerlikApp() {
         pt-5
       "
     >
-      {/* FULLSCREEN */}
+
+      {/* =================================================
+          FULLSCREEN BUTTON
+      ================================================= */}
 
       {isTelegram && (
         <button
@@ -621,7 +782,9 @@ export function MenejerlikApp() {
         </button>
       )}
 
-      {/* AI SCREEN */}
+      {/* =================================================
+          AI
+      ================================================= */}
 
       {screen === 'ai' && (
         <AIAssistant
@@ -629,7 +792,9 @@ export function MenejerlikApp() {
         />
       )}
 
-      {/* HOME */}
+      {/* =================================================
+          HOME
+      ================================================= */}
 
       {screen === 'home' && (
         <div className="flex flex-col gap-5">
@@ -645,6 +810,8 @@ export function MenejerlikApp() {
               openEducationSelection
             }
           />
+
+          {/* AI BUTTON */}
 
           <button
             type="button"
@@ -665,7 +832,17 @@ export function MenejerlikApp() {
               active:scale-[0.99]
             "
           >
-            <div className="absolute -right-8 -top-8 size-32 rounded-full bg-primary/5" />
+
+            <div
+              className="
+                absolute
+                -right-8
+                -top-8
+                size-32
+                rounded-full
+                bg-primary/5
+              "
+            />
 
             <div className="relative flex items-center gap-4">
 
@@ -717,7 +894,9 @@ export function MenejerlikApp() {
         </div>
       )}
 
-      {/* EDUCATION */}
+      {/* =================================================
+          EDUCATION
+      ================================================= */}
 
       {screen === 'education' && (
         <EducationScreen
@@ -728,7 +907,9 @@ export function MenejerlikApp() {
         />
       )}
 
-      {/* MODULES */}
+      {/* =================================================
+          MODULES
+      ================================================= */}
 
       {screen === 'modules' && (
         <ModuleScreen
@@ -745,7 +926,9 @@ export function MenejerlikApp() {
         />
       )}
 
-      {/* TOPICS */}
+      {/* =================================================
+          TOPICS
+      ================================================= */}
 
       {screen === 'topics' && (
         <TopicScreen
@@ -759,7 +942,9 @@ export function MenejerlikApp() {
         />
       )}
 
-      {/* LEVELS */}
+      {/* =================================================
+          LEVELS
+      ================================================= */}
 
       {screen === 'levels' && (
         <LevelScreen
@@ -773,7 +958,9 @@ export function MenejerlikApp() {
         />
       )}
 
-      {/* QUIZ */}
+      {/* =================================================
+          QUIZ
+      ================================================= */}
 
       {screen === 'quiz' &&
         session && (
@@ -788,7 +975,7 @@ export function MenejerlikApp() {
               !isTelegram
             }
             onExit={
-              goHome
+              goBack
             }
             onFinish={
               finish
@@ -796,7 +983,9 @@ export function MenejerlikApp() {
           />
         )}
 
-      {/* RESULT */}
+      {/* =================================================
+          RESULT
+      ================================================= */}
 
       {screen === 'result' &&
         result && (
@@ -858,6 +1047,8 @@ function EducationScreen({
 
       <div className="grid gap-4">
 
+        {/* BOG'CHA */}
+
         <button
           type="button"
           onClick={() =>
@@ -881,7 +1072,17 @@ function EducationScreen({
             active:scale-[0.99]
           "
         >
-          <div className="absolute -right-8 -top-8 size-32 rounded-full bg-primary/5" />
+
+          <div
+            className="
+              absolute
+              -right-8
+              -top-8
+              size-32
+              rounded-full
+              bg-primary/5
+            "
+          />
 
           <div className="relative flex items-center gap-5">
 
@@ -912,6 +1113,8 @@ function EducationScreen({
           </div>
         </button>
 
+        {/* MAKTAB */}
+
         <button
           type="button"
           onClick={() =>
@@ -935,7 +1138,17 @@ function EducationScreen({
             active:scale-[0.99]
           "
         >
-          <div className="absolute -right-8 -top-8 size-32 rounded-full bg-primary/5" />
+
+          <div
+            className="
+              absolute
+              -right-8
+              -top-8
+              size-32
+              rounded-full
+              bg-primary/5
+            "
+          />
 
           <div className="relative flex items-center gap-5">
 
@@ -1082,6 +1295,7 @@ function ModuleScreen({
                 }
                 className="group flex items-center gap-4 rounded-3xl border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
               >
+
                 <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground">
                   {String(
                     index + 1,
