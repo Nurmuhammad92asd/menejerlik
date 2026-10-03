@@ -1,13 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Check, Clock, Lightbulb, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { type AnswerRecord, type QuizSession } from '@/lib/quiz'
+import {
+  type AnswerRecord,
+  type QuizSession,
+} from '@/lib/quiz'
 import { haptic } from '@/lib/telegram'
 import { cn } from '@/lib/utils'
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E']
+
+// HAR BIR SAVOLGA 2 DAQIQA
 const QUESTION_TIME = 120
 
 type Props = {
@@ -17,98 +22,167 @@ type Props = {
   onFinish: (answers: AnswerRecord[]) => void
 }
 
-export function QuizScreen({ session, showCloseButton, onExit, onFinish }: Props) {
+export function QuizScreen({
+  session,
+  showCloseButton,
+  onExit,
+  onFinish,
+}: Props) {
   const [index, setIndex] = useState(0)
   const [answers, setAnswers] = useState<AnswerRecord[]>([])
   const [selected, setSelected] = useState<number | null>(null)
   const [timeLeft, setTimeLeft] = useState(QUESTION_TIME)
 
+  // Stale closure muammosini oldini olish uchun ref
+  const answersRef = useRef<AnswerRecord[]>([])
+  const selectedRef = useRef<number | null>(null)
+  const finishedRef = useRef(false)
+
   const question = session.questions[index]
   const total = session.questions.length
   const isLast = index === total - 1
   const locked = selected !== null
-  const progress = ((index + (locked ? 1 : 0)) / total) * 100
 
+  const progress =
+    ((index + (locked ? 1 : 0)) / total) * 100
+
+  /**
+   * Har bir yangi savolga kirilganda
+   * vaqt yana 2:00 dan boshlanadi.
+   */
   useEffect(() => {
     setTimeLeft(QUESTION_TIME)
+    setSelected(null)
+    selectedRef.current = null
 
     const timer = setInterval(() => {
-      setTimeLeft((time) => {
-        if (time <= 1) {
+      setTimeLeft((currentTime) => {
+        if (currentTime <= 1) {
           clearInterval(timer)
 
-          if (selected === null) {
-            setAnswers((prev) => [
-              ...prev,
-              {
-                question,
-                selected: -1,
-              },
-            ])
-          }
-
-          setTimeout(() => {
-            if (isLast) {
-              onFinish(
-                selected === null
-                  ? [
-                      ...answers,
-                      {
-                        question,
-                        selected: -1,
-                      },
-                    ]
-                  : answers,
-              )
-            } else {
-              setIndex((i) => i + 1)
-              setSelected(null)
+          // Savolga javob berilmagan bo'lsa,
+          // -1 sifatida saqlaymiz
+          if (selectedRef.current === null) {
+            const unanswered: AnswerRecord = {
+              question: session.questions[index],
+              selected: -1,
             }
-          }, 300)
+
+            const updatedAnswers = [
+              ...answersRef.current,
+              unanswered,
+            ]
+
+            answersRef.current = updatedAnswers
+            setAnswers(updatedAnswers)
+
+            haptic('error')
+
+            // Oxirgi savol bo'lsa test tugaydi
+            if (isLast) {
+              if (!finishedRef.current) {
+                finishedRef.current = true
+
+                setTimeout(() => {
+                  onFinish(updatedAnswers)
+                }, 300)
+              }
+            } else {
+              // Keyingi savolga o'tamiz
+              setTimeout(() => {
+                setIndex((currentIndex) => currentIndex + 1)
+              }, 300)
+            }
+          } else {
+            // Javob allaqachon berilgan bo'lsa,
+            // uni qayta qo'shmaymiz.
+            if (isLast) {
+              if (!finishedRef.current) {
+                finishedRef.current = true
+
+                setTimeout(() => {
+                  onFinish(answersRef.current)
+                }, 300)
+              }
+            } else {
+              setTimeout(() => {
+                setIndex((currentIndex) => currentIndex + 1)
+              }, 300)
+            }
+          }
 
           return 0
         }
 
-        return time - 1
+        return currentTime - 1
       })
     }, 1000)
 
-    return () => clearInterval(timer)
-  }, [index])
+    return () => {
+      clearInterval(timer)
+    }
+  }, [index, isLast, onFinish, session.questions])
 
+  /**
+   * Javob tanlash
+   */
   function choose(optionIndex: number) {
-    if (locked) return
-
-    setSelected(optionIndex)
-
-    setAnswers((prev) => [
-      ...prev,
-      {
-        question,
-        selected: optionIndex,
-      },
-    ])
-
-    haptic(optionIndex === question.answer ? 'success' : 'error')
-  }
-
-  function next() {
-    haptic('light')
-
-    if (isLast) {
-      onFinish(answers)
+    if (locked || finishedRef.current) {
       return
     }
 
-    setIndex((i) => i + 1)
-    setSelected(null)
+    selectedRef.current = optionIndex
+    setSelected(optionIndex)
+
+    const record: AnswerRecord = {
+      question,
+      selected: optionIndex,
+    }
+
+    const updatedAnswers = [
+      ...answersRef.current,
+      record,
+    ]
+
+    answersRef.current = updatedAnswers
+    setAnswers(updatedAnswers)
+
+    haptic(
+      optionIndex === question.answer
+        ? 'success'
+        : 'error',
+    )
+  }
+
+  /**
+   * Keyingi savol
+   */
+  function next() {
+    if (!locked || finishedRef.current) {
+      return
+    }
+
+    haptic('light')
+
+    if (isLast) {
+      finishedRef.current = true
+      onFinish(answersRef.current)
+      return
+    }
+
+    setIndex((currentIndex) => currentIndex + 1)
   }
 
   const minutes = Math.floor(timeLeft / 60)
   const seconds = timeLeft % 60
 
+  const timerDanger = timeLeft <= 10
+  const timerWarning =
+    timeLeft > 10 && timeLeft <= 30
+
   return (
     <div className="flex min-h-[calc(100dvh-3rem)] flex-col gap-5">
+      {/* HEADER */}
       <header className="flex flex-col gap-3">
         <div className="flex items-center gap-3">
           {showCloseButton && (
@@ -118,34 +192,51 @@ export function QuizScreen({ session, showCloseButton, onExit, onFinish }: Props
               onClick={onExit}
               aria-label="Testni yakunlash"
             >
-              <X className="size-5" aria-hidden="true" />
+              <X
+                className="size-5"
+                aria-hidden="true"
+              />
             </Button>
           )}
 
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium">{session.title}</p>
+            <p className="truncate text-sm font-medium">
+              {session.title}
+            </p>
 
             <p className="text-xs text-muted-foreground tabular-nums">
               Savol {index + 1} / {total}
             </p>
           </div>
 
+          {/* TIMER */}
           <span
             className={cn(
               'flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold tabular-nums',
-              timeLeft <= 10
-                ? 'bg-destructive/15 text-destructive'
-                : 'bg-muted text-muted-foreground',
+              timerDanger &&
+                'bg-destructive/15 text-destructive',
+              timerWarning &&
+                'bg-yellow-500/15 text-yellow-600',
+              !timerDanger &&
+                !timerWarning &&
+                'bg-muted text-muted-foreground',
             )}
           >
-            <Clock className="size-3.5" aria-hidden="true" />
+            <Clock
+              className="size-3.5"
+              aria-hidden="true"
+            />
 
             <span>
-              {minutes}:{seconds.toString().padStart(2, '0')}
+              {minutes}:
+              {seconds
+                .toString()
+                .padStart(2, '0')}
             </span>
           </span>
         </div>
 
+        {/* PROGRESS */}
         <div
           className="h-2 overflow-hidden rounded-full bg-muted"
           role="progressbar"
@@ -156,11 +247,19 @@ export function QuizScreen({ session, showCloseButton, onExit, onFinish }: Props
         >
           <div
             className="h-full rounded-full bg-primary transition-[width] duration-500 ease-out"
-            style={{ width: `${progress}%` }}
+            style={{
+              width: `${progress}%`,
+            }}
           />
         </div>
+
+        {/* TIMER INFO */}
+        <p className="text-center text-xs text-muted-foreground">
+          Bu savol uchun vaqt: <b>2 daqiqa</b>
+        </p>
       </header>
 
+      {/* QUESTION */}
       <section
         key={question.id}
         className="flex flex-1 flex-col gap-5 animate-in fade-in slide-in-from-right-4 duration-300"
@@ -169,13 +268,17 @@ export function QuizScreen({ session, showCloseButton, onExit, onFinish }: Props
           {question.text}
         </h2>
 
+        {/* OPTIONS */}
         <ul
           className="flex flex-col gap-2.5"
           aria-label="Javob variantlari"
         >
           {question.options.map((option, i) => {
-            const isCorrect = i === question.answer
-            const isChosen = i === selected
+            const isCorrect =
+              i === question.answer
+
+            const isChosen =
+              i === selected
 
             const state = !locked
               ? 'idle'
@@ -218,7 +321,8 @@ export function QuizScreen({ session, showCloseButton, onExit, onFinish }: Props
                       state === 'wrong' &&
                         'bg-destructive text-white',
 
-                      (state === 'idle' || state === 'dim') &&
+                      (state === 'idle' ||
+                        state === 'dim') &&
                         'bg-muted text-muted-foreground',
                     )}
                   >
@@ -246,6 +350,7 @@ export function QuizScreen({ session, showCloseButton, onExit, onFinish }: Props
           })}
         </ul>
 
+        {/* EXPLANATION */}
         {locked && (
           <div
             role="status"
@@ -269,6 +374,7 @@ export function QuizScreen({ session, showCloseButton, onExit, onFinish }: Props
         )}
       </section>
 
+      {/* BOTTOM BUTTON */}
       <div className="sticky bottom-0 -mx-4 bg-background/95 px-4 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur">
         <Button
           size="lg"
