@@ -24,6 +24,13 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Check build output
+        run: |
+          echo "=== ROOT ==="
+          ls -la
+          echo "=== BUILD DIRECTORIES ==="
+          find . -maxdepth 2 -type d \( -name "dist" -o -name "build" -o -name ".output" \) -print
+
       - name: Check Wrangler
         run: npx wrangler --version
 
