@@ -1,7 +1,9 @@
+```tsx
 'use client'
-import { AIAssistant } from '@/components/ai-assistant'
+
 import { useEffect, useState } from 'react'
 
+import { AIAssistant } from '@/components/ai-assistant'
 import { HomeScreen } from '@/components/home-screen'
 import { QuizScreen } from '@/components/quiz-screen'
 import { ResultScreen } from '@/components/result-screen'
@@ -43,6 +45,7 @@ type Screen =
   | 'levels'
   | 'quiz'
   | 'result'
+  | 'ai'
 
 type NavigationState = {
   educationType: EducationType | null
@@ -80,14 +83,14 @@ export function MenejerlikApp() {
   const [result, setResult] =
     useState<QuizResult | null>(null)
 
+  const [isFullscreen, setIsFullscreen] =
+    useState(false)
+
   /*
    * =====================================================
    * TELEGRAM FULLSCREEN
    * =====================================================
    */
-
-  const [isFullscreen, setIsFullscreen] =
-    useState(false)
 
   useEffect(() => {
     if (!isTelegram) {
@@ -104,18 +107,10 @@ export function MenejerlikApp() {
     try {
       tg.ready()
 
-      /*
-       * Telegram Mini App oynasini
-       * maksimal darajada ochish
-       */
-      if (tg.expand) {
+      if (typeof tg.expand === 'function') {
         tg.expand()
       }
 
-      /*
-       * Yangi Telegram versiyalarida
-       * haqiqiy fullscreen
-       */
       if (
         typeof tg.requestFullscreen ===
         'function'
@@ -173,11 +168,6 @@ export function MenejerlikApp() {
     }
   }
 
-  /*
-   * Telegram fullscreen holati
-   * o‘zgarganda UI ni yangilash
-   */
-
   useEffect(() => {
     const tg =
       (window as any).Telegram?.WebApp
@@ -188,9 +178,7 @@ export function MenejerlikApp() {
 
     const handleFullscreenChanged = () => {
       setIsFullscreen(
-        Boolean(
-          tg.isFullscreen,
-        ),
+        Boolean(tg.isFullscreen),
       )
     }
 
@@ -238,7 +226,21 @@ export function MenejerlikApp() {
 
   /*
    * =====================================================
-   * EDUCATION TYPE
+   * AI ASSISTANT
+   * =====================================================
+   */
+
+  function openAI() {
+    setClosingConfirmation(false)
+
+    setScreen('ai')
+
+    scrollToTop()
+  }
+
+  /*
+   * =====================================================
+   * EDUCATION
    * =====================================================
    */
 
@@ -461,6 +463,10 @@ export function MenejerlikApp() {
 
   function goBack() {
     switch (screen) {
+      case 'ai':
+        goHome()
+        return
+
       case 'education':
         goHome()
         return
@@ -534,9 +540,7 @@ export function MenejerlikApp() {
 
   useEffect(() => {
     if (screen !== 'quiz') {
-      setClosingConfirmation(
-        false,
-      )
+      setClosingConfirmation(false)
     }
   }, [screen])
 
@@ -586,9 +590,7 @@ export function MenejerlikApp() {
       "
     >
 
-      {/* =================================================
-          TELEGRAM FULLSCREEN BUTTON
-      ================================================= */}
+      {/* FULLSCREEN */}
 
       {isTelegram && (
         <button
@@ -633,27 +635,100 @@ export function MenejerlikApp() {
         </button>
       )}
 
-      {/* =================================================
-          HOME
-      ================================================= */}
+      {/* AI */}
 
-      {screen === 'home' && (
-        <HomeScreen
-          user={user}
-          history={history}
-          stats={stats}
-          bestByCategory={
-            bestByCategory
-          }
-          onStart={
-            openEducationSelection
-          }
+      {screen === 'ai' && (
+        <AIAssistant
+          onBack={goBack}
         />
       )}
 
-      {/* =================================================
-          EDUCATION SELECTION
-      ================================================= */}
+      {/* HOME */}
+
+      {screen === 'home' && (
+        <div className="flex flex-col gap-5">
+
+          <HomeScreen
+            user={user}
+            history={history}
+            stats={stats}
+            bestByCategory={
+              bestByCategory
+            }
+            onStart={
+              openEducationSelection
+            }
+          />
+
+          <button
+            type="button"
+            onClick={openAI}
+            className="
+              group
+              relative
+              overflow-hidden
+              rounded-[2rem]
+              border
+              bg-card
+              p-5
+              text-left
+              shadow-sm
+              transition-all
+              hover:-translate-y-1
+              hover:shadow-xl
+              active:scale-[0.99]
+            "
+          >
+            <div className="absolute -right-8 -top-8 size-32 rounded-full bg-primary/5" />
+
+            <div className="relative flex items-center gap-4">
+
+              <div className="
+                flex
+                size-14
+                shrink-0
+                items-center
+                justify-center
+                rounded-2xl
+                bg-primary/10
+                text-3xl
+              ">
+                🤖
+              </div>
+
+              <div className="min-w-0 flex-1">
+
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                  MENEJERLIK AI
+                </p>
+
+                <h2 className="mt-1 text-lg font-bold">
+                  AI Rahbar yordamchisi
+                </h2>
+
+                <p className="mt-1 text-sm leading-5 text-muted-foreground">
+                  Ta’lim boshqaruvi va rahbarlik
+                  bo‘yicha savol bering.
+                </p>
+
+              </div>
+
+              <span className="
+                text-2xl
+                text-muted-foreground
+                transition-transform
+                group-hover:translate-x-1
+              ">
+                →
+              </span>
+
+            </div>
+          </button>
+
+        </div>
+      )}
+
+      {/* EDUCATION */}
 
       {screen === 'education' && (
         <EducationScreen
@@ -664,9 +739,7 @@ export function MenejerlikApp() {
         />
       )}
 
-      {/* =================================================
-          MODULES
-      ================================================= */}
+      {/* MODULES */}
 
       {screen === 'modules' && (
         <ModuleScreen
@@ -683,9 +756,7 @@ export function MenejerlikApp() {
         />
       )}
 
-      {/* =================================================
-          TOPICS
-      ================================================= */}
+      {/* TOPICS */}
 
       {screen === 'topics' && (
         <TopicScreen
@@ -699,9 +770,7 @@ export function MenejerlikApp() {
         />
       )}
 
-      {/* =================================================
-          LEVELS
-      ================================================= */}
+      {/* LEVELS */}
 
       {screen === 'levels' && (
         <LevelScreen
@@ -715,9 +784,7 @@ export function MenejerlikApp() {
         />
       )}
 
-      {/* =================================================
-          QUIZ
-      ================================================= */}
+      {/* QUIZ */}
 
       {screen === 'quiz' &&
         session && (
@@ -740,9 +807,7 @@ export function MenejerlikApp() {
           />
         )}
 
-      {/* =================================================
-          RESULT
-      ================================================= */}
+      {/* RESULT */}
 
       {screen === 'result' &&
         result && (
@@ -774,7 +839,6 @@ function EducationScreen({
   onSelect,
 }: {
   onBack: () => void
-
   onSelect: (
     type: EducationType,
   ) => void
@@ -813,7 +877,21 @@ function EducationScreen({
               'preschool',
             )
           }
-          className="group relative overflow-hidden rounded-[2rem] border bg-card p-6 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl active:scale-[0.99]"
+          className="
+            group
+            relative
+            overflow-hidden
+            rounded-[2rem]
+            border
+            bg-card
+            p-6
+            text-left
+            shadow-sm
+            transition-all
+            hover:-translate-y-1
+            hover:shadow-xl
+            active:scale-[0.99]
+          "
         >
 
           <div className="absolute -right-8 -top-8 size-32 rounded-full bg-primary/5" />
@@ -855,7 +933,21 @@ function EducationScreen({
               'school',
             )
           }
-          className="group relative overflow-hidden rounded-[2rem] border bg-card p-6 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl active:scale-[0.99]"
+          className="
+            group
+            relative
+            overflow-hidden
+            rounded-[2rem]
+            border
+            bg-card
+            p-6
+            text-left
+            shadow-sm
+            transition-all
+            hover:-translate-y-1
+            hover:shadow-xl
+            active:scale-[0.99]
+          "
         >
 
           <div className="absolute -right-8 -top-8 size-32 rounded-full bg-primary/5" />
@@ -1418,3 +1510,24 @@ function EmptyState({
     </div>
   )
 }
+```
+
+**Muhim:** bu kod `AIAssistant` komponentini chaqiradi, shuning uchun avvalgi qadamda yaratgan:
+
+```text
+components/ai-assistant.tsx
+```
+
+faylingiz GitHub'da bo‘lishi shart.
+
+Hozircha **AI tugmasi ko‘rinadi va AI oynasi ochiladi**, lekin `🤖 So‘rash` tugmasining ishlashi uchun keyingi qadamda `/api/ai` route'ni ulaymiz.
+
+Shu faylni GitHub'ga joylab **Commit changes** qiling. Commit nomini:
+
+```text
+add AI assistant to main app
+```
+
+deb qo‘ying.
+
+Keyin Vercel'da **Ready** bo‘lsa, menga natijasini yuboring.
