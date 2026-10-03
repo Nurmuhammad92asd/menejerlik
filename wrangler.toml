@@ -1,5 +1,5 @@
 name = "menejerlik"
-main = ".open-next/worker.js"
+main = "custom-worker.ts"
 compatibility_date = "2026-10-03"
 compatibility_flags = ["nodejs_compat"]
 
@@ -11,8 +11,6 @@ binding = "ASSETS"
 binding = "DB"
 database_name = "menejerlik-db"
 database_id = "24278777-7393-4cb0-acb4-5ad35b5392d0"
-
-# D1 database connected
 
 [triggers]
 crons = ["0 * * * *"]
