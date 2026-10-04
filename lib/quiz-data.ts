@@ -5,6 +5,8 @@ import { M1T4_LEVELS } from './data/m1t4'
 import { M1T5_LEVELS } from './data/m1t5'
 import { M1T6_LEVELS } from './data/m1t6'
 import { M2T1_LEVELS } from './data/m2t1'
+import { M2T2_LEVELS } from './data/m2t2'
+
 /*
  * =========================================================
  * TYPES
@@ -167,17 +169,12 @@ const MODULE_2: Category = {
   levels: M2T1_LEVELS,
 },
 
-    {
-      id: 'm2t2',
-
-      title: 'O‘quvchilarning ta’lim dasturlarini o‘zlashtirishi',
-
-      description:
-        'O‘quvchilarning bilim va ko‘nikmalarini tahlil qilish hamda natijalarni yaxshilash.',
-
-      levels: EMPTY_LEVELS,
-    },
-
+  {
+  id: 'm2t2',
+  title: '...',
+  description: '...',
+  levels: M2T2_LEVELS,
+},
     {
       id: 'm2t3',
 
