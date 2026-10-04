@@ -32,7 +32,6 @@ import {
 } from '@/lib/quiz-data'
 
 import { useHistory } from '@/hooks/use-history'
-
 import {
   useBackButton,
   useTelegram,
@@ -228,7 +227,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     icon: '🎨',
     title: 'Tasviriy san’at',
     description:
-      'Tasviriy san’at fani bo‘yicha testlar.',
+      'Tasviriy san’at bo‘yicha testlar.',
   },
   {
     id: 'texnologiya',
@@ -259,31 +258,19 @@ export function MenejerlikApp() {
   const [screen, setScreen] =
     useState<Screen>('home')
 
-  const [
-    navigation,
-    setNavigation,
-  ] = useState<NavigationState>(
-    INITIAL_NAVIGATION,
-  )
+  const [navigation, setNavigation] =
+    useState<NavigationState>(
+      INITIAL_NAVIGATION,
+    )
 
-  const [
-    quizSession,
-    setQuizSession,
-  ] = useState<QuizSession | null>(
-    null,
-  )
+  const [quizSession, setQuizSession] =
+    useState<QuizSession | null>(null)
 
-  const [
-    quizResult,
-    setQuizResult,
-  ] = useState<QuizResult | null>(
-    null,
-  )
+  const [quizResult, setQuizResult] =
+    useState<QuizResult | null>(null)
 
-  const [
-    isFullscreen,
-    setIsFullscreen,
-  ] = useState(false)
+  const [isFullscreen, setIsFullscreen] =
+    useState(false)
 
   const [
     isClosingConfirmation,
@@ -293,20 +280,17 @@ export function MenejerlikApp() {
   const history = useHistory()
 
   /* =========================================================
-     TELEGRAM FULLSCREEN
+     TELEGRAM INITIALIZATION
   ========================================================= */
 
   useEffect(() => {
-    if (!webApp) {
-      return
-    }
+    if (!webApp) return
 
     try {
       webApp.ready()
 
       if (
-        typeof webApp.expand ===
-        'function'
+        typeof webApp.expand === 'function'
       ) {
         webApp.expand()
       }
@@ -320,20 +304,18 @@ export function MenejerlikApp() {
       }
     } catch (error) {
       console.error(
-        'Telegram fullscreen error:',
+        'Telegram initialization error:',
         error,
       )
     }
   }, [webApp])
 
   /* =========================================================
-     FULLSCREEN EVENT
+     TELEGRAM FULLSCREEN EVENT
   ========================================================= */
 
   useEffect(() => {
-    if (!webApp) {
-      return
-    }
+    if (!webApp) return
 
     const handleFullscreenChanged =
       () => {
@@ -365,13 +347,12 @@ export function MenejerlikApp() {
   }, [webApp])
 
   /* =========================================================
-     SCROLL
+     SCROLL TOP
   ========================================================= */
 
   const scrollToTop = () => {
     if (
-      typeof window ===
-      'undefined'
+      typeof window === 'undefined'
     ) {
       return
     }
@@ -401,9 +382,21 @@ export function MenejerlikApp() {
 
   /* =========================================================
      STUDENT ACADEMY
+     MUHIM: barcha eski quiz holatini tozalaymiz
   ========================================================= */
 
   const openStudentAcademy = () => {
+    console.log(
+      '[MENEJERLIK] O‘quvchi Akademiyasi ochilmoqda...',
+    )
+
+    setQuizSession(null)
+    setQuizResult(null)
+
+    setNavigation(
+      INITIAL_NAVIGATION,
+    )
+
     setScreen(
       'student-academy',
     )
@@ -430,14 +423,21 @@ export function MenejerlikApp() {
   }
 
   /* =========================================================
-     EDUCATION
+     PROFESSIONAL EDUCATION
   ========================================================= */
 
   const openEducationSelection =
     () => {
+      setQuizSession(null)
+      setQuizResult(null)
+
       setScreen('education')
       scrollToTop()
     }
+
+  /* =========================================================
+     SELECT EDUCATION
+  ========================================================= */
 
   const selectEducation = (
     educationType: EducationType,
@@ -448,12 +448,11 @@ export function MenejerlikApp() {
     })
 
     setScreen('roles')
-
     scrollToTop()
   }
 
   /* =========================================================
-     ROLE
+     SELECT ROLE
   ========================================================= */
 
   const selectRole = (
@@ -465,9 +464,7 @@ export function MenejerlikApp() {
     setNavigation(
       (previous) => ({
         ...previous,
-
         role,
-
         moduleId: null,
         topicId: null,
         subjectId: null,
@@ -476,20 +473,15 @@ export function MenejerlikApp() {
     )
 
     if (
-      educationType ===
-      'school'
+      educationType === 'school'
     ) {
-      if (
-        role === 'teacher'
-      ) {
+      if (role === 'teacher') {
         setScreen('subjects')
       } else {
         setScreen('modules')
       }
     } else {
-      if (
-        role === 'pedagogue'
-      ) {
+      if (role === 'pedagogue') {
         setScreen('subjects')
       } else {
         setScreen('modules')
@@ -526,7 +518,6 @@ export function MenejerlikApp() {
     setNavigation(
       (previous) => ({
         ...previous,
-
         moduleId,
         topicId: null,
         quizSource: null,
@@ -534,12 +525,11 @@ export function MenejerlikApp() {
     )
 
     setScreen('topics')
-
     scrollToTop()
   }
 
   /* =========================================================
-     MODULE MIXED
+     MODULE MIXED TEST
   ========================================================= */
 
   const startModuleMixed = (
@@ -552,9 +542,7 @@ export function MenejerlikApp() {
         )
 
       if (
-        !session.questions ||
-        session.questions.length ===
-          0
+        !session?.questions?.length
       ) {
         console.error(
           'Modul bo‘yicha savollar topilmadi:',
@@ -567,7 +555,6 @@ export function MenejerlikApp() {
       setNavigation(
         (previous) => ({
           ...previous,
-
           moduleId,
           topicId: null,
           quizSource: 'module',
@@ -581,7 +568,7 @@ export function MenejerlikApp() {
       scrollToTop()
     } catch (error) {
       console.error(
-        'Modul aralash testini boshlashda xatolik:',
+        'Modul aralash testida xatolik:',
         error,
       )
     }
@@ -597,14 +584,12 @@ export function MenejerlikApp() {
     setNavigation(
       (previous) => ({
         ...previous,
-
         topicId,
         quizSource: null,
       }),
     )
 
     setScreen('levels')
-
     scrollToTop()
   }
 
@@ -615,9 +600,7 @@ export function MenejerlikApp() {
   const selectLevel = (
     level: QuizLevel,
   ) => {
-    if (
-      !navigation.topicId
-    ) {
+    if (!navigation.topicId) {
       return
     }
 
@@ -643,10 +626,7 @@ export function MenejerlikApp() {
         )
 
       if (
-        !session ||
-        !session.questions ||
-        session.questions.length ===
-          0
+        !session?.questions?.length
       ) {
         console.error(
           'Test savollari topilmadi:',
@@ -662,7 +642,6 @@ export function MenejerlikApp() {
       setNavigation(
         (previous) => ({
           ...previous,
-
           topicId,
           quizSource: 'topic',
         }),
@@ -682,7 +661,7 @@ export function MenejerlikApp() {
   }
 
   /* =========================================================
-     SAVE RESULT TO D1
+     SAVE RESULT TO DATABASE
   ========================================================= */
 
   const saveResultToDatabase =
@@ -721,13 +700,10 @@ export function MenejerlikApp() {
               body: JSON.stringify({
                 telegramUser: {
                   id: telegramUser.id,
-
                   first_name:
                     telegramUser.first_name,
-
                   last_name:
                     telegramUser.last_name,
-
                   username:
                     telegramUser.username,
                 },
@@ -812,7 +788,7 @@ export function MenejerlikApp() {
     }
 
   /* =========================================================
-     FINISH
+     FINISH QUIZ
   ========================================================= */
 
   const finish = async (
@@ -859,12 +835,9 @@ export function MenejerlikApp() {
 
             return {
               ...item,
-
               selected,
-
               isAnswered,
               isCorrect,
-
               isWrong:
                 isAnswered &&
                 !isCorrect,
@@ -914,21 +887,15 @@ export function MenejerlikApp() {
 
       const result = {
         ...quizSession,
-
         questions,
-
-        answers:
-          checkedAnswers,
-
+        answers: checkedAnswers,
         total,
         correct,
         wrong,
         percentage,
         score: correct,
-
         unanswered:
           finalUnanswered,
-
         durationSec: 0,
       } as unknown as QuizResult
 
@@ -1022,20 +989,15 @@ export function MenejerlikApp() {
   }
 
   /* =========================================================
-     BACK
+     BACK NAVIGATION
   ========================================================= */
 
   const goBack = () => {
-    if (
-      screen === 'home'
-    ) {
+    if (screen === 'home') {
       return
     }
 
-    /*
-     * O‘QUVCHI AKADEMIYASI
-     * alohida flow sifatida ishlaydi.
-     */
+    /* O‘QUVCHI AKADEMIYASI */
     if (
       screen ===
       'student-academy'
@@ -1044,6 +1006,7 @@ export function MenejerlikApp() {
       return
     }
 
+    /* RANKING / AI */
     if (
       screen === 'ranking' ||
       screen === 'ai'
@@ -1052,6 +1015,7 @@ export function MenejerlikApp() {
       return
     }
 
+    /* EDUCATION */
     if (
       screen === 'education'
     ) {
@@ -1059,49 +1023,43 @@ export function MenejerlikApp() {
       return
     }
 
-    if (
-      screen === 'roles'
-    ) {
+    /* ROLES */
+    if (screen === 'roles') {
       setScreen('education')
       scrollToTop()
       return
     }
 
-    if (
-      screen === 'subjects'
-    ) {
+    /* SUBJECTS */
+    if (screen === 'subjects') {
       setScreen('roles')
       scrollToTop()
       return
     }
 
-    if (
-      screen === 'modules'
-    ) {
+    /* MODULES */
+    if (screen === 'modules') {
       setScreen('roles')
       scrollToTop()
       return
     }
 
-    if (
-      screen === 'topics'
-    ) {
+    /* TOPICS */
+    if (screen === 'topics') {
       setScreen('modules')
       scrollToTop()
       return
     }
 
-    if (
-      screen === 'levels'
-    ) {
+    /* LEVELS */
+    if (screen === 'levels') {
       setScreen('topics')
       scrollToTop()
       return
     }
 
-    if (
-      screen === 'quiz'
-    ) {
+    /* QUIZ */
+    if (screen === 'quiz') {
       if (
         navigation.quizSource ===
         'module'
@@ -1115,9 +1073,8 @@ export function MenejerlikApp() {
       return
     }
 
-    if (
-      screen === 'result'
-    ) {
+    /* RESULT */
+    if (screen === 'result') {
       if (
         navigation.quizSource ===
         'module'
@@ -1134,7 +1091,7 @@ export function MenejerlikApp() {
   }
 
   /* =========================================================
-     TELEGRAM BACK
+     TELEGRAM BACK BUTTON
   ========================================================= */
 
   useBackButton(
@@ -1311,27 +1268,21 @@ export function MenejerlikApp() {
             stats={{
               count:
                 history.stats.count,
-
               average:
                 history.stats.average,
-
               best:
                 history.stats.best,
             }}
             bestByCategory={
               history.bestByCategory
             }
-
             onSelectEducation={
               openEducationSelection
             }
-
             onStudentAcademy={
               openStudentAcademy
             }
-
             onAI={openAI}
-
             onRanking={
               openRanking
             }
@@ -1339,7 +1290,7 @@ export function MenejerlikApp() {
         )}
 
         {/* ===================================================
-            STUDENT ACADEMY
+            O‘QUVCHI AKADEMIYASI
         =================================================== */}
 
         {screen ===
@@ -1407,20 +1358,16 @@ export function MenejerlikApp() {
             educationType={
               navigation.educationType
             }
-
             subjects={
               navigation.educationType ===
               'school'
                 ? SCHOOL_SUBJECTS
                 : []
             }
-
             selectedSubjectId={
               navigation.subjectId
             }
-
             onBack={goBack}
-
             onSelect={
               selectSubject
             }
@@ -1436,21 +1383,16 @@ export function MenejerlikApp() {
             categories={
               activeCategories
             }
-
             educationType={
               navigation.educationType
             }
-
             role={
               navigation.role
             }
-
             onBack={goBack}
-
             onSelect={
               selectModule
             }
-
             onMixed={
               startModuleMixed
             }
@@ -1466,9 +1408,7 @@ export function MenejerlikApp() {
             module={
               activeModule
             }
-
             onBack={goBack}
-
             onSelect={
               selectTopic
             }
@@ -1484,9 +1424,7 @@ export function MenejerlikApp() {
             topic={
               activeTopic
             }
-
             onBack={goBack}
-
             onSelect={
               selectLevel
             }
@@ -1503,15 +1441,12 @@ export function MenejerlikApp() {
               session={
                 quizSession
               }
-
               showCloseButton={
                 true
               }
-
               onFinish={
                 finish
               }
-
               onExit={
                 goBack
               }
@@ -1528,11 +1463,9 @@ export function MenejerlikApp() {
               result={
                 quizResult
               }
-
               onRetry={
                 retryQuiz
               }
-
               onHome={
                 goHome
               }
@@ -1541,7 +1474,9 @@ export function MenejerlikApp() {
 
       </div>
 
-      {/* ACCESSIBLE QUIZ STATE */}
+      {/* =====================================================
+          ACCESSIBLE QUIZ STATE
+      ===================================================== */}
 
       {isClosingConfirmation && (
         <div className="sr-only">
@@ -1562,7 +1497,6 @@ function EducationScreen({
   onSelect,
 }: {
   onBack: () => void
-
   onSelect: (
     educationType: EducationType,
   ) => void
@@ -1633,9 +1567,7 @@ function RoleScreen({
   educationType:
     | EducationType
     | null
-
   onBack: () => void
-
   onSelect: (
     role: RoleId,
   ) => void
@@ -1654,7 +1586,6 @@ function RoleScreen({
             'Maktab rahbari uchun menejerlik va attestatsiya tayyorgarligi.',
           badge: 'RAHBAR',
         },
-
         {
           id: 'deputy' as RoleId,
           icon: '👨‍💼',
@@ -1664,7 +1595,6 @@ function RoleScreen({
             'O‘quv, tarbiyaviy va boshqaruv faoliyati bo‘yicha tayyorgarlik.',
           badge: 'RAHBAR',
         },
-
         {
           id: 'teacher' as RoleId,
           icon: '👨‍🏫',
@@ -1685,7 +1615,6 @@ function RoleScreen({
             'Maktabgacha ta’lim tashkiloti rahbari uchun menejerlik tayyorgarligi.',
           badge: 'RAHBAR',
         },
-
         {
           id: 'deputy' as RoleId,
           icon: '👩‍💼',
@@ -1695,7 +1624,6 @@ function RoleScreen({
             'Boshqaruv va ta’lim jarayonini tashkil etish bo‘yicha tayyorgarlik.',
           badge: 'RAHBAR',
         },
-
         {
           id: 'pedagogue' as RoleId,
           icon: '👩‍🏫',
@@ -1766,6 +1694,7 @@ function RoleScreen({
                   <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
                     {role.description}
                   </p>
+
                 </div>
 
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:bg-blue-50 group-hover:text-blue-700 dark:group-hover:bg-blue-950/20">
@@ -1819,15 +1748,11 @@ function SubjectScreen({
   educationType:
     | EducationType
     | null
-
   subjects: Subject[]
-
   selectedSubjectId:
     | string
     | null
-
   onBack: () => void
-
   onSelect: (
     subjectId: string,
   ) => void
@@ -1947,7 +1872,6 @@ function SubjectScreen({
 
                   {active && (
                     <div className="mt-4 rounded-2xl bg-blue-50/70 p-3 dark:bg-blue-950/20">
-
                       <p className="text-[10px] font-black uppercase tracking-wider text-blue-700">
                         Test bazasi
                       </p>
@@ -1957,7 +1881,6 @@ function SubjectScreen({
                         uchun keyingi bosqichda
                         ulanadi.
                       </p>
-
                     </div>
                   )}
 
@@ -2043,21 +1966,16 @@ function ModuleScreen({
   onMixed,
 }: {
   categories: Category[]
-
   educationType:
     | EducationType
     | null
-
   role:
     | RoleId
     | null
-
   onBack: () => void
-
   onSelect: (
     moduleId: string,
   ) => void
-
   onMixed: (
     moduleId: string,
   ) => void
@@ -2243,9 +2161,7 @@ function TopicScreen({
         typeof getModuleById
       >
     | undefined
-
   onBack: () => void
-
   onSelect: (
     topicId: string,
   ) => void
@@ -2413,9 +2329,7 @@ function LevelScreen({
         typeof getTopicById
       >
     | undefined
-
   onBack: () => void
-
   onSelect: (
     level: QuizLevel,
   ) => void
@@ -2455,7 +2369,6 @@ function LevelScreen({
       questions:
         topic.levels.easy.length,
     },
-
     {
       id: 'medium',
       icon: '🟡',
@@ -2465,7 +2378,6 @@ function LevelScreen({
       questions:
         topic.levels.medium.length,
     },
-
     {
       id: 'hard',
       icon: '🔴',
@@ -2475,7 +2387,6 @@ function LevelScreen({
       questions:
         topic.levels.hard.length,
     },
-
     {
       id: 'case',
       icon: '🔵',
@@ -2485,7 +2396,6 @@ function LevelScreen({
       questions:
         topic.levels.case.length,
     },
-
     {
       id: 'mixed',
       icon: '🟣',
