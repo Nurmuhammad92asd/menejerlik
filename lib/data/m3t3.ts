@@ -722,7 +722,7 @@ Eng maqbul yechim qaysi?`,
 ========================================================= */
 
 export const CASE_QUESTIONS: Question[] = [
-  // bu yerda 10 ta case savol bo‘lsin
+  // 10 ta haqiqiy case savol
 ];
 
 export const M3T3_QUESTIONS: Question[] = [
@@ -740,9 +740,5 @@ export const M3T3_LEVELS = {
   hard: HARD_QUESTIONS,
   case: CASE_QUESTIONS,
 };
-
-export default M3T3_QUESTIONS;
-
-export const M3T3_QUESTION_COUNT = M3T3_QUESTIONS.length;
 
 export default M3T3_QUESTIONS;
