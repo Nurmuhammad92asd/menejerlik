@@ -1,9 +1,14 @@
 'use client'
 
-import {
-  useMemo,
-  useState,
-} from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+
+/* =========================================================
+   PISA ACADEMY
+   Menejerlik by Nurmuhammad
+   ---------------------------------------------------------
+   Original PISA-style adaptive training interface.
+   Bu rasmiy PISA testi emas.
+========================================================= */
 
 /* =========================================================
    TYPES
@@ -29,18 +34,34 @@ type Question = {
   correct: number
   explanation: string
   xp: number
+  estimatedTime?: number
+}
+
+type AnswerRecord = {
+  questionId: string
+  correct: boolean
+  difficulty: Difficulty
+  domain: Domain
+  selected: number
+  correctAnswer: number
+}
+
+type SkillState = {
+  mathematics: number
+  reading: number
+  science: number
+  'problem-solving': number
 }
 
 /* =========================================================
-   DEMO PISA BANK
-   Keyin mavjud lib/pisa bazasi bilan almashtiriladi.
+   QUESTION BANK
 ========================================================= */
 
 const QUESTIONS: Question[] = [
   {
     id: 'pisa-math-001',
     domain: 'mathematics',
-    difficulty: 3,
+    difficulty: 2,
     category: 'Miqdor',
     context: 'Shaxsiy hayot',
     stimulus:
@@ -55,37 +76,34 @@ const QUESTIONS: Question[] = [
     ],
     correct: 1,
     explanation:
-      '12 000 × 5 = 60 000 so‘m.',
+      'Bir kunlik xarajat 12 000 so‘m. 5 kun uchun 12 000 × 5 = 60 000 so‘m.',
     xp: 20,
+    estimatedTime: 45,
   },
 
   {
     id: 'pisa-math-002',
     domain: 'mathematics',
-    difficulty: 4,
-    category: 'O‘zgarish va bog‘lanishlar',
+    difficulty: 3,
+    category: 'Ma’lumotlarni tahlil qilish',
     context: 'Maktab',
     stimulus:
       'Maktabdagi 4 ta sinfda mos ravishda 24, 28, 26 va 22 nafar o‘quvchi bor.',
     question:
       'Ushbu sinflardagi o‘quvchilar sonining o‘rtacha qiymati nechaga teng?',
-    options: [
-      '24',
-      '25',
-      '26',
-      '27',
-    ],
+    options: ['24', '25', '26', '27'],
     correct: 1,
     explanation:
       '(24 + 28 + 26 + 22) ÷ 4 = 100 ÷ 4 = 25.',
     xp: 25,
+    estimatedTime: 60,
   },
 
   {
     id: 'pisa-math-003',
     domain: 'mathematics',
-    difficulty: 5,
-    category: 'Ma’lumotlar',
+    difficulty: 4,
+    category: 'Noaniqlik va ma’lumotlar',
     context: 'Jamiyat',
     stimulus:
       'Kutubxonaga bir oyda dushanba kuni 42, seshanba kuni 36, chorshanba kuni 51 va payshanba kuni 45 nafar o‘quvchi tashrif buyurdi.',
@@ -99,36 +117,56 @@ const QUESTIONS: Question[] = [
     ],
     correct: 2,
     explanation:
-      '51 eng katta qiymat bo‘lgani uchun javob chorshanba.',
+      'Berilgan qiymatlar ichida 51 eng katta son. Shuning uchun eng ko‘p tashrif chorshanba kuni bo‘lgan.',
     xp: 30,
+    estimatedTime: 45,
   },
 
   {
     id: 'pisa-math-004',
     domain: 'mathematics',
-    difficulty: 6,
-    category: 'Noaniqlik va ma’lumotlar',
+    difficulty: 5,
+    category: 'Foiz va nisbat',
     context: 'Ilmiy',
     stimulus:
       'Bir tadqiqotda 200 nafar o‘quvchining 70 foizi maktab kutubxonasidan oyiga kamida bir marta foydalanishi aniqlandi.',
     question:
       'Tadqiqotdagi nechta o‘quvchi kutubxonadan kamida bir marta foydalanadi?',
+    options: ['120', '130', '140', '150'],
+    correct: 2,
+    explanation:
+      '200 ning 70 foizi: 200 × 0,70 = 140.',
+    xp: 35,
+    estimatedTime: 60,
+  },
+
+  {
+    id: 'pisa-math-005',
+    domain: 'mathematics',
+    difficulty: 6,
+    category: 'O‘zgarish va bog‘lanishlar',
+    context: 'Shaxsiy hayot',
+    stimulus:
+      'Bir telefonning narxi 2 000 000 so‘m edi. Do‘kon aksiyasi vaqtida narx 15% ga kamaytirildi.',
+    question:
+      'Aksiya vaqtida telefonning yangi narxi qancha bo‘ladi?',
     options: [
-      '120',
-      '130',
-      '140',
-      '150',
+      '1 600 000 so‘m',
+      '1 650 000 so‘m',
+      '1 700 000 so‘m',
+      '1 850 000 so‘m',
     ],
     correct: 2,
     explanation:
-      '200 × 0,70 = 140 nafar o‘quvchi.',
-    xp: 35,
+      '15% chegirma 300 000 so‘m. 2 000 000 − 300 000 = 1 700 000 so‘m.',
+    xp: 40,
+    estimatedTime: 90,
   },
 
   {
     id: 'pisa-reading-001',
     domain: 'reading',
-    difficulty: 3,
+    difficulty: 2,
     category: 'Axborotni topish',
     context: 'Maktab',
     stimulus:
@@ -143,8 +181,9 @@ const QUESTIONS: Question[] = [
     ],
     correct: 2,
     explanation:
-      'Matnda shanba kuni kutubxona 09:00 dan 13:00 gacha ishlashi aytilgan.',
+      'Matnda shanba kuni kutubxona 09:00 dan 13:00 gacha ishlashi aniq ko‘rsatilgan.',
     xp: 20,
+    estimatedTime: 30,
   },
 
   {
@@ -165,14 +204,38 @@ const QUESTIONS: Question[] = [
     ],
     correct: 1,
     explanation:
-      'Matnda qayta foydalaniladigan idishlar tavsiya qilingach plastik butilkalar kamaygani ko‘rsatilgan.',
-    xp: 25,
+      'Matnda qayta foydalaniladigan idishlar tavsiya qilingach plastik butilkalar kamaygani kuzatilgani aytilgan.',
+    xp: 30,
+    estimatedTime: 75,
+  },
+
+  {
+    id: 'pisa-reading-003',
+    domain: 'reading',
+    difficulty: 5,
+    category: 'Dalillarni baholash',
+    context: 'Raqamli muhit',
+    stimulus:
+      'Bir blogda “Har kuni ertalab suv ichish barcha kasalliklarni davolaydi” degan fikr yozilgan. Muallif bu fikrni tasdiqlovchi hech qanday tadqiqot yoki manba keltirmagan.',
+    question:
+      'Ushbu fikrni baholashda eng muhim savol qaysi?',
+    options: [
+      'Blogning dizayni chiroylimi?',
+      'Muallifning yozish uslubi yoqimlimi?',
+      'Fikrni tasdiqlovchi ishonchli dalil yoki manba mavjudmi?',
+      'Maqolada nechta rasm bor?',
+    ],
+    correct: 2,
+    explanation:
+      'Axborotning ishonchliligini baholashda fikrni tasdiqlovchi dalil va ishonchli manbalar muhim.',
+    xp: 40,
+    estimatedTime: 90,
   },
 
   {
     id: 'pisa-science-001',
     domain: 'science',
-    difficulty: 4,
+    difficulty: 3,
     category: 'Ilmiy hodisani tushuntirish',
     context: 'Atrof-muhit',
     stimulus:
@@ -187,8 +250,9 @@ const QUESTIONS: Question[] = [
     ],
     correct: 0,
     explanation:
-      'Yorug‘lik fotosintez uchun zarur energiya manbalaridan biridir.',
+      'O‘simliklar fotosintez jarayonida yorug‘lik energiyasidan foydalanadi.',
     xp: 25,
+    estimatedTime: 60,
   },
 
   {
@@ -209,14 +273,38 @@ const QUESTIONS: Question[] = [
     ],
     correct: 0,
     explanation:
-      'Kuzatilgan tajribada harorat oshishi bilan erish tezligi oshgan.',
-    xp: 30,
+      'Aynan ushbu tajribada harorat oshishi bilan erish tezligi oshgani kuzatilgan.',
+    xp: 35,
+    estimatedTime: 75,
+  },
+
+  {
+    id: 'pisa-science-003',
+    domain: 'science',
+    difficulty: 6,
+    category: 'Tajriba dizayni',
+    context: 'Ilmiy',
+    stimulus:
+      'O‘quvchi ikki xil o‘g‘itning o‘simlik o‘sishiga ta’sirini solishtirmoqchi. U ikkita bir xil o‘simlikdan foydalanmoqda.',
+    question:
+      'Tajriba natijasini ishonchliroq taqqoslash uchun qaysi omilni imkon qadar bir xil saqlash kerak?',
+    options: [
+      'O‘simliklarning boshlang‘ich holati',
+      'Faqat o‘g‘it turi',
+      'O‘simliklardan birining idishini olib tashlash',
+      'Bir o‘simlikka umuman suv bermaslik',
+    ],
+    correct: 0,
+    explanation:
+      'Tajriba adolatli bo‘lishi uchun taqqoslanayotgan o‘simliklarning boshlang‘ich sharoitlari imkon qadar bir xil bo‘lishi kerak.',
+    xp: 45,
+    estimatedTime: 100,
   },
 
   {
     id: 'pisa-problem-001',
     domain: 'problem-solving',
-    difficulty: 4,
+    difficulty: 3,
     category: 'Muammo yechish',
     context: 'Maktab',
     stimulus:
@@ -231,20 +319,21 @@ const QUESTIONS: Question[] = [
     ],
     correct: 1,
     explanation:
-      '30 ÷ 3 = 10. Har bir guruhda 10 nafardan o‘quvchi bo‘ladi.',
-    xp: 25,
+      '30 ÷ 3 = 10. Demak, 3 ta guruhda 10 nafardan o‘quvchi bo‘ladi va shart bajariladi.',
+    xp: 30,
+    estimatedTime: 60,
   },
 
   {
     id: 'pisa-problem-002',
     domain: 'problem-solving',
-    difficulty: 6,
+    difficulty: 5,
     category: 'Strategik fikrlash',
     context: 'Shaxsiy hayot',
     stimulus:
       'Sizda 120 000 so‘m bor. Kitob 55 000 so‘m, daftar 18 000 so‘m, ruchka 7 000 so‘m va sumka 65 000 so‘m turadi.',
     question:
-      'Agar barcha narsani sotib olishning imkoni bo‘lmasa, o‘qish uchun eng zarur uchta buyumni tanlashda qaysi kombinatsiya 120 000 so‘mdan oshmaydi?',
+      'O‘qish uchun eng zarur uchta buyumni tanlashda qaysi kombinatsiya 120 000 so‘mdan oshmaydi?',
     options: [
       'Kitob + daftar + ruchka',
       'Kitob + sumka + ruchka',
@@ -254,7 +343,31 @@ const QUESTIONS: Question[] = [
     correct: 0,
     explanation:
       '55 000 + 18 000 + 7 000 = 80 000 so‘m. Bu 120 000 so‘mdan oshmaydi.',
-    xp: 35,
+    xp: 40,
+    estimatedTime: 90,
+  },
+
+  {
+    id: 'pisa-problem-003',
+    domain: 'problem-solving',
+    difficulty: 7,
+    category: 'Strategik qaror',
+    context: 'Jamiyat',
+    stimulus:
+      'Maktab tadbirida 180 nafar mehmon uchun o‘rindiqlar joylashtiriladi. Har bir qatorda 12 ta o‘rindiq bo‘lishi kerak. Biroq xavfsizlik talabiga ko‘ra 3 ta qatordan keyin kamida 1 metr bo‘sh joy qoldiriladi.',
+    question:
+      'Bunday vaziyatda eng avvalo qaysi ma’lumotni aniqlash strategik jihatdan muhim?',
+    options: [
+      'Mehmonlarning sevimli rangini',
+      'Xonaning umumiy uzunligi va kengligini',
+      'Tadbir boshlovchisining yoshini',
+      'O‘rindiqlarning rangini',
+    ],
+    correct: 1,
+    explanation:
+      'O‘rindiqlarni xavfsizlik talablariga mos joylashtirish uchun xona o‘lchamlari va mavjud bo‘sh joyni bilish zarur.',
+    xp: 55,
+    estimatedTime: 120,
   },
 ]
 
@@ -267,37 +380,203 @@ const DOMAIN_META: Record<
   {
     icon: string
     title: string
+    short: string
     description: string
+    gradient: string
   }
 > = {
   mathematics: {
     icon: '📐',
     title: 'Matematik savodxonlik',
+    short: 'Matematika',
     description:
-      'Real hayotdagi matematik vaziyatlarni tahlil qilish.',
+      'Real hayotdagi miqdor, nisbat, ma’lumot va o‘zgarishlarni tahlil qiling.',
+    gradient: 'from-blue-600 to-cyan-500',
   },
+
   reading: {
     icon: '📖',
     title: 'O‘qish savodxonligi',
+    short: 'O‘qish',
     description:
-      'Matnni tushunish, bog‘lash, xulosa qilish va baholash.',
+      'Matnni tushuning, dalillarni bog‘lang, xulosa chiqaring va baholang.',
+    gradient: 'from-violet-600 to-fuchsia-500',
   },
+
   science: {
     icon: '🔬',
     title: 'Tabiiy-ilmiy savodxonlik',
+    short: 'Fan',
     description:
-      'Ilmiy hodisa, dalil va ma’lumotlarni tushuntirish.',
+      'Ilmiy hodisalar, tajribalar, dalillar va ma’lumotlarni tahlil qiling.',
+    gradient: 'from-emerald-600 to-teal-500',
   },
+
   'problem-solving': {
     icon: '🧠',
     title: 'Muammo yechish',
+    short: 'Muammo',
     description:
-      'Murakkab vaziyatlarda strategik qaror qabul qilish.',
+      'Murakkab vaziyatlarda strategiya tanlang va asoslangan qaror qabul qiling.',
+    gradient: 'from-orange-600 to-amber-500',
   },
 }
 
 /* =========================================================
-   COMPONENT
+   DIFFICULTY META
+========================================================= */
+
+const DIFFICULTY_META: Record<
+  Difficulty,
+  {
+    label: string
+    color: string
+  }
+> = {
+  1: {
+    label: 'Boshlang‘ich',
+    color: 'text-emerald-600',
+  },
+  2: {
+    label: 'Oson',
+    color: 'text-emerald-600',
+  },
+  3: {
+    label: 'Rivojlanish',
+    color: 'text-cyan-600',
+  },
+  4: {
+    label: 'O‘rta',
+    color: 'text-blue-600',
+  },
+  5: {
+    label: 'Yuqori o‘rta',
+    color: 'text-indigo-600',
+  },
+  6: {
+    label: 'Qiyin',
+    color: 'text-violet-600',
+  },
+  7: {
+    label: 'Ilg‘or',
+    color: 'text-orange-600',
+  },
+  8: {
+    label: 'Master',
+    color: 'text-red-600',
+  },
+}
+
+/* =========================================================
+   CONSTANTS
+========================================================= */
+
+const TEST_LENGTH = 8
+const INITIAL_DIFFICULTY: Difficulty = 4
+const MAX_DIFFICULTY: Difficulty = 8
+const MIN_DIFFICULTY: Difficulty = 1
+const CORRECT_STREAK_TO_RISE = 2
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function clampDifficulty(
+  value: number,
+): Difficulty {
+  return Math.max(
+    MIN_DIFFICULTY,
+    Math.min(
+      MAX_DIFFICULTY,
+      value,
+    ),
+  ) as Difficulty
+}
+
+function getClosestQuestion(
+  pool: Question[],
+  difficulty: Difficulty,
+  usedIds: string[],
+) {
+  const available = pool.filter(
+    (question) =>
+      !usedIds.includes(
+        question.id,
+      ),
+  )
+
+  if (!available.length) {
+    return null
+  }
+
+  const sorted = [
+    ...available,
+  ].sort(
+    (a, b) =>
+      Math.abs(
+        a.difficulty -
+          difficulty,
+      ) -
+      Math.abs(
+        b.difficulty -
+          difficulty,
+      ),
+  )
+
+  const topDistance =
+    Math.abs(
+      sorted[0].difficulty -
+        difficulty,
+    )
+
+  const candidates =
+    sorted.filter(
+      (question) =>
+        Math.abs(
+          question.difficulty -
+            difficulty,
+        ) ===
+        topDistance,
+    )
+
+  return candidates[
+    Math.floor(
+      Math.random() *
+        candidates.length,
+    )
+  ]
+}
+
+function getDomainAccuracy(
+  answers: AnswerRecord[],
+  domain: Domain,
+) {
+  const records =
+    answers.filter(
+      (item) =>
+        item.domain ===
+        domain,
+    )
+
+  if (!records.length) {
+    return 0
+  }
+
+  const correct =
+    records.filter(
+      (item) =>
+        item.correct,
+    ).length
+
+  return Math.round(
+    (correct /
+      records.length) *
+      100,
+  )
+}
+
+/* =========================================================
+   MAIN COMPONENT
 ========================================================= */
 
 export default function PISAAcademy({
@@ -307,87 +586,336 @@ export default function PISAAcademy({
 }) {
   const [mode, setMode] =
     useState<
-      'dashboard' | 'test' | 'result'
+      'dashboard' |
+      'test' |
+      'result'
     >('dashboard')
 
   const [domain, setDomain] =
-    useState<Domain | null>(null)
+    useState<Domain | null>(
+      null,
+    )
 
-  const [current, setCurrent] =
-    useState(0)
+  const [
+    currentQuestion,
+    setCurrentQuestion,
+  ] =
+    useState<Question | null>(
+      null,
+    )
 
-  const [selected, setSelected] =
-    useState<number | null>(null)
+  const [
+    questionNumber,
+    setQuestionNumber,
+  ] = useState(0)
 
-  const [answers, setAnswers] =
-    useState<
-      Array<{
-        questionId: string
-        correct: boolean
-      }>
-    >([])
+  const [
+    selected,
+    setSelected,
+  ] =
+    useState<number | null>(
+      null,
+    )
 
-  const [difficulty, setDifficulty] =
-    useState<Difficulty>(4)
+  const [
+    answers,
+    setAnswers,
+  ] =
+    useState<AnswerRecord[]>(
+      [],
+    )
 
-  const [streak, setStreak] =
-    useState(0)
+  const [
+    difficulty,
+    setDifficulty,
+  ] =
+    useState<Difficulty>(
+      INITIAL_DIFFICULTY,
+    )
 
-  const [xp, setXp] =
-    useState(240)
+  const [
+    streak,
+    setStreak,
+  ] = useState(0)
+
+  const [
+    totalXp,
+    setTotalXp,
+  ] = useState(240)
+
+  const [
+    sessionXp,
+    setSessionXp,
+  ] = useState(0)
+
+  const [
+    usedQuestionIds,
+    setUsedQuestionIds,
+  ] = useState<string[]>(
+    [],
+  )
+
+  const [
+    lastResult,
+    setLastResult,
+  ] = useState<
+    boolean | null
+  >(null)
+
+  const [
+    showExplanation,
+    setShowExplanation,
+  ] = useState(false)
+
+  const [
+    timeLeft,
+    setTimeLeft,
+  ] = useState(15 * 60)
+
+  const [
+    startedAt,
+    setStartedAt,
+  ] = useState<number | null>(
+    null,
+  )
+
+  const [
+    bestLevel,
+    setBestLevel,
+  ] = useState<Difficulty>(
+    4,
+  )
+
+  const [
+    skills,
+    setSkills,
+  ] =
+    useState<SkillState>({
+      mathematics: 78,
+      reading: 64,
+      science: 57,
+      'problem-solving': 71,
+    })
 
   /* =======================================================
-     ADAPTIVE QUESTION SELECTION
+     LOCAL STORAGE
   ======================================================= */
 
-  const testQuestions = useMemo(() => {
-    const pool =
-      domain
+  useEffect(() => {
+    try {
+      const saved =
+        localStorage.getItem(
+          'menejerlik-pisa-progress-v1',
+        )
+
+      if (!saved) return
+
+      const data =
+        JSON.parse(saved)
+
+      if (
+        typeof data.totalXp ===
+        'number'
+      ) {
+        setTotalXp(
+          data.totalXp,
+        )
+      }
+
+      if (
+        typeof data.bestLevel ===
+        'number'
+      ) {
+        setBestLevel(
+          clampDifficulty(
+            data.bestLevel,
+          ),
+        )
+      }
+
+      if (data.skills) {
+        setSkills(
+          (value) => ({
+            ...value,
+            ...data.skills,
+          }),
+        )
+      }
+    } catch {
+      // LocalStorage xatosi
+      // ilovani to‘xtatmaydi.
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        'menejerlik-pisa-progress-v1',
+        JSON.stringify({
+          totalXp,
+          bestLevel,
+          skills,
+        }),
+      )
+    } catch {
+      // Ignore
+    }
+  }, [
+    totalXp,
+    bestLevel,
+    skills,
+  ])
+
+  /* =======================================================
+     TIMER
+  ======================================================= */
+
+  useEffect(() => {
+    if (
+      mode !== 'test' ||
+      !startedAt
+    ) {
+      return
+    }
+
+    const timer =
+      window.setInterval(() => {
+        setTimeLeft(
+          (value) => {
+            if (value <= 1) {
+              window.clearInterval(
+                timer,
+              )
+
+              setMode(
+                'result',
+              )
+
+              return 0
+            }
+
+            return value - 1
+          },
+        )
+      }, 1000)
+
+    return () =>
+      window.clearInterval(
+        timer,
+      )
+  }, [
+    mode,
+    startedAt,
+  ])
+
+  /* =======================================================
+     CURRENT POOL
+  ======================================================= */
+
+  const questionPool =
+    useMemo(() => {
+      return domain
         ? QUESTIONS.filter(
             (question) =>
               question.domain ===
               domain,
           )
         : QUESTIONS
-
-    const sorted = [...pool].sort(
-      (a, b) =>
-        Math.abs(
-          a.difficulty -
-            difficulty,
-        ) -
-        Math.abs(
-          b.difficulty -
-            difficulty,
-        ),
-    )
-
-    return sorted.slice(0, 5)
-  }, [
-    domain,
-    difficulty,
-  ])
-
-  const question =
-    testQuestions[current]
+    }, [domain])
 
   /* =======================================================
-     START
+     NEXT QUESTION
+  ======================================================= */
+
+  const prepareNextQuestion =
+    useCallback(
+      (
+        nextDifficulty: Difficulty,
+        usedIds: string[],
+      ) => {
+        const next =
+          getClosestQuestion(
+            questionPool,
+            nextDifficulty,
+            usedIds,
+          )
+
+        setCurrentQuestion(
+          next,
+        )
+
+        if (next) {
+          setUsedQuestionIds(
+            (value) =>
+              value.includes(
+                next.id,
+              )
+                ? value
+                : [
+                    ...value,
+                    next.id,
+                  ],
+          )
+        }
+      },
+      [questionPool],
+    )
+
+  /* =======================================================
+     START TEST
   ======================================================= */
 
   const startTest = (
-    selectedDomain: Domain | null =
-      null,
+    selectedDomain:
+      | Domain
+      | null = null,
   ) => {
+    const selectedPool =
+      selectedDomain
+        ? QUESTIONS.filter(
+            (question) =>
+              question.domain ===
+              selectedDomain,
+          )
+        : QUESTIONS
+
+    const startDifficulty =
+      INITIAL_DIFFICULTY
+
+    const first =
+      getClosestQuestion(
+        selectedPool,
+        startDifficulty,
+        [],
+      )
+
     setDomain(
       selectedDomain,
     )
-    setCurrent(0)
+
+    setMode('test')
+    setQuestionNumber(1)
     setSelected(null)
     setAnswers([])
     setStreak(0)
-    setDifficulty(4)
-    setMode('test')
+    setDifficulty(
+      startDifficulty,
+    )
+    setSessionXp(0)
+    setUsedQuestionIds(
+      first
+        ? [first.id]
+        : [],
+    )
+    setCurrentQuestion(
+      first,
+    )
+    setLastResult(null)
+    setShowExplanation(false)
+    setTimeLeft(15 * 60)
+    setStartedAt(
+      Date.now(),
+    )
   }
 
   /* =======================================================
@@ -397,92 +925,264 @@ export default function PISAAcademy({
   const answerQuestion = () => {
     if (
       selected === null ||
-      !question
+      !currentQuestion
     ) {
       return
     }
 
     const isCorrect =
       selected ===
-      question.correct
+      currentQuestion.correct
+
+    const answerRecord: AnswerRecord =
+      {
+        questionId:
+          currentQuestion.id,
+        correct:
+          isCorrect,
+        difficulty,
+        domain:
+          currentQuestion.domain,
+        selected,
+        correctAnswer:
+          currentQuestion.correct,
+      }
 
     const nextAnswers = [
       ...answers,
-      {
-        questionId:
-          question.id,
-        correct:
-          isCorrect,
-      },
+      answerRecord,
     ]
 
-    setAnswers(nextAnswers)
+    setAnswers(
+      nextAnswers,
+    )
+
+    setLastResult(
+      isCorrect,
+    )
+
+    setShowExplanation(
+      true,
+    )
+
+    /* -----------------------------------------------------
+       SKILL UPDATE
+    ----------------------------------------------------- */
+
+    setSkills(
+      (value) => {
+        const old =
+          value[
+            currentQuestion.domain
+          ]
+
+        const next =
+          isCorrect
+            ? Math.min(
+                100,
+                old + 2,
+              )
+            : Math.max(
+                0,
+                old - 1,
+              )
+
+        return {
+          ...value,
+          [currentQuestion.domain]:
+            next,
+        }
+      },
+    )
+
+    /* -----------------------------------------------------
+       ADAPTIVE ENGINE
+    ----------------------------------------------------- */
+
+    let nextDifficulty =
+      difficulty
+
+    let nextStreak =
+      streak
 
     if (isCorrect) {
-      const nextStreak =
+      nextStreak =
         streak + 1
 
-      setStreak(
-        nextStreak,
-      )
-
-      setXp(
-        (value) =>
-          value +
-          question.xp,
-      )
-
-      /*
-       * ADAPTIVE:
-       * 2 ta ketma-ket to‘g‘ri
-       * → 1 daraja yuqoriga
-       */
       if (
-        nextStreak >= 2 &&
-        difficulty < 8
+        nextStreak >=
+          CORRECT_STREAK_TO_RISE &&
+        difficulty <
+          MAX_DIFFICULTY
       ) {
-        setDifficulty(
-          (value) =>
-            Math.min(
-              8,
-              value + 1,
-            ) as Difficulty,
-        )
+        nextDifficulty =
+          clampDifficulty(
+            difficulty + 1,
+          )
 
-        setStreak(0)
+        nextStreak = 0
       }
     } else {
-      setStreak(0)
+      nextStreak = 0
 
-      /*
-       * Xato:
-       * 1 daraja pastga
-       */
-      setDifficulty(
-        (value) =>
-          Math.max(
-            1,
-            value - 1,
-          ) as Difficulty,
+      nextDifficulty =
+        clampDifficulty(
+          difficulty - 1,
+        )
+    }
+
+    setStreak(
+      nextStreak,
+    )
+
+    setDifficulty(
+      nextDifficulty,
+    )
+
+    if (
+      nextDifficulty >
+      bestLevel
+    ) {
+      setBestLevel(
+        nextDifficulty,
       )
     }
 
+    /* -----------------------------------------------------
+       XP
+    ----------------------------------------------------- */
+
+    if (isCorrect) {
+      const earned =
+        currentQuestion.xp +
+        nextDifficulty * 2
+
+      setSessionXp(
+        (value) =>
+          value + earned,
+      )
+
+      setTotalXp(
+        (value) =>
+          value + earned,
+      )
+    }
+
+    /* -----------------------------------------------------
+       LAST QUESTION
+    ----------------------------------------------------- */
+
     if (
-      current + 1 >=
-      testQuestions.length
+      questionNumber >=
+      TEST_LENGTH
     ) {
-      setMode('result')
+      window.setTimeout(() => {
+        setMode(
+          'result',
+        )
+        setShowExplanation(
+          false,
+        )
+      }, 700)
+
       return
     }
 
-    setTimeout(() => {
-      setCurrent(
+    /* -----------------------------------------------------
+       NEXT QUESTION
+    ----------------------------------------------------- */
+
+    window.setTimeout(() => {
+      const used =
+        nextAnswers.map(
+          (item) =>
+            item.questionId,
+        )
+
+      const next =
+        getClosestQuestion(
+          questionPool,
+          nextDifficulty,
+          used,
+        )
+
+      setCurrentQuestion(
+        next,
+      )
+
+      if (next) {
+        setUsedQuestionIds(
+          used.concat(
+            next.id,
+          ),
+        )
+      }
+
+      setQuestionNumber(
         (value) =>
           value + 1,
       )
+
       setSelected(null)
-    }, 350)
+      setLastResult(null)
+      setShowExplanation(
+        false,
+      )
+    }, 850)
   }
+
+  /* =======================================================
+     FORMAT TIME
+  ======================================================= */
+
+  const formattedTime =
+    `${String(
+      Math.floor(
+        timeLeft / 60,
+      ),
+    ).padStart(2, '0')}:${String(
+      timeLeft % 60,
+    ).padStart(2, '0')}`
+
+  /* =======================================================
+     RESULT DATA
+  ======================================================= */
+
+  const correctAnswers =
+    answers.filter(
+      (item) =>
+        item.correct,
+    ).length
+
+  const totalAnswers =
+    answers.length
+
+  const percentage =
+    totalAnswers > 0
+      ? Math.round(
+          (correctAnswers /
+            totalAnswers) *
+            100,
+        )
+      : 0
+
+  const resultTitle =
+    percentage >= 85
+      ? 'Ajoyib natija!'
+      : percentage >= 70
+        ? 'Juda yaxshi!'
+        : percentage >= 50
+          ? 'Yaxshi boshlanish!'
+          : 'Mashqni davom ettiring!'
+
+  const resultIcon =
+    percentage >= 85
+      ? '🏆'
+      : percentage >= 70
+        ? '🌟'
+        : percentage >= 50
+          ? '🚀'
+          : '💪'
 
   /* =======================================================
      DASHBOARD
@@ -500,54 +1200,67 @@ export default function PISAAcademy({
           text="O‘quvchi Akademiyasi"
         />
 
-        {/* HERO */}
+        {/* =================================================
+            HERO
+        ================================================= */}
 
-        <div className="relative overflow-hidden rounded-[30px] bg-gradient-to-br from-[#071a38] via-[#0d3d70] to-[#1478b8] p-6 text-white shadow-xl shadow-blue-900/20">
+        <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#04142d] via-[#083b6b] to-[#087db5] p-6 text-white shadow-2xl shadow-blue-900/20">
 
-          <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-cyan-300/10" />
+          <div className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full bg-cyan-300/10 blur-2xl" />
 
-          <div className="pointer-events-none absolute -bottom-20 -left-10 size-44 rounded-full bg-blue-400/10" />
+          <div className="pointer-events-none absolute -bottom-24 -left-20 size-64 rounded-full bg-blue-400/10 blur-2xl" />
 
           <div className="relative">
 
             <div className="flex items-center justify-between">
 
-              <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-cyan-100">
+              <div className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.18em] text-cyan-100">
                 International Assessment
-              </span>
+              </div>
 
-              <span className="text-3xl">
+              <div className="flex size-12 items-center justify-center rounded-2xl border border-white/10 bg-white/10 text-2xl">
                 🌍
-              </span>
+              </div>
 
             </div>
 
-            <h1 className="mt-5 text-[29px] font-black tracking-tight">
-              PISA Academy
-            </h1>
+            <div className="mt-7">
 
-            <p className="mt-2 max-w-lg text-[12px] leading-6 text-white/70">
-              Real hayotdagi vaziyatlarni
-              tahlil qiling, dalillar bilan
-              fikrlang va murakkab
-              muammolarni yeching.
-            </p>
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-cyan-200">
+                MENEJERLIK BY NURMUHAMMAD
+              </p>
 
-            <div className="mt-5 grid grid-cols-3 gap-2">
+              <h1 className="mt-2 text-[31px] font-black tracking-tight">
+                PISA Academy
+              </h1>
 
-              <Stat
-                value="4/8"
-                label="Daraja"
+              <p className="mt-3 max-w-xl text-[12px] leading-6 text-white/70">
+                Bilimni yodlash emas —
+                real hayotdagi vaziyatlarda
+                undan foydalanishni o‘rganing.
+                Tahlil qiling. Dalil toping.
+                Qaror qabul qiling.
+              </p>
+
+            </div>
+
+            {/* HERO STATS */}
+
+            <div className="mt-6 grid grid-cols-3 gap-2">
+
+              <HeroStat
+                value={`${bestLevel}/8`}
+                label="Eng yuqori daraja"
               />
 
-              <Stat
-                value={`${xp}`}
-                label="XP"
+              <HeroStat
+                value={`${totalXp}`}
+                label="Jami XP"
               />
 
-              <Stat
-                value="78%"
-                label="Aniqlik"
+              <HeroStat
+                value={`${skills.mathematics}%`}
+                label="Matematika"
               />
 
             </div>
@@ -555,68 +1268,86 @@ export default function PISAAcademy({
           </div>
         </div>
 
-        {/* ADAPTIVE INFO */}
+        {/* =================================================
+            ADAPTIVE ENGINE
+        ================================================= */}
 
-        <div className="rounded-[25px] border bg-card p-5 shadow-sm">
+        <div className="rounded-[28px] border bg-card p-5 shadow-sm">
 
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-4">
 
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-xl dark:bg-blue-950/20">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 text-xl text-white shadow-lg shadow-blue-600/20">
               🧠
             </div>
 
-            <div>
+            <div className="flex-1">
 
-              <h2 className="text-sm font-black">
-                Adaptive Learning
-              </h2>
+              <div className="flex items-center justify-between gap-3">
 
-              <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
-                Savol qiyinligi sizning
-                javoblaringizga moslashadi.
-                Ketma-ket to‘g‘ri javoblar
-                yuqoriroq darajaga olib chiqadi.
+                <h2 className="text-sm font-black">
+                  Adaptive Learning Engine
+                </h2>
+
+                <span className="rounded-full bg-emerald-50 px-2 py-1 text-[8px] font-black text-emerald-600 dark:bg-emerald-950/20">
+                  ACTIVE
+                </span>
+
+              </div>
+
+              <p className="mt-2 text-[11px] leading-5 text-muted-foreground">
+                Platforma sizning javoblaringizni
+                kuzatadi va keyingi savol
+                murakkabligini avtomatik
+                moslashtiradi.
               </p>
 
             </div>
 
           </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-2">
+          <div className="mt-5 grid grid-cols-3 gap-2">
 
-            <AdaptiveCard
-              icon="↑"
+            <EngineCard
+              icon="✓"
               title="To‘g‘ri"
+              text="Streak yig‘iladi"
+            />
+
+            <EngineCard
+              icon="↑"
+              title="2× ketma-ket"
               text="Daraja oshadi"
             />
 
-            <AdaptiveCard
+            <EngineCard
               icon="↓"
               title="Xato"
-              text="Daraja qayta moslanadi"
+              text="Daraja moslanadi"
             />
 
           </div>
 
         </div>
 
-        {/* DOMAINS */}
+        {/* =================================================
+            DOMAINS
+        ================================================= */}
 
         <div>
 
-          <div className="mb-3 flex items-end justify-between">
+          <div className="mb-4 flex items-end justify-between">
 
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.17em] text-blue-700">
+              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-700">
                 PISA DOMAINS
               </p>
 
               <h2 className="mt-1 text-xl font-black">
-                Yo‘nalishni tanlang
+                Savodxonlik yo‘nalishlari
               </h2>
             </div>
 
-            <span className="text-[10px] font-bold text-muted-foreground">
+            <span className="rounded-full bg-muted px-2.5 py-1 text-[9px] font-bold text-muted-foreground">
               4 yo‘nalish
             </span>
 
@@ -635,94 +1366,115 @@ export default function PISAAcademy({
               ([
                 id,
                 item,
-              ]) => (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() =>
-                    startTest(
-                      id,
-                    )
-                  }
-                  className="group flex items-center gap-4 rounded-[24px] border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.99]"
-                >
+              ]) => {
 
-                  <div className="flex size-14 shrink-0 items-center justify-center rounded-[18px] bg-gradient-to-br from-blue-50 to-indigo-100 text-2xl dark:from-blue-950/30 dark:to-indigo-950/20">
-                    {
-                      item.icon
+                const accuracy =
+                  skills[id]
+
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() =>
+                      startTest(
+                        id,
+                      )
                     }
-                  </div>
+                    className="group relative overflow-hidden rounded-[25px] border bg-card p-5 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-[0.99]"
+                  >
 
-                  <div className="min-w-0 flex-1">
+                    <div
+                      className={`absolute left-0 top-0 h-full w-1 bg-gradient-to-b ${item.gradient}`}
+                    />
 
-                    <h3 className="text-sm font-black">
-                      {
-                        item.title
-                      }
-                    </h3>
+                    <div className="flex items-center gap-4">
 
-                    <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
-                      {
-                        item.description
-                      }
-                    </p>
+                      <div
+                        className={`flex size-14 shrink-0 items-center justify-center rounded-[19px] bg-gradient-to-br ${item.gradient} text-2xl text-white shadow-lg`}
+                      >
+                        {item.icon}
+                      </div>
 
-                    <div className="mt-2 flex gap-1.5">
+                      <div className="min-w-0 flex-1">
 
-                      <MiniTag>
-                        Adaptive
-                      </MiniTag>
+                        <div className="flex items-center justify-between gap-2">
 
-                      <MiniTag>
-                        PISA-style
-                      </MiniTag>
+                          <h3 className="text-sm font-black">
+                            {item.title}
+                          </h3>
+
+                          <span className="text-[10px] font-black text-muted-foreground">
+                            {accuracy}%
+                          </span>
+
+                        </div>
+
+                        <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
+                          {item.description}
+                        </p>
+
+                        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted">
+
+                          <div
+                            className={`h-full rounded-full bg-gradient-to-r ${item.gradient} transition-all duration-700`}
+                            style={{
+                              width: `${accuracy}%`,
+                            }}
+                          />
+
+                        </div>
+
+                      </div>
+
+                      <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground transition-all group-hover:translate-x-1 group-hover:bg-blue-50 group-hover:text-blue-700">
+                        →
+                      </div>
 
                     </div>
 
-                  </div>
-
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground transition-all group-hover:translate-x-1 group-hover:bg-blue-50 group-hover:text-blue-700">
-                    →
-                  </span>
-
-                </button>
-              ),
+                  </button>
+                )
+              },
             )}
 
           </div>
         </div>
 
-        {/* FULL TEST */}
+        {/* =================================================
+            FULL CHALLENGE
+        ================================================= */}
 
         <button
           type="button"
           onClick={() =>
             startTest(null)
           }
-          className="group relative overflow-hidden rounded-[26px] bg-gradient-to-r from-violet-600 to-blue-700 p-5 text-left text-white shadow-lg shadow-blue-900/20 transition hover:-translate-y-0.5"
+          className="group relative overflow-hidden rounded-[28px] bg-gradient-to-r from-violet-700 via-blue-700 to-cyan-600 p-5 text-left text-white shadow-xl shadow-blue-900/20 transition-all hover:-translate-y-1"
         >
 
-          <div className="absolute -right-8 -top-8 size-28 rounded-full bg-white/10" />
+          <div className="pointer-events-none absolute -right-10 -top-10 size-36 rounded-full bg-white/10" />
+
+          <div className="pointer-events-none absolute -bottom-10 -left-10 size-32 rounded-full bg-white/5" />
 
           <div className="relative flex items-center gap-4">
 
-            <div className="flex size-14 items-center justify-center rounded-[18px] bg-white/10 text-2xl">
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-[19px] border border-white/10 bg-white/10 text-2xl">
               🏆
             </div>
 
             <div className="flex-1">
 
-              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/60">
-                CHALLENGE
+              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-cyan-100">
+                ULTIMATE CHALLENGE
               </p>
 
               <h2 className="mt-1 text-lg font-black">
                 PISA Full Challenge
               </h2>
 
-              <p className="mt-1 text-[11px] leading-5 text-white/70">
-                Turli domenlardan
-                moslashuvchan savollar.
+              <p className="mt-1 text-[10px] leading-5 text-white/70">
+                4 yo‘nalish. Adaptive engine.
+                8 daraja. Bitta katta sinov.
               </p>
 
             </div>
@@ -735,70 +1487,157 @@ export default function PISAAcademy({
 
         </button>
 
-        {/* SKILLS */}
-
-        <div className="rounded-[25px] border bg-card p-5 shadow-sm">
-
-          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-blue-700">
+        {/* =================================================
             SKILL MAP
-          </p>
+        ================================================= */}
 
-          <h2 className="mt-1 text-lg font-black">
-            Sizning rivojlanish xaritangiz
-          </h2>
+        <div className="rounded-[28px] border bg-card p-5 shadow-sm">
 
-          <div className="mt-5 flex flex-col gap-4">
+          <div className="flex items-start justify-between">
 
-            <Skill
-              icon="📐"
-              title="Matematik savodxonlik"
-              value={80}
-            />
+            <div>
+              <p className="text-[9px] font-black uppercase tracking-[0.18em] text-blue-700">
+                SKILL MAP
+              </p>
 
-            <Skill
-              icon="📖"
-              title="O‘qish savodxonligi"
-              value={60}
-            />
+              <h2 className="mt-1 text-lg font-black">
+                Rivojlanish xaritasi
+              </h2>
+            </div>
 
-            <Skill
-              icon="🔬"
-              title="Ilmiy savodxonlik"
-              value={50}
-            />
+            <div className="flex size-10 items-center justify-center rounded-xl bg-blue-50 text-lg dark:bg-blue-950/20">
+              📊
+            </div>
 
-            <Skill
-              icon="🧠"
-              title="Muammo yechish"
-              value={70}
-            />
+          </div>
+
+          <div className="mt-6 flex flex-col gap-5">
+
+            {(
+              Object.entries(
+                DOMAIN_META,
+              ) as [
+                Domain,
+                (typeof DOMAIN_META)[Domain],
+              ][]
+            ).map(
+              ([
+                id,
+                item,
+              ]) => (
+                <SkillBar
+                  key={id}
+                  icon={item.icon}
+                  title={
+                    item.short
+                  }
+                  value={
+                    skills[id]
+                  }
+                  gradient={
+                    item.gradient
+                  }
+                />
+              ),
+            )}
 
           </div>
 
         </div>
 
-        {/* NOTE */}
+        {/* =================================================
+            ROADMAP
+        ================================================= */}
 
-        <div className="rounded-[23px] border border-amber-100 bg-amber-50/70 p-5 dark:border-amber-900/20 dark:bg-amber-950/10">
+        <div className="rounded-[28px] border bg-card p-5 shadow-sm">
+
+          <p className="text-[9px] font-black uppercase tracking-[0.18em] text-blue-700">
+            ADAPTIVE ROADMAP
+          </p>
+
+          <h2 className="mt-1 text-lg font-black">
+            8 bosqichli rivojlanish
+          </h2>
+
+          <div className="mt-5 grid grid-cols-4 gap-2">
+
+            {(
+              Array.from(
+                {
+                  length: 8,
+                },
+                (_, index) =>
+                  index + 1,
+              ) as Difficulty[]
+            ).map(
+              (level) => {
+
+                const active =
+                  level <=
+                  bestLevel
+
+                return (
+                  <div
+                    key={level}
+                    className={`rounded-2xl border p-3 text-center transition-all ${
+                      active
+                        ? 'border-blue-200 bg-blue-50 dark:border-blue-900/30 dark:bg-blue-950/20'
+                        : 'bg-muted/30'
+                    }`}
+                  >
+
+                    <div
+                      className={`text-sm font-black ${
+                        active
+                          ? 'text-blue-700'
+                          : 'text-muted-foreground'
+                      }`}
+                    >
+                      {level}
+                    </div>
+
+                    <div className="mt-1 text-[7px] font-bold uppercase text-muted-foreground">
+                      {
+                        DIFFICULTY_META[
+                          level
+                        ].label
+                      }
+                    </div>
+
+                  </div>
+                )
+              },
+            )}
+
+          </div>
+
+        </div>
+
+        {/* =================================================
+            DISCLAIMER
+        ================================================= */}
+
+        <div className="rounded-[25px] border border-amber-100 bg-amber-50/70 p-5 dark:border-amber-900/20 dark:bg-amber-950/10">
 
           <div className="flex gap-3">
 
-            <span className="text-xl">
+            <div className="text-xl">
               💡
-            </span>
+            </div>
 
             <div>
 
               <p className="text-sm font-black">
-                Muhim
+                PISA Academy haqida
               </p>
 
               <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
-                Ushbu bo‘lim OECD PISA
-                frameworklariga ilhomlangan
+                Ushbu tizim xalqaro baholash
+                yondashuvlari va PISA
+                frameworklaridan ilhomlangan
                 original mashqlar asosida
-                tuziladi. Bu rasmiy PISA testi
-                emas.
+                yaratilmoqda. Bu OECDning
+                rasmiy PISA testi emas.
               </p>
 
             </div>
@@ -811,60 +1650,114 @@ export default function PISAAcademy({
     )
   }
 
-  /* =======================================================
-     TEST
-  ======================================================= */
+  /* =========================================================
+     TEST SCREEN
+  ========================================================= */
 
   if (
     mode === 'test' &&
-    question
+    currentQuestion
   ) {
     const progress =
-      ((current + 1) /
-        testQuestions.length) *
-      100
+      Math.round(
+        (questionNumber /
+          TEST_LENGTH) *
+          100,
+      )
+
+    const meta =
+      DOMAIN_META[
+        currentQuestion.domain
+      ]
 
     return (
       <section className="flex flex-col gap-5">
 
-        <BackButton
-          onClick={() =>
-            setMode(
-              'dashboard',
-            )
-          }
-          text="PISA Academy"
-        />
+        {/* HEADER */}
 
-        {/* TOP */}
+        <div className="flex items-center justify-between">
 
-        <div className="rounded-[25px] border bg-card p-5 shadow-sm">
+          <button
+            type="button"
+            onClick={() =>
+              setMode(
+                'dashboard',
+              )
+            }
+            className="group flex items-center gap-2 text-[11px] font-bold text-muted-foreground transition hover:text-blue-700"
+          >
+            <span className="transition-transform group-hover:-translate-x-1">
+              ←
+            </span>
+
+            Chiqish
+          </button>
+
+          <div className="flex items-center gap-2">
+
+            <div className="rounded-xl border bg-card px-3 py-2">
+
+              <span className="text-[9px] font-black text-muted-foreground">
+                SAVOL
+              </span>
+
+              <span className="ml-1 text-[11px] font-black">
+                {questionNumber}/
+                {TEST_LENGTH}
+              </span>
+
+            </div>
+
+            <div
+              className={`rounded-xl px-3 py-2 ${
+                timeLeft <= 60
+                  ? 'bg-red-50 text-red-600 dark:bg-red-950/20'
+                  : 'bg-blue-50 text-blue-700 dark:bg-blue-950/20'
+              }`}
+            >
+              ⏱ {formattedTime}
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* PROGRESS */}
+
+        <div className="rounded-[23px] border bg-card p-4 shadow-sm">
 
           <div className="flex items-center justify-between">
 
             <div>
 
-              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-blue-700">
-                PISA ADAPTIVE TEST
+              <p className="text-[8px] font-black uppercase tracking-[0.18em] text-blue-700">
+                PISA ADAPTIVE ENGINE
               </p>
 
               <p className="mt-1 text-xs font-black">
-                Savol {current + 1} /{' '}
-                {
-                  testQuestions.length
-                }
+                Savol murakkabligi:
+                {' '}
+                <span
+                  className={
+                    DIFFICULTY_META[
+                      difficulty
+                    ].color
+                  }
+                >
+                  {difficulty}/8
+                </span>
               </p>
 
             </div>
 
-            <div className="rounded-xl bg-blue-50 px-3 py-2 text-center dark:bg-blue-950/20">
+            <div className="text-right">
 
-              <p className="text-[8px] font-bold text-muted-foreground">
-                DARAJA
+              <p className="text-[8px] font-bold uppercase text-muted-foreground">
+                STREAK
               </p>
 
-              <p className="text-lg font-black text-blue-700">
-                {difficulty}
+              <p className="text-lg font-black">
+                🔥 {streak}
               </p>
 
             </div>
@@ -874,7 +1767,7 @@ export default function PISAAcademy({
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
 
             <div
-              className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-400 transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-blue-700 via-cyan-500 to-emerald-400 transition-all duration-500"
               style={{
                 width: `${progress}%`,
               }}
@@ -884,96 +1777,148 @@ export default function PISAAcademy({
 
         </div>
 
-        {/* QUESTION */}
+        {/* QUESTION CARD */}
 
-        <div className="rounded-[28px] border bg-card p-6 shadow-sm">
+        <div className="rounded-[30px] border bg-card p-5 shadow-sm">
+
+          {/* DOMAIN */}
 
           <div className="flex flex-wrap gap-2">
 
-            <MiniTag>
-              {DOMAIN_META[
-                question.domain
-              ].icon}{' '}
-              {
-                DOMAIN_META[
-                  question.domain
-                ].title
-              }
-            </MiniTag>
+            <Badge>
+              {meta.icon}
+              {' '}
+              {meta.short}
+            </Badge>
 
-            <MiniTag>
-              {question.category}
-            </MiniTag>
+            <Badge>
+              {currentQuestion.category}
+            </Badge>
 
-            <MiniTag>
-              🌍 {question.context}
-            </MiniTag>
+            <Badge>
+              🌍
+              {' '}
+              {currentQuestion.context}
+            </Badge>
+
+            <Badge>
+              L{difficulty}
+            </Badge>
 
           </div>
 
-          {question.stimulus && (
-            <div className="mt-5 rounded-[20px] border bg-slate-50 p-4 dark:bg-white/5">
+          {/* STIMULUS */}
 
-              <p className="text-[11px] leading-6 text-slate-700 dark:text-slate-300">
+          {currentQuestion.stimulus && (
+            <div className="mt-5 rounded-[23px] border bg-slate-50 p-5 dark:bg-white/5">
+
+              <div className="mb-3 flex items-center gap-2">
+
+                <span className="flex size-7 items-center justify-center rounded-lg bg-white text-sm shadow-sm dark:bg-white/10">
+                  📄
+                </span>
+
+                <span className="text-[9px] font-black uppercase tracking-[0.15em] text-muted-foreground">
+                  Vaziyat / dalil
+                </span>
+
+              </div>
+
+              <p className="text-[12px] leading-6 text-slate-700 dark:text-slate-300">
                 {
-                  question.stimulus
+                  currentQuestion.stimulus
                 }
               </p>
 
             </div>
           )}
 
-          <h1 className="mt-6 text-[19px] font-black leading-7">
+          {/* QUESTION */}
+
+          <h1 className="mt-6 text-[19px] font-black leading-7 tracking-tight">
             {
-              question.question
+              currentQuestion.question
             }
           </h1>
 
-          <div className="mt-5 flex flex-col gap-2.5">
+          {/* OPTIONS */}
 
-            {question.options.map(
+          <div className="mt-6 flex flex-col gap-2.5">
+
+            {currentQuestion.options.map(
               (
                 option,
                 index,
               ) => {
+
                 const active =
                   selected ===
                   index
 
+                const isCorrect =
+                  showExplanation &&
+                  index ===
+                    currentQuestion.correct
+
+                const isWrong =
+                  showExplanation &&
+                  active &&
+                  !isCorrect
+
                 return (
                   <button
-                    key={
-                      `${question.id}-${index}`
-                    }
+                    key={`${currentQuestion.id}-${index}`}
                     type="button"
+                    disabled={
+                      showExplanation
+                    }
                     onClick={() =>
                       setSelected(
                         index,
                       )
                     }
-                    className={`flex items-center gap-3 rounded-[19px] border p-4 text-left transition-all ${
-                      active
-                        ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500/10 dark:bg-blue-950/20'
-                        : 'bg-card hover:bg-muted/40'
+                    className={`group flex items-center gap-3 rounded-[20px] border p-4 text-left transition-all ${
+                      isCorrect
+                        ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/20'
+                        : isWrong
+                          ? 'border-red-500 bg-red-50 dark:bg-red-950/20'
+                          : active
+                            ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500/10 dark:bg-blue-950/20'
+                            : 'bg-card hover:-translate-y-0.5 hover:bg-muted/40 hover:shadow-md'
                     }`}
                   >
 
                     <span
-                      className={`flex size-9 shrink-0 items-center justify-center rounded-xl text-xs font-black ${
-                        active
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-muted text-muted-foreground'
+                      className={`flex size-10 shrink-0 items-center justify-center rounded-xl text-xs font-black transition-all ${
+                        isCorrect
+                          ? 'bg-emerald-600 text-white'
+                          : isWrong
+                            ? 'bg-red-600 text-white'
+                            : active
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-muted text-muted-foreground group-hover:bg-blue-100 group-hover:text-blue-700'
                       }`}
                     >
-                      {String.fromCharCode(
-                        65 +
-                          index,
-                      )}
+                      {isCorrect
+                        ? '✓'
+                        : isWrong
+                          ? '×'
+                          : String.fromCharCode(
+                              65 +
+                                index,
+                            )}
                     </span>
 
-                    <span className="text-[12px] font-semibold leading-5">
+                    <span className="flex-1 text-[12px] font-semibold leading-5">
                       {option}
                     </span>
+
+                    {!showExplanation &&
+                      active && (
+                        <span className="text-blue-600">
+                          ●
+                        </span>
+                      )}
 
                   </button>
                 )
@@ -982,41 +1927,87 @@ export default function PISAAcademy({
 
           </div>
 
+          {/* EXPLANATION */}
+
+          {showExplanation &&
+            lastResult !==
+              null && (
+              <div
+                className={`mt-5 rounded-[22px] border p-4 ${
+                  lastResult
+                    ? 'border-emerald-200 bg-emerald-50 dark:border-emerald-900/30 dark:bg-emerald-950/20'
+                    : 'border-red-200 bg-red-50 dark:border-red-900/30 dark:bg-red-950/20'
+                }`}
+              >
+
+                <div className="flex gap-3">
+
+                  <span className="text-xl">
+                    {lastResult
+                      ? '🎉'
+                      : '💡'}
+                  </span>
+
+                  <div>
+
+                    <p className="text-sm font-black">
+                      {lastResult
+                        ? 'To‘g‘ri javob!'
+                        : 'Bu safar xato.'}
+                    </p>
+
+                    <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
+                      {
+                        currentQuestion.explanation
+                      }
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
+            )}
+
+          {/* ACTION */}
+
           <button
             type="button"
             disabled={
-              selected === null
+              selected ===
+                null ||
+              showExplanation
             }
             onClick={
               answerQuestion
             }
-            className="mt-5 w-full rounded-[19px] bg-gradient-to-r from-blue-700 to-cyan-600 px-5 py-4 text-sm font-black text-white shadow-lg shadow-blue-700/20 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40"
+            className="mt-5 w-full rounded-[20px] bg-gradient-to-r from-blue-700 to-cyan-600 px-5 py-4 text-sm font-black text-white shadow-lg shadow-blue-700/20 transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40"
           >
             Javobni tekshirish →
           </button>
 
         </div>
 
-        {/* ADAPTIVE STATUS */}
+        {/* LIVE STATS */}
 
         <div className="grid grid-cols-3 gap-2">
 
-          <MiniStat
+          <LiveStat
             icon="🔥"
             value={`${streak}`}
             label="Streak"
           />
 
-          <MiniStat
+          <LiveStat
             icon="⭐"
-            value={`${xp}`}
-            label="XP"
+            value={`+${sessionXp}`}
+            label="Session XP"
           />
 
-          <MiniStat
+          <LiveStat
             icon="🎯"
             value={`${difficulty}/8`}
-            label="Level"
+            label="Daraja"
           />
 
         </div>
@@ -1025,26 +2016,9 @@ export default function PISAAcademy({
     )
   }
 
-  /* =======================================================
-     RESULT
-  ======================================================= */
-
-  const correct =
-    answers.filter(
-      (answer) =>
-        answer.correct,
-    ).length
-
-  const total =
-    answers.length
-
-  const percentage =
-    total > 0
-      ? Math.round(
-          (correct / total) *
-            100,
-        )
-      : 0
+  /* =========================================================
+     RESULT SCREEN
+  ========================================================= */
 
   return (
     <section className="flex flex-col gap-5">
@@ -1058,72 +2032,103 @@ export default function PISAAcademy({
         text="PISA Academy"
       />
 
-      <div className="relative overflow-hidden rounded-[30px] bg-gradient-to-br from-[#081b3b] to-[#1268a5] p-7 text-center text-white shadow-xl">
+      {/* RESULT HERO */}
+
+      <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#061733] via-[#0a4775] to-[#087fb4] p-7 text-center text-white shadow-2xl">
+
+        <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-cyan-300/10 blur-2xl" />
 
         <div className="relative">
 
           <div className="text-5xl">
-            {percentage >=
-            80
-              ? '🏆'
-              : percentage >=
-                  60
-                ? '🌟'
-                : '🚀'}
+            {resultIcon}
           </div>
 
-          <p className="mt-4 text-[10px] font-black uppercase tracking-[0.18em] text-cyan-200">
-            TEST YAKUNI
+          <p className="mt-4 text-[9px] font-black uppercase tracking-[0.2em] text-cyan-200">
+            ADAPTIVE TEST YAKUNI
           </p>
 
-          <h1 className="mt-2 text-4xl font-black">
+          <h1 className="mt-2 text-5xl font-black tracking-tight">
             {percentage}%
           </h1>
 
-          <p className="mt-2 text-sm text-white/70">
-            {correct} / {total}{' '}
-            to‘g‘ri javob
+          <h2 className="mt-2 text-lg font-black">
+            {resultTitle}
+          </h2>
+
+          <p className="mt-2 text-[11px] text-white/60">
+            {correctAnswers}
+            {' / '}
+            {totalAnswers}
+            {' '}
+            ta to‘g‘ri javob
           </p>
 
         </div>
 
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      {/* RESULT STATS */}
+
+      <div className="grid grid-cols-3 gap-2">
+
+        <ResultCard
+          icon="✓"
+          value={`${correctAnswers}`}
+          label="To‘g‘ri"
+        />
 
         <ResultCard
           icon="⭐"
-          value={`+${xp}`}
-          label="Umumiy XP"
+          value={`+${sessionXp}`}
+          label="XP"
         />
 
         <ResultCard
           icon="🎯"
-          value={`${difficulty}/8`}
-          label="Adaptive daraja"
+          value={`${bestLevel}/8`}
+          label="Max level"
         />
 
       </div>
 
-      <div className="rounded-[25px] border bg-card p-5 shadow-sm">
+      {/* ADAPTIVE ANALYSIS */}
 
-        <h2 className="text-lg font-black">
-          Adaptive tahlil
-        </h2>
+      <div className="rounded-[28px] border bg-card p-5 shadow-sm">
 
-        <p className="mt-2 text-[11px] leading-5 text-muted-foreground">
-          Natijangiz asosida keyingi
-          mashg‘ulotlarda savollar
-          qiyinligi avtomatik
-          moslashtiriladi.
+        <div className="flex items-start justify-between">
+
+          <div>
+
+            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-blue-700">
+              PERFORMANCE
+            </p>
+
+            <h2 className="mt-1 text-lg font-black">
+              Adaptive tahlil
+            </h2>
+
+          </div>
+
+          <div className="flex size-10 items-center justify-center rounded-xl bg-blue-50 text-lg dark:bg-blue-950/20">
+            🧠
+          </div>
+
+        </div>
+
+        <p className="mt-3 text-[10px] leading-5 text-muted-foreground">
+          Sizning javoblaringiz asosida
+          keyingi mashg‘ulotlarda
+          savollar murakkabligi
+          avtomatik moslashtiriladi.
         </p>
 
         <div className="mt-5">
 
-          <div className="flex items-center justify-between text-[10px] font-bold">
+          <div className="flex items-center justify-between text-[10px] font-black">
 
             <span>
-              Rivojlanish
+              Umumiy natija
             </span>
 
             <span>
@@ -1135,7 +2140,7 @@ export default function PISAAcademy({
           <div className="mt-2 h-3 overflow-hidden rounded-full bg-muted">
 
             <div
-              className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-400"
+              className="h-full rounded-full bg-gradient-to-r from-blue-700 via-cyan-500 to-emerald-400 transition-all duration-1000"
               style={{
                 width: `${percentage}%`,
               }}
@@ -1145,16 +2150,130 @@ export default function PISAAcademy({
 
         </div>
 
+        <div className="mt-5 grid grid-cols-2 gap-2">
+
+          <AnalysisItem
+            icon="🔥"
+            title="Eng yaxshi streak"
+            value={`${Math.max(
+              1,
+              Math.min(
+                3,
+                correctAnswers,
+              ),
+            )}`}
+          />
+
+          <AnalysisItem
+            icon="📈"
+            title="Adaptive level"
+            value={`${bestLevel}/8`}
+          />
+
+        </div>
+
       </div>
+
+      {/* DOMAIN PERFORMANCE */}
+
+      <div className="rounded-[28px] border bg-card p-5 shadow-sm">
+
+        <p className="text-[9px] font-black uppercase tracking-[0.18em] text-blue-700">
+          DOMAIN PERFORMANCE
+        </p>
+
+        <h2 className="mt-1 text-lg font-black">
+          Savodxonlik profili
+        </h2>
+
+        <div className="mt-5 flex flex-col gap-5">
+
+          {(
+            Object.entries(
+              DOMAIN_META,
+            ) as [
+              Domain,
+              (typeof DOMAIN_META)[Domain],
+            ][]
+          ).map(
+            ([
+              id,
+              item,
+            ]) => {
+
+              const sessionAccuracy =
+                getDomainAccuracy(
+                  answers,
+                  id,
+                )
+
+              const value =
+                sessionAccuracy >
+                0
+                  ? sessionAccuracy
+                  : skills[id]
+
+              return (
+                <SkillBar
+                  key={id}
+                  icon={item.icon}
+                  title={
+                    item.short
+                  }
+                  value={value}
+                  gradient={
+                    item.gradient
+                  }
+                />
+              )
+            },
+          )}
+
+        </div>
+
+      </div>
+
+      {/* RECOMMENDATION */}
+
+      <div className="rounded-[26px] border border-blue-100 bg-blue-50/70 p-5 dark:border-blue-900/20 dark:bg-blue-950/10">
+
+        <div className="flex gap-3">
+
+          <div className="text-xl">
+            🎯
+          </div>
+
+          <div>
+
+            <p className="text-sm font-black">
+              Keyingi qadam
+            </p>
+
+            <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
+              {percentage >= 80
+                ? 'Siz murakkabroq savollarga tayyorsiz. Keyingi mashg‘ulotda yuqoriroq daraja ochiladi.'
+                : percentage >=
+                    60
+                  ? 'Asosiy ko‘nikmalar yaxshi shakllanmoqda. Keyingi mashg‘ulotda xatolar ustida ishlaymiz.'
+                  : 'Avval asosiy ko‘nikmalarni mustahkamlaymiz, so‘ng murakkablikni yana oshiramiz.'}
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* ACTIONS */}
 
       <button
         type="button"
         onClick={() =>
           startTest(domain)
         }
-        className="rounded-[21px] bg-blue-700 px-5 py-4 text-sm font-black text-white shadow-lg shadow-blue-700/20"
+        className="rounded-[21px] bg-gradient-to-r from-blue-700 to-cyan-600 px-5 py-4 text-sm font-black text-white shadow-lg shadow-blue-700/20 transition hover:-translate-y-0.5"
       >
-        🔄 Yana test ishlash
+        🔄 Yana adaptive test
       </button>
 
       <button
@@ -1164,9 +2283,9 @@ export default function PISAAcademy({
             'dashboard',
           )
         }
-        className="rounded-[21px] border bg-card px-5 py-4 text-sm font-black"
+        className="rounded-[21px] border bg-card px-5 py-4 text-sm font-black transition hover:bg-muted"
       >
-        PISA Academy’ga qaytish
+        🌍 PISA Academy’ga qaytish
       </button>
 
     </section>
@@ -1188,9 +2307,9 @@ function BackButton({
     <button
       type="button"
       onClick={onClick}
-      className="group flex w-fit items-center gap-1.5 text-[12px] font-bold text-muted-foreground transition hover:text-blue-700"
+      className="group flex w-fit items-center gap-2 text-[12px] font-bold text-muted-foreground transition hover:text-blue-700"
     >
-      <span className="transition-transform group-hover:-translate-x-0.5">
+      <span className="transition-transform group-hover:-translate-x-1">
         ←
       </span>
 
@@ -1199,7 +2318,7 @@ function BackButton({
   )
 }
 
-function Stat({
+function HeroStat({
   value,
   label,
 }: {
@@ -1207,13 +2326,13 @@ function Stat({
   label: string
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/10 p-3">
+    <div className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur-sm">
 
       <p className="text-base font-black">
         {value}
       </p>
 
-      <p className="mt-0.5 text-[8px] font-bold uppercase tracking-wider text-white/50">
+      <p className="mt-0.5 text-[7px] font-bold uppercase tracking-wider text-white/50">
         {label}
       </p>
 
@@ -1221,7 +2340,7 @@ function Stat({
   )
 }
 
-function AdaptiveCard({
+function EngineCard({
   icon,
   title,
   text,
@@ -1235,17 +2354,17 @@ function AdaptiveCard({
 
       <div className="flex items-center gap-2">
 
-        <span className="flex size-7 items-center justify-center rounded-lg bg-card font-black">
+        <span className="flex size-7 items-center justify-center rounded-lg bg-card text-xs font-black shadow-sm">
           {icon}
         </span>
 
-        <span className="text-[10px] font-black">
+        <span className="text-[9px] font-black">
           {title}
         </span>
 
       </div>
 
-      <p className="mt-2 text-[9px] text-muted-foreground">
+      <p className="mt-2 text-[8px] leading-4 text-muted-foreground">
         {text}
       </p>
 
@@ -1253,26 +2372,28 @@ function AdaptiveCard({
   )
 }
 
-function MiniTag({
+function Badge({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <span className="inline-flex rounded-full border bg-muted/60 px-2 py-1 text-[8px] font-bold text-muted-foreground">
+    <span className="inline-flex items-center rounded-full border bg-muted/60 px-2.5 py-1.5 text-[8px] font-bold text-muted-foreground">
       {children}
     </span>
   )
 }
 
-function Skill({
+function SkillBar({
   icon,
   title,
   value,
+  gradient,
 }: {
   icon: string
   title: string
   value: number
+  gradient: string
 }) {
   return (
     <div>
@@ -1296,7 +2417,7 @@ function Skill({
       <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
 
         <div
-          className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-400"
+          className={`h-full rounded-full bg-gradient-to-r ${gradient} transition-all duration-700`}
           style={{
             width: `${value}%`,
           }}
@@ -1308,7 +2429,7 @@ function Skill({
   )
 }
 
-function MiniStat({
+function LiveStat({
   icon,
   value,
   label,
@@ -1318,7 +2439,7 @@ function MiniStat({
   label: string
 }) {
   return (
-    <div className="rounded-[18px] border bg-card p-3 text-center">
+    <div className="rounded-[19px] border bg-card p-3 text-center shadow-sm">
 
       <div className="text-sm">
         {icon}
@@ -1328,7 +2449,7 @@ function MiniStat({
         {value}
       </div>
 
-      <div className="text-[8px] font-bold uppercase tracking-wider text-muted-foreground">
+      <div className="text-[7px] font-bold uppercase tracking-wider text-muted-foreground">
         {label}
       </div>
 
@@ -1346,19 +2467,51 @@ function ResultCard({
   label: string
 }) {
   return (
-    <div className="rounded-[22px] border bg-card p-5 text-center shadow-sm">
+    <div className="rounded-[22px] border bg-card p-4 text-center shadow-sm">
 
-      <div className="text-xl">
+      <div className="flex justify-center text-lg">
         {icon}
       </div>
 
-      <div className="mt-2 text-xl font-black">
+      <div className="mt-2 text-lg font-black">
         {value}
       </div>
 
-      <div className="mt-1 text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
+      <div className="mt-1 text-[7px] font-bold uppercase tracking-wider text-muted-foreground">
         {label}
       </div>
+
+    </div>
+  )
+}
+
+function AnalysisItem({
+  icon,
+  title,
+  value,
+}: {
+  icon: string
+  title: string
+  value: string
+}) {
+  return (
+    <div className="rounded-2xl bg-muted/50 p-3">
+
+      <div className="flex items-center gap-2">
+
+        <span className="text-sm">
+          {icon}
+        </span>
+
+        <span className="text-[9px] font-bold text-muted-foreground">
+          {title}
+        </span>
+
+      </div>
+
+      <p className="mt-2 text-base font-black">
+        {value}
+      </p>
 
     </div>
   )
