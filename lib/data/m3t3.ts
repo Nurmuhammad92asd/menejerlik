@@ -1499,7 +1499,7 @@ text: `Quyidagi bayonotlardan qaysilari samarali delegatsiya mantiqiga mos?
     moduleId: MODULE_ID,
     topicId: TOPIC_ID,
     difficulty: "hard",
-    text: "Quyidagi besh fikrdan qaysilari strategik vaqt boshqaruviga mos?
+ text: `Quyidagi besh fikrdan qaysilari strategik vaqt boshqaruviga mos?
 
 1. Muhim ishni oldindan kalendarga qo‘yish.
 2. Strategik ishni bo‘sh vaqtga qoldirish.
