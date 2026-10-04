@@ -1,189 +1,269 @@
-import type { PISAQuestion } from "../pisa-types";
+/* =========================================================
+ * PISA MATHEMATICS — EASY BANK
+ * Menejerlik by Nurmuhammad
+ *
+ * PISA-inspired original assessment items
+ * Til: O'zbekcha
+ *
+ * IMPORTANT:
+ * Bu savollar rasmiy OECD/PISA savollarining nusxasi emas.
+ * Ular PISA matematik savodxonligi tamoyillaridan
+ * ilhomlangan holda original tarzda yaratilgan.
+ * ========================================================= */
 
-/**
- * ============================================================
- * PISA MATEMATIKA — EASY
- * MENEJERLIK BY NURMUHAMMAD
- * ============================================================
- *
- * PISA-USLUBIDAGI ORIGINAL SAVOLLAR
- *
- * Til:
- *   O'zbekcha
- *
- * Asos:
- *   - Matematik savodxonlik
- *   - Real hayot kontekstlari
- *   - Matematik fikrlash
- *   - Ma'lumotlarni talqin qilish
- *   - Qaror qabul qilish
- *
- * Eslatma:
- * Ushbu savollar rasmiy OECD/PISA savollarining nusxasi emas.
- * Ular PISA 2022 matematik savodxonlik ramkasidan ilhomlangan
- * holda original tarzda ishlab chiqilgan.
- *
- * Mazmun:
- *   quantity
- *   change-and-relationships
- *   space-and-shape
- *   uncertainty-and-data
- *
- * Jarayon:
- *   formulate
- *   employ
- *   interpret-evaluate
- *   reasoning
- * ============================================================
- */
+import type { PISAQuestion } from "../pisa-types"
+
+/* =========================================================
+   30 TA BOSHLANG'ICH DARAJADAGI SAVOL
+========================================================= */
 
 export const PISA_MATH_EASY: PISAQuestion[] = [
+  /* =======================================================
+     01 — FOIZ
+  ======================================================= */
+
   {
     id: "pisa-math-easy-001",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Foiz va kundalik xarid",
+    topic: "Foiz va xarid",
     context: "personal",
     type: "single-choice",
 
     stimulus: {
       type: "text",
-      title: "Sport anjomlari do‘koni",
-      content:
-        "Dilshod 120 000 so‘mlik sport sumkasini sotib olmoqchi. Do‘kon ushbu mahsulotga 10% chegirma bermoqda.",
+      title: "Sport sumkasi",
+      text:
+        "Dilshod 120 000 so'mlik sport sumkasini sotib olmoqchi. " +
+        "Do'kon ushbu mahsulotga 10% chegirma bermoqda.",
     },
 
     question:
-      "Chegirmadan keyin Dilshod sumka uchun qancha pul to‘laydi?",
+      "Chegirmadan keyin Dilshod sumka uchun qancha pul to'laydi?",
 
     options: [
-      "108 000 so‘m",
-      "110 000 so‘m",
-      "112 000 so‘m",
-      "118 000 so‘m",
+      {
+        id: "a",
+        text: "108 000 so'm",
+      },
+      {
+        id: "b",
+        text: "110 000 so'm",
+      },
+      {
+        id: "c",
+        text: "112 000 so'm",
+      },
+      {
+        id: "d",
+        text: "118 000 so'm",
+      },
     ],
 
-    correctAnswer: "108 000 so‘m",
+    correctAnswer: "108 000 so'm",
 
     explanation:
-      "120 000 so‘mning 10 foizi 12 000 so‘m. 120 000 − 12 000 = 108 000 so‘m.",
+      "120 000 so'mning 10 foizi 12 000 so'm. " +
+      "120 000 − 12 000 = 108 000 so'm.",
 
     learningObjective:
-      "Foizni real hayotdagi xarid vaziyatida qo‘llash.",
+      "Foizni kundalik xarid vaziyatida qo'llash.",
 
-    skill: "Foizni hisoblash va natijani talqin qilish",
+    skill: "Foizni hisoblash",
+
+    secondarySkills: [
+      "Pul bilan ishlash",
+      "Natijani talqin qilish",
+    ],
 
     mathematics: {
-      content: "quantity",
+      contentArea: "quantity",
       process: "employ",
     },
 
     estimatedTimeSeconds: 45,
     xp: 10,
-    tags: ["foiz", "xarid", "kundalik hayot"],
+    tags: [
+      "foiz",
+      "xarid",
+      "moliyaviy-savodxonlik",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     02 — VAQT
+  ======================================================= */
 
   {
     id: "pisa-math-easy-002",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Vaqt va jadval",
-    context: "personal",
+    topic: "Vaqt",
+    context: "school",
     type: "single-choice",
 
     stimulus: {
       type: "text",
       title: "Maktabga borish",
-      content:
-        "Aziza uyidan soat 07:25 da chiqdi. U maktabga 35 daqiqada yetib bordi.",
+      text:
+        "Aziza uyidan soat 07:25 da chiqdi. " +
+        "U maktabga 35 daqiqada yetib bordi.",
     },
 
     question:
-      "Aziza maktabga taxminan soat nechada yetib borgan?",
+      "Aziza maktabga soat nechada yetib borgan?",
 
     options: [
-      "07:50",
-      "08:00",
-      "08:10",
-      "08:20",
+      {
+        id: "a",
+        text: "07:50",
+      },
+      {
+        id: "b",
+        text: "08:00",
+      },
+      {
+        id: "c",
+        text: "08:10",
+      },
+      {
+        id: "d",
+        text: "08:20",
+      },
     ],
 
     correctAnswer: "08:00",
 
     explanation:
-      "07:25 ga 35 daqiqa qo‘shilsa, 08:00 bo‘ladi.",
+      "07:25 ga 35 daqiqa qo'shilsa, 08:00 bo'ladi.",
 
     learningObjective:
-      "Vaqt oralig‘ini hisoblash.",
+      "Vaqt oralig'ini aniqlash.",
 
     skill: "Vaqt birliklari bilan ishlash",
 
     mathematics: {
-      content: "quantity",
+      contentArea: "quantity",
       process: "employ",
     },
 
     estimatedTimeSeconds: 40,
     xp: 10,
-    tags: ["vaqt", "jadval"],
+    tags: [
+      "vaqt",
+      "jadval",
+      "kundalik-hayot",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     03 — JADVAL
+  ======================================================= */
 
   {
     id: "pisa-math-easy-003",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Ma’lumotni jadvaldan o‘qish",
-    context: "personal",
+    topic: "Jadvalni o'qish",
+    context: "school",
     type: "single-choice",
 
     stimulus: {
       type: "table",
-      title: "Bir haftada o‘qilgan kitob sahifalari",
-      headers: ["Kun", "Sahifalar"],
-      rows: [
-        ["Dushanba", "12"],
-        ["Seshanba", "18"],
-        ["Chorshanba", "15"],
-        ["Payshanba", "20"],
-        ["Juma", "15"],
-      ],
+      title: "Bir haftada o'qilgan sahifalar",
+      text:
+        "O'quvchining bir hafta davomida o'qigan sahifalari quyidagi jadvalda berilgan.",
+      data: {
+        columns: [
+          {
+            id: "day",
+            label: "Kun",
+          },
+          {
+            id: "pages",
+            label: "Sahifalar",
+          },
+        ],
+        rows: [
+          {
+            id: "mon",
+            values: ["Dushanba", 12],
+          },
+          {
+            id: "tue",
+            values: ["Seshanba", 18],
+          },
+          {
+            id: "wed",
+            values: ["Chorshanba", 15],
+          },
+          {
+            id: "thu",
+            values: ["Payshanba", 20],
+          },
+          {
+            id: "fri",
+            values: ["Juma", 15],
+          },
+        ],
+      },
     },
 
     question:
-      "Qaysi kuni eng ko‘p sahifa o‘qilgan?",
+      "Qaysi kuni eng ko'p sahifa o'qilgan?",
 
     options: [
-      "Dushanba",
-      "Seshanba",
-      "Payshanba",
-      "Juma",
+      {
+        id: "a",
+        text: "Dushanba",
+      },
+      {
+        id: "b",
+        text: "Seshanba",
+      },
+      {
+        id: "c",
+        text: "Payshanba",
+      },
+      {
+        id: "d",
+        text: "Juma",
+      },
     ],
 
     correctAnswer: "Payshanba",
 
     explanation:
-      "Jadvaldagi eng katta qiymat 20 sahifa bo‘lib, u Payshanba kuniga tegishli.",
+      "Jadvaldagi eng katta qiymat 20 sahifa. Bu Payshanba kuniga tegishli.",
 
     learningObjective:
-      "Jadvaldagi ma’lumotlarni taqqoslash.",
+      "Jadvaldagi ma'lumotlarni o'qish va taqqoslash.",
 
-    skill: "Ma’lumotni o‘qish va taqqoslash",
+    skill: "Ma'lumotni taqqoslash",
 
     mathematics: {
-      content: "uncertainty-and-data",
-      process: "interpret-evaluate",
+      contentArea: "uncertainty-and-data",
+      process: "interpret",
     },
 
     estimatedTimeSeconds: 35,
     xp: 10,
-    tags: ["jadval", "ma’lumot", "taqqoslash"],
+    tags: [
+      "jadval",
+      "ma'lumot",
+      "taqqoslash",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     04 — MASOFA
+  ======================================================= */
 
   {
     id: "pisa-math-easy-004",
@@ -197,18 +277,30 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
     stimulus: {
       type: "text",
       title: "Velosiped safari",
-      content:
+      text:
         "Kamol ertalab 4 km, tushdan keyin esa 6 km velosiped haydadi.",
     },
 
     question:
-      "Kamol bir kunda jami qancha masofa bosib o‘tgan?",
+      "Kamol bir kunda jami qancha masofa bosib o'tgan?",
 
     options: [
-      "8 km",
-      "9 km",
-      "10 km",
-      "12 km",
+      {
+        id: "a",
+        text: "8 km",
+      },
+      {
+        id: "b",
+        text: "9 km",
+      },
+      {
+        id: "c",
+        text: "10 km",
+      },
+      {
+        id: "d",
+        text: "12 km",
+      },
     ],
 
     correctAnswer: "10 km",
@@ -217,67 +309,93 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
       "4 km + 6 km = 10 km.",
 
     learningObjective:
-      "Kundalik vaziyatda masofalarni qo‘shish.",
+      "Masofalarni birlashtirish.",
 
-    skill: "Miqdorlarni birlashtirish",
+    skill: "Miqdorlarni qo'shish",
 
     mathematics: {
-      content: "quantity",
+      contentArea: "quantity",
       process: "employ",
     },
 
     estimatedTimeSeconds: 30,
     xp: 10,
-    tags: ["masofa", "qo‘shish"],
+    tags: [
+      "masofa",
+      "qo'shish",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     05 — O'RTACHA
+  ======================================================= */
 
   {
     id: "pisa-math-easy-005",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "O‘rtacha qiymat",
+    topic: "O'rtacha qiymat",
     context: "personal",
     type: "single-choice",
 
     stimulus: {
       type: "text",
-      title: "Kunlik suv iste’moli",
-      content:
-        "Bir o‘quvchi besh kun davomida quyidagi miqdorda suv ichdi: 5, 6, 4, 5 va 5 stakan.",
+      title: "Suv iste'moli",
+      text:
+        "Bir o'quvchi besh kun davomida 5, 6, 4, 5 va 5 stakan suv ichdi.",
     },
 
     question:
-      "O‘quvchining bir kundagi o‘rtacha suv iste’moli necha stakan?",
+      "O'quvchining bir kundagi o'rtacha suv iste'moli necha stakan?",
 
     options: [
-      "4 stakan",
-      "5 stakan",
-      "6 stakan",
-      "7 stakan",
+      {
+        id: "a",
+        text: "4 stakan",
+      },
+      {
+        id: "b",
+        text: "5 stakan",
+      },
+      {
+        id: "c",
+        text: "6 stakan",
+      },
+      {
+        id: "d",
+        text: "7 stakan",
+      },
     ],
 
     correctAnswer: "5 stakan",
 
     explanation:
-      "Jami 25 stakan suv ichilgan. 25 ÷ 5 = 5 stakan.",
+      "Jami 25 stakan. 25 ÷ 5 = 5 stakan.",
 
     learningObjective:
-      "O‘rtacha arifmetik qiymatni hisoblash.",
+      "O'rtacha arifmetik qiymatni hisoblash.",
 
-    skill: "Ma’lumotlardan o‘rtacha qiymat chiqarish",
+    skill: "O'rtacha qiymat",
 
     mathematics: {
-      content: "uncertainty-and-data",
+      contentArea: "uncertainty-and-data",
       process: "employ",
     },
 
     estimatedTimeSeconds: 50,
     xp: 10,
-    tags: ["o‘rtacha", "statistika"],
+    tags: [
+      "o'rtacha",
+      "statistika",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     06 — NISBAT
+  ======================================================= */
 
   {
     id: "pisa-math-easy-006",
@@ -291,40 +409,59 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
     stimulus: {
       type: "text",
       title: "Mevali ichimlik",
-      content:
-        "Ichimlik tayyorlash uchun 2 stakan sharbatga 3 stakan suv qo‘shiladi.",
+      text:
+        "Ichimlik tayyorlash uchun 2 stakan sharbatga 3 stakan suv qo'shiladi.",
     },
 
     question:
       "Agar 4 stakan sharbat ishlatilsa, xuddi shu nisbatni saqlash uchun qancha suv kerak?",
 
     options: [
-      "4 stakan",
-      "5 stakan",
-      "6 stakan",
-      "8 stakan",
+      {
+        id: "a",
+        text: "4 stakan",
+      },
+      {
+        id: "b",
+        text: "5 stakan",
+      },
+      {
+        id: "c",
+        text: "6 stakan",
+      },
+      {
+        id: "d",
+        text: "8 stakan",
+      },
     ],
 
     correctAnswer: "6 stakan",
 
     explanation:
-      "Sharbat miqdori 2 baravar oshdi. Shuning uchun suv miqdori ham 3 × 2 = 6 stakan bo‘ladi.",
+      "Sharbat miqdori 2 baravar oshgan. Suv ham 2 baravar oshadi: 3 × 2 = 6 stakan.",
 
     learningObjective:
-      "Nisbat va proporsiyani real vaziyatda qo‘llash.",
+      "Nisbatni real vaziyatda qo'llash.",
 
     skill: "Proporsional fikrlash",
 
     mathematics: {
-      content: "quantity",
+      contentArea: "quantity",
       process: "employ",
     },
 
     estimatedTimeSeconds: 55,
     xp: 10,
-    tags: ["nisbat", "proporsiya"],
+    tags: [
+      "nisbat",
+      "proporsiya",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     07 — YUZA
+  ======================================================= */
 
   {
     id: "pisa-math-easy-007",
@@ -337,145 +474,254 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
 
     stimulus: {
       type: "text",
-      title: "Xona gilami",
-      content:
-        "Xonaning uzunligi 5 metr, eni 4 metr. Xona to‘g‘ri to‘rtburchak shaklida.",
+      title: "Xona",
+      text:
+        "Xonaning uzunligi 5 metr, eni 4 metr. Xona to'g'ri to'rtburchak shaklida.",
     },
 
     question:
       "Xonaning yuzi qancha?",
 
     options: [
-      "9 m²",
-      "18 m²",
-      "20 m²",
-      "25 m²",
+      {
+        id: "a",
+        text: "9 m²",
+      },
+      {
+        id: "b",
+        text: "18 m²",
+      },
+      {
+        id: "c",
+        text: "20 m²",
+      },
+      {
+        id: "d",
+        text: "25 m²",
+      },
     ],
 
     correctAnswer: "20 m²",
 
     explanation:
-      "To‘g‘ri to‘rtburchak yuzi uzunlik × eniga teng: 5 × 4 = 20 m².",
+      "Yuza = uzunlik × eni. 5 × 4 = 20 m².",
 
     learningObjective:
-      "Geometrik o‘lchovlarni real vaziyatda qo‘llash.",
+      "Yuzani real vaziyatda hisoblash.",
 
-    skill: "Yuzani hisoblash",
+    skill: "To'g'ri to'rtburchak yuzasi",
 
     mathematics: {
-      content: "space-and-shape",
+      contentArea: "space-and-shape",
       process: "employ",
     },
 
     estimatedTimeSeconds: 45,
     xp: 10,
-    tags: ["yuza", "geometriya"],
+    tags: [
+      "yuza",
+      "geometriya",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     08 — HARORAT
+  ======================================================= */
 
   {
     id: "pisa-math-easy-008",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Ma’lumotlarni taqqoslash",
+    topic: "O'zgarish",
     context: "scientific",
     type: "single-choice",
 
     stimulus: {
       type: "table",
-      title: "Havo harorati",
-      headers: ["Kun", "Harorat"],
-      rows: [
-        ["Dushanba", "18°C"],
-        ["Seshanba", "21°C"],
-        ["Chorshanba", "17°C"],
-        ["Payshanba", "23°C"],
-      ],
+      title: "Haftalik harorat",
+      text:
+        "To'rt kun davomida qayd etilgan havo harorati.",
+      data: {
+        columns: [
+          {
+            id: "day",
+            label: "Kun",
+          },
+          {
+            id: "temperature",
+            label: "Harorat",
+          },
+        ],
+        rows: [
+          {
+            id: "mon",
+            values: ["Dushanba", "18°C"],
+          },
+          {
+            id: "tue",
+            values: ["Seshanba", "21°C"],
+          },
+          {
+            id: "wed",
+            values: ["Chorshanba", "17°C"],
+          },
+          {
+            id: "thu",
+            values: ["Payshanba", "23°C"],
+          },
+        ],
+      },
     },
 
     question:
-      "Qaysi kuni dushanbaga nisbatan harorat eng katta farq bilan oshgan?",
+      "Dushanbaga nisbatan harorat eng katta miqdorga qaysi kuni oshgan?",
 
     options: [
-      "Seshanba",
-      "Chorshanba",
-      "Payshanba",
-      "Hech qaysi kuni",
+      {
+        id: "a",
+        text: "Seshanba",
+      },
+      {
+        id: "b",
+        text: "Chorshanba",
+      },
+      {
+        id: "c",
+        text: "Payshanba",
+      },
+      {
+        id: "d",
+        text: "Hech qaysi kuni",
+      },
     ],
 
     correctAnswer: "Payshanba",
 
     explanation:
-      "Dushanba 18°C edi. Payshanba 23°C bo‘lib, farq 5°C. Bu eng katta ijobiy farq.",
+      "Dushanba 18°C. Payshanba 23°C. Farq 23 − 18 = 5°C.",
 
     learningObjective:
-      "Jadvaldan olingan qiymatlarni boshlang‘ich qiymat bilan taqqoslash.",
+      "Ikki qiymat orasidagi o'zgarishni aniqlash.",
 
-    skill: "Farqni aniqlash",
+    skill: "Qiymatlar farqini tahlil qilish",
 
     mathematics: {
-      content: "change-and-relationships",
-      process: "interpret-evaluate",
+      contentArea: "change-and-relationships",
+      process: "interpret",
     },
 
     estimatedTimeSeconds: 50,
     xp: 10,
-    tags: ["jadval", "harorat", "farq"],
+    tags: [
+      "harorat",
+      "o'zgarish",
+      "jadval",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     09 — ENERGIYA
+  ======================================================= */
 
   {
     id: "pisa-math-easy-009",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "O‘zgarish va munosabat",
-    context: "scientific",
+    topic: "Energiya sarfi",
+    context: "environmental",
     type: "single-choice",
 
     stimulus: {
       type: "table",
-      title: "Bir haftadagi elektr energiyasi sarfi",
-      headers: ["Kun", "Sarflangan energiya"],
-      rows: [
-        ["Dushanba", "8 kVt·soat"],
-        ["Seshanba", "10 kVt·soat"],
-        ["Chorshanba", "7 kVt·soat"],
-        ["Payshanba", "9 kVt·soat"],
-      ],
+      title: "Elektr energiyasi sarfi",
+      text:
+        "Bir haftaning ayrim kunlaridagi elektr energiyasi sarfi.",
+      data: {
+        columns: [
+          {
+            id: "day",
+            label: "Kun",
+          },
+          {
+            id: "energy",
+            label: "Sarflangan energiya",
+          },
+        ],
+        rows: [
+          {
+            id: "mon",
+            values: ["Dushanba", 8],
+          },
+          {
+            id: "tue",
+            values: ["Seshanba", 10],
+          },
+          {
+            id: "wed",
+            values: ["Chorshanba", 7],
+          },
+          {
+            id: "thu",
+            values: ["Payshanba", 9],
+          },
+        ],
+      },
     },
 
     question:
-      "Chorshanbadagi sarfdan 3 kVt·soat ko‘p energiya qaysi kuni sarflangan?",
+      "Chorshanbadagi sarfdan 3 kVt·soat ko'p energiya qaysi kuni sarflangan?",
 
     options: [
-      "Dushanba",
-      "Seshanba",
-      "Payshanba",
-      "Juma",
+      {
+        id: "a",
+        text: "Dushanba",
+      },
+      {
+        id: "b",
+        text: "Seshanba",
+      },
+      {
+        id: "c",
+        text: "Payshanba",
+      },
+      {
+        id: "d",
+        text: "Juma",
+      },
     ],
 
     correctAnswer: "Seshanba",
 
     explanation:
-      "Chorshanba kuni 7 kVt·soat sarflangan. 7 + 3 = 10 kVt·soat. Jadvalda 10 kVt·soat Seshanba kuni qayd etilgan.",
+      "Chorshanba kuni 7 kVt·soat sarflangan. 7 + 3 = 10. Jadvalda 10 kVt·soat Seshanba kuni qayd etilgan.",
 
     learningObjective:
-      "Jadvaldagi qiymatlar orasidagi bog‘lanishni aniqlash.",
+      "Jadvaldagi qiymatlar o'rtasidagi bog'lanishni aniqlash.",
 
-    skill: "Qiymatlar orasidagi farqni tahlil qilish",
+    skill: "Ma'lumotlar orasidagi munosabatni aniqlash",
 
     mathematics: {
-      content: "change-and-relationships",
-      process: "interpret-evaluate",
+      contentArea: "change-and-relationships",
+      process: "interpret",
     },
 
     estimatedTimeSeconds: 50,
     xp: 10,
-    tags: ["jadval", "energiya", "munosabat"],
+    tags: [
+      "energiya",
+      "jadval",
+      "o'zgarish",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     10 — EHTIMOLLIK
+  ======================================================= */
 
   {
     id: "pisa-math-easy-010",
@@ -489,18 +735,30 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
     stimulus: {
       type: "text",
       title: "Rangli sharlar",
-      content:
-        "Qutida 3 ta qizil va 2 ta ko‘k shar bor. Ko‘z yumib bitta shar olinadi.",
+      text:
+        "Qutida 3 ta qizil va 2 ta ko'k shar bor. Ko'z yumib bitta shar olinadi.",
     },
 
     question:
-      "Olingan sharning qizil bo‘lish ehtimoli qanday?",
+      "Olingan sharning qizil bo'lish ehtimoli qanday?",
 
     options: [
-      "1/5",
-      "2/5",
-      "3/5",
-      "4/5",
+      {
+        id: "a",
+        text: "1/5",
+      },
+      {
+        id: "b",
+        text: "2/5",
+      },
+      {
+        id: "c",
+        text: "3/5",
+      },
+      {
+        id: "d",
+        text: "4/5",
+      },
     ],
 
     correctAnswer: "3/5",
@@ -511,18 +769,25 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
     learningObjective:
       "Oddiy ehtimollikni aniqlash.",
 
-    skill: "Ehtimolni qulay va jami natijalar orqali aniqlash",
+    skill: "Ehtimollikni hisoblash",
 
     mathematics: {
-      content: "uncertainty-and-data",
+      contentArea: "uncertainty-and-data",
       process: "employ",
     },
 
     estimatedTimeSeconds: 50,
     xp: 10,
-    tags: ["ehtimollik", "tasodif"],
+    tags: [
+      "ehtimollik",
+      "tasodif",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     11 — TEZLIK
+  ======================================================= */
 
   {
     id: "pisa-math-easy-011",
@@ -536,18 +801,31 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
     stimulus: {
       type: "text",
       title: "Avtobus safari",
-      content:
-        "Avtobus 2 soatda 120 km masofa bosib o‘tdi. Harakat davomida tezlik o‘zgarmagan deb hisoblang.",
+      text:
+        "Avtobus 2 soatda 120 km masofa bosib o'tdi. " +
+        "Harakat davomida tezlik o'zgarmagan deb hisoblang.",
     },
 
     question:
-      "Avtobusning o‘rtacha tezligi qancha bo‘lgan?",
+      "Avtobusning o'rtacha tezligi qancha bo'lgan?",
 
     options: [
-      "40 km/soat",
-      "50 km/soat",
-      "60 km/soat",
-      "80 km/soat",
+      {
+        id: "a",
+        text: "40 km/soat",
+      },
+      {
+        id: "b",
+        text: "50 km/soat",
+      },
+      {
+        id: "c",
+        text: "60 km/soat",
+      },
+      {
+        id: "d",
+        text: "80 km/soat",
+      },
     ],
 
     correctAnswer: "60 km/soat",
@@ -556,20 +834,28 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
       "Tezlik = masofa ÷ vaqt. 120 ÷ 2 = 60 km/soat.",
 
     learningObjective:
-      "Masofa, vaqt va tezlik o‘rtasidagi bog‘lanishni qo‘llash.",
+      "Masofa va vaqt orqali tezlikni aniqlash.",
 
     skill: "Tezlikni hisoblash",
 
     mathematics: {
-      content: "change-and-relationships",
+      contentArea: "change-and-relationships",
       process: "employ",
     },
 
     estimatedTimeSeconds: 50,
     xp: 10,
-    tags: ["tezlik", "masofa", "vaqt"],
+    tags: [
+      "tezlik",
+      "masofa",
+      "vaqt",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     12 — MASSHTAB
+  ======================================================= */
 
   {
     id: "pisa-math-easy-012",
@@ -583,87 +869,128 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
     stimulus: {
       type: "text",
       title: "Xarita",
-      content:
+      text:
         "Xaritada 1 sm masofa haqiqiy hayotdagi 2 km masofaga teng.",
     },
 
     question:
-      "Xaritada 5 sm bo‘lgan yo‘lning haqiqiy uzunligi qancha?",
+      "Xaritada 5 sm bo'lgan yo'lning haqiqiy uzunligi qancha?",
 
     options: [
-      "5 km",
-      "7 km",
-      "10 km",
-      "12 km",
+      {
+        id: "a",
+        text: "5 km",
+      },
+      {
+        id: "b",
+        text: "7 km",
+      },
+      {
+        id: "c",
+        text: "10 km",
+      },
+      {
+        id: "d",
+        text: "12 km",
+      },
     ],
 
     correctAnswer: "10 km",
 
     explanation:
-      "1 sm = 2 km bo‘lsa, 5 sm = 5 × 2 = 10 km.",
+      "1 sm = 2 km bo'lsa, 5 sm = 5 × 2 = 10 km.",
 
     learningObjective:
-      "Masshtabni real masofani aniqlashda qo‘llash.",
+      "Masshtab yordamida haqiqiy masofani aniqlash.",
 
-    skill: "Masshtab va proporsiya",
+    skill: "Masshtab bilan ishlash",
 
     mathematics: {
-      content: "space-and-shape",
+      contentArea: "space-and-shape",
       process: "employ",
     },
 
     estimatedTimeSeconds: 50,
     xp: 10,
-    tags: ["masshtab", "xarita", "masofa"],
+    tags: [
+      "masshtab",
+      "xarita",
+      "masofa",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     13 — PUL
+  ======================================================= */
 
   {
     id: "pisa-math-easy-013",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Pul va tanlov",
+    topic: "Moliyaviy hisob",
     context: "personal",
     type: "single-choice",
 
     stimulus: {
       type: "text",
-      title: "Nonushta tanlovi",
-      content:
-        "O‘quvchida 25 000 so‘m bor. U 12 000 so‘mlik sendvich va 8 000 so‘mlik sharbat sotib oldi.",
+      title: "Nonushta",
+      text:
+        "O'quvchida 25 000 so'm bor. U 12 000 so'mlik sendvich " +
+        "va 8 000 so'mlik sharbat sotib oldi.",
     },
 
     question:
-      "O‘quvchida qancha pul qoladi?",
+      "O'quvchida qancha pul qoladi?",
 
     options: [
-      "3 000 so‘m",
-      "5 000 so‘m",
-      "7 000 so‘m",
-      "9 000 so‘m",
+      {
+        id: "a",
+        text: "3 000 so'm",
+      },
+      {
+        id: "b",
+        text: "5 000 so'm",
+      },
+      {
+        id: "c",
+        text: "7 000 so'm",
+      },
+      {
+        id: "d",
+        text: "9 000 so'm",
+      },
     ],
 
-    correctAnswer: "5 000 so‘m",
+    correctAnswer: "5 000 so'm",
 
     explanation:
-      "Jami xarajat 12 000 + 8 000 = 20 000 so‘m. 25 000 − 20 000 = 5 000 so‘m.",
+      "Jami xarajat 20 000 so'm. 25 000 − 20 000 = 5 000 so'm.",
 
     learningObjective:
-      "Bir nechta xarajatni hisobga olib moliyaviy qaror qilish.",
+      "Bir nechta xarajatni hisobga olib qolgan pulni aniqlash.",
 
     skill: "Moliyaviy hisob-kitob",
 
     mathematics: {
-      content: "quantity",
+      contentArea: "quantity",
       process: "employ",
     },
 
     estimatedTimeSeconds: 45,
     xp: 10,
-    tags: ["pul", "xarid", "qaror"],
+    tags: [
+      "pul",
+      "xarid",
+      "moliyaviy-savodxonlik",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     14 — QONUNIYAT
+  ======================================================= */
 
   {
     id: "pisa-math-easy-014",
@@ -677,18 +1004,31 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
     stimulus: {
       type: "text",
       title: "Qadamlar",
-      content:
-        "Bir o‘quvchi har kuni kechagidan 1 000 qadam ko‘proq yurmoqda. Birinchi kuni u 4 000 qadam yurgan.",
+      text:
+        "Bir o'quvchi har kuni avvalgi kundagidan 1 000 qadam ko'proq yurmoqda. " +
+        "Birinchi kuni u 4 000 qadam yurgan.",
     },
 
     question:
       "Uchinchi kuni nechta qadam yuradi?",
 
     options: [
-      "5 000",
-      "6 000",
-      "7 000",
-      "8 000",
+      {
+        id: "a",
+        text: "5 000",
+      },
+      {
+        id: "b",
+        text: "6 000",
+      },
+      {
+        id: "c",
+        text: "7 000",
+      },
+      {
+        id: "d",
+        text: "8 000",
+      },
     ],
 
     correctAnswer: "6 000",
@@ -697,20 +1037,27 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
       "Birinchi kun 4 000, ikkinchi kun 5 000, uchinchi kun 6 000 qadam.",
 
     learningObjective:
-      "Oddiy o‘suvchi ketma-ketlikni aniqlash.",
+      "Oddiy o'suvchi qonuniyatni aniqlash.",
 
     skill: "Qonuniyatni aniqlash",
 
     mathematics: {
-      content: "change-and-relationships",
-      process: "reasoning",
+      contentArea: "change-and-relationships",
+      process: "reason",
     },
 
     estimatedTimeSeconds: 50,
     xp: 10,
-    tags: ["ketma-ketlik", "qonuniyat"],
+    tags: [
+      "ketma-ketlik",
+      "qonuniyat",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     15 — PERIMETR
+  ======================================================= */
 
   {
     id: "pisa-math-easy-015",
@@ -723,19 +1070,31 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
 
     stimulus: {
       type: "text",
-      title: "Bog‘",
-      content:
-        "To‘g‘ri to‘rtburchak shaklidagi bog‘ning uzunligi 8 metr, eni 5 metr.",
+      title: "Bog'",
+      text:
+        "To'g'ri to'rtburchak shaklidagi bog'ning uzunligi 8 metr, eni 5 metr.",
     },
 
     question:
-      "Bog‘ni bir marta aylanib chiqish uchun qancha masofa yurish kerak?",
+      "Bog'ni bir marta aylanib chiqish uchun qancha masofa yurish kerak?",
 
     options: [
-      "13 metr",
-      "20 metr",
-      "26 metr",
-      "40 metr",
+      {
+        id: "a",
+        text: "13 metr",
+      },
+      {
+        id: "b",
+        text: "20 metr",
+      },
+      {
+        id: "c",
+        text: "26 metr",
+      },
+      {
+        id: "d",
+        text: "40 metr",
+      },
     ],
 
     correctAnswer: "26 metr",
@@ -749,40 +1108,89 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
     skill: "Perimetrni hisoblash",
 
     mathematics: {
-      content: "space-and-shape",
+      contentArea: "space-and-shape",
       process: "employ",
     },
 
     estimatedTimeSeconds: 45,
     xp: 10,
-    tags: ["perimetr", "geometriya"],
+    tags: [
+      "perimetr",
+      "geometriya",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     16 — MA'LUMOT TAQQOSLASH
+  ======================================================= */
 
   {
     id: "pisa-math-easy-016",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Grafikni talqin qilish",
-    context: "societal",
+    topic: "Ma'lumotlar tahlili",
+    context: "school",
     type: "single-choice",
 
     stimulus: {
-      type: "text",
+      type: "table",
       title: "Kutubxonaga tashrif",
-      content:
-        "Kutubxonaga bir hafta davomida tashrif buyurganlar soni: Dushanba — 30, Seshanba — 45, Chorshanba — 40, Payshanba — 55.",
+      text:
+        "Maktab kutubxonasiga to'rt kun davomida tashrif buyurganlar soni.",
+      data: {
+        columns: [
+          {
+            id: "day",
+            label: "Kun",
+          },
+          {
+            id: "visitors",
+            label: "Tashrif buyuruvchilar",
+          },
+        ],
+        rows: [
+          {
+            id: "mon",
+            values: ["Dushanba", 30],
+          },
+          {
+            id: "tue",
+            values: ["Seshanba", 45],
+          },
+          {
+            id: "wed",
+            values: ["Chorshanba", 40],
+          },
+          {
+            id: "thu",
+            values: ["Payshanba", 55],
+          },
+        ],
+      },
     },
 
     question:
-      "Qaysi kuni tashrif buyuruvchilar soni seshanbaga nisbatan 10 nafarga ko‘p bo‘lgan?",
+      "Qaysi kuni tashrif buyuruvchilar soni Seshanbaga nisbatan 10 nafarga ko'p bo'lgan?",
 
     options: [
-      "Dushanba",
-      "Chorshanba",
-      "Payshanba",
-      "Juma",
+      {
+        id: "a",
+        text: "Dushanba",
+      },
+      {
+        id: "b",
+        text: "Chorshanba",
+      },
+      {
+        id: "c",
+        text: "Payshanba",
+      },
+      {
+        id: "d",
+        text: "Hech qaysi kuni",
+      },
     ],
 
     correctAnswer: "Payshanba",
@@ -791,98 +1199,139 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
       "Seshanba kuni 45 kishi kelgan. 45 + 10 = 55. 55 kishi Payshanba kuni kelgan.",
 
     learningObjective:
-      "Ma’lumotlar orasidagi o‘zgarishni aniqlash.",
+      "Jadvaldagi o'zgarishlarni taqqoslash.",
 
-    skill: "Grafik va sonli ma’lumotlarni talqin qilish",
+    skill: "Ma'lumotlar orasidagi farqni aniqlash",
 
     mathematics: {
-      content: "uncertainty-and-data",
-      process: "interpret-evaluate",
+      contentArea: "uncertainty-and-data",
+      process: "interpret",
     },
 
     estimatedTimeSeconds: 50,
     xp: 10,
-    tags: ["grafik", "ma’lumot", "taqqoslash"],
+    tags: [
+      "jadval",
+      "ma'lumot",
+      "taqqoslash",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     17 — KASR
+  ======================================================= */
 
   {
     id: "pisa-math-easy-017",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Ulush",
+    topic: "Kasr va ulush",
     context: "personal",
     type: "single-choice",
 
     stimulus: {
       type: "text",
-      title: "Kitob o‘qish",
-      content:
-        "120 betlik kitobning 1/4 qismi o‘qildi.",
+      title: "Kitob o'qish",
+      text:
+        "120 betlik kitobning 1/4 qismi o'qildi.",
     },
 
     question:
-      "Necha bet o‘qilgan?",
+      "Necha bet o'qilgan?",
 
     options: [
-      "20 bet",
-      "25 bet",
-      "30 bet",
-      "40 bet",
+      {
+        id: "a",
+        text: "20 bet",
+      },
+      {
+        id: "b",
+        text: "25 bet",
+      },
+      {
+        id: "c",
+        text: "30 bet",
+      },
+      {
+        id: "d",
+        text: "40 bet",
+      },
     ],
 
     correctAnswer: "30 bet",
 
     explanation:
-      "120 ning 1/4 qismi 120 ÷ 4 = 30 bet.",
+      "120 ÷ 4 = 30. Demak, 30 bet o'qilgan.",
 
     learningObjective:
-      "Kasrni miqdorning ulushi sifatida qo‘llash.",
+      "Kasrni miqdorning ulushi sifatida qo'llash.",
 
-    skill: "Kasr va miqdor munosabati",
+    skill: "Kasr bilan ishlash",
 
     mathematics: {
-      content: "quantity",
+      contentArea: "quantity",
       process: "employ",
     },
 
     estimatedTimeSeconds: 40,
     xp: 10,
-    tags: ["kasr", "ulush"],
+    tags: [
+      "kasr",
+      "ulush",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     18 — QAROR
+  ======================================================= */
 
   {
     id: "pisa-math-easy-018",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Qaror qabul qilish",
-    context: "personal",
+    topic: "Tanlov va shart",
+    context: "digital",
     type: "single-choice",
 
     stimulus: {
       type: "text",
-      title: "Ikki internet tarifi",
-      content:
-        "A tarif: oyiga 70 000 so‘m va 100 GB internet.\nB tarif: oyiga 90 000 so‘m va 150 GB internet.",
+      title: "Internet tariflari",
+      text:
+        "A tarif oyiga 70 000 so'm va 100 GB internet beradi. " +
+        "B tarif oyiga 90 000 so'm va 150 GB internet beradi. " +
+        "Foydalanuvchiga oyiga kamida 120 GB kerak.",
     },
 
     question:
-      "Agar foydalanuvchiga oyiga kamida 120 GB kerak bo‘lsa, qaysi tarif mos keladi?",
+      "Qaysi tarif berilgan talabni qanoatlantiradi?",
 
     options: [
-      "Faqat A tarif",
-      "Faqat B tarif",
-      "Ikkala tarif ham",
-      "Hech qaysisi",
+      {
+        id: "a",
+        text: "Faqat A tarif",
+      },
+      {
+        id: "b",
+        text: "Faqat B tarif",
+      },
+      {
+        id: "c",
+        text: "Ikkala tarif ham",
+      },
+      {
+        id: "d",
+        text: "Hech qaysisi",
+      },
     ],
 
     correctAnswer: "Faqat B tarif",
 
     explanation:
-      "A tarifda 100 GB bor, bu 120 GB talabdan kam. B tarifda 150 GB bor, shuning uchun talabni qanoatlantiradi.",
+      "A tarifda 100 GB bor va bu 120 GB talabdan kam. B tarifda 150 GB bor.",
 
     learningObjective:
       "Berilgan shart asosida mos variantni tanlash.",
@@ -890,251 +1339,364 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
     skill: "Shartli qaror qabul qilish",
 
     mathematics: {
-      content: "uncertainty-and-data",
-      process: "reasoning",
+      contentArea: "quantity",
+      process: "evaluate",
     },
 
     estimatedTimeSeconds: 55,
     xp: 10,
-    tags: ["qaror", "shart", "taqqoslash"],
+    tags: [
+      "qaror",
+      "shart",
+      "raqamli-savodxonlik",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     19 — YAXLITLASH
+  ======================================================= */
 
   {
     id: "pisa-math-easy-019",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Yaxlitlash va baholash",
+    topic: "Yaxlitlash",
     context: "personal",
     type: "single-choice",
 
     stimulus: {
       type: "text",
       title: "Sayohat xarajati",
-      content:
-        "Sayohat uchun 48 700 so‘m yo‘l xarajati va 31 600 so‘m ovqat xarajati rejalashtirilgan.",
+      text:
+        "Sayohat uchun 48 700 so'm yo'l xarajati va " +
+        "31 600 so'm ovqat xarajati rejalashtirilgan.",
     },
 
     question:
-      "Xarajatlarni eng yaqin ming so‘mgacha yaxlitlasak, jami taxminan qancha bo‘ladi?",
+      "Har bir xarajatni eng yaqin ming so'mgacha yaxlitlasak, jami taxminan qancha bo'ladi?",
 
     options: [
-      "79 000 so‘m",
-      "80 000 so‘m",
-      "81 000 so‘m",
-      "82 000 so‘m",
+      {
+        id: "a",
+        text: "79 000 so'm",
+      },
+      {
+        id: "b",
+        text: "80 000 so'm",
+      },
+      {
+        id: "c",
+        text: "81 000 so'm",
+      },
+      {
+        id: "d",
+        text: "82 000 so'm",
+      },
     ],
 
-    correctAnswer: "80 000 so‘m",
+    correctAnswer: "81 000 so'm",
 
     explanation:
-      "48 700 ≈ 49 000 va 31 600 ≈ 32 000. 49 000 + 32 000 = 81 000. Demak, to‘g‘ri javob 81 000 so‘m.",
+      "48 700 ≈ 49 000 va 31 600 ≈ 32 000. " +
+      "49 000 + 32 000 = 81 000 so'm.",
 
     learningObjective:
-      "Yaxlitlash va taxminiy hisoblashni qo‘llash.",
+      "Yaxlitlash orqali taxminiy natijani aniqlash.",
 
     skill: "Taxminiy hisoblash",
 
     mathematics: {
-      content: "quantity",
+      contentArea: "quantity",
       process: "employ",
     },
 
     estimatedTimeSeconds: 55,
     xp: 10,
-    tags: ["yaxlitlash", "taxmin"],
+    tags: [
+      "yaxlitlash",
+      "taxmin",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     20 — STATISTIK XULOSA
+  ======================================================= */
 
   {
     id: "pisa-math-easy-020",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Noto‘g‘ri xulosani aniqlash",
-    context: "societal",
+    topic: "Ulush va xulosa",
+    context: "school",
     type: "single-choice",
 
     stimulus: {
       type: "text",
-      title: "Sport to‘garagi",
-      content:
-        "Bir maktabda 40 nafar o‘quvchining 30 nafari sport to‘garagiga qatnashadi.",
+      title: "Sport to'garagi",
+      text:
+        "Bir maktabda 40 nafar o'quvchining 30 nafari sport to'garagiga qatnashadi.",
     },
 
     question:
-      "Quyidagi xulosalardan qaysi biri berilgan ma’lumotga mos?",
+      "O'quvchilarning qaysi qismi sport to'garagiga qatnashadi?",
 
     options: [
-      "O‘quvchilarning yarmi sportga qatnashadi.",
-      "O‘quvchilarning 3/4 qismi sportga qatnashadi.",
-      "O‘quvchilarning 1/4 qismi sportga qatnashadi.",
-      "O‘quvchilarning 2/3 qismi sportga qatnashadi.",
+      {
+        id: "a",
+        text: "1/2 qismi",
+      },
+      {
+        id: "b",
+        text: "3/4 qismi",
+      },
+      {
+        id: "c",
+        text: "1/4 qismi",
+      },
+      {
+        id: "d",
+        text: "2/3 qismi",
+      },
     ],
 
-    correctAnswer: "O‘quvchilarning 3/4 qismi sportga qatnashadi.",
+    correctAnswer: "3/4 qismi",
 
     explanation:
-      "30 ÷ 40 = 3/4. Demak, o‘quvchilarning to‘rtdan uch qismi sport to‘garagiga qatnashadi.",
+      "30 ÷ 40 = 3/4. Demak, o'quvchilarning 3/4 qismi sport to'garagiga qatnashadi.",
 
     learningObjective:
-      "Sonli ma’lumotdan ulushni chiqarish.",
+      "Sonli ma'lumotdan ulush chiqarish.",
 
-    skill: "Ma’lumot asosida xulosa chiqarish",
+    skill: "Ma'lumotdan xulosa chiqarish",
 
     mathematics: {
-      content: "uncertainty-and-data",
-      process: "interpret-evaluate",
+      contentArea: "uncertainty-and-data",
+      process: "interpret",
     },
 
     estimatedTimeSeconds: 55,
     xp: 10,
-    tags: ["ulush", "ma’lumot", "xulosa"],
+    tags: [
+      "ulush",
+      "ma'lumot",
+      "statistika",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     21 — CHIZIQLI BOG'LANISH
+  ======================================================= */
 
   {
     id: "pisa-math-easy-021",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Chiziqli bog‘lanish",
+    topic: "Chiziqli bog'lanish",
     context: "personal",
     type: "single-choice",
 
     stimulus: {
       type: "text",
       title: "Velosiped ijarasi",
-      content:
-        "Velosiped ijarasi uchun boshlang‘ich to‘lov 10 000 so‘m. Har bir soat uchun yana 5 000 so‘m to‘lanadi.",
+      text:
+        "Velosiped ijarasi uchun boshlang'ich to'lov 10 000 so'm. " +
+        "Har bir soat uchun yana 5 000 so'm to'lanadi.",
     },
 
     question:
       "3 soatlik ijara qancha turadi?",
 
     options: [
-      "15 000 so‘m",
-      "20 000 so‘m",
-      "25 000 so‘m",
-      "30 000 so‘m",
+      {
+        id: "a",
+        text: "15 000 so'm",
+      },
+      {
+        id: "b",
+        text: "20 000 so'm",
+      },
+      {
+        id: "c",
+        text: "25 000 so'm",
+      },
+      {
+        id: "d",
+        text: "30 000 so'm",
+      },
     ],
 
-    correctAnswer: "25 000 so‘m",
+    correctAnswer: "25 000 so'm",
 
     explanation:
-      "Boshlang‘ich 10 000 so‘mga 3 × 5 000 = 15 000 so‘m qo‘shiladi. Jami 25 000 so‘m.",
+      "3 × 5 000 = 15 000 so'm. Boshlang'ich 10 000 so'm bilan jami 25 000 so'm.",
 
     learningObjective:
-      "Boshlang‘ich qiymat va o‘zgaruvchan xarajatni birlashtirish.",
+      "Boshlang'ich va o'zgaruvchan xarajatlarni birlashtirish.",
 
-    skill: "Chiziqli bog‘lanishni tushunish",
+    skill: "Chiziqli bog'lanishni tushunish",
 
     mathematics: {
-      content: "change-and-relationships",
+      contentArea: "change-and-relationships",
       process: "formulate",
     },
 
     estimatedTimeSeconds: 55,
     xp: 10,
-    tags: ["bog‘lanish", "xarajat", "model"],
+    tags: [
+      "bog'lanish",
+      "xarajat",
+      "model",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     22 — YUZANI TAQQOSLASH
+  ======================================================= */
 
   {
     id: "pisa-math-easy-022",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Geometrik taqqoslash",
+    topic: "Yuzalarni taqqoslash",
     context: "personal",
     type: "single-choice",
 
     stimulus: {
       type: "text",
       title: "Ikki gilam",
-      content:
-        "A gilamning o‘lchami 3 m × 4 m. B gilamning o‘lchami 2 m × 5 m.",
+      text:
+        "A gilamning o'lchami 3 m × 4 m. " +
+        "B gilamning o'lchami 2 m × 5 m.",
     },
 
     question:
       "Qaysi gilamning yuzi kattaroq?",
 
     options: [
-      "A gilam",
-      "B gilam",
-      "Ikkalasining yuzi teng",
-      "Ma’lumot yetarli emas",
+      {
+        id: "a",
+        text: "A gilam",
+      },
+      {
+        id: "b",
+        text: "B gilam",
+      },
+      {
+        id: "c",
+        text: "Ikkalasining yuzi teng",
+      },
+      {
+        id: "d",
+        text: "Aniqlash uchun ma'lumot yetarli emas",
+      },
     ],
 
-    correctAnswer: "Ikkalasining yuzi teng",
+    correctAnswer: "A gilam",
 
     explanation:
-      "A gilam: 3 × 4 = 12 m². B gilam: 2 × 5 = 10 m². Demak, aslida A gilam kattaroq.",
+      "A gilam yuzi 3 × 4 = 12 m². B gilam yuzi 2 × 5 = 10 m². Shuning uchun A gilamning yuzi kattaroq.",
 
     learningObjective:
-      "Geometrik kattaliklarni hisoblab taqqoslash.",
+      "Ikki geometrik obyektning yuzalarini hisoblab taqqoslash.",
 
     skill: "Yuzalarni taqqoslash",
 
     mathematics: {
-      content: "space-and-shape",
-      process: "reasoning",
+      contentArea: "space-and-shape",
+      process: "evaluate",
     },
 
     estimatedTimeSeconds: 55,
     xp: 10,
-    tags: ["yuza", "taqqoslash", "geometriya"],
+    tags: [
+      "yuza",
+      "taqqoslash",
+      "geometriya",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     23 — TANLANMA
+  ======================================================= */
 
   {
     id: "pisa-math-easy-023",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Ma’lumotlarning ishonchliligi",
-    context: "societal",
+    topic: "Tanlanma va xulosa",
+    context: "school",
     type: "single-choice",
 
     stimulus: {
       type: "text",
-      title: "Maktab so‘rovi",
-      content:
-        "Maktabdagi 800 o‘quvchidan 20 nafari so‘rovda qatnashdi. 20 nafar o‘quvchining 18 nafari yangi sport maydonchasi kerakligini aytdi.",
+      title: "Maktab so'rovi",
+      text:
+        "Maktabdagi 800 o'quvchidan 20 nafari so'rovda qatnashdi. " +
+        "Ularning 18 nafari yangi sport maydonchasi kerakligini aytdi.",
     },
 
     question:
-      "Qaysi fikr ma’lumotni ehtiyotkorlik bilan talqin qilishga eng mos?",
+      "Qaysi xulosa berilgan ma'lumotga eng ehtiyotkorona mos keladi?",
 
     options: [
-      "Barcha 800 o‘quvchi sport maydonchasini xohlaydi.",
-      "So‘rov qatnashchilarining ko‘pchiligi sport maydonchasini xohlaydi.",
-      "800 o‘quvchining faqat 18 nafari sport maydonchasini xohlaydi.",
-      "So‘rov natijasi butun maktab uchun mutlaq haqiqatdir.",
+      {
+        id: "a",
+        text: "Barcha 800 o'quvchi sport maydonchasini xohlaydi.",
+      },
+      {
+        id: "b",
+        text: "So'rov qatnashchilarining ko'pchiligi sport maydonchasini xohlaydi.",
+      },
+      {
+        id: "c",
+        text: "800 o'quvchining faqat 18 nafari sport maydonchasini xohlaydi.",
+      },
+      {
+        id: "d",
+        text: "So'rov natijasi butun maktab uchun mutlaq haqiqatdir.",
+      },
     ],
 
     correctAnswer:
-      "So‘rov qatnashchilarining ko‘pchiligi sport maydonchasini xohlaydi.",
+      "So'rov qatnashchilarining ko'pchiligi sport maydonchasini xohlaydi.",
 
     explanation:
-      "18/20 qatnashchi ijobiy javob bergan. Ammo atigi 20 kishi qatnashgani sababli natijani barcha 800 o‘quvchiga avtomatik tatbiq etib bo‘lmaydi.",
+      "20 qatnashchidan 18 nafari ijobiy javob bergan. " +
+      "Ammo atigi 20 kishi so'ralgani uchun natijani barcha 800 o'quvchiga avtomatik tatbiq etib bo'lmaydi.",
 
     learningObjective:
-      "Tanlanma hajmi va xulosaning chegarasini tushunish.",
+      "Tanlanma asosida xulosa chiqarish chegaralarini tushunish.",
 
-    skill: "Statistik xulosani ehtiyotkorlik bilan baholash",
+    skill: "Statistik xulosani baholash",
 
     mathematics: {
-      content: "uncertainty-and-data",
-      process: "interpret-evaluate",
+      contentArea: "uncertainty-and-data",
+      process: "evaluate",
     },
 
     estimatedTimeSeconds: 70,
     xp: 10,
-    tags: ["so‘rov", "tanlanma", "ishonchlilik"],
+    tags: [
+      "tanlanma",
+      "so'rov",
+      "statistika",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     24 — SHARTLI TANLOV
+  ======================================================= */
 
   {
     id: "pisa-math-easy-024",
@@ -1147,376 +1709,641 @@ export const PISA_MATH_EASY: PISAQuestion[] = [
 
     stimulus: {
       type: "text",
-      title: "Muzqaymoq tanlovi",
-      content:
-        "Do‘konda 4 xil muzqaymoq bor: vanilli, shokoladli, qulupnayli va limonli. Aziza shokoladli muzqaymoqni yoqtirmaydi.",
+      title: "Muzqaymoq",
+      text:
+        "Do'konda 4 xil muzqaymoq bor: vanilli, shokoladli, " +
+        "qulupnayli va limonli. Aziza shokoladli muzqaymoqni yoqtirmaydi.",
     },
 
     question:
       "Aziza uchun nechta variant qoladi?",
 
     options: [
-      "1 ta",
-      "2 ta",
-      "3 ta",
-      "4 ta",
+      {
+        id: "a",
+        text: "1 ta",
+      },
+      {
+        id: "b",
+        text: "2 ta",
+      },
+      {
+        id: "c",
+        text: "3 ta",
+      },
+      {
+        id: "d",
+        text: "4 ta",
+      },
     ],
 
     correctAnswer: "3 ta",
 
     explanation:
-      "4 ta variantdan shokoladli variant chiqarib tashlansa, 3 ta tanlov qoladi.",
+      "4 ta variantdan shokoladli variant chiqarib tashlansa, 3 ta variant qoladi.",
 
     learningObjective:
-      "Shart asosida variantlar to‘plamini qisqartirish.",
+      "Shart asosida imkoniyatlar sonini aniqlash.",
 
     skill: "Shartli mantiqiy fikrlash",
 
     mathematics: {
-      content: "uncertainty-and-data",
-      process: "reasoning",
+      contentArea: "uncertainty-and-data",
+      process: "reason",
     },
 
     estimatedTimeSeconds: 40,
     xp: 10,
-    tags: ["tanlov", "shart", "mantiq"],
+    tags: [
+      "tanlov",
+      "shart",
+      "mantiq",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     25 — O'SISH
+  ======================================================= */
 
   {
     id: "pisa-math-easy-025",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "O‘sish",
+    topic: "O'sish qonuniyati",
     context: "scientific",
     type: "single-choice",
 
     stimulus: {
       type: "text",
-      title: "O‘simlikning bo‘yi",
-      content:
-        "O‘simlik birinchi haftada 8 sm, ikkinchi haftada 11 sm, uchinchi haftada 14 sm bo‘ldi.",
+      title: "O'simlik",
+      text:
+        "O'simlik birinchi haftada 8 sm, ikkinchi haftada 11 sm, " +
+        "uchinchi haftada 14 sm bo'ldi.",
     },
 
     question:
-      "Agar shu o‘sish tartibi davom etsa, to‘rtinchi haftada uning bo‘yi qancha bo‘lishi kutiladi?",
+      "Agar shu o'sish tartibi davom etsa, to'rtinchi haftada uning bo'yi qancha bo'lishi kutiladi?",
 
     options: [
-      "15 sm",
-      "16 sm",
-      "17 sm",
-      "18 sm",
+      {
+        id: "a",
+        text: "15 sm",
+      },
+      {
+        id: "b",
+        text: "16 sm",
+      },
+      {
+        id: "c",
+        text: "17 sm",
+      },
+      {
+        id: "d",
+        text: "18 sm",
+      },
     ],
 
     correctAnswer: "17 sm",
 
     explanation:
-      "Har hafta bo‘y 3 sm ga oshmoqda: 8 → 11 → 14. Demak, 14 + 3 = 17 sm.",
+      "Bo'y har hafta 3 sm ga oshmoqda: 8 → 11 → 14. " +
+      "Demak, keyingi qiymat 14 + 3 = 17 sm.",
 
     learningObjective:
-      "O‘sish qonuniyatini aniqlash va davom ettirish.",
+      "O'sish qonuniyatini aniqlash.",
 
-    skill: "O‘sish modelini aniqlash",
+    skill: "Qonuniyat va model",
 
     mathematics: {
-      content: "change-and-relationships",
-      process: "reasoning",
+      contentArea: "change-and-relationships",
+      process: "reason",
     },
 
     estimatedTimeSeconds: 55,
     xp: 10,
-    tags: ["o‘sish", "qonuniyat", "model"],
+    tags: [
+      "o'sish",
+      "qonuniyat",
+      "model",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     26 — BIRLIKLAR
+  ======================================================= */
 
   {
     id: "pisa-math-easy-026",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Birliklarni almashtirish",
+    topic: "O'lchov birliklari",
     context: "scientific",
     type: "single-choice",
 
     stimulus: {
       type: "text",
-      title: "Masofa o‘lchovi",
-      content:
-        "Bir tadqiqotchi 2,5 kilometr masofani o‘lchadi.",
+      title: "Masofa",
+      text:
+        "Tadqiqotchi 2,5 kilometr masofani o'lchadi.",
     },
 
     question:
       "Bu masofa necha metrga teng?",
 
     options: [
-      "25 metr",
-      "250 metr",
-      "2 500 metr",
-      "25 000 metr",
+      {
+        id: "a",
+        text: "25 metr",
+      },
+      {
+        id: "b",
+        text: "250 metr",
+      },
+      {
+        id: "c",
+        text: "2 500 metr",
+      },
+      {
+        id: "d",
+        text: "25 000 metr",
+      },
     ],
 
     correctAnswer: "2 500 metr",
 
     explanation:
-      "1 kilometr = 1 000 metr. Shuning uchun 2,5 × 1 000 = 2 500 metr.",
+      "1 kilometr = 1 000 metr. 2,5 × 1 000 = 2 500 metr.",
 
     learningObjective:
-      "O‘lchov birliklari orasidagi bog‘lanishni qo‘llash.",
+      "O'lchov birliklarini almashtirish.",
 
-    skill: "Birliklarni almashtirish",
+    skill: "Birliklar bilan ishlash",
 
     mathematics: {
-      content: "quantity",
+      contentArea: "quantity",
       process: "employ",
     },
 
     estimatedTimeSeconds: 40,
     xp: 10,
-    tags: ["metr", "kilometr", "birlik"],
+    tags: [
+      "metr",
+      "kilometr",
+      "o'lchov",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     27 — SAVDO MA'LUMOTLARI
+  ======================================================= */
 
   {
     id: "pisa-math-easy-027",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Grafikdan qaror chiqarish",
-    context: "occupational",
+    topic: "Savdo ma'lumotlari",
+    context: "work",
     type: "single-choice",
 
     stimulus: {
-      type: "text",
+      type: "table",
       title: "Kichik kafe savdosi",
-      content:
-        "Kafeda uch kun davomida sotilgan ichimliklar soni: Dushanba — 40 ta, Seshanba — 55 ta, Chorshanba — 50 ta.",
+      text:
+        "Kafeda uch kun davomida sotilgan ichimliklar soni.",
+      data: {
+        columns: [
+          {
+            id: "day",
+            label: "Kun",
+          },
+          {
+            id: "sales",
+            label: "Sotilgan ichimliklar",
+          },
+        ],
+        rows: [
+          {
+            id: "mon",
+            values: ["Dushanba", 40],
+          },
+          {
+            id: "tue",
+            values: ["Seshanba", 55],
+          },
+          {
+            id: "wed",
+            values: ["Chorshanba", 50],
+          },
+        ],
+      },
     },
 
     question:
-      "Qaysi kuni sotuv Dushanbaga nisbatan eng ko‘p oshgan?",
+      "Qaysi kuni sotuv Dushanbaga nisbatan eng ko'p oshgan?",
 
     options: [
-      "Dushanba",
-      "Seshanba",
-      "Chorshanba",
-      "Ikki kun ham bir xil",
+      {
+        id: "a",
+        text: "Dushanba",
+      },
+      {
+        id: "b",
+        text: "Seshanba",
+      },
+      {
+        id: "c",
+        text: "Chorshanba",
+      },
+      {
+        id: "d",
+        text: "Ikki kun ham bir xil",
+      },
     ],
 
     correctAnswer: "Seshanba",
 
     explanation:
-      "Seshanba kuni o‘sish 55 − 40 = 15 ta. Chorshanba kuni esa 50 − 40 = 10 ta. Demak, eng katta o‘sish Seshanbada.",
+      "Seshanba kuni o'sish 55 − 40 = 15 ta. " +
+      "Chorshanba kuni o'sish 50 − 40 = 10 ta. Demak, eng katta o'sish Seshanbada.",
 
     learningObjective:
-      "Vaqt bo‘yicha ma’lumotlar o‘zgarishini taqqoslash.",
+      "Vaqt bo'yicha ma'lumotlar o'zgarishini taqqoslash.",
 
-    skill: "Ma’lumot asosida biznes qarori qilish",
+    skill: "Ma'lumot asosida qaror qilish",
 
     mathematics: {
-      content: "change-and-relationships",
-      process: "interpret-evaluate",
+      contentArea: "change-and-relationships",
+      process: "evaluate",
     },
 
     estimatedTimeSeconds: 55,
     xp: 10,
-    tags: ["savdo", "grafik", "qaror"],
+    tags: [
+      "savdo",
+      "ma'lumot",
+      "qaror",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     28 — TAXMIN
+  ======================================================= */
 
   {
     id: "pisa-math-easy-028",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Taxminiy natijani baholash",
+    topic: "Taxminiy hisob",
     context: "personal",
     type: "single-choice",
 
     stimulus: {
       type: "text",
       title: "Savatdagi mahsulotlar",
-      content:
-        "Do‘konda uchta mahsulot narxi 19 800 so‘m, 29 700 so‘m va 49 900 so‘m.",
+      text:
+        "Do'konda uchta mahsulot narxi 19 800 so'm, " +
+        "29 700 so'm va 49 900 so'm.",
     },
 
     question:
-      "Xaridor hisob-kitobni tez baholash uchun narxlarni eng yaqin ming so‘mgacha yaxlitlasa, jami taxminan qancha chiqadi?",
+      "Narxlarni eng yaqin ming so'mgacha yaxlitlasak, jami taxminan qancha bo'ladi?",
 
     options: [
-      "90 000 so‘m",
-      "98 000 so‘m",
-      "100 000 so‘m",
-      "110 000 so‘m",
+      {
+        id: "a",
+        text: "90 000 so'm",
+      },
+      {
+        id: "b",
+        text: "98 000 so'm",
+      },
+      {
+        id: "c",
+        text: "100 000 so'm",
+      },
+      {
+        id: "d",
+        text: "110 000 so'm",
+      },
     ],
 
-    correctAnswer: "100 000 so‘m",
+    correctAnswer: "100 000 so'm",
 
     explanation:
-      "19 800 ≈ 20 000, 29 700 ≈ 30 000, 49 900 ≈ 50 000. Jami taxminan 100 000 so‘m.",
+      "19 800 ≈ 20 000, 29 700 ≈ 30 000, 49 900 ≈ 50 000. " +
+      "20 000 + 30 000 + 50 000 = 100 000 so'm.",
 
     learningObjective:
-      "Taxminiy hisob yordamida natijaning mantiqiyligini tekshirish.",
+      "Yaxlitlash orqali taxminiy natijani aniqlash.",
 
-    skill: "Baholash va yaxlitlash",
+    skill: "Taxminiy hisoblash",
 
     mathematics: {
-      content: "quantity",
-      process: "interpret-evaluate",
+      contentArea: "quantity",
+      process: "evaluate",
     },
 
     estimatedTimeSeconds: 60,
     xp: 10,
-    tags: ["taxmin", "yaxlitlash", "tekshirish"],
+    tags: [
+      "taxmin",
+      "yaxlitlash",
+      "hisoblash",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     29 — O'RTACHA VA DALIL
+  ======================================================= */
 
   {
     id: "pisa-math-easy-029",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Ma’lumot va dalil",
+    topic: "O'rtacha va statistik xulosa",
     context: "scientific",
     type: "single-choice",
 
     stimulus: {
       type: "text",
-      title: "Suv ichish bo‘yicha kuzatuv",
-      content:
-        "Bir guruh o‘quvchining suv ichishi kuzatildi. Birinchi guruh kuniga o‘rtacha 5 stakan, ikkinchi guruh 7 stakan suv ichgan.",
+      title: "Suv ichish bo'yicha kuzatuv",
+      text:
+        "Bir guruh o'quvchining suv ichishi kuzatildi. " +
+        "Birinchi guruh kuniga o'rtacha 5 stakan, " +
+        "ikkinchi guruh esa o'rtacha 7 stakan suv ichgan.",
     },
 
     question:
-      "Qaysi xulosa berilgan ma’lumotga eng bevosita mos?",
+      "Qaysi xulosa berilgan ma'lumotga eng bevosita mos?",
 
     options: [
-      "Ikkinchi guruhning o‘rtacha ko‘rsatkichi birinchi guruhnikidan yuqori.",
-      "Ikkinchi guruhdagi har bir o‘quvchi birinchi guruhdagi har bir o‘quvchidan ko‘proq suv ichgan.",
-      "Birinchi guruhdagi hech kim 7 stakan suv ichmagan.",
-      "Ikki guruhdagi barcha o‘quvchilar aynan bir xil miqdorda suv ichgan.",
+      {
+        id: "a",
+        text: "Ikkinchi guruhning o'rtacha ko'rsatkichi yuqori.",
+      },
+      {
+        id: "b",
+        text: "Ikkinchi guruhdagi har bir o'quvchi ko'proq suv ichgan.",
+      },
+      {
+        id: "c",
+        text: "Birinchi guruhdagi hech kim 7 stakan suv ichmagan.",
+      },
+      {
+        id: "d",
+        text: "Ikki guruhdagi barcha o'quvchilar bir xil miqdorda suv ichgan.",
+      },
     ],
 
     correctAnswer:
-      "Ikkinchi guruhning o‘rtacha ko‘rsatkichi birinchi guruhnikidan yuqori.",
+      "Ikkinchi guruhning o'rtacha ko'rsatkichi yuqori.",
 
     explanation:
-      "5 va 7 stakan guruhlarning o‘rtacha qiymatlari. Bu ma’lumotlar faqat o‘rtacha ko‘rsatkichni taqqoslashga imkon beradi; har bir o‘quvchi haqida alohida xulosa chiqarib bo‘lmaydi.",
+      "Berilgan ma'lumot faqat guruhlarning o'rtacha qiymatlarini taqqoslashga imkon beradi. " +
+      "Har bir o'quvchi haqida alohida xulosa chiqarish mumkin emas.",
 
     learningObjective:
-      "O‘rtacha qiymat nimani anglatishini to‘g‘ri talqin qilish.",
+      "O'rtacha qiymat asosida ehtiyotkor xulosa chiqarish.",
 
-    skill: "Statistik xulosani chegaralash",
+    skill: "Statistik xulosani talqin qilish",
 
     mathematics: {
-      content: "uncertainty-and-data",
-      process: "interpret-evaluate",
+      contentArea: "uncertainty-and-data",
+      process: "evaluate",
     },
 
     estimatedTimeSeconds: 70,
     xp: 10,
-    tags: ["o‘rtacha", "statistika", "dalil"],
+    tags: [
+      "o'rtacha",
+      "statistika",
+      "dalil",
+    ],
     adaptiveEligible: true,
   },
+
+  /* =======================================================
+     30 — KOMPLEKS QAROR
+  ======================================================= */
 
   {
     id: "pisa-math-easy-030",
     version: 1,
     domain: "mathematics",
     difficulty: 1,
-    topic: "Kompleks kundalik qaror",
+    topic: "Moliyaviy qaror",
     context: "personal",
     type: "single-choice",
 
     stimulus: {
       type: "text",
       title: "Bir kunlik reja",
-      content:
-        "Sardorning 50 000 so‘mi bor. U tushlikka 18 000 so‘m, transportga 12 000 so‘m sarflaydi. U qolgan pulining kamida 15 000 so‘mini jamg‘armoqchi.",
+      text:
+        "Sardorning 50 000 so'mi bor. U tushlikka 18 000 so'm, " +
+        "transportga 12 000 so'm sarflaydi. " +
+        "U qolgan pulining kamida 15 000 so'mini jamg'armoqchi.",
     },
 
     question:
-      "Sardor qolgan pulidan 15 000 so‘mni jamg‘arib, yana qancha pulni erkin ishlatishi mumkin?",
+      "Sardor 15 000 so'mni jamg'argandan keyin yana qancha pulni erkin ishlatishi mumkin?",
 
     options: [
-      "3 000 so‘m",
-      "5 000 so‘m",
-      "7 000 so‘m",
-      "10 000 so‘m",
+      {
+        id: "a",
+        text: "3 000 so'm",
+      },
+      {
+        id: "b",
+        text: "5 000 so'm",
+      },
+      {
+        id: "c",
+        text: "7 000 so'm",
+      },
+      {
+        id: "d",
+        text: "10 000 so'm",
+      },
     ],
 
-    correctAnswer: "5 000 so‘m",
+    correctAnswer: "5 000 so'm",
 
     explanation:
-      "50 000 − 18 000 − 12 000 = 20 000 so‘m qoladi. 15 000 so‘m jamg‘arilsa, 20 000 − 15 000 = 5 000 so‘m erkin qoladi.",
+      "Avval 50 000 − 18 000 − 12 000 = 20 000 so'm qoladi. " +
+      "20 000 − 15 000 = 5 000 so'm.",
 
     learningObjective:
-      "Bir nechta shartni hisobga olib moliyaviy qaror qabul qilish.",
+      "Bir nechta shartni hisobga olib matematik qaror qabul qilish.",
 
     skill: "Bosqichma-bosqich matematik fikrlash",
 
+    secondarySkills: [
+      "Moliyaviy savodxonlik",
+      "Shartlarni tekshirish",
+      "Qaror qabul qilish",
+    ],
+
     mathematics: {
-      content: "quantity",
-      process: "reasoning",
+      contentArea: "quantity",
+      process: "reason",
     },
 
     estimatedTimeSeconds: 75,
     xp: 10,
-    tags: ["moliyaviy savodxonlik", "qaror", "mantiq"],
+    tags: [
+      "moliyaviy-savodxonlik",
+      "qaror",
+      "mantiq",
+      "hisoblash",
+    ],
     adaptiveEligible: true,
   },
-];
+]
 
-/**
- * ============================================================
- * BANK VALIDATSIYASI
- * ============================================================
- */
+/* =========================================================
+   VALIDATSIYA
+========================================================= */
 
 export function validatePISAMathEasyBank(): boolean {
   if (PISA_MATH_EASY.length !== 30) {
-    return false;
+    return false
   }
 
-  const ids = new Set<string>();
+  const ids = new Set<string>()
 
   for (const question of PISA_MATH_EASY) {
-    if (!question.id) return false;
-
-    if (ids.has(question.id)) {
-      return false;
+    /* ID takrorlanmasligi kerak */
+    if (!question.id || ids.has(question.id)) {
+      return false
     }
 
-    ids.add(question.id);
+    ids.add(question.id)
 
-    if (!question.question) return false;
-
-    if (!question.options || question.options.length !== 4) {
-      return false;
-    }
-
-    if (!question.correctAnswer) {
-      return false;
-    }
-
-    if (!question.options.includes(question.correctAnswer)) {
-      return false;
+    /* Asosiy maydonlar */
+    if (!question.question) {
+      return false
     }
 
     if (!question.explanation) {
-      return false;
+      return false
     }
 
     if (!question.learningObjective) {
-      return false;
+      return false
     }
 
     if (!question.skill) {
-      return false;
+      return false
+    }
+
+    if (!question.tags?.length) {
+      return false
+    }
+
+    /* Variantlar */
+    if (
+      question.type === "single-choice" &&
+      (!question.options ||
+        question.options.length !== 4)
+    ) {
+      return false
+    }
+
+    /* To'g'ri javob variantlarda mavjudligini tekshirish */
+    if (
+      question.type === "single-choice" &&
+      question.options
+    ) {
+      const correctAnswer =
+        String(question.correctAnswer)
+
+      const exists = question.options.some(
+        (option) =>
+          option.text === correctAnswer
+      )
+
+      if (!exists) {
+        return false
+      }
+    }
+
+    /* Matematika metama'lumotlari */
+    if (
+      question.domain === "mathematics" &&
+      !question.mathematics
+    ) {
+      return false
+    }
+
+    /* Vaqt */
+    if (
+      question.estimatedTimeSeconds <= 0
+    ) {
+      return false
+    }
+
+    /* XP */
+    if (question.xp <= 0) {
+      return false
     }
   }
 
-  return true;
+  return true
 }
 
-export default PISA_MATH_EASY;
+/* =========================================================
+   STATISTIKA
+========================================================= */
+
+export const PISA_MATH_EASY_STATS = {
+  total: PISA_MATH_EASY.length,
+
+  quantity:
+    PISA_MATH_EASY.filter(
+      (q) =>
+        q.mathematics?.contentArea ===
+        "quantity"
+    ).length,
+
+  changeAndRelationships:
+    PISA_MATH_EASY.filter(
+      (q) =>
+        q.mathematics?.contentArea ===
+        "change-and-relationships"
+    ).length,
+
+  spaceAndShape:
+    PISA_MATH_EASY.filter(
+      (q) =>
+        q.mathematics?.contentArea ===
+        "space-and-shape"
+    ).length,
+
+  uncertaintyAndData:
+    PISA_MATH_EASY.filter(
+      (q) =>
+        q.mathematics?.contentArea ===
+        "uncertainty-and-data"
+    ).length,
+
+  adaptive:
+    PISA_MATH_EASY.filter(
+      (q) => q.adaptiveEligible
+    ).length,
+}
+
+/* =========================================================
+   DEFAULT EXPORT
+========================================================= */
+
+export default PISA_MATH_EASY
