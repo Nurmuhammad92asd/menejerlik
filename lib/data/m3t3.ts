@@ -1624,7 +1624,7 @@ text: `Quyidagi bayonotlardan qaysilari samarali delegatsiya mantiqiga mos?
     moduleId: MODULE_ID,
     topicId: TOPIC_ID,
     difficulty: "hard",
-    text: `Quyidagi bayonotlarni baholang.
+text: `Quyidagi bayonotlarni baholang.
 
 1. Muhim, lekin shoshilinch bo‘lmagan ishlar oldindan rejalashtirilishi kerak.
 2. III kvadrant ishlarini imkon qadar delegatsiya qilish mumkin.
