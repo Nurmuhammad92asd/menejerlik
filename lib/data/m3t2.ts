@@ -1366,13 +1366,13 @@ export const M3T2_HARD_QUESTIONS: Question[] = [
     moduleId: MODULE_3_ID,
     topicId: TOPIC_3_2_ID,
     difficulty: "hard",
-    text: "Quyidagi fikrlardan qaysilari ma’naviy algoritmning tarkibiy qismlariga kiradi?
+   text: `Quyidagi fikrlardan qaysilari ma’naviy algoritmning tarkibiy qismlariga kiradi?
 
 1. Axloqiy diagnostika
 2. Manfaatlar xaritasi
 3. Variantlar generatsiyasi
 4. Oqibatlarni bashorat qilish
-5. Qarorni asoslash",
+5. Qarorni asoslash"`,
     options: [
       "1, 2, 3",
       "1, 3, 4",
