@@ -1376,7 +1376,7 @@ Ushbu boshqaruv jarayonining asosiy kuchli tomoni nimada?`,
    EXPORT
 ========================================================= */
 
-export const M2T1_LEVELS: LevelSet = {
+export const M2T2_LEVELS: LevelSet = {
   easy,
   medium,
   hard,
