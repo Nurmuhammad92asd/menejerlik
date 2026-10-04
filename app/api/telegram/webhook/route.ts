@@ -37,6 +37,7 @@ import {
  */
 
 export const maxDuration = 60
+const WEBHOOK_VERSION = '2026-10-04-TEST-01'
 
 /*
  * =========================================================
@@ -1262,30 +1263,22 @@ Iltimos, birozdan keyin qayta urinib ko‘ring.`,
 export async function GET() {
   return NextResponse.json({
     ok: true,
+    version: WEBHOOK_VERSION,
 
-    service:
-      'Menejerlik Telegram Webhook',
+    service: 'Menejerlik Telegram Webhook',
 
-    status:
-      'working',
+    status: 'working',
 
-    bot:
-      '@topmenejerbot',
+    bot: '@topmenejerbot',
 
-    botId:
-      8747655999,
+    botId: 8747655999,
 
-    group:
-      '@talim_ilmfan',
+    group: '@talim_ilmfan',
 
-    groupChatId:
-      GROUP_CHAT_ID,
+    groupChatId: GROUP_CHAT_ID,
 
-    requiredReferrals:
-      REQUIRED_REFERRALS,
+    requiredReferrals: REQUIRED_REFERRALS,
 
-    miniApp:
-      MINI_APP_URL,
+    miniApp: MINI_APP_URL,
   })
 }
- 
