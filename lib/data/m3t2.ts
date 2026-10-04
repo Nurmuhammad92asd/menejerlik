@@ -2010,4 +2010,205 @@ export const M3T2_CASE_COUNT = M3T2_CASE_QUESTIONS.length;
 
 export const M3T2_QUESTION_COUNT = M3T2_QUESTIONS.length;
 
+/* =========================================================
+ * VALIDATION
+ * ========================================================= */
+
+if (M3T2_EASY_COUNT !== 30) {
+  console.warn(
+    `[M3T2] Easy savollar soni 30 emas: ${M3T2_EASY_COUNT}`
+  );
+}
+
+if (M3T2_MEDIUM_COUNT !== 30) {
+  console.warn(
+    `[M3T2] Medium savollar soni 30 emas: ${M3T2_MEDIUM_COUNT}`
+  );
+}
+
+if (M3T2_HARD_COUNT !== 30) {
+  console.warn(
+    `[M3T2] Hard savollar soni 30 emas: ${M3T2_HARD_COUNT}`
+  );
+}
+
+if (M3T2_CASE_COUNT !== 10) {
+  console.warn(
+    `[M3T2] Case savollar soni 10 emas: ${M3T2_CASE_COUNT}`
+  );
+}
+
+if (M3T2_QUESTION_COUNT !== 100) {
+  console.warn(
+    `[M3T2] Jami savollar soni 100 emas: ${M3T2_QUESTION_COUNT}`
+  );
+}
+
+/* =========================================================
+ * DUPLICATE ID CHECK
+ * ========================================================= */
+
+const M3T2_ID_SET = new Set<string>();
+
+for (const question of M3T2_QUESTIONS) {
+  if (M3T2_ID_SET.has(question.id)) {
+    console.warn(
+      `[M3T2] Duplicate question ID topildi: ${question.id}`
+    );
+  }
+
+  M3T2_ID_SET.add(question.id);
+}
+
+/* =========================================================
+ * LEVEL REGISTRY
+ *
+ * quiz-data.ts aynan shu obyektni import qiladi:
+ *
+ * import { M3T2_LEVELS } from "./data/m3t2";
+ * ========================================================= */
+
+export const M3T2_LEVELS = {
+  easy: M3T2_EASY_QUESTIONS,
+  medium: M3T2_MEDIUM_QUESTIONS,
+  hard: M3T2_HARD_QUESTIONS,
+  case: M3T2_CASE_QUESTIONS,
+};
+
+/* =========================================================
+ * ANSWER SHUFFLING
+ *
+ * Maqsad:
+ * - to‘g‘ri javob doim bir xil pozitsiyada turmasin;
+ * - A/B/C/D avtomatik aralashsin;
+ * - correctAnswer yangi joyga avtomatik ko‘chsin;
+ * - bir xil savolda variantlar har safar bir xil tartibda
+ *   chiqishi uchun question.id asosida deterministic ishlasin.
+ * ========================================================= */
+
+function seededRandom(seed: string): () => number {
+  let hash = 2166136261;
+
+  for (let i = 0; i < seed.length; i++) {
+    hash ^= seed.charCodeAt(i);
+    hash +=
+      (hash << 1) +
+      (hash << 4) +
+      (hash << 7) +
+      (hash << 8) +
+      (hash << 24);
+  }
+
+  return () => {
+    hash += 0x6d2b79f5;
+
+    let t = hash;
+
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* =========================================================
+ * MIX SINGLE QUESTION
+ * ========================================================= */
+
+export function shuffleM3T2Question(
+  question: Question
+): Question {
+  const random = seededRandom(question.id);
+
+  const originalCorrectAnswer = question.correctAnswer;
+
+  const indexedOptions = question.options.map(
+    (option, index) => ({
+      option,
+      originalIndex: index,
+    })
+  );
+
+  for (
+    let i = indexedOptions.length - 1;
+    i > 0;
+    i--
+  ) {
+    const j = Math.floor(random() * (i + 1));
+
+    [
+      indexedOptions[i],
+      indexedOptions[j],
+    ] = [
+      indexedOptions[j],
+      indexedOptions[i],
+    ];
+  }
+
+  const newCorrectAnswer =
+    indexedOptions.findIndex(
+      (item) =>
+        item.originalIndex === originalCorrectAnswer
+    );
+
+  return {
+    ...question,
+    options: indexedOptions.map(
+      (item) => item.option
+    ),
+    correctAnswer: newCorrectAnswer,
+  };
+}
+
+/* =========================================================
+ * SHUFFLE QUESTION COLLECTION
+ * ========================================================= */
+
+export function shuffleM3T2Questions(
+  questions: Question[]
+): Question[] {
+  return questions.map(
+    shuffleM3T2Question
+  );
+}
+
+/* =========================================================
+ * READY-TO-USE LEVELS
+ *
+ * UI/test tizimiga shu variantni berish mumkin.
+ * ========================================================= */
+
+export const M3T2_SHUFFLED_LEVELS = {
+  easy: shuffleM3T2Questions(
+    M3T2_EASY_QUESTIONS
+  ),
+
+  medium: shuffleM3T2Questions(
+    M3T2_MEDIUM_QUESTIONS
+  ),
+
+  hard: shuffleM3T2Questions(
+    M3T2_HARD_QUESTIONS
+  ),
+
+  case: shuffleM3T2Questions(
+    M3T2_CASE_QUESTIONS
+  ),
+};
+
+/* =========================================================
+ * READY-TO-USE ALL QUESTIONS
+ * ========================================================= */
+
+export const M3T2_SHUFFLED_QUESTIONS: Question[] = [
+  ...M3T2_SHUFFLED_LEVELS.easy,
+  ...M3T2_SHUFFLED_LEVELS.medium,
+  ...M3T2_SHUFFLED_LEVELS.hard,
+  ...M3T2_SHUFFLED_LEVELS.case,
+];
+
+/* =========================================================
+ * DEFAULT EXPORT
+ * ========================================================= */
+
 export default M3T2_QUESTIONS;
