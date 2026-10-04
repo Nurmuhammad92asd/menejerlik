@@ -13,7 +13,8 @@ import {
 
 /*
  * =========================================================
- * MENEJERLIK TELEGRAM WEBHOOK
+ * MENEJERLIK BY NURMUHAMMAD
+ * TELEGRAM WEBHOOK
  * =========================================================
  *
  * BOT:
@@ -22,34 +23,15 @@ import {
  * BOT ID:
  *   8747655999
  *
- * GURUH:
- *   Menejerlar super 30 jamoasi
- *
- * GROUP CHAT ID:
- *   -1003642158156
+ * MAJBURIY GURUH:
+ *   @talim_ilmfan
  *
  * ASOSIY TALABLAR:
  *
- * 1. Telefon orqali ro'yxatdan o'tish
- * 2. Guruhga majburiy a'zolik
+ * 1. Telefon raqamni tasdiqlash
+ * 2. talim_ilmfan guruhiga a'zo bo'lish
  * 3. 5 ta yangi foydalanuvchini taklif qilish
- * 4. 5/5 + guruh a'zoligi bajarilgandan keyin testga kirish
- * 5. Referral faqat yangi ro'yxatdan o'tgan foydalanuvchi
- *    bo'lgandan keyin hisoblanadi
- * 6. Bir foydalanuvchi ikki marta referral hisoblanmaydi
- *
- * ENV:
- *
- * TELEGRAM_BOT_TOKEN
- * TELEGRAM_WEBHOOK_SECRET
- *
- * TELEGRAM_GROUP_URL
- *
- * Masalan:
- * https://t.me/menejerlar_super_30
- *
- * Agar guruh private bo'lsa:
- * https://t.me/+xxxxxxxxxxxx
+ * 4. Shundan keyingina testga kirish
  *
  * =========================================================
  */
@@ -58,20 +40,27 @@ export const maxDuration = 60
 
 /*
  * =========================================================
- * ASOSIY SOZLAMALAR
+ * SOZLAMALAR
  * =========================================================
  */
 
 const BOT_USERNAME = 'topmenejerbot'
 
-const GROUP_CHAT_ID = '-1003642158156'
+/*
+ * Public Telegram guruh username.
+ *
+ * Agar sizda aniq numeric Chat ID bo'lsa,
+ * keyinchalik shu qiymatni almashtirish mumkin.
+ */
+const GROUP_CHAT_ID = '@talim_ilmfan'
+
+const GROUP_URL =
+  process.env.TELEGRAM_GROUP_URL ??
+  'https://t.me/talim_ilmfan'
 
 const MINI_APP_URL =
   process.env.MINI_APP_URL ??
   'https://menejerlik.vercel.app'
-
-const GROUP_URL =
-  process.env.TELEGRAM_GROUP_URL ?? ''
 
 const REQUIRED_REFERRALS = 5
 
@@ -90,6 +79,7 @@ type TelegramChat = {
 
 type TelegramUser = {
   id: number
+  is_bot?: boolean
   first_name?: string
   last_name?: string
   username?: string
@@ -98,6 +88,7 @@ type TelegramUser = {
 type TelegramContact = {
   phone_number: string
   first_name?: string
+  last_name?: string
   user_id?: number
 }
 
@@ -118,9 +109,7 @@ type TelegramCallbackQuery = {
 
 type TelegramUpdate = {
   update_id?: number
-
   message?: TelegramMessage
-
   callback_query?: TelegramCallbackQuery
 }
 
@@ -134,29 +123,42 @@ const REGISTER_PROMPT = `🎓 MENEJERLIK BY NURMUHAMMAD
 
 Assalomu alaykum! 👋
 
-Platformadan foydalanish uchun avval telefon raqamingizni tasdiqlang.
+Platformadan foydalanish uchun avval telefon raqamingizni tasdiqlashingiz kerak.
 
-📱 Raqamingiz natijalarni saqlash va foydalanuvchini aniqlash uchun kerak.
+📱 Telefon raqamingiz:
+• foydalanuvchini aniqlash
+• natijalarni saqlash
+• referral tizimini ishlatish
 
-Quyidagi tugmani bosing 👇`
+uchun kerak.
 
-const HELP = `📚 MENEJERLIK BOT — YORDAM
+👇 Pastdagi tugmani bosing:`
 
-Botdan foydalanish uchun:
+const PHONE_SUCCESS = `✅ TELEFON RAQAMI TASDIQLANDI!
 
-1️⃣ Guruhga a'zo bo'ling
-2️⃣ 5 ta yangi foydalanuvchini taklif qiling
-3️⃣ "🔄 TEKSHIRISH" tugmasini bosing
-4️⃣ Shartlar bajarilgach testlarga kiring.
+🎉 Ro'yxatdan o'tish muvaffaqiyatli yakunlandi.
 
-Savollaringizni oddiy qilib yozishingiz mumkin.
+Endi platformaga kirish uchun quyidagi 2 ta shartni bajaring:
 
-Masalan:
+1️⃣ @talim_ilmfan guruhiga a'zo bo'ling.
+2️⃣ 5 ta yangi foydalanuvchini taklif qiling.
 
-• Ta'lim muassasasini strategik boshqarish nima?
-• Rahbarning asosiy kompetensiyalari qaysilar?
-• Korrupsiyaviy xavflarni qanday kamaytirish mumkin?
-• Ta'lim sifatini qanday boshqarish kerak?`
+Shundan keyin testlar ochiladi.`
+
+const HELP = `📚 MENEJERLIK BY NURMUHAMMAD
+
+Platformadan foydalanish tartibi:
+
+1️⃣ Telefon raqamingizni tasdiqlang
+2️⃣ @talim_ilmfan guruhiga a'zo bo'ling
+3️⃣ 5 ta yangi foydalanuvchini taklif qiling
+4️⃣ "🔄 TEKSHIRISH" tugmasini bosing
+5️⃣ Barcha shartlar bajarilgach testlarni boshlang.
+
+Bot buyruqlari:
+
+/start — boshlash
+/help — yordam`
 
 /*
  * =========================================================
@@ -173,40 +175,59 @@ async function telegram(
 
   if (!token) {
     console.error(
-      'TELEGRAM_BOT_TOKEN kiritilmagan',
+      '❌ TELEGRAM_BOT_TOKEN mavjud emas',
     )
 
     return null
   }
 
-  const response = await fetch(
-    `https://api.telegram.org/bot${token}/${method}`,
-    {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    },
-  )
-
-  let data: any = null
-
   try {
-    data = await response.json()
-  } catch {
-    data = null
-  }
-
-  if (!response.ok) {
-    console.error(
-      'Telegram API HTTP ERROR:',
-      response.status,
-      data,
+    const response = await fetch(
+      `https://api.telegram.org/bot${token}/${method}`,
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      },
     )
-  }
 
-  return data
+    let data: any = null
+
+    try {
+      data = await response.json()
+    } catch {
+      data = null
+    }
+
+    if (!response.ok) {
+      console.error(
+        'Telegram HTTP ERROR:',
+        response.status,
+        data,
+      )
+    }
+
+    if (
+      data &&
+      data.ok === false
+    ) {
+      console.error(
+        `Telegram ${method} ERROR:`,
+        data,
+      )
+    }
+
+    return data
+  } catch (error) {
+    console.error(
+      `Telegram ${method} FETCH ERROR:`,
+      error,
+    )
+
+    return null
+  }
 }
 
 /*
@@ -232,30 +253,7 @@ async function sendMessage(
 
 /*
  * =========================================================
- * EDIT MESSAGE
- * =========================================================
- */
-
-async function editMessage(
-  chatId: number,
-  messageId: number,
-  text: string,
-  extra: Record<string, unknown> = {},
-) {
-  return telegram(
-    'editMessageText',
-    {
-      chat_id: chatId,
-      message_id: messageId,
-      text: text.slice(0, 4000),
-      ...extra,
-    },
-  )
-}
-
-/*
- * =========================================================
- * CALLBACK JAVOBI
+ * CALLBACK
  * =========================================================
  */
 
@@ -277,6 +275,9 @@ async function answerCallback(
  * =========================================================
  * TELEFON KLAVIATURASI
  * =========================================================
+ *
+ * request_contact faqat private chatda ishlaydi.
+ * =========================================================
  */
 
 const CONTACT_KEYBOARD = {
@@ -284,17 +285,22 @@ const CONTACT_KEYBOARD = {
     keyboard: [
       [
         {
-          text: '📱 Telefon raqamni yuborish',
+          text: '📱 TELEFON RAQAMIMNI TASDIQLASH',
           request_contact: true,
         },
       ],
     ],
-
     resize_keyboard: true,
-
     one_time_keyboard: true,
+    is_persistent: true,
   },
 }
+
+/*
+ * =========================================================
+ * KEYBOARDNI OLIB TASHLASH
+ * =========================================================
+ */
 
 const REMOVE_KEYBOARD = {
   reply_markup: {
@@ -304,7 +310,7 @@ const REMOVE_KEYBOARD = {
 
 /*
  * =========================================================
- * ASOSIY INLINE KLAVIATURA
+ * ACCESS KEYBOARD
  * =========================================================
  */
 
@@ -314,52 +320,35 @@ function buildAccessKeyboard(
   const referralLink =
     `https://t.me/${BOT_USERNAME}?start=ref_${userId}`
 
-  const keyboard: any[][] = []
-
-  /*
-   * Guruhga kirish tugmasi.
-   *
-   * TELEGRAM_GROUP_URL env mavjud bo'lsa ko'rsatiladi.
-   */
-  if (GROUP_URL) {
-    keyboard.push([
-      {
-        text: '👥 GURUHGA A’ZO BO‘LISH',
-        url: GROUP_URL,
-      },
-    ])
-  }
-
-  /*
-   * Referral tugmasi.
-   */
-  keyboard.push([
-    {
-      text: '👥 5 TA DO‘STNI TAKLIF QILISH',
-      url: referralLink,
-    },
-  ])
-
-  /*
-   * Tekshirish.
-   */
-  keyboard.push([
-    {
-      text: '🔄 TEKSHIRISH',
-      callback_data: 'check_access',
-    },
-  ])
-
   return {
     reply_markup: {
-      inline_keyboard: keyboard,
+      inline_keyboard: [
+        [
+          {
+            text: '👥 GURUHGA A’ZO BO‘LISH',
+            url: GROUP_URL,
+          },
+        ],
+        [
+          {
+            text: '👥 5 TA DO‘STNI TAKLIF QILISH',
+            url: referralLink,
+          },
+        ],
+        [
+          {
+            text: '🔄 TEKSHIRISH',
+            callback_data: 'check_access',
+          },
+        ],
+      ],
     },
   }
 }
 
 /*
  * =========================================================
- * TESTGA KIRISH KLAVIATURASI
+ * TEST KEYBOARD
  * =========================================================
  */
 
@@ -380,34 +369,7 @@ const TEST_KEYBOARD = {
 
 /*
  * =========================================================
- * ANTI SPAM
- * =========================================================
- */
-
-const lastRequest =
-  new Map<number, number>()
-
-function tooFast(
-  userId: number,
-): boolean {
-  const now = Date.now()
-
-  const previous =
-    lastRequest.get(userId) ?? 0
-
-  lastRequest.set(
-    userId,
-    now,
-  )
-
-  return (
-    now - previous < 5000
-  )
-}
-
-/*
- * =========================================================
- * GURUH
+ * GROUP CHAT
  * =========================================================
  */
 
@@ -420,36 +382,9 @@ function isGroupChat(
   )
 }
 
-function rememberGroup(
-  chat: TelegramChat,
-) {
-  if (!isGroupChat(chat)) {
-    return
-  }
-
-  console.log(
-    '================================',
-  )
-
-  console.log(
-    'TELEGRAM GROUP ANIQLANDI',
-  )
-
-  console.log({
-    chatId: chat.id,
-    title: chat.title,
-    username: chat.username,
-    type: chat.type,
-  })
-
-  console.log(
-    '================================',
-  )
-}
-
 /*
  * =========================================================
- * GURUH A'ZOLIGINI TEKSHIRISH
+ * GROUP MEMBER CHECK
  * =========================================================
  */
 
@@ -466,28 +401,25 @@ async function isGroupMember(
         },
       )
 
-    if (!result?.ok) {
-      console.error(
-        'getChatMember xatosi:',
-        result,
-      )
+    console.log(
+      'GROUP MEMBERSHIP CHECK:',
+      {
+        userId,
+        group: GROUP_CHAT_ID,
+        telegramOk: result?.ok,
+        status: result?.result?.status,
+        isMember: result?.result?.is_member,
+        errorCode: result?.error_code,
+        description: result?.description,
+      },
+    )
 
+    if (!result?.ok) {
       return false
     }
 
     const status =
       result.result?.status
-
-    /*
-     * Telegram statuslari:
-     *
-     * creator
-     * administrator
-     * member
-     * restricted
-     * left
-     * kicked
-     */
 
     if (
       status === 'creator' ||
@@ -497,22 +429,17 @@ async function isGroupMember(
       return true
     }
 
-    /*
-     * Restricted foydalanuvchi ham guruhda
-     * bo'lishi mumkin.
-     */
     if (
-      status === 'restricted'
+      status === 'restricted' &&
+      result.result?.is_member === true
     ) {
-      return (
-        result.result?.is_member === true
-      )
+      return true
     }
 
     return false
   } catch (error) {
     console.error(
-      'Guruh a’zoligini tekshirish xatosi:',
+      'GROUP MEMBERSHIP ERROR:',
       error,
     )
 
@@ -522,13 +449,40 @@ async function isGroupMember(
 
 /*
  * =========================================================
- * ACCESS HOLATI
+ * ACCESS STATUS
  * =========================================================
  */
 
 async function getAccessStatus(
   userId: number,
 ) {
+  const user =
+    await getUser(userId)
+
+  /*
+   * Telefon majburiy.
+   */
+  const phoneVerified =
+    Boolean(
+      user?.phone &&
+      normalizePhone(user.phone),
+    )
+
+  /*
+   * Telefon tasdiqlanmagan bo'lsa,
+   * qolgan accessni hisoblamaymiz.
+   */
+  if (!phoneVerified) {
+    return {
+      phoneVerified: false,
+      groupMember: false,
+      referralsCompleted: false,
+      accessGranted: false,
+      invited: 0,
+      remaining: REQUIRED_REFERRALS,
+    }
+  }
+
   const referral =
     await getReferralStats(userId)
 
@@ -536,13 +490,29 @@ async function getAccessStatus(
     await isGroupMember(userId)
 
   const referralsCompleted =
-    referral.invited >= REQUIRED_REFERRALS
+    referral.invited >=
+    REQUIRED_REFERRALS
 
   const accessGranted =
+    phoneVerified &&
     groupMember &&
     referralsCompleted
 
+  console.log(
+    'ACCESS STATUS:',
+    {
+      userId,
+      phoneVerified,
+      groupMember,
+      invited: referral.invited,
+      required: REQUIRED_REFERRALS,
+      referralsCompleted,
+      accessGranted,
+    },
+  )
+
   return {
+    phoneVerified,
     groupMember,
     referralsCompleted,
     accessGranted,
@@ -557,7 +527,7 @@ async function getAccessStatus(
 
 /*
  * =========================================================
- * ACCESS XABARI
+ * ACCESS MESSAGE
  * =========================================================
  */
 
@@ -569,22 +539,35 @@ async function sendAccessMessage(
     await getAccessStatus(userId)
 
   /*
-   * HAMMA SHARTLAR BAJARILDI
+   * TELEFON YO'Q
    */
+  if (!status.phoneVerified) {
+    await sendMessage(
+      chatId,
+      REGISTER_PROMPT,
+      CONTACT_KEYBOARD,
+    )
 
+    return
+  }
+
+  /*
+   * HAMMA SHART BAJARILGAN
+   */
   if (status.accessGranted) {
     await sendMessage(
       chatId,
 
       `🎉 TABRIKLAYMIZ!
 
-✅ Guruhga a'zolik: TASDIQLANDI
+✅ Telefon: TASDIQLANGAN
+✅ Guruh: A’ZO
 ✅ Takliflar: ${status.invited}/${REQUIRED_REFERRALS}
 
-🔓 Siz uchun testlar ochildi.
+🔓 TESTLAR OCHILDI!
 
-Endi "🚀 TESTLARNI BOSHLASH" tugmasini bosib testlarni boshlashingiz mumkin.`,
-      
+Quyidagi tugmani bosib testlarni boshlang.`,
+
       TEST_KEYBOARD,
     )
 
@@ -592,49 +575,56 @@ Endi "🚀 TESTLARNI BOSHLASH" tugmasini bosib testlarni boshlashingiz mumkin.`,
   }
 
   /*
-   * HALI SHARTLAR BAJARILMAGAN
+   * GURUH HOLATI
    */
-
   const groupStatus =
     status.groupMember
-      ? '✅ A’zo'
-      : '❌ A’zo emas'
+      ? '✅ A’ZO'
+      : '❌ A’ZO EMAS'
 
+  /*
+   * REFERRAL HOLATI
+   */
   const referralStatus =
     `${status.invited}/${REQUIRED_REFERRALS}`
 
-  await sendMessage(
-    chatId,
+  let message =
+    `🔐 PLATFORMAGA KIRISH
 
-    `🔐 TESTLARGA KIRISH SHARTLARI
+📱 Telefon:
+✅ TASDIQLANGAN
 
 👥 Guruh:
 ${groupStatus}
 
-🤝 Taklif qilinganlar:
+🤝 Takliflar:
 ${referralStatus}
 
-${
-  status.remaining > 0
-    ? `👤 Yana ${status.remaining} ta yangi foydalanuvchi kerak.`
-    : '✅ 5 ta taklif bajarildi.'
-}
+`
 
-${
-  !status.groupMember
-    ? '📢 Avval guruhga a’zo bo‘ling.'
-    : ''
-}
+  if (!status.groupMember) {
+    message +=
+      `📢 Avval @talim_ilmfan guruhiga a’zo bo‘ling.\n\n`
+  }
 
-👇 Quyidagi amallarni bajaring va "🔄 TEKSHIRISH" tugmasini bosing.`,
+  if (status.remaining > 0) {
+    message +=
+      `👤 Yana ${status.remaining} ta yangi foydalanuvchi kerak.\n\n`
+  }
 
+  message +=
+    `👇 Shartlarni bajaring va "🔄 TEKSHIRISH" tugmasini bosing.`
+
+  await sendMessage(
+    chatId,
+    message,
     buildAccessKeyboard(userId),
   )
 }
 
 /*
  * =========================================================
- * /START PAYLOAD
+ * START PAYLOAD
  * =========================================================
  */
 
@@ -697,7 +687,7 @@ function getReferralId(
 
 /*
  * =========================================================
- * RO'YXATDAN O'TGANDAN KEYIN REFERRAL
+ * REFERRALNI REGISTRATIONDAN KEYIN HISOBLASH
  * =========================================================
  */
 
@@ -712,10 +702,17 @@ async function processReferralAfterRegistration(
   }
 
   /*
-   * Referralni faqat yangi foydalanuvchi
-   * muvaffaqiyatli ro'yxatdan o'tgandan keyin
-   * hisoblaymiz.
+   * O'zini o'zi taklif qilish.
    */
+  if (
+    pendingReferrer === userId
+  ) {
+    await clearPendingReferral(
+      userId,
+    )
+
+    return null
+  }
 
   const added =
     await addReferral(
@@ -793,11 +790,8 @@ export async function POST(
     const callback =
       update.callback_query
 
-    const callbackUserId =
+    const userId =
       callback.from.id
-
-    const callbackMessage =
-      callback.message
 
     if (
       callback.data ===
@@ -808,31 +802,14 @@ export async function POST(
         '🔄 Holat tekshirilmoqda...',
       )
 
-      if (
-        callbackMessage
-      ) {
-        const callbackChatId =
-          callbackMessage.chat.id
+      const callbackMessage =
+        callback.message
 
-        const user =
-          await getUser(
-            callbackUserId,
-          )
-
-        if (!user) {
-          await sendMessage(
-            callbackChatId,
-
-            REGISTER_PROMPT,
-
-            CONTACT_KEYBOARD,
-          )
-        } else {
-          await sendAccessMessage(
-            callbackChatId,
-            callbackUserId,
-          )
-        }
+      if (callbackMessage) {
+        await sendAccessMessage(
+          callbackMessage.chat.id,
+          userId,
+        )
       }
 
       return NextResponse.json({
@@ -875,22 +852,33 @@ export async function POST(
 
   /*
    * =======================================================
-   * GURUH
+   * GURUH CHAT
    * =======================================================
    */
 
   if (
     isGroupChat(chat)
   ) {
-    rememberGroup(chat)
+    console.log(
+      'TELEGRAM GROUP:',
+      {
+        id: chat.id,
+        title: chat.title,
+        username: chat.username,
+        type: chat.type,
+      },
+    )
 
+    /*
+     * Guruhdagi test komandasi.
+     */
     if (
       text === '/test'
     ) {
       await sendMessage(
         chatId,
 
-        `🤖 MENEJERLIK BOT
+        `🤖 MENEJERLIK BY NURMUHAMMAD
 
 ✅ Bot guruhni ko'rmoqda.
 
@@ -901,16 +889,12 @@ ${chat.title ?? 'Nomaʼlum'}
 ${chat.id}
 
 🔐 Majburiy guruh:
-${chat.id === Number(GROUP_CHAT_ID) ? 'HA' : 'YO‘Q'}
+${chat.username === 'talim_ilmfan'
+          ? 'HA'
+          : 'TEKSHIRILADI'}
 
-⏰ Avtomatik test tizimi:
-05:00 — 23:00
-
-📝 Har soatda:
-50 daqiqa TEST
-10 daqiqa DAM OLISH
-
-🏆 Reyting avtomatik chiqariladi.`,
+🤖 Bot:
+@${BOT_USERNAME}`,
       )
     }
 
@@ -921,19 +905,14 @@ ${chat.id === Number(GROUP_CHAT_ID) ? 'HA' : 'YO‘Q'}
 
   /*
    * =======================================================
-   * SHAXSIY CHAT
+   * PRIVATE CHAT
    * =======================================================
    */
 
   try {
     /*
-     * START PAYLOADNI ENG AVVAL OLAMIZ.
-     *
-     * Sababi:
-     * yangi foydalanuvchi hali ro'yxatdan o'tmagan
-     * bo'lishi mumkin.
+     * START
      */
-
     const startPayload =
       getStartPayload(text)
 
@@ -943,26 +922,37 @@ ${chat.id === Number(GROUP_CHAT_ID) ? 'HA' : 'YO‘Q'}
       )
 
     /*
-     * =====================================================
      * USER
-     * =====================================================
      */
-
     const user =
       await getUser(userId)
 
     /*
      * =====================================================
-     * YANGI USER
+     * TELEFON TASDIQLANGANMI?
      * =====================================================
      */
 
-    if (!user) {
+    const phoneVerified =
+      Boolean(
+        user?.phone &&
+        normalizePhone(user.phone),
+      )
+
+    /*
+     * =====================================================
+     * TELEFON TASDIQLANMAGAN
+     * =====================================================
+     *
+     * User Redis'da bo'lsa ham,
+     * phone bo'lmasa uni ro'yxatdan o'tgan
+     * deb hisoblamaymiz.
+     */
+
+    if (!phoneVerified) {
+
       /*
-       * Referral kelgan bo'lsa,
-       * uni vaqtinchalik saqlaymiz.
-       *
-       * Hali telefon tasdiqlanmagan.
+       * Referralni vaqtinchalik saqlash.
        */
       if (
         referralId &&
@@ -975,16 +965,14 @@ ${chat.id === Number(GROUP_CHAT_ID) ? 'HA' : 'YO‘Q'}
       }
 
       /*
-       * TELEFON YUBORILDI
+       * TELEFON KELDI
        */
-
       if (
         message.contact
       ) {
         /*
-         * Faqat o'z telefonini yuborishi kerak.
+         * Faqat o'z telefonini qabul qilamiz.
          */
-
         if (
           message.contact.user_id !==
           userId
@@ -992,9 +980,9 @@ ${chat.id === Number(GROUP_CHAT_ID) ? 'HA' : 'YO‘Q'}
           await sendMessage(
             chatId,
 
-            `⚠️ Iltimos, faqat o'zingizning telefon raqamingizni yuboring.
+            `⚠️ Faqat o'zingizning telefon raqamingizni yuboring.
 
-Pastdagi tugmadan foydalaning 👇`,
+👇 Pastdagi tugmadan foydalaning.`,
 
             CONTACT_KEYBOARD,
           )
@@ -1004,6 +992,9 @@ Pastdagi tugmadan foydalaning 👇`,
           })
         }
 
+        /*
+         * ISM
+         */
         const name =
           [
             message.from?.first_name,
@@ -1015,7 +1006,7 @@ Pastdagi tugmadan foydalaning 👇`,
           'Foydalanuvchi'
 
         /*
-         * Avval referralni aniqlaymiz.
+         * PENDING REFERRER
          */
         const pendingReferrer =
           await getPendingReferral(
@@ -1023,7 +1014,7 @@ Pastdagi tugmadan foydalaning 👇`,
           )
 
         /*
-         * Referralni hisoblaymiz.
+         * REFERRALNI HISOBLASH
          */
         const actualReferrer =
           await processReferralAfterRegistration(
@@ -1031,7 +1022,7 @@ Pastdagi tugmadan foydalaning 👇`,
           )
 
         /*
-         * Userni saqlaymiz.
+         * USERNI SAQLASH
          */
         await saveUser({
           id: userId,
@@ -1044,6 +1035,7 @@ Pastdagi tugmadan foydalaning 👇`,
             ),
 
           registeredAt:
+            user?.registeredAt ??
             new Date().toISOString(),
 
           ...(actualReferrer
@@ -1056,29 +1048,25 @@ Pastdagi tugmadan foydalaning 👇`,
                   referredBy:
                     pendingReferrer,
                 }
-              : {}),
+              : user?.referredBy
+                ? {
+                    referredBy:
+                      user.referredBy,
+                  }
+                : {}),
         })
 
         /*
-         * Keyboardni olib tashlash.
+         * TELEFON TASDIQLANDI
          */
         await sendMessage(
           chatId,
-
-          `🎉 Ro'yxatdan o'tish muvaffaqiyatli yakunlandi!
-
-Endi platformadan foydalanish uchun 2 ta shartni bajaring:
-
-1️⃣ "Menejerlar super 30 jamoasi" guruhiga a’zo bo‘ling.
-2️⃣ 5 ta yangi foydalanuvchini taklif qiling.
-
-Shundan so'ng testlar ochiladi.`,
-
+          PHONE_SUCCESS,
           REMOVE_KEYBOARD,
         )
 
         /*
-         * Access holatini chiqaramiz.
+         * KEYINGI BOSQICH
          */
         await sendAccessMessage(
           chatId,
@@ -1091,16 +1079,11 @@ Shundan so'ng testlar ochiladi.`,
       }
 
       /*
-       * ===================================================
        * TELEFON HALI YUBORILMAGAN
-       * ===================================================
        */
-
       await sendMessage(
         chatId,
-
         REGISTER_PROMPT,
-
         CONTACT_KEYBOARD,
       )
 
@@ -1110,30 +1093,27 @@ Shundan so'ng testlar ochiladi.`,
     }
 
     /*
-     * =======================================================
-     * MATN BO'LMASA
-     * =======================================================
-     */
-
-    if (!text) {
-      return NextResponse.json({
-        ok: true,
-      })
-    }
-
-    /*
-     * =======================================================
-     * /START
-     * =======================================================
+     * =====================================================
+     * START
+     * =====================================================
      */
 
     if (
       startPayload !== null
     ) {
       /*
-       * Agar referral bilan kelgan eski user bo'lsa,
-       * referralga qayta qo'shilmaydi.
+       * Agar yangi referral bilan kelsa,
+       * pending referralni saqlaymiz.
        */
+      if (
+        referralId &&
+        referralId !== userId
+      ) {
+        await savePendingReferral(
+          userId,
+          referralId,
+        )
+      }
 
       await sendAccessMessage(
         chatId,
@@ -1146,9 +1126,9 @@ Shundan so'ng testlar ochiladi.`,
     }
 
     /*
-     * =======================================================
-     * /HELP
-     * =======================================================
+     * =====================================================
+     * HELP
+     * =====================================================
      */
 
     if (
@@ -1165,9 +1145,9 @@ Shundan so'ng testlar ochiladi.`,
     }
 
     /*
-     * =======================================================
+     * =====================================================
      * TEKSHIRISH
-     * =======================================================
+     * =====================================================
      */
 
     if (
@@ -1185,14 +1165,9 @@ Shundan so'ng testlar ochiladi.`,
     }
 
     /*
-     * =======================================================
-     * TESTLARGA KIRISH
-     * =======================================================
-     *
-     * Hozircha test tugmasi web_app orqali ochiladi.
-     *
-     * Keyinchalik Mini App ichida ham
-     * server-side access check qo'yish tavsiya qilinadi.
+     * =====================================================
+     * TESTLARNI BOSHLASH
+     * =====================================================
      */
 
     if (
@@ -1203,6 +1178,9 @@ Shundan so'ng testlar ochiladi.`,
           userId,
         )
 
+      /*
+       * SHART BAJARILMAGAN
+       */
       if (
         !status.accessGranted
       ) {
@@ -1216,14 +1194,19 @@ Shundan so'ng testlar ochiladi.`,
         })
       }
 
+      /*
+       * SHART BAJARILGAN
+       */
       await sendMessage(
         chatId,
 
         `🚀 TESTLAR OCHILDI!
 
-Siz barcha talablarni bajargansiz.
+✅ Telefon tasdiqlangan
+✅ Guruhga a’zolik tasdiqlangan
+✅ 5 ta referral bajarilgan
 
-📝 Testni boshlashingiz mumkin.`,
+Endi testlarni boshlashingiz mumkin.`,
 
         TEST_KEYBOARD,
       )
@@ -1234,52 +1217,22 @@ Siz barcha talablarni bajargansiz.
     }
 
     /*
-     * =======================================================
-     * AI ANTI-SPAM
-     * =======================================================
-     */
-
-    if (
-      tooFast(userId)
-    ) {
-      await sendMessage(
-        chatId,
-
-        `⏳ Bir necha soniya kuting va qayta yuboring.`,
-      )
-
-      return NextResponse.json({
-        ok: true,
-      })
-    }
-
-    /*
-     * =======================================================
-     * AI TYPING
-     * =======================================================
-     */
-
-    await telegram(
-      'sendChatAction',
-      {
-        chat_id: chatId,
-        action: 'typing',
-      },
-    )
-
-    /*
-     * =======================================================
-     * AI JAVOB
-     * =======================================================
+     * =====================================================
+     * AI
+     * =====================================================
      */
 
     const answer =
-      await askAI(text)
+      await askAI(
+        text ?? '',
+      )
 
-    await sendMessage(
-      chatId,
-      answer,
-    )
+    if (answer) {
+      await sendMessage(
+        chatId,
+        answer,
+      )
+    }
   } catch (error) {
     console.error(
       'WEBHOOK XATOSI:',
@@ -1291,7 +1244,7 @@ Siz barcha talablarni bajargansiz.
 
       `⚠️ Hozircha texnik xatolik yuz berdi.
 
-Iltimos, birozdan keyin qayta urinib ko'ring.`,
+Iltimos, birozdan keyin qayta urinib ko‘ring.`,
     )
   }
 
@@ -1302,7 +1255,7 @@ Iltimos, birozdan keyin qayta urinib ko'ring.`,
 
 /*
  * =========================================================
- * GET
+ * GET HEALTH CHECK
  * =========================================================
  */
 
@@ -1323,7 +1276,7 @@ export async function GET() {
       8747655999,
 
     group:
-      'Menejerlar super 30 jamoasi',
+      '@talim_ilmfan',
 
     groupChatId:
       GROUP_CHAT_ID,
@@ -1331,16 +1284,7 @@ export async function GET() {
     requiredReferrals:
       REQUIRED_REFERRALS,
 
-    schedule:
-      '05:00-23:00',
-
-    test:
-      '50 minutes',
-
-    rest:
-      '10 minutes',
-
-    ranking:
-      'automatic',
+    miniApp:
+      MINI_APP_URL,
   })
 }
