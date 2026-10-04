@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 
 import {
   ArrowRight,
+  Award,
   BookOpen,
   Brain,
   ChevronRight,
@@ -60,25 +61,36 @@ export function HomeScreen({
 
   void safeBestByCategory
 
+  const firstName = user?.first_name?.trim()
+
   return (
-    <div className="flex flex-col gap-5 pb-6">
-      {/* HEADER */}
-      <header className="flex items-center justify-between pt-2">
-        <div className="flex items-center gap-3">
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
+    <div className="relative flex flex-col gap-5 overflow-hidden pb-8">
+
+      {/* =====================================================
+          TOP BRAND
+      ===================================================== */}
+
+      <header className="flex items-center justify-between pt-1">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="relative flex size-12 shrink-0 items-center justify-center rounded-[17px] bg-gradient-to-br from-blue-700 via-blue-800 to-slate-950 text-white shadow-lg shadow-blue-900/20">
             <GraduationCap
               className="size-6"
               strokeWidth={2}
             />
+
+            <span className="absolute -right-1 -top-1 size-3 rounded-full border-2 border-background bg-amber-400" />
           </div>
 
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+          <div className="min-w-0">
+            <p className="truncate text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
               Professional Education
             </p>
 
-            <h1 className="text-xl font-bold tracking-tight">
+            <h1 className="mt-0.5 truncate text-[19px] font-black tracking-tight">
               MENEJERLIK
+              <span className="ml-1.5 text-blue-700">
+                BY NURMUHAMMAD
+              </span>
             </h1>
           </div>
         </div>
@@ -88,127 +100,85 @@ export function HomeScreen({
             type="button"
             onClick={onAI}
             aria-label="AI yordamchi"
-            className="flex size-10 items-center justify-center rounded-xl border bg-card transition-all hover:bg-secondary active:scale-95"
+            className="group flex size-11 shrink-0 items-center justify-center rounded-2xl border border-blue-100 bg-white shadow-sm transition-all hover:border-blue-200 hover:shadow-md active:scale-95 dark:border-white/10 dark:bg-card"
           >
-            <Sparkles className="size-5 text-primary" />
+            <Sparkles className="size-5 text-blue-700 transition-transform group-hover:rotate-12" />
           </button>
         ) : (
-          <div className="flex size-10 items-center justify-center rounded-xl border bg-card">
-            <Sparkles className="size-5 text-primary" />
+          <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl border bg-card">
+            <Sparkles className="size-5 text-blue-700" />
           </div>
         )}
       </header>
 
-      {/* HERO */}
-      <section className="relative overflow-hidden rounded-[2rem] bg-primary p-6 text-primary-foreground shadow-lg">
-        <div className="pointer-events-none absolute -right-12 -top-12 size-36 rounded-full bg-white/10" />
-        <div className="pointer-events-none absolute -bottom-16 -left-10 size-40 rounded-full bg-white/5" />
+      {/* =====================================================
+          HERO
+      ===================================================== */}
+
+      <section className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#0b1f44] via-[#123b78] to-[#1769aa] px-6 py-7 text-white shadow-xl shadow-blue-900/20">
+
+        {/* decorative elements */}
+        <div className="pointer-events-none absolute -right-20 -top-20 size-56 rounded-full border border-white/10 bg-white/[0.04]" />
+
+        <div className="pointer-events-none absolute -right-8 top-8 size-24 rounded-full border border-white/10" />
+
+        <div className="pointer-events-none absolute -bottom-20 -left-16 size-52 rounded-full bg-blue-300/10 blur-2xl" />
+
+        <div className="pointer-events-none absolute bottom-8 right-8 size-2 rounded-full bg-amber-300 shadow-[0_0_18px_rgba(252,211,77,0.9)]" />
 
         <div className="relative">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-3 py-1.5 text-xs font-medium backdrop-blur-sm">
-            <Sparkles className="size-3.5" />
 
-            <span>
-              Attestatsiyaga tayyorgarlik
+          {/* badge */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] backdrop-blur-md">
+            <span className="flex size-5 items-center justify-center rounded-full bg-amber-400 text-slate-900">
+              <Sparkles className="size-3" />
             </span>
+
+            Attestatsiyaga tayyorgarlik
           </div>
 
-          <h2 className="max-w-[320px] text-2xl font-bold leading-tight tracking-tight">
-            {user
-              ? `Assalomu alaykum, ${user.first_name}!`
+          {/* greeting */}
+          <h2 className="mt-5 max-w-[330px] text-[27px] font-black leading-[1.12] tracking-tight">
+            {firstName
+              ? `Assalomu alaykum, ${firstName}!`
               : 'Xush kelibsiz!'}
           </h2>
 
-          <p className="mt-3 max-w-[330px] text-sm leading-6 text-primary-foreground/80">
+          <p className="mt-3 max-w-[340px] text-[13px] leading-6 text-blue-50/80">
             Lavozimingiz va faoliyatingizga mos
-            testlarni tanlang. Bilimni sinang,
-            natijani tahlil qiling va professional
-            rivojlanishni davom ettiring.
+            tayyorgarlik yo‘nalishini tanlang.
+            Bilimingizni sinang, natijangizni
+            kuzating va professional rivojlaning.
           </p>
 
+          {/* CTA */}
           <button
             type="button"
             onClick={() =>
               onSelectEducation('school')
             }
-            className="mt-6 flex w-full items-center justify-between rounded-2xl bg-primary-foreground px-4 py-3.5 text-left text-sm font-semibold text-primary shadow-sm transition-transform hover:-translate-y-0.5 active:translate-y-0"
+            className="group mt-6 flex w-full items-center justify-between rounded-2xl bg-white px-4 py-3.5 text-left text-sm font-bold text-slate-900 shadow-lg shadow-black/10 transition-all hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0"
           >
-            <span className="flex items-center gap-2">
-              <BookOpen className="size-5" />
-              Testlarni boshlash
+            <span className="flex items-center gap-2.5">
+              <span className="flex size-8 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                <BookOpen className="size-4" />
+              </span>
+
+              Tayyorgarlikni boshlash
             </span>
 
-            <ArrowRight className="size-5" />
+            <span className="flex size-8 items-center justify-center rounded-xl bg-slate-100 transition-transform group-hover:translate-x-1">
+              <ArrowRight className="size-4" />
+            </span>
           </button>
         </div>
       </section>
 
-      {/* CONCEPT */}
-      <section className="rounded-3xl border bg-card p-5 shadow-sm">
-        <div className="flex items-start gap-4">
-          <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-secondary text-secondary-foreground">
-            <Brain className="size-5" />
-          </div>
+      {/* =====================================================
+          QUICK STATS
+      ===================================================== */}
 
-          <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
-              Menejerlik konsepsiyasi
-            </p>
-
-            <p className="mt-2 text-base font-semibold">
-              Bilim → Tahlil → Qaror → Natija
-            </p>
-
-            <p className="mt-1 text-sm leading-5 text-muted-foreground">
-              Nazariy bilimlarni amaliy vaziyatlar,
-              tahlil va qaror qabul qilish bilan
-              bog‘lab o‘rganing.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* EDUCATION DIRECTIONS */}
-      <section className="flex flex-col gap-3">
-        <div className="flex items-end justify-between px-1">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
-              Ta’lim yo‘nalishi
-            </p>
-
-            <h2 className="mt-1 text-xl font-bold">
-              Qaysi yo‘nalishda tayyorlanasiz?
-            </h2>
-          </div>
-
-          <Target className="size-5 text-primary" />
-        </div>
-
-        {/* MAKTAB */}
-        <EducationCard
-          icon="🏫"
-          title="MAKTAB"
-          badge="Umumiy o‘rta ta’lim"
-          description="Maktab direktori, direktor o‘rinbosari va fan o‘qituvchilari uchun attestatsiyaga tayyorgarlik."
-          onClick={() =>
-            onSelectEducation('school')
-          }
-        />
-
-        {/* MAKTABGACHA */}
-        <EducationCard
-          icon="🧸"
-          title="MAKTABGACHA TA’LIM"
-          badge="Maktabgacha ta’lim"
-          description="Maktabgacha ta’lim rahbarlari va pedagoglari uchun professional tayyorgarlik."
-          onClick={() =>
-            onSelectEducation('preschool')
-          }
-        />
-      </section>
-
-      {/* STATISTICS */}
-      <section className="grid grid-cols-3 gap-2">
+      <section className="grid grid-cols-3 gap-2.5">
         <StatCard
           icon={<BookOpen className="size-4" />}
           label="Testlar"
@@ -228,86 +198,184 @@ export function HomeScreen({
         />
       </section>
 
-      {/* RANKING */}
+      {/* =====================================================
+          EDUCATION DIRECTIONS
+      ===================================================== */}
+
+      <section className="flex flex-col gap-3.5">
+
+        <div className="flex items-end justify-between px-1">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-700">
+              Tayyorlanish yo‘nalishi
+            </p>
+
+            <h2 className="mt-1 text-[20px] font-black tracking-tight">
+              Yo‘nalishingizni tanlang
+            </h2>
+          </div>
+
+          <div className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-blue-700 dark:bg-blue-950/40">
+            <Target className="size-4.5" />
+          </div>
+        </div>
+
+        {/* MAKTAB */}
+        <EducationCard
+          icon="🏫"
+          title="MAKTAB"
+          badge="UMUMIY O‘RTA TA’LIM"
+          description="Direktor, direktor o‘rinbosari va fan o‘qituvchilari uchun professional tayyorgarlik."
+          accent="blue"
+          onClick={() =>
+            onSelectEducation('school')
+          }
+        />
+
+        {/* MAKTABGACHA */}
+        <EducationCard
+          icon="🧸"
+          title="MAKTABGACHA TA’LIM"
+          badge="MAKTABGACHA TA’LIM"
+          description="Rahbarlar va pedagoglar uchun attestatsiya hamda professional rivojlanish."
+          accent="gold"
+          onClick={() =>
+            onSelectEducation('preschool')
+          }
+        />
+      </section>
+
+      {/* =====================================================
+          CONCEPT
+      ===================================================== */}
+
+      <section className="relative overflow-hidden rounded-[25px] border border-blue-100 bg-gradient-to-br from-blue-50/80 to-white p-5 shadow-sm dark:border-white/10 dark:from-blue-950/20 dark:to-card">
+
+        <div className="pointer-events-none absolute -right-10 -top-10 size-28 rounded-full bg-blue-100/60 dark:bg-blue-900/10" />
+
+        <div className="relative flex items-start gap-4">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-blue-700 text-white shadow-md shadow-blue-700/20">
+            <Brain className="size-5" />
+          </div>
+
+          <div className="min-w-0">
+            <p className="text-[10px] font-black uppercase tracking-[0.17em] text-blue-700">
+              Menejerlik konsepsiyasi
+            </p>
+
+            <p className="mt-2 text-[16px] font-black tracking-tight">
+              Bilim
+              <span className="mx-1.5 text-blue-700">→</span>
+              Tahlil
+              <span className="mx-1.5 text-blue-700">→</span>
+              Qaror
+              <span className="mx-1.5 text-blue-700">→</span>
+              Natija
+            </p>
+
+            <p className="mt-2 text-[12px] leading-5 text-muted-foreground">
+              Nazariy bilimlarni amaliy vaziyatlar,
+              tahlil va samarali qaror qabul qilish
+              bilan bog‘lab rivojlaning.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          RANKING
+      ===================================================== */}
+
       <button
         type="button"
         onClick={onRanking}
-        className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg active:scale-[0.99]"
+        className="group relative overflow-hidden rounded-[25px] border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.99]"
       >
-        <div className="absolute -right-6 -top-6 size-24 rounded-full bg-primary/5" />
+        <div className="pointer-events-none absolute -right-8 -top-8 size-32 rounded-full bg-amber-400/5" />
 
         <div className="relative flex items-center gap-4">
-          <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary">
-            <Trophy className="size-7 text-primary" />
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-100 to-yellow-50 text-amber-600 dark:from-amber-950/40 dark:to-yellow-950/20">
+            <Trophy className="size-7" />
           </div>
 
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
-              Reyting
+            <p className="text-[10px] font-black uppercase tracking-[0.17em] text-amber-600">
+              Natijalar
             </p>
 
-            <h3 className="mt-1 text-lg font-bold">
-              🏆 Menejerlik TOP reyting
+            <h3 className="mt-1 text-[17px] font-black">
+              Menejerlik TOP reyting
             </h3>
 
-            <p className="mt-1 text-sm leading-5 text-muted-foreground">
+            <p className="mt-1 text-[12px] leading-5 text-muted-foreground">
               Qatnashchilar orasidagi o‘rningizni
-              va eng yuqori natijalarni ko‘ring.
+              va yuqori natijalarni ko‘ring.
             </p>
           </div>
 
-          <ChevronRight className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1" />
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted transition-all group-hover:bg-amber-50 dark:group-hover:bg-amber-950/20">
+            <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+          </div>
         </div>
       </button>
 
-      {/* AI */}
+      {/* =====================================================
+          AI
+      ===================================================== */}
+
       {onAI && (
         <button
           type="button"
           onClick={onAI}
-          className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg active:scale-[0.99]"
+          className="group relative overflow-hidden rounded-[25px] border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.99]"
         >
-          <div className="absolute -right-8 -top-8 size-28 rounded-full bg-primary/5" />
+          <div className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-blue-500/5" />
 
           <div className="relative flex items-center gap-4">
-            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary">
-              <Sparkles className="size-7 text-primary" />
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-50 text-blue-700 dark:from-blue-950/40 dark:to-indigo-950/20">
+              <Sparkles className="size-7" />
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
+              <p className="text-[10px] font-black uppercase tracking-[0.17em] text-blue-700">
                 Sun’iy intellekt
               </p>
 
-              <h3 className="mt-1 text-lg font-bold">
-                🤖 AI menejer yordamchi
+              <h3 className="mt-1 text-[17px] font-black">
+                AI menejer yordamchi
               </h3>
 
-              <p className="mt-1 text-sm leading-5 text-muted-foreground">
-                Menejment bo‘yicha savollar bering,
-                tahlil qiling va yangi bilimlarni
-                o‘rganing.
+              <p className="mt-1 text-[12px] leading-5 text-muted-foreground">
+                Savollar bering, tahlil qiling va
+                menejment bo‘yicha bilimlaringizni
+                rivojlantiring.
               </p>
             </div>
 
-            <ChevronRight className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1" />
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted">
+              <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+            </div>
           </div>
         </button>
       )}
 
-      {/* FEATURES */}
-      <section className="rounded-3xl border bg-muted/40 p-5">
+      {/* =====================================================
+          FEATURES
+      ===================================================== */}
+
+      <section className="rounded-[25px] border bg-muted/30 p-5">
+
         <div className="mb-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+          <p className="text-[10px] font-black uppercase tracking-[0.17em] text-blue-700">
             Platforma imkoniyatlari
           </p>
 
-          <h2 className="mt-1 text-lg font-bold">
+          <h2 className="mt-1 text-[18px] font-black tracking-tight">
             Bilimingizni tizimli rivojlantiring
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2.5">
           <Feature
             icon="📚"
             title="Modullar"
@@ -317,35 +385,51 @@ export function HomeScreen({
           <Feature
             icon="🎯"
             title="Darajalar"
-            text="4 xil murakkablik"
+            text="Murakkablik bosqichlari"
           />
 
           <Feature
             icon="🧠"
-            title="Keyslar"
-            text="Amaliy vaziyatlar"
+            title="Amaliy vaziyatlar"
+            text="Keys va tahlil"
           />
 
           <Feature
             icon="📊"
             title="Natijalar"
-            text="O‘zgarishni kuzatish"
+            text="Rivojlanishni kuzatish"
           />
         </div>
       </section>
 
-      {/* RECENT RESULTS */}
+      {/* =====================================================
+          RECENT RESULTS
+      ===================================================== */}
+
       {safeHistory.length > 0 && (
         <section className="flex flex-col gap-3">
-          <div className="flex items-center gap-2 px-1">
-            <History className="size-4 text-primary" />
 
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              So‘nggi natijalar
-            </h2>
+          <div className="flex items-center justify-between px-1">
+            <div className="flex items-center gap-2">
+              <div className="flex size-8 items-center justify-center rounded-xl bg-blue-50 text-blue-700 dark:bg-blue-950/30">
+                <History className="size-4" />
+              </div>
+
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-blue-700">
+                  Faollik
+                </p>
+
+                <h2 className="text-sm font-bold">
+                  So‘nggi natijalar
+                </h2>
+              </div>
+            </div>
+
+            <Award className="size-5 text-muted-foreground" />
           </div>
 
-          <div className="overflow-hidden rounded-3xl border bg-card">
+          <div className="overflow-hidden rounded-[23px] border bg-card">
             {safeHistory.slice(0, 5).map(
               (attempt) => {
                 const percentage =
@@ -362,16 +446,16 @@ export function HomeScreen({
                     key={attempt.id}
                     className="flex items-center gap-3 border-b p-4 last:border-b-0"
                   >
-                    <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-secondary">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700 dark:bg-blue-950/30">
                       <Brain className="size-4" />
                     </div>
 
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold">
+                      <p className="truncate text-sm font-bold">
                         Test natijasi
                       </p>
 
-                      <p className="mt-0.5 text-xs text-muted-foreground">
+                      <p className="mt-0.5 text-[10px] text-muted-foreground">
                         {new Date(
                           attempt.at,
                         ).toLocaleDateString(
@@ -387,11 +471,19 @@ export function HomeScreen({
                     </div>
 
                     <div className="text-right">
-                      <p className="text-sm font-bold tabular-nums">
+                      <p
+                        className={`text-sm font-black tabular-nums ${
+                          percentage >= 80
+                            ? 'text-emerald-600'
+                            : percentage >= 60
+                              ? 'text-amber-600'
+                              : 'text-red-500'
+                        }`}
+                      >
                         {percentage}%
                       </p>
 
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-[10px] text-muted-foreground">
                         {attempt.correct}/
                         {attempt.total}
                       </p>
@@ -404,39 +496,53 @@ export function HomeScreen({
         </section>
       )}
 
-      {/* FOOTER */}
-      <footer className="mt-2 rounded-3xl border bg-card px-5 py-6 text-center">
-        <div className="mx-auto flex size-10 items-center justify-center rounded-2xl bg-secondary">
-          <GraduationCap className="size-5 text-primary" />
+      {/* =====================================================
+          FOOTER
+      ===================================================== */}
+
+      <footer className="relative overflow-hidden rounded-[26px] border bg-card px-5 py-7 text-center">
+
+        <div className="pointer-events-none absolute left-1/2 top-0 size-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/5" />
+
+        <div className="relative">
+          <div className="mx-auto flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-700 to-blue-900 text-white shadow-md shadow-blue-900/20">
+            <GraduationCap className="size-5" />
+          </div>
+
+          <p className="mt-4 text-[9px] font-black uppercase tracking-[0.2em] text-blue-700">
+            MENEJERLIK BY NURMUHAMMAD
+          </p>
+
+          <p className="mt-2 text-sm font-bold leading-5">
+            Ta’lim menejmenti va rahbarlik
+            kompetensiyalarini rivojlantirish
+          </p>
+
+          <div className="mx-auto my-4 flex items-center justify-center gap-2">
+            <span className="h-px w-8 bg-border" />
+            <span className="size-1 rounded-full bg-amber-400" />
+            <span className="h-px w-8 bg-border" />
+          </div>
+
+          <p className="text-[10px] text-muted-foreground">
+            Muallif
+          </p>
+
+          <p className="mt-1 text-sm font-black">
+            Talatbekov Nurmuhammad
+          </p>
+
+          <p className="mx-auto mt-1 max-w-[290px] text-[10px] leading-4 text-muted-foreground">
+            Abdulla Avloniy nomidagi pedagogik
+            mahorat milliy instituti magistranti
+          </p>
+
+          <div className="mt-5 inline-flex items-center rounded-full border bg-muted/50 px-3 py-1.5">
+            <span className="text-[9px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+              Bilim · Tahlil · Qaror · Natija
+            </span>
+          </div>
         </div>
-
-        <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-          Menejerlik platformasi
-        </p>
-
-        <p className="mt-2 text-sm font-semibold">
-          Ta’lim menejmenti va rahbarlik
-          kompetensiyalarini rivojlantirish loyihasi
-        </p>
-
-        <div className="mx-auto my-4 h-px w-12 bg-border" />
-
-        <p className="text-xs leading-5 text-muted-foreground">
-          Muallif
-        </p>
-
-        <p className="mt-1 text-sm font-bold">
-          Talatbekov Nurmuhammad
-        </p>
-
-        <p className="mt-1 text-xs text-muted-foreground">
-          Abdulla Avloniy nomidagi pedagogik
-          mahorat milliy instituti magistranti
-        </p>
-
-        <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground/70">
-          Bilim · Tahlil · Qaror · Natija
-        </p>
       </footer>
     </div>
   )
@@ -451,44 +557,81 @@ function EducationCard({
   title,
   badge,
   description,
+  accent,
   onClick,
 }: {
   icon: string
   title: string
   badge: string
   description: string
+  accent: 'blue' | 'gold'
   onClick: () => void
 }) {
+  const isGold = accent === 'gold'
+
   return (
     <button
       type="button"
       onClick={onClick}
-      className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg active:scale-[0.99]"
+      className={`group relative overflow-hidden rounded-[26px] border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.99] ${
+        isGold
+          ? 'border-amber-100 dark:border-amber-900/20'
+          : 'border-blue-100 dark:border-blue-900/20'
+      }`}
     >
-      <div className="absolute right-0 top-0 size-28 translate-x-8 -translate-y-8 rounded-full bg-primary/5" />
+      {/* decorative background */}
+      <div
+        className={`pointer-events-none absolute -right-8 -top-8 size-32 rounded-full ${
+          isGold
+            ? 'bg-amber-400/5'
+            : 'bg-blue-500/5'
+        }`}
+      />
 
       <div className="relative flex items-center gap-4">
-        <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary text-2xl shadow-sm">
+
+        <div
+          className={`flex size-14 shrink-0 items-center justify-center rounded-[19px] text-[26px] shadow-sm ${
+            isGold
+              ? 'bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-950/30 dark:to-yellow-950/20'
+              : 'bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950/30 dark:to-indigo-950/20'
+          }`}
+        >
           {icon}
         </div>
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-bold">
+
+            <h3 className="text-[15px] font-black tracking-tight">
               {title}
             </h3>
 
-            <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold uppercase">
+            <span
+              className={`rounded-full px-2 py-1 text-[8px] font-black uppercase tracking-wide ${
+                isGold
+                  ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400'
+                  : 'bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400'
+              }`}
+            >
               {badge}
             </span>
           </div>
 
-          <p className="mt-1 text-sm leading-5 text-muted-foreground">
+          <p className="mt-1.5 text-[11px] leading-[1.45] text-muted-foreground">
             {description}
           </p>
         </div>
 
-        <ChevronRight className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1" />
+        <div
+          className={`flex size-8 shrink-0 items-center justify-center rounded-xl transition-all ${
+            isGold
+              ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/20'
+              : 'bg-blue-50 text-blue-700 dark:bg-blue-950/20'
+          }`}
+        >
+          <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+        </div>
       </div>
     </button>
   )
@@ -508,16 +651,18 @@ function StatCard({
   value: string
 }) {
   return (
-    <div className="rounded-2xl border bg-card p-3 shadow-sm">
+    <div className="rounded-[20px] border bg-card p-3.5 shadow-sm">
       <div className="flex items-center gap-1.5 text-muted-foreground">
-        {icon}
+        <span className="text-blue-700">
+          {icon}
+        </span>
 
-        <span className="text-[11px] font-medium">
+        <span className="text-[10px] font-semibold">
           {label}
         </span>
       </div>
 
-      <p className="mt-2 text-lg font-bold tabular-nums">
+      <p className="mt-2 text-[19px] font-black tabular-nums tracking-tight">
         {value}
       </p>
     </div>
@@ -538,16 +683,16 @@ function Feature({
   text: string
 }) {
   return (
-    <div className="rounded-2xl border bg-card p-3">
-      <div className="text-xl">
+    <div className="rounded-[19px] border bg-card p-3.5 transition-colors hover:bg-muted/50">
+      <div className="flex size-9 items-center justify-center rounded-xl bg-muted text-lg">
         {icon}
       </div>
 
-      <p className="mt-2 text-sm font-semibold">
+      <p className="mt-2.5 text-[12px] font-black">
         {title}
       </p>
 
-      <p className="mt-0.5 text-xs text-muted-foreground">
+      <p className="mt-0.5 text-[10px] leading-4 text-muted-foreground">
         {text}
       </p>
     </div>
