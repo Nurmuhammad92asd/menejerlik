@@ -22,398 +22,405 @@ const q = (
 })
 
 /* =========================================================
+   M2T1
+   TA'LIM SIFATINI BOSHQARISH
+   Professional test bank
+   30 Easy + 30 Medium + 30 Hard + 10 Case
+========================================================= */
+
+/* =========================================================
    1-DARAJA: OSON — 30 TA
 ========================================================= */
 
 const easy: Question[] = [
   q(
     'm2t1-e01',
-    'Ota-onalar bilan muloqotni “Biz birgalikda qanday yordam bera olamiz?” formatiga o‘tkazish nimani anglatadi?',
+    'Ta’lim sifatini boshqarishning asosiy maqsadi nima?',
     [
-      'Hamkorlik va ishtirokchilikka asoslangan yondashuvni',
-      'Nazoratni kuchaytirishga asoslangan yondashuvni',
-      'Mas’uliyatni ota-onaga topshirish yondashuvini',
-      'Intizomiy talablarni oshirish yondashuvini',
+      'O‘quvchilarning ta’lim natijalarini izchil yaxshilash',
+      'Hisobotlar sonini ko‘paytirish',
+      'Faqat yakuniy baholarni oshirish',
+      'Nazorat tadbirlarini ko‘paytirish',
     ],
     0,
-    'Muammoni birgalikda hal qilish ota-ona va maktab hamkorligini kuchaytiradi.'
+    'Ta’lim sifatini boshqarishning markaziy maqsadi — ta’lim natijalarini tizimli ravishda yaxshilash.'
   ),
 
   q(
     'm2t1-e02',
-    'O‘quvchi portfoliosining asosiy vazifasi nimani ko‘rsatishdan iborat?',
+    'Maktabda ta’lim sifati qaysi omillar majmuasi bilan bog‘liq?',
     [
-      'O‘quvchining faqat chorak baholarini',
-      'O‘quvchining rivojlanish va yutuqlar dinamikasini',
-      'O‘quvchining intizomiy holatini',
-      'O‘quvchining davomat ko‘rsatkichlarini',
+      'Faqat o‘quvchilar baholari bilan',
+      'O‘qituvchi, metodika, baholash, muhit va boshqa omillar bilan',
+      'Faqat darsliklar soni bilan',
+      'Faqat o‘quvchilar davomatiga bog‘liq',
     ],
     1,
-    'Portfolio yutuqlar, ijodiy ishlar va rivojlanish dinamikasini jamlaydi.'
+    'Ta’lim sifati ko‘plab o‘zaro bog‘liq omillar ta’sirida shakllanadi.'
   ),
 
   q(
     'm2t1-e03',
-    '“Nazoratdan qo‘llab-quvvatlashga” o‘tish qaysi liderlik yondashuviga mos?',
+    'Direktorning ta’lim sifatini boshqarishdagi muhim vazifalaridan biri qaysi?',
     [
-      'Rivojlantiruvchi va hamroh bo‘luvchi liderlik',
-      'Qattiq intizomiy liderlik',
-      'Hisobotga asoslangan liderlik',
-      'Reytingga asoslangan liderlik',
+      'Faqat hujjatlarni tekshirish',
+      'Faqat intizomni nazorat qilish',
+      'Ta’lim jarayonini tahlil qilib, rivojlantirish choralarini belgilash',
+      'Barcha qarorlarni o‘qituvchilarga topshirish',
     ],
-    0,
-    'Direktor muammoni qayd etishdan ko‘ra o‘qituvchining rivojlanishiga yordam beradi.'
+    2,
+    'Direktor ma’lumotlarni tahlil qilib, muammolar va rivojlanish yo‘nalishlari bo‘yicha qaror qabul qiladi.'
   ),
 
   q(
     'm2t1-e04',
-    'Muammoli o‘quvchining kuchli tomonlaridan foydalanishning asosiy maqsadi nima?',
+    'Davlat ta’lim standarti ta’lim jarayonida qanday vazifani bajaradi?',
     [
-      'Nazorat sonini kamaytirish',
-      'Ichki ishonch va motivatsiyani kuchaytirish',
-      'Baholash mezonlarini bekor qilish',
-      'O‘quv yuklamasini kamaytirish',
+      'Ta’lim natijalariga qo‘yiladigan asosiy talablarni belgilaydi',
+      'O‘qituvchilarning ish vaqtini belgilaydi',
+      'Maktabning ichki tartib qoidalarini almashtiradi',
+      'Faqat dars jadvalini tartibga soladi',
     ],
-    1,
-    'Kuchli tomonlarga tayangan muvaffaqiyat o‘quvchida “men qila olaman” ishonchini shakllantiradi.'
+    0,
+    'Davlat ta’lim standarti ta’lim mazmuni va kutiladigan natijalarga doir asosiy talablarni belgilaydi.'
   ),
 
   q(
     'm2t1-e05',
-    'Moslashuvchan dars jadvali nimani nazarda tutadi?',
+    'Ta’lim sifatining natija ko‘rsatkichiga qaysi biri misol bo‘ladi?',
     [
-      'Barcha o‘quvchilar uchun bir xil jadvalni',
-      'O‘quvchi ehtiyojlariga qarab ta’lim imkoniyatlarini moslashtirishni',
-      'Dars soatlarini kamaytirishni',
-      'To‘garaklarni darslardan ajratishni',
+      'Sinfxona jihozlari',
+      'O‘qituvchining dars rejasi',
+      'O‘quvchining kompetensiyani egallash darajasi',
+      'Maktabdagi xona soni',
     ],
-    1,
-    'Moslashuvchanlik o‘quvchilarning ehtiyojlari va rivojlanish sur’atlarini hisobga oladi.'
+    2,
+    'Natija ko‘rsatkichi o‘quvchining ta’lim yakunida erishgan natijasini ifodalaydi.'
   ),
 
   q(
     'm2t1-e06',
-    'Qiziqishlar auditi qanday ma’lumot beradi?',
+    'Ichki monitoringning asosiy vazifasi nima?',
     [
-      'O‘qituvchilar ish yuklamasini',
-      'O‘quvchilarning qiziqish va ehtiyojlarini',
-      'Maktabning moliyaviy xarajatlarini',
-      'Sinflarning yakuniy reytingini',
+      'Muammolarni aniqlash va ta’lim sifatini yaxshilash uchun ma’lumot berish',
+      'O‘qituvchilarni jazolash',
+      'Faqat reyting tuzish',
+      'Hujjatlarni ko‘paytirish',
     ],
-    1,
-    'Audit o‘quvchilar qaysi faoliyat va yo‘nalishlarga qiziqishini aniqlashga xizmat qiladi.'
+    0,
+    'Ichki monitoring maktabdagi ta’lim jarayonining holatini aniqlash va takomillashtirishga xizmat qiladi.'
   ),
 
   q(
     'm2t1-e07',
-    'Ijobiy mustahkamlashning asosiy mazmuni qaysi?',
+    'Formativ baholashning asosiy maqsadi nima?',
     [
-      'Kerakli xatti-harakatni ijobiy e’tirof orqali kuchaytirish',
-      'Xatolar uchun qat’iy jazo belgilash',
-      'Barcha o‘quvchilarni bir xil nazorat qilish',
-      'O‘quvchini boshqa guruhga ajratish',
+      'Faqat yakuniy bahoni chiqarish',
+      'O‘quv jarayonida rivojlanish uchun feedback berish',
+      'O‘quvchilarni reytingga joylashtirish',
+      'Faqat nazorat ishini rasmiylashtirish',
     ],
-    0,
-    'Ijobiy xatti-harakatni vaqtida e’tirof etish uning takrorlanish ehtimolini oshiradi.'
+    1,
+    'Formativ baholash o‘quvchining keyingi rivojlanishi uchun o‘z vaqtida fikr-mulohaza beradi.'
   ),
 
   q(
     'm2t1-e08',
-    'Shaxsiy shartnoma usuli nimaga asoslanadi?',
+    'Kompetensiyaga yo‘naltirilgan ta’lim nimaga urg‘u beradi?',
     [
-      'Ommaviy tanqidga',
-      'Oldindan kelishilgan qoidalar va rag‘batlarga',
-      'Umumiy reytingga',
-      'Tasodifiy rag‘batlantirishga',
+      'Faqat ma’lumotni yodlashga',
+      'Bilimni real vaziyatlarda qo‘llashga',
+      'Faqat darslikni qayta aytishga',
+      'Faqat test topshirishga',
     ],
     1,
-    'Shaxsiy shartnoma o‘quvchi bilan aniq kutishlar va rag‘batlar bo‘yicha kelishuvni nazarda tutadi.'
+    'Kompetensiya bilim va ko‘nikmalarni amaliy vaziyatlarda qo‘llay olishni nazarda tutadi.'
   ),
 
   q(
     'm2t1-e09',
-    'Loyiha usulida faol o‘quvchining energiyasi qanday yo‘naltiriladi?',
+    'Ta’lim sifatining jarayon ko‘rsatkichiga qaysi biri kiradi?',
     [
-      'Intizomiy jazoga',
-      'Foydali va mas’uliyatli faoliyatga',
-      'Nazorat topshiriqlariga',
-      'Baholarni oshirishga',
+      'Darsning qanday tashkil etilishi',
+      'Maktab binosining maydoni',
+      'O‘quvchi uyining joylashuvi',
+      'Maktabning nomi',
     ],
-    1,
-    'Loyiha va mas’uliyatli vazifalar o‘quvchining faolligini konstruktiv yo‘nalishga buradi.'
+    0,
+    'Jarayon ko‘rsatkichi ta’lim qanday tashkil etilayotganini ifodalaydi.'
   ),
 
   q(
     'm2t1-e10',
-    'Past o‘zlashtirishni “signal” sifatida ko‘rish nimani talab qiladi?',
+    'O‘qituvchining kasbiy salohiyati ta’lim sifatiga qanday ta’sir qiladi?',
     [
-      'Sabablarni diagnostika qilishni',
-      'Darhol jazo berishni',
-      'O‘quvchini boshqa guruhga o‘tkazishni',
-      'Yakuniy bahoni o‘zgartirishni',
+      'Ta’sir qilmaydi',
+      'Faqat hujjatlar soniga ta’sir qiladi',
+      'Dars sifati va o‘quv natijalariga bevosita ta’sir qiladi',
+      'Faqat davomatga ta’sir qiladi',
     ],
-    0,
-    'Signal yondashuvi natijaning ortidagi sabablarni aniqlashni talab qiladi.'
+    2,
+    'O‘qituvchining bilim, metodik va pedagogik kompetensiyasi o‘quv natijalariga bevosita ta’sir ko‘rsatadi.'
   ),
 
   q(
     'm2t1-e11',
-    'Quyidagi moslashtirishlardan to‘g‘risini aniqlang.\n\nA) Qiziqishlar xaritasi\nB) Portfolio\nC) Moslashuvchan jadval\n\n1) Rivojlanish natijalarini jamlash\n2) Qiziqishlarni aniqlash\n3) Ehtiyojga mos mashg‘ulotlarni rejalash',
+    'Ta’lim sifatini boshqarishda ma’lumotlardan foydalanish nimani anglatadi?',
     [
-      'A–2, B–1, C–3',
-      'A–1, B–2, C–3',
-      'A–3, B–1, C–2',
-      'A–2, B–3, C–1',
+      'Qarorlarni dalillar va tahlil asosida qabul qilishni',
+      'Faqat hisobotlarni saqlashni',
+      'Faqat rahbar fikriga tayanishni',
+      'Barcha qarorlarni bir xil qilishni',
     ],
     0,
-    'Qiziqishlar xaritasi — qiziqish, portfolio — rivojlanish, jadval — ehtiyojga moslashuv.'
+    'Ma’lumotlarga asoslangan boshqaruv qarorlarni dalillar bilan asoslashni talab qiladi.'
   ),
 
   q(
     'm2t1-e12',
-    'Qaysi yondashuv “o‘quvchi = trayektoriya” qarashiga mos?',
+    'O‘quvchilarning bilim darajasini aniqlash uchun qaysi vosita samarali?',
     [
-      'Faqat chorak bahosiga qarash',
-      'Rivojlanish bosqichlari va yutuqlarini kuzatish',
-      'Intizomiy holatni qayd etish',
-      'Sinf reytingini taqqoslash',
+      'Diagnostik topshiriq',
+      'Faqat davomat jurnali',
+      'Faqat sinf xonasi kuzatuvi',
+      'Faqat maktab reytingi',
     ],
-    1,
-    'Trayektoriya o‘quvchining vaqt davomida qanday rivojlanayotganini ko‘rsatadi.'
+    0,
+    'Diagnostik topshiriq o‘quvchilarning mavjud bilim va ko‘nikmalarini aniqlashga yordam beradi.'
   ),
 
   q(
     'm2t1-e13',
-    '“Bahodan shaxsga” o‘tish nimani bildiradi?',
+    'Ta’lim sifatini boshqarishda feedback nima uchun kerak?',
     [
-      'Baholashni butunlay bekor qilishni',
-      'O‘quvchini uning qobiliyat va rivojlanishi bilan birga ko‘rishni',
-      'Yuqori baholarni kamaytirishni',
-      'Nazoratni boshqa xodimga topshirishni',
+      'Jarayonni yaxshilash uchun fikr va dalil olish uchun',
+      'Faqat o‘quvchini baholash uchun',
+      'Hisobot hajmini oshirish uchun',
+      'Nazoratni bekor qilish uchun',
     ],
-    1,
-    'O‘quvchi faqat baho emas, balki qobiliyat, qiziqish va rivojlanish subyekti sifatida qaraladi.'
+    0,
+    'Feedback mavjud holatni tushunish va keyingi takomillashtirish choralarini belgilashga yordam beradi.'
   ),
 
   q(
     'm2t1-e14',
-    '“Yopiq tizimdan ochiq hamkorlikka” o‘tishda qaysi harakat muhim?',
+    'Differensial ta’limning asosiy xususiyati qaysi?',
     [
-      'Ota-onalarni muhokamalarga jalb qilish',
-      'Hisobotlarni ko‘paytirish',
-      'Nazoratlarni qisqartirish',
-      'To‘garaklarni kamaytirish',
+      'Barcha o‘quvchilarga aynan bir xil topshiriq berish',
+      'O‘quvchilarning ehtiyoj va tayyorgarligiga mos topshiriqlar berish',
+      'Faqat kuchli o‘quvchilar bilan ishlash',
+      'Faqat nazorat ishlarini ko‘paytirish',
     ],
-    0,
-    'Ochiq hamkorlik ota-ona va boshqa manfaatdor tomonlarning ishtirokini kuchaytiradi.'
+    1,
+    'Differensial yondashuv o‘quvchilarning tayyorgarligi va ehtiyojlaridagi farqlarni hisobga oladi.'
   ),
 
   q(
     'm2t1-e15',
-    '“Kichik g‘alaba” topshirig‘i qanday bo‘lishi kerak?',
+    'Ta’lim muhitining sifatga ta’sir qiluvchi jihati qaysi?',
     [
-      'O‘quvchi uchun bajarib bo‘lmaydigan',
-      'O‘quvchining imkoniyatiga mos va natija beradigan',
-      'Barcha sinfga bir xil murakkablikdagi',
-      'Faqat yuqori bahoga qaratilgan',
+      'Psixologik xavfsizlik va hamkorlik',
+      'Faqat sinf devorlarining rangi',
+      'Faqat maktab binosining kattaligi',
+      'Faqat darsliklar soni',
     ],
-    1,
-    'Kichik g‘alaba o‘quvchida muvaffaqiyat tajribasini yaratadi.'
+    0,
+    'Sog‘lom psixologik muhit o‘quvchilarning faolligi va o‘qishga munosabatiga ijobiy ta’sir qiladi.'
   ),
 
   q(
     'm2t1-e16',
-    'Quyidagilardan qaysi biri psixologik muhitga oid sabab?',
+    'Resurs ko‘rsatkichiga qaysi biri misol bo‘ladi?',
     [
-      'Oldingi mavzudagi bilim bo‘shlig‘i',
-      'Oiladagi zo‘riqish yoki tengdoshlar bosimi',
-      'Mos kelmaydigan dars metodikasi',
-      'O‘quv rejasidagi yuklama',
+      'O‘quvchining mustaqil fikrlashi',
+      'O‘qituvchining darsdagi savollari',
+      'Ta’lim uchun mavjud jihoz va infratuzilma',
+      'O‘quvchining yakuniy natijasi',
     ],
-    1,
-    'Oilaviy va tengdoshlar bilan bog‘liq bosim psixologik muhit omiliga kiradi.'
+    2,
+    'Resurs ko‘rsatkichlari ta’limni tashkil etish uchun mavjud moddiy va tashkiliy imkoniyatlarni ifodalaydi.'
   ),
 
   q(
     'm2t1-e17',
-    'Kognitiv to‘siqqa misol qaysi?',
+    'Ta’lim sifatini yaxshilash siklining to‘g‘ri ketma-ketligi qaysi?',
     [
-      'Oldingi mavzulardagi tayanch bilimlarning yetishmasligi',
-      'Oiladagi nizolar',
-      'O‘qituvchi metodikasining mos kelmasligi',
-      'To‘garakka qiziqishning kamayishi',
+      'Muammo → sabab → yechim → qayta o‘lchash',
+      'Jazo → hisobot → muammo → xulosa',
+      'Reyting → tanbeh → nazorat → yakun',
+      'Hisobot → arxiv → baho → qaror',
     ],
     0,
-    'Kognitiv to‘siq bilim va ko‘nikmalardagi bo‘shliq bilan bog‘liq.'
+    'Sifatni yaxshilash muammoni aniqlash, sababni tahlil qilish, yechimni qo‘llash va natijani qayta tekshirishni talab qiladi.'
   ),
 
   q(
     'm2t1-e18',
-    'Metodik xato qaysi holatda yuzaga keladi?',
+    'O‘qituvchi darsini kuzatishning rivojlantiruvchi maqsadi nima?',
     [
-      'O‘quvchi oilasida muammo bo‘lsa',
-      'O‘qitish usuli o‘quvchining qabul qilish xususiyatiga mos kelmasa',
-      'O‘quvchining davomatida uzilish bo‘lsa',
-      'O‘quvchi sportga qiziqsa',
+      'Kamchilik uchun jazo berish',
+      'Metodik kuchli va rivojlanadigan jihatlarni aniqlash',
+      'O‘qituvchini reytingga joylashtirish',
+      'Hisobot sonini oshirish',
     ],
     1,
-    'Metodik xato ta’lim usulining o‘quvchi ehtiyojiga mos kelmasligi bilan bog‘liq.'
+    'Dars kuzatuvi professional rivojlanish uchun dalil va feedback berishi kerak.'
   ),
 
   q(
     'm2t1-e19',
-    'O‘quvchining vizual axborotni tez qabul qilishi nimani qo‘llashni asoslaydi?',
+    'O‘quvchi natijasi pasayganda eng maqbul birinchi qadam nima?',
     [
-      'Video va infografikalardan foydalanishni',
-      'Faqat yozma topshiriqlarni',
-      'Darsni qisqartirishni',
-      'Nazoratni kuchaytirishni',
+      'Sababni aniqlash',
+      'Darhol jazolash',
+      'Bahoni avtomatik pasaytirish',
+      'O‘quvchini boshqa sinfga o‘tkazish',
     ],
     0,
-    'Vizual qabul qilishga mos materiallar tushunishni yengillashtiradi.'
+    'Natijaning o‘zi yetarli emas; avvalo uning sabablarini aniqlash zarur.'
   ),
 
   q(
     'm2t1-e20',
-    'O‘zlashtirish tezligi turlicha bo‘lgan o‘quvchilar uchun qaysi yechim mos?',
+    'Ta’lim sifatini boshqarishda direktor qanday rolni bajarishi kerak?',
     [
-      'Bir xil tempni saqlash',
-      'Individual o‘quv trayektoriyalarini joriy etish',
-      'Baholarni tenglashtirish',
-      'Qo‘shimcha nazoratni bekor qilish',
+      'Faqat nazoratchi',
+      'Pedagogik, tahliliy va o‘zgarishlarni boshqaruvchi lider',
+      'Faqat hujjatlarni imzolovchi',
+      'Faqat xo‘jalik ishlarini nazorat qiluvchi',
     ],
     1,
-    'Individual trayektoriya turli o‘zlashtirish sur’atlarini hisobga olish imkonini beradi.'
+    'Zamonaviy direktor pedagogik jarayonni tahlil qiladi, rivojlantiradi va o‘zgarishlarni boshqaradi.'
   ),
 
   q(
     'm2t1-e21',
-    'Kompetensiyaga yo‘naltirilgan ta’limning belgisi qaysi?',
+    'Ota-onalar bilan hamkorlik ta’lim sifatiga qanday yordam beradi?',
     [
-      'Faktlarni ko‘proq yodlatish',
-      'Bilimni real vaziyatda qo‘llashga yo‘naltirish',
-      'Darslikni to‘liq ko‘chirish',
-      'Faqat nazariy tushuntirish',
+      'O‘quvchi rivojlanishi bo‘yicha qo‘shimcha hamkorlik imkonini yaratadi',
+      'O‘qituvchining vazifalarini to‘liq ota-onaga topshiradi',
+      'Baholashni bekor qiladi',
+      'Nazoratni kamaytiradi',
     ],
-    1,
-    'Kompetensiya bilimni amaliy vaziyatda qo‘llay olishni talab qiladi.'
+    0,
+    'Maktab va oila hamkorligi o‘quvchining rivojlanishini qo‘llab-quvvatlash imkoniyatini kengaytiradi.'
   ),
 
   q(
     'm2t1-e22',
-    'Mavzular integratsiyasiga qaysi holat mos?',
+    'Ichki monitoring faqat yakuniy natijani emas, yana nimani o‘rganishi kerak?',
     [
-      'Fanlar mazmunini real vazifalar atrofida bog‘lash',
-      'Har bir fanni boshqa fanlardan ajratish',
-      'Faqat darslik ketma-ketligini saqlash',
-      'Qo‘shimcha misollardan foydalanmaslik',
+      'Jarayon va natijaga ta’sir qiluvchi omillarni',
+      'Faqat o‘qituvchi yoshini',
+      'Faqat sinfxona hajmini',
+      'Faqat maktab nomini',
     ],
     0,
-    'Integratsiya fanlararo mazmuniy bog‘lanish va real vazifalarni kuchaytiradi.'
+    'Sifat monitoringi natija bilan birga jarayon va unga ta’sir qiluvchi omillarni ham qamrab oladi.'
   ),
 
   q(
     'm2t1-e23',
-    '“Eng katta o‘sishga erishgan o‘quvchi” nominatsiyasi nimani rag‘batlantiradi?',
+    'Innovatsiyani joriy etishdan oldin nimani aniqlash muhim?',
     [
-      'Faqat yuqori bahoni',
-      'Rivojlanish dinamikasini',
-      'Sinf ichidagi raqobatni',
-      'Intizomiy nazoratni',
+      'Muammo yoki ehtiyojni',
+      'Faqat tadbirlar sonini',
+      'Faqat o‘qituvchi xohishini',
+      'Faqat reklama imkoniyatini',
     ],
-    1,
-    'Bu nominatsiya boshlang‘ich darajadan o‘sishni ham qadrlaydi.'
+    0,
+    'Innovatsiya aniq ehtiyoj yoki muammoni hal qilishga xizmat qilishi kerak.'
   ),
 
   q(
     'm2t1-e24',
-    'Ijtimoiy rag‘batning asosiy ta’siri qaysi?',
+    'Pilot loyiha nima uchun qo‘llanadi?',
     [
-      'Jamoa oldidagi ijtimoiy maqomni oshirish',
-      'O‘quv yuklamasini kamaytirish',
-      'Uy vazifasini bekor qilish',
-      'Baholashni o‘zgartirish',
+      'Yangi yechimni kichik miqyosda sinab ko‘rish uchun',
+      'Innovatsiyani darhol butun maktabga yoyish uchun',
+      'Nazoratni bekor qilish uchun',
+      'Faqat hisobot tayyorlash uchun',
     ],
     0,
-    'Ijtimoiy rag‘bat o‘quvchining jamoa oldidagi e’tirofi va maqomini kuchaytiradi.'
+    'Pilot sinov yangi yondashuvning samaradorligi va amalga oshirish sharoitlarini tekshirish imkonini beradi.'
   ),
 
   q(
     'm2t1-e25',
-    'Hissiy rag‘bat nimani kuchaytiradi?',
+    'Baholash mezonlarining aniq bo‘lishi nimani ta’minlaydi?',
     [
-      'Nazorat mexanizmini',
-      'Ijobiy emotsional bog‘liqlikni',
-      'O‘quv yuklamasini',
-      'Reyting bosimini',
+      'Adolatli va tushunarli baholashni',
+      'Baholarni avtomatik oshirishni',
+      'Nazoratni bekor qilishni',
+      'Faqat yuqori natijani',
     ],
-    1,
-    'Hissiy rag‘bat ijobiy emotsional aloqa va qo‘llab-quvvatlashni kuchaytiradi.'
+    0,
+    'Aniq mezonlar o‘quvchi natijasini tushunarli va adolatli baholashga yordam beradi.'
   ),
 
   q(
     'm2t1-e26',
-    'Resurslarni optimallashtirishga mos yechim qaysi?',
+    'O‘quvchining real vaziyatda bilimini qo‘llay olishi nimani ko‘rsatadi?',
     [
-      'Mavjud joylardan ko‘p funksiyali foydalanish',
-      'Xonalarni faqat dars vaqtida ishlatish',
-      'Kutubxonani yopiq saqlash',
-      'Yangi bino qurishni birinchi o‘ringa qo‘yish',
+      'Faqat yodlash darajasini',
+      'Kompetensiyani amalda namoyon etishini',
+      'Faqat davomatini',
+      'Faqat intizomini',
     ],
-    0,
-    'Mavjud resurslardan ko‘p funksiyali foydalanish samaradorlikni oshiradi.'
+    1,
+    'Bilimni real vaziyatda qo‘llash kompetensiyaning muhim belgilaridan biridir.'
   ),
 
   q(
     'm2t1-e27',
-    'Bo‘sh vaqtni boshqarishda birinchi qadam nima bo‘lishi mumkin?',
+    'Maktabda sifatni yaxshilash uchun muammo aniqlangach nima qilinadi?',
     [
-      'To‘garaklar sonini darhol oshirish',
-      'O‘quvchilarning qiziqishlarini aniqlash',
-      'Nazoratni kuchaytirish',
-      'Barcha o‘quvchilarni bir xil faoliyatga jalb qilish',
+      'Sabablar tahlil qilinadi va mos yechim belgilanadi',
+      'Muammo yashiriladi',
+      'Faqat hisobot yoziladi',
+      'Mas’ul shaxs jazolanadi',
     ],
-    1,
-    'Faoliyatni ehtiyojga moslashtirish uchun avval qiziqishlar o‘rganiladi.'
+    0,
+    'Muammo sabablarini tushunish to‘g‘ri va maqsadli yechim tanlash uchun zarur.'
   ),
 
   q(
     'm2t1-e28',
-    'Quyidagi moslashtirishlardan to‘g‘risini toping.\n\nA) Kognitiv to‘siq\nB) Psixologik muhit\nC) Metodik xato\n\n1) Oilaviy bosim\n2) Tayanch bilim bo‘shlig‘i\n3) Mos kelmagan o‘qitish usuli',
+    'Qaysi holat ma’lumotlarga asoslangan boshqaruvga misol bo‘ladi?',
     [
-      'A–2, B–1, C–3',
-      'A–1, B–2, C–3',
-      'A–3, B–1, C–2',
-      'A–2, B–3, C–1',
+      'Direktorning shaxsiy taxminiga asoslangan qaror',
+      'Diagnostika natijalari asosida qo‘shimcha mashg‘ulot rejasini tuzish',
+      'An’anaga ko‘ra bir xil qarorni takrorlash',
+      'Barcha sinflarga bir xil chorani qo‘llash',
     ],
-    0,
-    'Kognitiv — bilim bo‘shlig‘i, psixologik — bosim, metodik — o‘qitish usuli.'
+    1,
+    'Ma’lumotlarga asoslangan boshqaruvda qaror aniq dalillar asosida shakllanadi.'
   ),
 
   q(
     'm2t1-e29',
-    'O‘qituvchiga qo‘shimcha korreksion mashg‘ulotlarni strategik ish sifatida ko‘rsatish nimaga xizmat qiladi?',
+    'Ta’lim sifatini boshqarishda doimiy takomillashtirish nimani anglatadi?',
     [
-      'Past natijalarni yashirishga',
-      'Maktab natijadorligini yaxshilashga',
-      'Nazorat hujjatlarini ko‘paytirishga',
-      'O‘qituvchi yuklamasini kamaytirishga',
+      'Bir marta qaror qabul qilib, uni o‘zgartirmaslikni',
+      'Natijalarni muntazam tahlil qilib, jarayonni yaxshilab borishni',
+      'Faqat nazoratni kuchaytirishni',
+      'Faqat yangi hujjatlar yaratishni',
     ],
     1,
-    'Korreksion ishlar muammoli o‘quvchilar natijasini yaxshilash orqali umumiy sifatga ta’sir qiladi.'
+    'Doimiy takomillashtirish natijalarni muntazam tahlil qilish va zarur o‘zgarishlarni kiritishni anglatadi.'
   ),
 
   q(
     'm2t1-e30',
-    '“O‘quvchi = baho” qarashidan voz kechish nimani anglatadi?',
+    'Ta’lim sifatini boshqarishning eng muhim tamoyillaridan biri qaysi?',
     [
-      'Baholashni bekor qilishni',
-      'O‘quvchini kengroq rivojlanish ko‘rsatkichlari bilan baholashni',
-      'Reytingni majburiy qilishni',
-      'Nazoratni kamaytirishni',
+      'Muammoni yashirish',
+      'Dalilga asoslanish va natijani qayta tekshirish',
+      'Faqat jazoga tayanish',
+      'Barcha vaziyatlarda bir xil qaror qabul qilish',
     ],
     1,
-    'O‘quvchining shaxsiy yutuqlari, qiziqishi va rivojlanishi ham hisobga olinadi.'
+    'Sifat boshqaruvi dalillar, maqsadli choralar va qayta baholashga tayangan holda amalga oshiriladi.'
   ),
 ]
 
@@ -424,392 +431,392 @@ const easy: Question[] = [
 const medium: Question[] = [
   q(
     'm2t1-m01',
-    'Ota-ona suhbatida qaysi ketma-ketlik hamkorlikka ko‘proq yordam beradi?',
+    'Maktabda o‘quvchilarning yakuniy natijalari pasaydi. Direktorning eng asosli birinchi harakati qaysi?',
     [
-      'Muammo → ayblash → talab',
-      'Kuchli tomon → muammo → birgalikdagi yechim',
-      'Talab → ogohlantirish → nazorat',
-      'Baholash → taqqoslash → xulosa',
+      'O‘qituvchilarga darhol tanbeh berish',
+      'Natijani fan, sinf va kompetensiyalar kesimida tahlil qilish',
+      'Qo‘shimcha nazoratlarni ko‘paytirish',
+      'Barcha o‘quvchilarga bir xil qo‘shimcha topshiriq berish',
     ],
     1,
-    'Ijobiy boshlanish himoyaviy reaksiyani kamaytirib, yechimga o‘tishni osonlashtiradi.'
+    'Natijaning qayerda va qaysi kompetensiyada pasaygani aniqlansa, keyingi chorani aniq belgilash mumkin.'
   ),
 
   q(
     'm2t1-m02',
-    'Direktor o‘qituvchining past natijasini ko‘rib, darhol tanbeh bermadi. Avval darsni kuzatib, sabablarni aniqladi. Bu qaysi yondashuv?',
+    'Bir sinfda chorak baholari yuqori, ammo mustaqil topshiriqlarda natijalar past. Direktor nimani tekshirishi kerak?',
     [
-      'Rivojlantiruvchi boshqaruv',
-      'Jazo asosidagi boshqaruv',
-      'Reyting nazorati',
-      'Ma’muriy bosim',
+      'Faqat davomatni',
+      'Baholash mezonlari va topshiriqlarning kompetensiyani o‘lchash darajasini',
+      'Faqat sinfdagi o‘quvchilar sonini',
+      'Faqat ota-onalar fikrini',
     ],
-    0,
-    'Sababni aniqlash va yordam ko‘rsatish rivojlantiruvchi boshqaruvga mos.'
+    1,
+    'Yuqori baholar real mustaqil natija bilan mos kelmasa, baholashning validligi tahlil qilinadi.'
   ),
 
   q(
     'm2t1-m03',
-    'Bir o‘quvchi tez, ikkinchisi sekin o‘zlashtiradi. Direktor qanday qarorni qo‘llab-quvvatlashi kerak?',
+    'Bir sinfda o‘quvchilarning tayyorgarlik darajasi keskin farq qiladi. Qaysi boshqaruv yechimi maqsadga muvofiq?',
     [
-      'Bir xil topshiriq va bir xil temp',
-      'Individual va differensial topshiriqlar',
-      'Past o‘zlashtiruvchini chetlatish',
-      'Barcha o‘quvchilarga qo‘shimcha nazorat',
+      'Barcha o‘quvchilarga bir xil murakkablikdagi topshiriq berish',
+      'Differensial topshiriqlar tizimini qo‘llab-quvvatlash',
+      'Faqat kuchli o‘quvchilar bilan ishlash',
+      'Past natijali o‘quvchilarni topshiriqlardan ozod qilish',
     ],
     1,
-    'Differensial yondashuv o‘quvchilarning turli sur’atlarini hisobga oladi.'
+    'Differensiallashtirish turli tayyorgarlik darajalariga mos ta’lim imkonini beradi.'
   ),
 
   q(
     'm2t1-m04',
-    'Quyidagi moslashtirishlardan to‘g‘risini aniqlang.\n\nA) Nazoratdan qo‘llab-quvvatlashga\nB) Bahodan shaxsga\nC) Yopiq tizimdan ochiq hamkorlikka\n\n1) Ota-onalarni muloqotga jalb qilish\n2) Qobiliyat va qiziqishni hisobga olish\n3) Metodik yordam va maslahat berish',
+    'Direktor dars kuzatuvidan keyin o‘qituvchiga faqat kamchiliklarni sanab bermay, keyingi dars uchun aniq metodik tavsiyalar berdi. Bu qanday yondashuv?',
     [
-      'A–3, B–2, C–1',
-      'A–2, B–1, C–3',
-      'A–1, B–3, C–2',
-      'A–3, B–1, C–2',
+      'Rivojlantiruvchi monitoring',
+      'Jazo asosidagi nazorat',
+      'Formal attestatsiya',
+      'Reyting nazorati',
     ],
     0,
-    'Har bir yo‘nalishning amaliy ko‘rinishi mos ravishda 3, 2 va 1.'
+    'Monitoring rivojlanish uchun aniq feedback va amaliy yordam bilan yakunlanmoqda.'
   ),
 
   q(
     'm2t1-m05',
-    'Direktor qiziqishlar auditidan so‘ng ayrim to‘garaklarni o‘zgartirdi. Bu qarorning asosiy dalili nima?',
+    'Maktabda ayrim to‘garaklarga qatnashuv juda past. Direktor birinchi navbatda qaysi ma’lumotni o‘rganishi kerak?',
     [
-      'Mavjud jadvalning qulayligi',
-      'O‘quvchilarning real ehtiyojlari',
-      'O‘qituvchilar sonining ko‘pligi',
-      'An’anaviy yo‘nalishlarning mavjudligi',
+      'O‘qituvchilarning ish stajini',
+      'O‘quvchilarning qiziqish va ehtiyojlarini',
+      'Faqat xonalar sonini',
+      'Faqat maktab reytingini',
     ],
     1,
-    'Audit ma’lumotlari faoliyat yo‘nalishlarini real qiziqishlarga moslashtirish uchun ishlatiladi.'
+    'Qatnashuv past bo‘lishining sababini tushunish uchun o‘quvchi ehtiyojlarini o‘rganish muhim.'
   ),
 
   q(
     'm2t1-m06',
-    'O‘quvchi portfoliosida ijodiy ishlar, loyihalar va yutuqlar jamlanmoqda. Bu qaysi boshqaruv qarorini qo‘llab-quvvatlaydi?',
+    'O‘quvchi portfoliosidan boshqaruv qarorida foydalanishning eng katta afzalligi nimada?',
     [
-      'O‘quvchini faqat baho bilan baholashni',
-      'Rivojlanish trayektoriyasini tahlil qilishni',
-      'Intizomiy choralarni kuchaytirishni',
-      'Sinf reytingini bekor qilishni',
+      'Faqat yakuniy bahoni ko‘rsatadi',
+      'Rivojlanishning turli dalillarini bir joyda ko‘rsatadi',
+      'Faqat davomatni nazorat qiladi',
+      'Faqat intizomiy holatni aks ettiradi',
     ],
     1,
-    'Portfolio o‘quvchining vaqt davomida rivojlanishini ko‘rsatadi.'
+    'Portfolio baho bilan birga loyiha, ijodiy ish va boshqa rivojlanish dalillarini ko‘rsatishi mumkin.'
   ),
 
   q(
     'm2t1-m07',
-    'Quyidagi moslashtirishlardan to‘g‘risini toping.\n\nA) Ijobiy mustahkamlash\nB) Shaxsiy shartnoma\nC) Loyiha usuli\n\n1) Oldindan kelishilgan qoidalar\n2) Ijobiy xatti-harakatni e’tirof etish\n3) Faollikni foydali vazifaga yo‘naltirish',
+    'Past o‘zlashtirishni “signal” sifatida ko‘rish qanday qarorni talab qiladi?',
     [
-      'A–2, B–1, C–3',
-      'A–1, B–2, C–3',
-      'A–3, B–1, C–2',
-      'A–2, B–3, C–1',
+      'Sabablarni aniqlash va mos yordamni rejalashni',
+      'Darhol intizomiy chora ko‘rishni',
+      'O‘quvchini reytingdan chiqarishni',
+      'Bahoni avtomatik pasaytirishni',
     ],
     0,
-    'Instrumentlarning asosiy ta’siri 2, 1 va 3 bilan mos.'
+    'Signal yondashuvi natija ortidagi sabablarni aniqlash va mos chorani tanlashga asoslanadi.'
   ),
 
   q(
     'm2t1-m08',
-    'Past o‘zlashtiruvchi o‘quvchiga kichik va bajariladigan topshiriq berish qanday natijani ko‘zlaydi?',
+    'O‘qituvchi o‘quvchini “dangasa” deb ta’rifladi. Direktor uchun eng professional savol qaysi?',
     [
-      'Rasmiy nazoratni oshirishni',
-      'Muvaffaqiyat tajribasini yaratishni',
-      'Yuklamani butunlay bekor qilishni',
-      'Sinf reytingini o‘zgartirishni',
+      'Uni qanday jazolash kerak?',
+      'Bu xatti-harakat yoki natijaga qanday omillar ta’sir qilmoqda?',
+      'Nega unga yuqori baho bermadingiz?',
+      'Uni boshqa sinfga o‘tkazamizmi?',
     ],
     1,
-    'Bajariladigan vazifa muvaffaqiyatni his qilish va keyingi harakatga tayyorlikni kuchaytiradi.'
+    'Professional boshqaruv yorliq qo‘yishdan ko‘ra kuzatilayotgan natijaning sabablarini izlaydi.'
   ),
 
   q(
     'm2t1-m09',
-    'Quyidagi sabablarni moslashtiring.\n\nA) Kognitiv to‘siq\nB) Psixologik muhit\nC) Metodik xato\n\n1) Oila va tengdoshlar bosimi\n2) Tayanch bilimning yetishmasligi\n3) O‘qitish usulining mos kelmasligi',
+    'Ota-ona suhbatda himoyaviy munosabat bildirdi. Qaysi muloqot modeli samaraliroq?',
     [
-      'A–2, B–1, C–3',
-      'A–1, B–3, C–2',
-      'A–3, B–2, C–1',
-      'A–2, B–3, C–1',
+      'Kamchiliklarni ketma-ket sanash',
+      'Kuchli tomon → muammo → kelishilgan yechim',
+      'Talab → ogohlantirish → jazo',
+      'Baholash → taqqoslash → tanbeh',
     ],
-    0,
-    'Sabablar mos ravishda bilim bo‘shlig‘i, psixologik muhit va metodikaga taalluqli.'
+    1,
+    'Ijobiy boshlanish va kelishilgan yechim himoyaviy reaksiyani kamaytiradi.'
   ),
 
   q(
     'm2t1-m10',
-    'Direktor o‘quvchilarni rag‘batlantirishda “eng katta o‘sish” mezonini qo‘shdi. Buning afzalligi nimada?',
+    '“Eng katta o‘sish” mezonini rag‘batlantirish tizimiga kiritishning asosiy afzalligi nima?',
     [
-      'Yuqori natijali o‘quvchilarni ajratishda',
-      'Turli boshlang‘ich darajadagi o‘quvchilarni rivojlanishga undashda',
-      'Baholash mezonlarini soddalashtirishda',
-      'Reytingdagi farqni kamaytirishda',
+      'Faqat yuqori natijali o‘quvchilarni ajratish',
+      'Turli boshlang‘ich darajadagi o‘quvchilarning rivojlanishini e’tirof etish',
+      'Baholashni bekor qilish',
+      'Sinf reytingini tenglashtirish',
     ],
     1,
-    'O‘sish mezoni boshlang‘ich darajasi turlicha bo‘lgan o‘quvchilarning yutug‘ini ko‘rsatadi.'
+    'O‘sish mezoni faqat mutlaq natijani emas, o‘quvchining rivojlanish dinamikasini ham qadrlaydi.'
   ),
 
   q(
     'm2t1-m11',
-    'Maktabda barcha o‘quvchilarga bir xil topshiriq berish natijasida ayrimlari ortda qolmoqda. Eng mos boshqaruv chorasi qaysi?',
+    'Direktor o‘quvchilarning qiziqishlarini o‘rganib, bo‘sh vaqt dasturini qayta tuzdi. Bu qanday boshqaruvga misol?',
     [
-      'Topshiriq hajmini barcha uchun oshirish',
-      'Differensial topshiriqlarni joriy etish',
-      'Nazorat ishlarini ko‘paytirish',
-      'Ortda qolganlarni alohida guruhga chiqarish',
+      'Ma’lumotlarga asoslangan boshqaruvga',
+      'Faqat ma’muriy boshqaruvga',
+      'Tasodifiy boshqaruvga',
+      'Faqat nazoratga',
     ],
-    1,
-    'Differensial topshiriqlar turli tayyorgarlik darajalariga mos yordam beradi.'
+    0,
+    'Qaror oldindan yig‘ilgan ma’lumotga tayanganligi sababli dalillarga asoslangan boshqaruv hisoblanadi.'
   ),
 
   q(
     'm2t1-m12',
-    'Raqamli savodxonligi yuqori o‘quvchilar uchun direktor qaysi yo‘nalishni qo‘llab-quvvatlashi maqsadga muvofiq?',
+    'Raqamli vosita darsga joriy qilindi, ammo natija yaxshilanmadi. Qaysi xulosa eng asosli?',
     [
-      'Raqamli resurslardan maqsadli foydalanishni',
-      'Raqamli vositalardan voz kechishni',
-      'Barcha darslarni qisqartirishni',
-      'Faqat an’anaviy topshiriqlarni',
+      'Texnologiya o‘z-o‘zidan ta’lim sifatini kafolatlamaydi',
+      'Barcha raqamli vositalardan voz kechish kerak',
+      'O‘quvchilar texnologiyaga qarshi',
+      'An’anaviy darslar har doim samaraliroq',
     ],
     0,
-    'Raqamli savodxonlikni ta’limiy maqsadga yo‘naltirish zamonaviy boshqaruvga mos.'
+    'Texnologiyaning samarasi uning pedagogik maqsadga mos va to‘g‘ri qo‘llanishiga bog‘liq.'
   ),
 
   q(
     'm2t1-m13',
-    'Vizual axborotni tez qabul qiladigan o‘quvchilar uchun qaysi vosita maqsadga muvofiq?',
+    'O‘quvchilarning vizual axborotni yaxshi qabul qilishi aniqlansa, qaysi yechim maqsadga muvofiq?',
     [
-      'Faqat uzun matnli bayon',
-      'Video, sxema va infografika',
+      'Faqat uzun matnli topshiriqlar',
+      'Sxema, diagramma, video va infografikalardan maqsadli foydalanish',
+      'Faqat og‘zaki bayon',
       'Faqat yozma nazorat',
-      'Faqat og‘zaki so‘rov',
     ],
     1,
-    'Vizual materiallar o‘quvchining qabul qilish xususiyatiga mos keladi.'
+    'Vizual vositalar o‘quv materialini tushunishni yengillashtirishi mumkin.'
   ),
 
   q(
     'm2t1-m14',
-    'Direktor “Nima uchun aynan shu fanlar va shu ketma-ketlik?” deb so‘radi. Bu savol nimani ko‘rsatadi?',
+    'Direktor o‘quv rejasini tahlil qilib, “Bu fan va mavzu maktabning rivojlanish maqsadiga qanday xizmat qiladi?” degan savolni qo‘ydi. Bu nimani anglatadi?',
     [
-      'O‘quv rejasini strategik tahlil qilishni',
-      'O‘qituvchi tashabbusini cheklashni',
-      'Jadvalni texnik tekshirishni',
-      'Fanlarni kamaytirishni',
+      'Strategik moslikni tahlil qilishni',
+      'Dars jadvalini texnik tekshirishni',
+      'Fanlarni qisqartirishni',
+      'O‘qituvchining mustaqilligini cheklashni',
     ],
     0,
-    'Savol fanlar mazmuni va ketma-ketligining strategik maqsadga mosligini tekshiradi.'
+    'Savol o‘quv mazmunining maktab strategik maqsadlari bilan bog‘liqligini tekshiradi.'
   ),
 
   q(
     'm2t1-m15',
-    'O‘quv rejasini “amaliy natijaga yo‘naltirilgan strategiya” deb ko‘rish nimani talab qiladi?',
+    'Ta’lim sifatini boshqarishda faqat yakuniy natijalarni tahlil qilishning cheklovi nimada?',
     [
-      'Fanlar va maktab rivojlanish maqsadlarini uyg‘unlashtirishni',
-      'Fanlar sonini kamaytirishni',
-      'Faqat davlat hujjatini takrorlashni',
-      'Dars jadvalini o‘zgartirmaslikni',
+      'Natija juda tez o‘zgaradi',
+      'Jarayon va sabablar haqida yetarli ma’lumot bermaydi',
+      'Baholashni murakkablashtiradi',
+      'O‘quvchilar sonini kamaytiradi',
     ],
-    0,
-    'O‘quv rejasi maktabning rivojlanish yo‘nalishlari bilan bog‘langanda strategik vositaga aylanadi.'
+    1,
+    'Yakuniy natija muammoni ko‘rsatadi, lekin uning qanday yuzaga kelganini to‘liq tushuntirmasligi mumkin.'
   ),
 
   q(
     'm2t1-m16',
-    'Qaysi harakat “diagnostik yondashuv”ga mos?',
+    'Quyidagi qaysi ketma-ketlik diagnostik boshqaruvga mos?',
     [
-      'Past bahoni ko‘rib, darhol tanbeh berish',
-      'Natijaning ortidagi sabablarni aniqlash',
-      'O‘quvchini reytingdan chiqarish',
-      'Bir xil topshiriq berishni davom ettirish',
+      'Natija → tanbeh → jazo → hisobot',
+      'Muammo → sabab → yechim → qayta baholash',
+      'Reyting → taqqoslash → tanbeh → yakun',
+      'Hisobot → arxiv → baho → qaror',
     ],
     1,
-    'Diagnostika natija sabablarini aniqlash va keyingi chorani asoslashga xizmat qiladi.'
+    'Diagnostik boshqaruv muammoni aniqlab, sababni tahlil qiladi va natijani qayta tekshiradi.'
   ),
 
   q(
     'm2t1-m17',
-    'Quyidagilardan qaysilari resurslarni optimallashtirishga mos?\n\nA) Maktab binosidan darsdan keyin foydalanish\nB) Kutubxonani hamkorlik hududiga aylantirish\nC) Mavjud joylardan ko‘p funksiyali foydalanish\nD) Infratuzilmani faqat dars vaqtida ishlatish',
+    'Maktabda o‘quvchilarning bo‘sh vaqti uchun yangi yo‘nalish ochishdan oldin qaysi ma’lumotlar muhim?',
     [
-      'A, B, C',
-      'A, C, D',
-      'B, C, D',
-      'A, B, D',
+      'Faqat o‘qituvchi xohishi',
+      'Qiziqish, ehtiyoj, mavjud resurs va kutilayotgan natija',
+      'Faqat xona mavjudligi',
+      'Faqat boshqa maktablar tajribasi',
     ],
-    0,
-    'Uchala yondashuv ham mavjud resurslardan samaraliroq foydalanishni ko‘zlaydi.'
+    1,
+    'Yangi faoliyat ehtiyoj, resurs va kutilayotgan natija o‘rtasidagi moslik asosida rejalashtiriladi.'
   ),
 
   q(
     'm2t1-m18',
-    'Quyidagi moslashtirishni aniqlang.\n\n1) Vizual qabul\n2) Raqamli savodxonlik\n3) Turli o‘zlashtirish tezligi\n4) Kompetensiyaga ehtiyoj\n\na) Individual trayektoriya\nb) Video va infografika\nc) Real vaziyatdagi topshiriqlar\nd) Raqamli resurslar',
+    'Kompetensiyaga yo‘naltirilgan topshiriqning asosiy belgisi qaysi?',
     [
-      '1–b, 2–d, 3–a, 4–c',
-      '1–a, 2–b, 3–d, 4–c',
-      '1–b, 2–a, 3–c, 4–d',
-      '1–c, 2–d, 3–a, 4–b',
+      'Ko‘proq ta’rif yodlatish',
+      'Bilimni yangi yoki real vaziyatda qo‘llash',
+      'Darslik matnini qayta yozish',
+      'Faqat test variantlarini belgilash',
     ],
-    0,
-    'Xususiyatlar mos ravishda vizual, raqamli, individual va kompetensiyaviy yechimlar bilan bog‘lanadi.'
+    1,
+    'Kompetensiyaviy topshiriq bilimdan yangi sharoitda foydalanishni talab qiladi.'
   ),
 
   q(
     'm2t1-m19',
-    'Ota-onaning himoyaviy pozitsiyasini kamaytirishda qaysi boshlanish samaraliroq?',
+    'Direktor dars kuzatuvida o‘qituvchining kuchli jihatlarini ham qayd etdi. Buning boshqaruviy qiymati nimada?',
     [
-      'Bolaning kamchiliklarini sanab berish',
-      'Bolaning kuchli tomonlarini tan olish',
-      'Mas’uliyatni ota-onaga yuklash',
-      'Qat’iy talablarni bayon qilish',
+      'O‘qituvchini baholashdan voz kechishda',
+      'Rivojlanish uchun mavjud professional resurslarni aniqlashda',
+      'Faqat ijobiy hisobot tayyorlashda',
+      'Kamchiliklarni yashirishda',
     ],
     1,
-    'Ijobiy jihatni tan olish suhbat uchun xavfsizroq psixologik muhit yaratadi.'
+    'Kuchli jihatlar keyingi professional rivojlanish uchun tayanch sifatida ishlatilishi mumkin.'
   ),
 
   q(
     'm2t1-m20',
-    'Direktor qo‘shimcha mashg‘ulotlarni o‘qituvchi uchun strategik ish sifatida belgiladi. Bu nimani anglatadi?',
+    'Maktabda baholash mezonlari o‘qituvchilar bo‘yicha sezilarli farq qilmoqda. Direktorning birinchi vazifasi nima?',
     [
-      'Korreksion ishni sifatni oshirish mexanizmi sifatida ko‘rishni',
-      'O‘qituvchining asosiy vazifasini kamaytirishni',
-      'Past natijalarni yashirishni',
-      'Hisobotlar sonini oshirishni',
+      'Barcha baholarni oshirish',
+      'Mezonlarni aniqlashtirish va umumiy talablarga moslashtirish',
+      'Baholashni bekor qilish',
+      'Faqat past baho qo‘ygan o‘qituvchilarni tanqid qilish',
     ],
-    0,
-    'Qo‘shimcha yordam muammoli o‘quvchilar natijasini yaxshilashga qaratilgan strategik chora bo‘lishi mumkin.'
+    1,
+    'Baholashdagi izchillik aniq va umumiy mezonlar orqali ta’minlanadi.'
   ),
 
   q(
     'm2t1-m21',
-    'Quyidagi rag‘batlantirishlarni ta’siri bilan moslang.\n\nA) Ijtimoiy rag‘bat\nB) Imtiyozli rag‘bat\nC) Hissiy rag‘bat\n\n1) Ishonch va mas’uliyatni kuchaytirish\n2) Jamoa oldidagi maqomni oshirish\n3) Ijobiy emotsional aloqani kuchaytirish',
+    'O‘quvchining bilim bo‘shlig‘i aniqlanganda qaysi chora eng maqsadli?',
     [
-      'A–2, B–1, C–3',
-      'A–1, B–2, C–3',
-      'A–3, B–1, C–2',
-      'A–2, B–3, C–1',
+      'Qo‘shimcha va korreksion mashg‘ulotlarni ehtiyojga mos tashkil etish',
+      'Faqat nazorat ishlarini ko‘paytirish',
+      'O‘quvchini jazolash',
+      'Barcha mavzularni qayta boshlash',
     ],
     0,
-    'Rag‘bat turlari mos ravishda maqom, ishonch va emotsional aloqaga ta’sir qiladi.'
+    'Korreksion yordam aynan aniqlangan bilim bo‘shlig‘iga yo‘naltirilishi kerak.'
   ),
 
   q(
     'm2t1-m22',
-    '“Mavzular integratsiyasi” va “kompetensiyaga yo‘naltirilganlik” o‘rtasidagi farq qaysi javobda to‘g‘ri berilgan?',
+    'Ota-onalar bilan hamkorlikka asoslangan muloqotda qaysi savol konstruktivroq?',
     [
-      'Birinchisi fanlararo bog‘lanish, ikkinchisi bilimni qo‘llashga urg‘u beradi',
-      'Birinchisi nazorat, ikkinchisi intizomga urg‘u beradi',
-      'Birinchisi baholash, ikkinchisi dars jadvaliga urg‘u beradi',
-      'Birinchisi yuklama, ikkinchisi hisobotga urg‘u beradi',
+      'Nega farzandingiz bunday?',
+      'Biz birgalikda bu holatni yaxshilash uchun nima qila olamiz?',
+      'Nega siz nazorat qilmadingiz?',
+      'Kim aybdor?',
     ],
-    0,
-    'Integratsiya mazmunlar bog‘lanishini, kompetensiya esa bilimdan amalda foydalanishni anglatadi.'
+    1,
+    'Savol aybdor izlashdan ko‘ra umumiy mas’uliyat va amaliy yechimga yo‘naltiradi.'
   ),
 
   q(
     'm2t1-m23',
-    'Direktor o‘qituvchiga darsni kuzatib, keyin metodik tavsiya berdi. Bu qanday boshqaruv amaliyoti?',
+    'Maktabda o‘quvchilarning qiziqishlari o‘rganildi, lekin natijalar asosida hech qanday qaror qabul qilinmadi. Bu holat nimani ko‘rsatadi?',
     [
-      'Nazorat va jazolash',
-      'Kuzatuv asosidagi metodik qo‘llab-quvvatlash',
-      'Reyting nazorati',
-      'Ma’muriy cheklov',
+      'Ma’lumot yig‘ish qaror bilan bog‘lanmagan',
+      'Monitoring juda samarali bo‘lgan',
+      'Qiziqishlar boshqaruv uchun ahamiyatsiz',
+      'Barcha ehtiyojlar avtomatik qondirilgan',
     ],
-    1,
-    'Kuzatuv ma’lumotlari yordam ko‘rsatish uchun ishlatilmoqda.'
+    0,
+    'Ma’lumot boshqaruv qaroriga aylantirilmasa, uning amaliy qiymati pasayadi.'
   ),
 
   q(
     'm2t1-m24',
-    'O‘quvchining qiziqishi va qobiliyatini aniqlashdan keyin qo‘shimcha mashg‘ulotlarni qayta taqsimlash nimaga misol?',
+    'O‘quvchilar o‘zlashtirish tezligi bo‘yicha farq qilmoqda. Qaysi yechim individual yondashuvni kuchaytiradi?',
     [
-      'Dalillarga asoslangan boshqaruv qaroriga',
-      'Tasodifiy tashkiliy qarorga',
-      'Intizomiy choraga',
-      'Yagona standartlashtirishga',
+      'Barcha o‘quvchilar uchun bir xil temp',
+      'Bosqichli va individual topshiriqlar',
+      'Faqat kuchli o‘quvchilar bilan ishlash',
+      'Past natijali o‘quvchilarni topshiriqlardan ozod qilish',
     ],
-    0,
-    'Qaror oldindan yig‘ilgan ma’lumot asosida qabul qilinmoqda.'
+    1,
+    'Bosqichli va individual topshiriqlar turli o‘zlashtirish sur’atlarini hisobga olishga imkon beradi.'
   ),
 
   q(
     'm2t1-m25',
-    'O‘qituvchi “bu bola dangasa” degan xulosaga keldi. Direktor qanday savol bilan vaziyatni chuqurlashtirishi mumkin?',
+    'Rag‘batlantirish tizimi faqat a’lochi o‘quvchilarni qamrab olmoqda. Qaysi o‘zgarish rivojlanish madaniyatiga mos?',
     [
-      'Qanday qilib jazolaymiz?',
-      'Bu natijaning ortida qanday sabablar bor?',
-      'Nega bahosini oshirmadingiz?',
-      'Qaysi guruhga o‘tkazamiz?',
+      'Rag‘batni butunlay bekor qilish',
+      'O‘sish, tashabbus va turli kuchli tomonlarni ham e’tirof etish',
+      'Faqat eng yuqori bahoni mukofotlash',
+      'Faqat musobaqa g‘oliblarini rag‘batlantirish',
     ],
     1,
-    'Sababni izlash yorliq qo‘yishdan ko‘ra samarali boshqaruv qaroriga olib keladi.'
+    'Rivojlanish madaniyati turli shakldagi ijobiy o‘sish va tashabbusni qadrlaydi.'
   ),
 
   q(
     'm2t1-m26',
-    'Ota-onalar bilan uchrashuvlarda muammoni ayblashsiz muhokama qilishning asosiy foydasi nima?',
+    'Maktabda dars kuzatuvlari ko‘p, ammo o‘qituvchilar metodik jihatdan rivojlanmayapti. Muammo nimada bo‘lishi mumkin?',
     [
-      'Suhbat vaqtini qisqartirish',
-      'Hamkorlik uchun psixologik sharoit yaratish',
-      'Talablarni kamaytirish',
-      'Baholashni o‘zgartirish',
+      'Kuzatuv natijalari rivojlantiruvchi feedback bilan bog‘lanmagan',
+      'Dars kuzatuvi umuman kerak emas',
+      'O‘qituvchilar juda ko‘p',
+      'Baholar yetarlicha yuqori',
     ],
-    1,
-    'Himoyalanish kamayganda ota-ona yechim izlash jarayonida faolroq qatnashadi.'
+    0,
+    'Kuzatuvning o‘zi emas, undan keyingi tahlil, feedback va qo‘llab-quvvatlash rivojlanishni ta’minlaydi.'
   ),
 
   q(
     'm2t1-m27',
-    'Direktor “o‘quvchining qaysi jihati kuchli?” savolini berganda qaysi qarash namoyon bo‘ladi?',
+    'Direktor bir nechta manbadan ma’lumot oldi: diagnostika, davomat, dars kuzatuvi va ota-onalar feedbacki. Eng to‘g‘ri keyingi qadam qaysi?',
     [
-      'Muammoga yo‘naltirilgan yondashuv',
-      'Resurs va kuchli tomonlarga tayanuvchi yondashuv',
-      'Intizomiy nazorat',
-      'Reytingga asoslangan boshqaruv',
+      'Faqat eng yuqori ko‘rsatkichni olish',
+      'Ma’lumotlarni o‘zaro taqqoslab, umumiy xulosa chiqarish',
+      'Faqat direktor fikriga tayanish',
+      'Qolgan ma’lumotlarni e’tiborsiz qoldirish',
     ],
     1,
-    'Kuchli tomonlarni izlash keyingi rivojlanish uchun ichki resursni aniqlaydi.'
+    'Bir nechta manbani birgalikda tahlil qilish holatni aniqroq tushunishga yordam beradi.'
   ),
 
   q(
     'm2t1-m28',
-    'Maktab bo‘sh vaqt dasturini qayta tuzishda qaysi ketma-ketlik maqsadga muvofiq?',
+    'Innovatsion metodning pilot sinovida natija kutilganidan past bo‘ldi. Eng to‘g‘ri xulosa qaysi?',
     [
-      'Qiziqishlarni aniqlash → yo‘nalish tanlash → resurslarni moslashtirish',
-      'To‘garak ochish → qiziqishni aniqlash → ehtiyojni baholash',
-      'Hisobot → nazorat → qiziqishlarni aniqlash',
-      'Jadval → hisobot → o‘quvchi fikri',
+      'Innovatsiya doimo samarasiz',
+      'Amalga oshirish sharoitlari va metodik qo‘llash sifati ham tekshirilishi kerak',
+      'Pilot natijasi umuman ahamiyatsiz',
+      'Metodni darhol barcha sinflarda qo‘llash kerak',
     ],
-    0,
-    'Avval ehtiyoj aniqlanadi, keyin faoliyat va resurslar unga moslashtiriladi.'
+    1,
+    'Pilot natijasi metodning o‘zi bilan birga uni qanday qo‘llash sharoitlarini ham tahlil qilishni talab qiladi.'
   ),
 
   q(
     'm2t1-m29',
-    'Past natijali o‘quvchi bilan ishlashda quyidagi qarorlardan qaysi biri eng konstruktiv?',
+    'Maktabda o‘quvchi natijalarini yaxshilash uchun diagnostika, differensial topshiriq va ota-ona hamkorligi birgalikda qo‘llanmoqda. Bu qanday yondashuv?',
     [
-      'Bir xil topshiriqni ko‘proq berish',
-      'Sababni aniqlab, mos topshiriq va rag‘bat tanlash',
-      'O‘quvchini reytingdan chiqarish',
-      'Intizomiy chorani kuchaytirish',
+      'Kompleks boshqaruv',
+      'Faqat ma’muriy nazorat',
+      'Faqat individual baholash',
+      'Faqat psixologik yondashuv',
     ],
-    1,
-    'Diagnostika asosida mos yordam tanlash muammoni aniqroq hal qiladi.'
+    0,
+    'Bir nechta omil va mexanizmni birlashtirish kompleks boshqaruvga xos.'
   ),
 
   q(
     'm2t1-m30',
-    'Quyidagi bosqichlarning qaysi ketma-ketligi “jonli” rag‘batlantirish tizimiga mos?',
+    '“Ma’lumot → qaror → natija → qayta tahlil” modeli nimani ifodalaydi?',
     [
-      'E’tirof → maqsadli motivatsiya → muvaffaqiyat tuyg‘usi',
-      'Maqsadli motivatsiya → muvaffaqiyat tuyg‘usi → e’tirof',
-      'Muvaffaqiyat tuyg‘usi → e’tirof → maqsadli motivatsiya',
-      'Nazorat → baholash → jazo',
+      'Bir martalik nazoratni',
+      'Uzluksiz takomillashtirish siklini',
+      'Faqat hujjat yuritishni',
+      'Faqat yakuniy attestatsiyani',
     ],
     1,
-    'Avval ma’no va maqsad shakllanadi, keyin muvaffaqiyat tajribasi va e’tirof mustahkamlanadi.'
+    'Qayta tahlil natijasida keyingi qarorlar takomillashtiriladi va boshqaruv sikli davom etadi.'
   ),
 ]
 
@@ -820,569 +827,548 @@ const medium: Question[] = [
 const hard: Question[] = [
   q(
     'm2t1-h01',
-    'Maktabda past natijalar qayd etildi. O‘qituvchilar buni o‘quvchilarning sustligi bilan izohladi. Direktorning birinchi boshqaruv qadami qaysi bo‘lishi kerak?',
+    'Maktabda fanlar bo‘yicha yakuniy natijalar barqaror, ammo o‘quvchilarning real vaziyatdagi topshiriqlarni bajarish darajasi past. Direktor qaysi muammoni birinchi navbatda tekshirishi kerak?',
     [
-      'Muammoni ko‘rsatkichlar va sabablar kesimida diagnostika qilish',
-      'O‘qituvchilarga natijani oshirish bo‘yicha topshiriq berish',
-      'Past natijali o‘quvchilarni alohida guruhga ajratish',
-      'Ota-onalarga intizomiy talablarni kuchaytirish',
+      'Baholash va topshiriqlarning kompetensiyani o‘lchash darajasini',
+      'Faqat o‘quvchilar sonini',
+      'Faqat davomatni',
+      'Faqat maktab infratuzilmasini',
     ],
     0,
-    'Boshqaruv qarori dalil va sabablarni aniqlashdan boshlanishi kerak.'
+    'Yuqori formal natija va past amaliy qo‘llash o‘rtasidagi tafovut baholashning mazmuni va validligini tekshirishni talab qiladi.'
   ),
 
   q(
     'm2t1-h02',
-    'Bir sinfda baholar yuqori, ammo mustaqil topshiriqlarda natijalar past. Direktor nimani tekshirishi kerak?',
+    'Bir sinfda past natija qayd etildi. Tahlilda bilim bo‘shlig‘i, oilaviy bosim va metodik nomuvofiqlik bir vaqtda aniqlandi. Qaysi boshqaruv qarori eng maqbul?',
     [
-      'Faqat davomat ko‘rsatkichlarini',
-      'Baholash mezonlari va topshiriqlarning haqiqiy kompetensiyani o‘lchashini',
-      'O‘quvchilar sonini',
-      'To‘garaklar qamrovini',
+      'Faqat o‘qituvchiga tanbeh berish',
+      'Har bir sababga mos choralarni birlashtirgan reja tuzish',
+      'Faqat ota-onalar bilan ishlash',
+      'Faqat qo‘shimcha test o‘tkazish',
     ],
     1,
-    'Yuqori baho va past mustaqil natija baholashning validligi masalasini ko‘rsatishi mumkin.'
+    'Muammo ko‘p omilli bo‘lsa, yechim ham har bir muhim sababga mos mexanizmlarni qamrab olishi kerak.'
   ),
 
   q(
     'm2t1-h03',
-    'Innovatsion metod ikki sinfda sinovdan o‘tkazildi. Birida natija yaxshilandi, ikkinchisida o‘zgarish bo‘lmadi. Direktor darhol barcha sinflarga joriy etishi kerakmi?',
+    'Innovatsion metod 7-A sinfida samarali, 7-B sinfida esa samarasiz bo‘ldi. Dars kuzatuvi 7-Bda metodning asosiy bosqichlari to‘liq bajarilmaganini ko‘rsatdi. Direktor qanday xulosa qilishi kerak?',
     [
-      'Ha, chunki bir sinfda natija ijobiy bo‘ldi',
-      'Yo‘q, avval qo‘llash sharoiti va metodik amalga oshirilishini tahlil qilish kerak',
-      'Ha, chunki innovatsiya doimo bir xil ishlaydi',
-      'Yo‘q, chunki innovatsiyalar maktabda qo‘llanmasligi kerak',
+      'Metod faqat 7-A uchun mos',
+      'Metodning samarasi uni to‘g‘ri amalga oshirish sifati bilan ham bog‘liq',
+      'Innovatsiya umuman kerak emas',
+      '7-B sinfini qo‘shimcha jazolash kerak',
     ],
     1,
-    'Pilot natijalarini kengaytirishdan oldin amalga oshirish sifati va sharoitlar tekshiriladi.'
+    'Pilot natijasidagi farq metodning amalga oshirilish sifati ham natijaga ta’sir qilishini ko‘rsatadi.'
   ),
 
   q(
     'm2t1-h04',
-    'Quyidagi ketma-ketliklardan qaysi biri muammoli o‘quvchi bilan ishlashning dalillarga asoslangan sikliga mos?',
+    'Direktor o‘quvchi natijalarini tahlil qilib, muammo sabablarini aniqladi, korreksion reja tuzdi va uch oy o‘tib natijani qayta o‘lchadi. Ushbu boshqaruvning eng kuchli jihati nima?',
     [
-      'Baholash → ogohlantirish → jazo → hisobot',
-      'Muammo → sabab → yechim → qayta o‘lchash',
-      'Nazorat → reyting → taqqoslash → xulosa',
-      'Topshiriq → baho → tanbeh → yakun',
+      'Faqat nazoratning kuchaytirilgani',
+      'Qarorning natija bilan tekshirilgani',
+      'Hisobotlar sonining oshgani',
+      'O‘qituvchilar sonining ko‘paygani',
     ],
     1,
-    'Sikl muammoni aniqlash, sababni tushunish, chorani qo‘llash va natijani qayta o‘lchashdan iborat.'
+    'Qayta o‘lchash qo‘llangan choralar natija bergan-bermaganini aniqlash imkonini beradi.'
   ),
 
   q(
     'm2t1-h05',
-    'Ota-ona suhbatda himoyalanishga o‘tdi. Direktorning qaysi harakati vaziyatni konstruktiv yo‘nalishga buradi?',
+    'Maktabda o‘quvchilarning baholari yuqori, ammo xalqaro tipdagi kompetensiyaviy topshiriqlarda natijalar past. Qaysi strategik chorani tanlash maqsadga muvofiq?',
     [
-      'Muammoning barcha salbiy jihatlarini sanash',
-      'Bolaning kuchli tomonini tan olib, keyin muammo va hamkorlikdagi qadamni muhokama qilish',
-      'Ota-onaning mas’uliyatini alohida ta’kidlash',
-      'Suhbatni rasmiy ogohlantirish bilan yakunlash',
+      'Faqat uy vazifalarini ko‘paytirish',
+      'Ta’lim topshiriqlari va baholashni real qo‘llashga yo‘naltirish',
+      'Baholarni yanada oshirish',
+      'Faqat nazorat ishlarini ko‘paytirish',
     ],
     1,
-    'Ijobiy boshlanish va birgalikdagi yechim himoyaviy pozitsiyani kamaytiradi.'
+    'Kompetensiyaviy natija uchun topshiriqlar bilimni yangi vaziyatda qo‘llashni talab qilishi kerak.'
   ),
 
   q(
     'm2t1-h06',
-    'Direktor past o‘zlashtirishni uch guruh sabab bilan tahlil qildi: bilim bo‘shlig‘i, psixologik bosim, metodik nomuvofiqlik. Bu qanday boshqaruv kuchini ko‘rsatadi?',
+    'Maktabda o‘qituvchilar dars kuzatuvlarini “nazorat” sifatida qabul qilmoqda. Direktor ushbu qarashni o‘zgartirmoqchi. Qaysi choraga ustuvorlik berish kerak?',
     [
-      'Muammoni ko‘p omilli tizim sifatida ko‘rishni',
-      'Muammoni bitta sababga qisqartirishni',
-      'Nazoratni o‘qituvchiga topshirishni',
-      'Baholashni ikkilamchi deb hisoblashni',
+      'Kuzatuvlar sonini ko‘paytirishga',
+      'Kuzatuvni feedback va metodik qo‘llab-quvvatlash bilan bog‘lashga',
+      'Kuzatuvni bekor qilishga',
+      'Har bir kuzatuvdan keyin tanbeh berishga',
     ],
-    0,
-    'Ko‘p omilli diagnostika muammoni kompleks boshqarishga imkon beradi.'
+    1,
+    'Kuzatuv rivojlantirish vositasiga aylantirilsa, o‘qituvchilarning professional o‘sishiga xizmat qiladi.'
   ),
 
   q(
     'm2t1-h07',
-    'Maktabda barcha o‘quvchilarga bir xil topshiriq beriladi. Kuchli o‘quvchilar zerikadi, sust o‘quvchilar qiynaladi. Eng maqbul strategik yechim qaysi?',
+    'Maktabda barcha sinflar uchun bir xil qo‘shimcha mashg‘ulot rejasi tuzildi, biroq muammolar sinflar kesimida farq qiladi. Qaysi boshqaruv xatosi mavjud?',
     [
-      'Topshiriqlarni ko‘paytirish',
-      'Differensial va individual topshiriqlar tizimini ishlab chiqish',
-      'Barcha topshiriqlarni soddalashtirish',
-      'Nazorat ishlarini ko‘paytirish',
+      'Resurslardan ko‘p foydalanilgan',
+      'Muammo xususiyatlari differensial tahlil qilinmagan',
+      'Monitoring haddan tashqari aniq bo‘lgan',
+      'O‘quvchilar haddan tashqari ko‘p baholangan',
     ],
     1,
-    'Bir xil topshiriq turli ehtiyojlarni qondirmaydi; differensiallashtirish samaraliroq.'
+    'Turli muammolarga bir xil yechim berish ehtiyojlarning farqini hisobga olmaslikka olib keladi.'
   ),
 
   q(
     'm2t1-h08',
-    'Qaysi juftlik “muammo → boshqaruv chorasi” jihatidan eng to‘g‘ri?',
+    'Direktor o‘quvchilar qiziqishlari bo‘yicha audit o‘tkazdi. Natijada texnika va ingliz tiliga talab yuqori ekanligi aniqlandi, lekin maktabda tegishli resurs cheklangan. Eng maqbul strategiya qaysi?',
     [
-      'Psixologik bosim → ko‘proq nazorat',
-      'Bilim bo‘shlig‘i → diagnostika va korreksion yordam',
-      'Metodik xato → o‘quvchini boshqa sinfga o‘tkazish',
-      'Qiziqish pastligi → bir xil topshiriqlarni ko‘paytirish',
+      'Talabni e’tiborsiz qoldirish',
+      'Mavjud resurs, hamkorlik va bosqichli joriy etish imkoniyatlarini tahlil qilish',
+      'Barcha to‘garaklarni yopish',
+      'Talabni hisobga olmasdan an’anaviy yo‘nalishlarni saqlash',
     ],
     1,
-    'Bilim bo‘shlig‘i diagnostika va maqsadli korreksion yordamni talab qiladi.'
+    'Ehtiyoj aniqlangach, uni mavjud resurs va hamkorlik imkoniyatlari bilan uyg‘unlashtirish kerak.'
   ),
 
   q(
     'm2t1-h09',
-    'Direktor bo‘sh vaqt tizimini qayta ko‘rib chiqmoqda. Qaysi qaror eng ko‘p dalil talab qiladi?',
+    'O‘quvchilarning past natijasi faqat o‘qituvchi metodikasi bilan izohlanmoqda. Keyingi tahlil esa ayrim o‘quvchilarda tayanch bilim bo‘shlig‘i va psixologik muammo borligini ko‘rsatdi. Bu holat nimani ko‘rsatadi?',
     [
-      'Mavjud to‘garaklarni saqlash',
-      'Qiziqishlar auditiga asoslanib yangi yo‘nalishlarni ochish',
-      'Tadbirlar sonini oshirish',
-      'Jadvalni o‘zgartirmaslik',
+      'Ta’lim sifati faqat o‘qituvchiga bog‘liq',
+      'Ta’lim natijasi ko‘p omilli tizim sifatida ko‘rilishi kerak',
+      'Psixologik omillar ahamiyatsiz',
+      'Diagnostika boshqaruvga kerak emas',
     ],
     1,
-    'Yangi yo‘nalish ochish resurs va ehtiyoj mosligini ko‘rsatuvchi ma’lumotni talab qiladi.'
+    'Ta’lim natijalariga pedagogik, kognitiv, psixologik va boshqa omillar birgalikda ta’sir qilishi mumkin.'
   ),
 
   q(
     'm2t1-h10',
-    'Bir o‘quvchi akademik jihatdan sust, lekin sportda yuqori natija ko‘rsatmoqda. Direktorning eng maqbul qarori qaysi?',
+    'O‘quvchi akademik jihatdan sust, biroq sport va jamoaviy faoliyatda yuqori natija ko‘rsatmoqda. Direktorning qaysi qarori rivojlantiruvchi yondashuvga mos?',
     [
-      'Sport faoliyatini vaqtincha to‘xtatish',
-      'Kuchli tomonini motivatsiya va rivojlanish uchun resurs sifatida ishlatish',
-      'Uni faqat sport guruhiga o‘tkazish',
-      'Akademik muammo hal bo‘lmaguncha rag‘bat bermaslik',
+      'Sport faoliyatini cheklash',
+      'Kuchli tomonlardan akademik motivatsiyani kuchaytirishda foydalanish',
+      'Faqat akademik baholarni hisobga olish',
+      'Rag‘batni to‘xtatish',
     ],
     1,
-    'Kuchli tomon muvaffaqiyat tajribasini yaratib, akademik rivojlanishga ham ko‘maklashishi mumkin.'
+    'Kuchli tomonlar o‘quvchida muvaffaqiyat hissini yaratib, boshqa sohalardagi rivojlanish uchun resurs bo‘lishi mumkin.'
   ),
 
   q(
     'm2t1-h11',
-    'Quyidagi moslashtirishni aniqlang.\n\nA) Nazoratdan qo‘llab-quvvatlashga\nB) Bahodan shaxsga\nC) Ochiq hamkorlik\nD) Individual trayektoriya\n\n1) Ota-ona bilan birgalikdagi reja\n2) O‘quvchi yutuqlari va qiziqishlarini hisobga olish\n3) Metodik maslahat va dars kuzatuvi\n4) Bosqichli maqsad va monitoring',
+    'Maktabda ota-onalar fikri juda ijobiy, ammo diagnostika o‘quvchilarning mustaqil fikrlashi pastligini ko‘rsatdi. Direktor qaysi qarorni tanlashi kerak?',
     [
-      'A–3, B–2, C–1, D–4',
-      'A–2, B–3, C–4, D–1',
-      'A–1, B–2, C–3, D–4',
-      'A–3, B–1, C–2, D–4',
+      'Faqat ota-onalar fikriga tayanish',
+      'Diagnostika, dars kuzatuvi va ota-onalar feedbackini birgalikda tahlil qilish',
+      'Diagnostikani bekor qilish',
+      'O‘qituvchilar fikrini umuman hisobga olmaslik',
     ],
-    0,
-    'Yo‘nalishlar mos ravishda metodik yordam, shaxsiy rivojlanish, hamkorlik va trayektoriyaga ulanadi.'
+    1,
+    'Turli manbalardan kelgan dalillarni birgalikda tahlil qilish muammoni yaxshiroq ko‘rsatadi.'
   ),
 
   q(
     'm2t1-h12',
-    'Maktabda “eng katta o‘sish” nominatsiyasi joriy etildi. Qaysi xavfni oldini olish uchun mezon aniq belgilanadi?',
+    'Bir o‘qituvchining o‘quvchilari testlarda yuqori natija ko‘rsatmoqda, ammo loyiha va ochiq topshiriqlarda qiynalmoqda. Direktor qaysi yo‘nalishni tekshirishi kerak?',
     [
-      'Yuqori baholarni kamaytirish',
-      'Boshlang‘ich darajalar farqi sababli noto‘g‘ri taqqoslash',
-      'To‘garaklar sonining kamayishi',
-      'Ota-onalar ishtirokining oshishi',
+      'Test topshiriqlari va ta’lim faoliyatining kompetensiyaga mosligini',
+      'Faqat davomatni',
+      'Faqat sinf xonasini',
+      'Faqat uy vazifasi hajmini',
     ],
-    1,
-    'O‘sish mezoni boshlang‘ich daraja bilan bog‘liq farqlarni hisobga olishi kerak.'
+    0,
+    'Testdagi natija amaliy kompetensiyani to‘liq aks ettirmasligi mumkin; topshiriqlar mazmuni tahlil qilinadi.'
   ),
 
   q(
     'm2t1-h13',
-    'Direktor o‘quvchi portfoliosidan foydalanib qaror chiqarmoqda. Qaysi ma’lumotlar eng mazmunli?',
+    'Maktabda innovatsiyani joriy etishdan oldin ehtiyoj tahlili qilinmagan. Keyinchalik o‘qituvchilar qarshilik bildirdi. Muammoning asosiy sabablaridan biri nima bo‘lishi mumkin?',
     [
-      'Faqat yakuniy baholar',
-      'Baholar, ijodiy ishlar, loyihalar va rivojlanish dinamikasi',
-      'Faqat davomat',
-      'Faqat intizomiy qaydlar',
+      'O‘zgarishning maqsadi va zarurati yetarlicha asoslanmagan',
+      'O‘qituvchilar soni ko‘pligi',
+      'Maktabda baholash mavjudligi',
+      'O‘quvchilar soni kamligi',
     ],
-    1,
-    'Portfolio ko‘p manbali rivojlanish dalillarini jamlaydi.'
+    0,
+    'O‘zgarish ehtiyoj va dalil bilan asoslanmasa, uni qabul qilish va amalga oshirish qiyinlashadi.'
   ),
 
   q(
     'm2t1-h14',
-    'Qaysi vaziyat kompetensiyaga yo‘naltirilganlikni eng aniq ko‘rsatadi?',
+    'Direktor monitoring natijasida bir fan bo‘yicha muammo borligini aniqladi. Muammo aynan bitta sinfda kuzatilmoqda. Qaysi qaror eng asosli?',
     [
-      'O‘quvchi ta’riflarni yod oladi',
-      'O‘quvchi real muammoni tahlil qilib, bilimini yechimda qo‘llaydi',
-      'O‘quvchi darslikdagi barcha mashqlarni bajaradi',
-      'O‘quvchi nazariy qoidalarni qayta aytadi',
+      'Butun maktabga bir xil chora qo‘llash',
+      'Muammoning mahalliy sabablarini aniqlab, maqsadli yordam ko‘rsatish',
+      'Fan bo‘yicha nazoratni butunlay bekor qilish',
+      'Barcha o‘qituvchilarga tanbeh berish',
     ],
     1,
-    'Kompetensiya bilimni real vaziyatda mustaqil qo‘llashni talab qiladi.'
+    'Muammo chegaralangan bo‘lsa, yechim ham uning aniq sababi va doirasiga mos bo‘lishi kerak.'
   ),
 
   q(
     'm2t1-h15',
-    'Direktor dars ishlanmasining o‘quvchi portretiga mosligini tekshirmoqda. Bu nazoratning asosiy maqsadi nima?',
+    'Direktor bir muammoni hal qilish uchun uch xil chorani sinab ko‘rdi. Qaysi ko‘rsatkichlar choraning samaradorligini aniqlashga ko‘proq yordam beradi?',
     [
-      'Hujjat hajmini tekshirish',
-      'Ta’lim mazmunining o‘quvchi ehtiyojlariga mosligini aniqlash',
-      'Dars sonini kamaytirish',
-      'O‘qituvchi hujjatini standartlashtirish',
+      'Faqat bajarilgan ishlar soni',
+      'Boshlang‘ich va keyingi natijalar o‘rtasidagi o‘zgarish',
+      'Faqat xodimlarning fikri',
+      'Faqat yozilgan hisobotlar soni',
     ],
     1,
-    'Dars rejasining o‘quvchi xususiyatlariga mosligi ta’lim samaradorligiga bevosita ta’sir qiladi.'
+    'Samaradorlik natijaning choradan oldingi va keyingi holati bilan taqqoslanganda aniqroq ko‘rinadi.'
   ),
 
   q(
     'm2t1-h16',
-    'Direktor raqamli vositalarni joriy qildi, lekin o‘quv natijasi o‘zgarmadi. Qaysi xulosa to‘g‘riroq?',
+    'Maktabda resurs cheklangan, ammo bo‘sh xonalar mavjud. Direktor yangi xona qurishdan oldin nima qilishi kerak?',
     [
-      'Texnologiya o‘z-o‘zidan natijani kafolatlamaydi',
-      'Raqamli vositalardan foydalanish har doim noto‘g‘ri',
-      'O‘quvchilar raqamli vositalarni qabul qilmaydi',
-      'An’anaviy darslarni bekor qilish kerak',
+      'Mavjud resurslardan ko‘p funksiyali foydalanish imkoniyatini tahlil qilish',
+      'Darhol yangi bino loyihasini boshlash',
+      'Bo‘sh xonalarni yopish',
+      'Darsdan keyingi faoliyatni qisqartirish',
     ],
     0,
-    'Vosita emas, uning pedagogik maqsadga mos va samarali qo‘llanishi natijani belgilaydi.'
+    'Strategik resurs boshqaruvi mavjud imkoniyatlardan samarali foydalanishni birinchi navbatda ko‘rib chiqadi.'
   ),
 
   q(
     'm2t1-h17',
-    'Quyidagi ketma-ketliklardan qaysi biri innovatsiyani boshqarish uchun maqbul?',
+    'Quyidagi qarorlardan qaysi biri “monitoring”ni oddiy nazoratdan farqlaydi?',
     [
-      'Keng joriy etish → ehtiyoj → monitoring → metodik yordam',
-      'Ehtiyojni aniqlash → pilot → metodik yordam → monitoring va kengaytirish',
-      'Monitoring → joriy etish → ehtiyoj → pilot',
-      'Pilot → kengaytirish → ehtiyoj → baholash',
+      'Natijani qayd etib, keyingi rivojlantirish choralarini belgilash',
+      'Kamchiliklarni sanab berish',
+      'Faqat hisobot yozish',
+      'Faqat mas’ul shaxsni aniqlash',
     ],
-    1,
-    'Innovatsiya avval ehtiyojga asoslanadi, kichik miqyosda sinovdan o‘tadi va keyin kengayadi.'
+    0,
+    'Monitoring ma’lumotni qayd etish bilan cheklanmay, undan rivojlantiruvchi qarorlar uchun foydalanadi.'
   ),
 
   q(
     'm2t1-h18',
-    'Qaysi qaror dalillarga asoslangan boshqaruvga eng yaqin?',
+    'Maktabda o‘qituvchilar malakasini oshirish tadbirlari ko‘p, lekin dars sifati sezilarli o‘zgarmadi. Direktor nimani tahlil qilishi kerak?',
     [
-      'Direktorning shaxsiy kuzatuvi asosida jadvalni o‘zgartirish',
-      'Diagnostika, davomat va feedback ma’lumotlari asosida yordam rejasini tuzish',
-      'O‘qituvchilarning umumiy fikri asosida barcha to‘garaklarni yopish',
-      'An’anaviy amaliyotni o‘zgartirmaslik',
+      'Malaka oshirish mazmuni amaliy ehtiyojlarga mosligini',
+      'Faqat tadbirlar sonini',
+      'Faqat qatnashganlar ro‘yxatini',
+      'Faqat sertifikatlar sonini',
     ],
-    1,
-    'Bir nechta dalil manbasini birlashtirish qarorni asosli qiladi.'
+    0,
+    'Kasbiy rivojlanish natija berishi uchun uning mazmuni real metodik ehtiyoj bilan bog‘langan bo‘lishi kerak.'
   ),
 
   q(
     'm2t1-h19',
-    'Ota-onalar bilan muloqotda “muammo — yechim — kelishilgan qadam” modeli nimani kuchaytiradi?',
+    'Maktabda diagnostika o‘tkazildi, lekin natijalar o‘qituvchilarga qaytarilmadi. Bu holatning asosiy kamchiligi nima?',
     [
-      'Tomonlarning qarama-qarshiligini',
-      'Birgalikdagi mas’uliyat va amaliy hamkorlikni',
-      'Nazorat bosimini',
-      'Rasmiy hisobotni',
+      'Diagnostika natijasi rivojlantiruvchi feedbackga aylantirilmagan',
+      'Diagnostika juda tez o‘tkazilgan',
+      'O‘quvchilar soni kam bo‘lgan',
+      'Natijalar haddan tashqari yuqori bo‘lgan',
     ],
-    1,
-    'Kelishilgan qadamlar hamkorlikni aniq harakatlarga aylantiradi.'
+    0,
+    'Diagnostik ma’lumot keyingi ta’lim qarorlariga xizmat qilishi uchun tegishli tomonlarga yetkazilishi va tahlil qilinishi kerak.'
   ),
 
   q(
     'm2t1-h20',
-    'Maktabda past natijalar mavjud, ammo direktor faqat yakuniy baholarni tahlil qilmoqda. Qaysi muammo yuzaga keladi?',
+    'Bir maktabda past natijalar qayd etilganda faqat o‘quvchilarga qo‘shimcha topshiriq berildi. Natija o‘zgarmadi. Qaysi xulosa asosli?',
     [
-      'Jarayon va sabablar haqida yetarli dalil yig‘ilmaydi',
-      'Baholash juda batafsil bo‘ladi',
-      'Ota-onalar ishtiroki ortadi',
-      'O‘quvchilar qiziqishi avtomatik aniqlanadi',
+      'Faqat topshiriq hajmini oshirish yetarli bo‘lmasligi mumkin',
+      'O‘quvchilar o‘qishni istamaydi',
+      'Monitoring kerak emas',
+      'Baholashni bekor qilish kerak',
     ],
     0,
-    'Faqat yakuniy natija sabab va jarayonni to‘liq ko‘rsatmaydi.'
+    'Natija o‘zgarmasa, muammoning asl sababi va qo‘llangan choraning mosligi qayta tahlil qilinadi.'
   ),
 
   q(
     'm2t1-h21',
-    'Qaysi kombinatsiya past o‘zlashtirishni kompleks boshqarishga mos?',
+    'O‘quvchilarning natijasi past, lekin davomat yuqori. Qaysi taxminni tekshirish mantiqan to‘g‘ri?',
     [
-      'Baholash + intizomiy choralar',
-      'Diagnostika + differensial topshiriq + hamkorlik + qayta baholash',
-      'Reyting + tanbeh',
-      'Qo‘shimcha vazifa + umumiy nazorat',
+      'Ta’lim jarayonining sifati va metodik samaradorligini',
+      'Faqat davomat tizimini',
+      'Faqat maktab binosini',
+      'Faqat ota-onalar sonini',
     ],
-    1,
-    'Kompleks yondashuv sababni aniqlash, mos yordam, hamkorlik va natijani qayta tekshirishni birlashtiradi.'
+    0,
+    'Davomat yaxshi bo‘lsa-yu natija past bo‘lsa, ta’lim jarayonining mazmuni va metodikasi tahlil qilinishi kerak.'
   ),
 
   q(
     'm2t1-h22',
-    'Direktor qiziqishlar auditini o‘tkazdi, ammo audit natijalaridan keyin faoliyat dasturi o‘zgarmadi. Qaysi xulosa to‘g‘ri?',
+    'Direktor “o‘quvchi portreti”ni ishlab chiqishda qaysi ma’lumotlar majmuasidan foydalanishi maqsadga muvofiq?',
     [
-      'Auditning boshqaruv qiymati qaror bilan bog‘lanmagan',
-      'Audit natijalari doimo noto‘g‘ri',
-      'O‘quvchilar qiziqishi boshqaruvga taalluqli emas',
-      'To‘garaklar soni yetarli',
+      'Faqat baholar',
+      'Natija, qiziqish, ehtiyoj, rivojlanish va psixologik-pedagogik ma’lumotlar',
+      'Faqat davomat',
+      'Faqat intizomiy qaydlar',
     ],
-    0,
-    'Ma’lumot qarorga aylantirilmasa, uning boshqaruvdagi qiymati kamayadi.'
+    1,
+    'O‘quvchi portreti kengroq ma’lumotlar asosida shakllanganda individual yondashuv uchun foydaliroq bo‘ladi.'
   ),
 
   q(
     'm2t1-h23',
-    'Quyidagi holatlarning qaysi biri “bahodan shaxsga” yondashuvga mos emas?',
+    'Maktabda barcha o‘quvchilarga bir xil qo‘shimcha mashg‘ulot berish rejalashtirildi. Diagnostika esa muammolar turlicha ekanini ko‘rsatdi. Qaysi yechim yaxshiroq?',
     [
-      'Ijodiy ishlarni hisobga olish',
-      'Qiziqishlarni tahlil qilish',
-      'O‘quvchining faqat chorak bahosini asosiy dalil qilish',
-      'Shaxsiy yutuqlarni e’tirof etish',
+      'Umumiy mashg‘ulotni yanada ko‘paytirish',
+      'Diagnostika asosida kichik guruhlar va individual yordamni tashkil etish',
+      'Qo‘shimcha mashg‘ulotni bekor qilish',
+      'Faqat kuchli o‘quvchilar bilan ishlash',
     ],
-    2,
-    'Shaxsga yo‘naltirilgan yondashuv bahodan kengroq ma’lumotlarni talab qiladi.'
+    1,
+    'Muammo turi va darajasiga moslashtirilgan yordam resurslardan samaraliroq foydalanishga imkon beradi.'
   ),
 
   q(
     'm2t1-h24',
-    'Direktor o‘qituvchiga “bu o‘quvchi bilan ishlashda qaysi usulni o‘zgartirish mumkin?” deb savol berdi. Bu nimani ko‘rsatadi?',
+    'Maktabda ota-onalar bilan hamkorlik yaxshi yo‘lga qo‘yilgan, ammo o‘qituvchilar o‘quvchi natijalari bo‘yicha umumiy ma’lumot bera olmayapti. Qaysi tizimni kuchaytirish zarur?',
     [
-      'Muammoni faqat o‘quvchiga yuklashni',
-      'Metodik refleksiya va qo‘llab-quvvatlashni',
-      'Intizomiy nazoratni',
-      'Reytingni oshirishni',
+      'Ma’lumotlarni muntazam yig‘ish va tahlil qilish tizimini',
+      'Faqat tadbirlar sonini',
+      'Faqat ota-onalar yig‘ilishini',
+      'Faqat nazorat ishlarini',
     ],
-    1,
-    'Savol o‘qituvchining metodik imkoniyatlarini tahlil qilishga undaydi.'
+    0,
+    'Hamkorlik samarali bo‘lishi uchun tomonlarda o‘quvchi rivojlanishi haqida ishonchli ma’lumot bo‘lishi kerak.'
   ),
 
   q(
     'm2t1-h25',
-    'Bir o‘quvchi oilaviy bosim sabab darsda diqqatini jamlay olmayapti. Qaysi chorani birinchi o‘ringa qo‘yish maqsadga muvofiq?',
+    'Maktabda yangi metod joriy etildi. O‘qituvchilarga material berildi, ammo amaliy qo‘llash bo‘yicha yordam berilmadi. Qaysi xavf yuzaga keladi?',
     [
-      'Qo‘shimcha nazorat ishlarini berish',
-      'Psixologik qo‘llab-quvvatlash va xavfsiz muloqot muhitini yaratish',
-      'Intizomiy talabni kuchaytirish',
-      'Reytingini pasaytirish',
+      'Metodning amalga oshirilish sifati pasayishi mumkin',
+      'O‘quvchilar soni avtomatik kamayadi',
+      'Baholar avtomatik oshadi',
+      'Monitoringga ehtiyoj qolmaydi',
     ],
-    1,
-    'Psixologik omil mavjud bo‘lsa, qo‘llab-quvvatlovchi muhit muhim.'
+    0,
+    'Innovatsiyani joriy etishda metodik qo‘llab-quvvatlash uning amaliy sifatini belgilovchi muhim omildir.'
   ),
 
   q(
     'm2t1-h26',
-    'Direktor “hamma uchun bir xil” topshiriqning o‘rniga turli darajadagi vazifalarni taklif qilmoqda. Bu qarorning asosiy sababi nima?',
+    'Direktor ta’lim sifatini oshirish bo‘yicha ko‘plab tadbirlar rejasini tuzdi, ammo har bir tadbir uchun natija ko‘rsatkichi belgilanmagan. Asosiy muammo nimada?',
     [
-      'O‘qituvchi ishini ko‘paytirish',
-      'O‘quvchilarning ehtiyoj va imkoniyatlarini hisobga olish',
-      'Baholarni tenglashtirish',
-      'Nazoratni kamaytirish',
+      'Faoliyat va kutilayotgan natija o‘rtasidagi bog‘liqlik aniqlanmagan',
+      'Tadbirlar soni juda kam',
+      'O‘qituvchilar soni yetarli emas',
+      'Monitoring ortiqcha',
     ],
-    1,
-    'Differensial vazifa o‘quvchilar o‘rtasidagi tayyorgarlik farqlarini hisobga oladi.'
+    0,
+    'Strategik reja faqat faoliyatlarni emas, ularning o‘lchanadigan kutilayotgan natijalarini ham ko‘rsatishi kerak.'
   ),
 
   q(
     'm2t1-h27',
-    'Maktabda rag‘batlantirish tizimi faqat a’lochilarga qaratilgan. Qaysi o‘zgarish rivojlanish madaniyatiga ko‘proq xizmat qiladi?',
+    'Maktabdagi bir muammo uch oy davomida takrorlanmoqda, garchi bir necha marta nazorat o‘tkazilgan bo‘lsa ham. Qaysi xulosa ehtimolga yaqin?',
     [
-      'Rag‘batni bekor qilish',
-      'O‘sish, tashabbus va turli kuchli tomonlarni ham e’tirof etish',
-      'Faqat sportchilarni rag‘batlantirish',
-      'Faqat yuqori bahoni mukofotlash',
+      'Nazoratning o‘zi muammoni hal qilish uchun yetarli emas',
+      'Muammo mavjud emas',
+      'Nazoratni yanada ko‘paytirish kifoya',
+      'Barcha mas’ullarni almashtirish kerak',
     ],
-    1,
-    'Rivojlanish madaniyati turli shakldagi ijobiy o‘sishni qadrlaydi.'
+    0,
+    'Nazorat muammoni aniqlaydi, ammo uning sababiga mos yechim va qo‘llab-quvvatlash bo‘lmasa natija o‘zgarmasligi mumkin.'
   ),
 
   q(
     'm2t1-h28',
-    'Quyidagi fikrlardan qaysi biri zamonaviy o‘quvchi portretiga eng mos?',
+    'Direktor ta’lim sifatini baholashda faqat o‘quvchi natijasiga emas, dars jarayoni va ta’lim muhitiga ham qaramoqda. Bu qanday yondashuv?',
     [
-      'Barcha o‘quvchilar bir xil tempda o‘rganadi',
-      'O‘quvchilarning qabul qilish usuli va rivojlanish sur’ati farqlanadi',
-      'O‘quvchiga vizual vositalar kerak emas',
-      'Kompetensiya yodlash bilan cheklanadi',
+      'Tizimli yondashuv',
+      'Faqat natijaviy yondashuv',
+      'Faqat ma’muriy yondashuv',
+      'Faqat statistik yondashuv',
     ],
-    1,
-    'Zamonaviy boshqaruv individual farqlar va kompetensiyaviy ehtiyojlarni hisobga oladi.'
+    0,
+    'Tizimli yondashuv natija bilan birga jarayon, muhit va resurslarni ham hisobga oladi.'
   ),
 
   q(
     'm2t1-h29',
-    'Direktor bir vaqtning o‘zida diagnostika, o‘qituvchi yordami va ota-ona hamkorligini yo‘lga qo‘ydi. Buning asosiy afzalligi nima?',
+    'Maktabda sifat ko‘rsatkichlari belgilandi. Ularning ayrimlari o‘quvchi natijasini, ayrimlari jarayonni, boshqalari resurs va muhitni ifodalaydi. Bu nima uchun foydali?',
     [
-      'Muammoni bir nechta omil orqali boshqarish',
-      'Nazorat hujjatlarini kamaytirish',
-      'O‘quvchi bahosini tez oshirish',
-      'Ota-onalar mas’uliyatini kuchaytirish',
+      'Sifatni bir nechta o‘zaro bog‘liq jihatdan baholash imkonini beradi',
+      'Faqat hisobotni ko‘paytiradi',
+      'Natijani yashirish imkonini beradi',
+      'Faqat resurslarni hisoblash uchun kerak',
     ],
     0,
-    'Muammo turli omillarga ega bo‘lsa, boshqaruv ham bir nechta mexanizmni birlashtiradi.'
+    'Ko‘rsatkichlarning turli guruhlari ta’lim sifatining kompleks holatini ko‘rishga yordam beradi.'
   ),
 
   q(
     'm2t1-h30',
-    'Qaysi qaror “ma’lumot → qaror → natijani qayta tekshirish” sikliga eng mos?',
+    'Direktor diagnostika natijasiga asoslanib choralar ko‘rdi, ammo kutilgan o‘zgarish kuzatilmadi. Keyingi eng to‘g‘ri qadam qaysi?',
     [
-      'Audit → hisobot → arxiv',
-      'Diagnostika → individual reja → qayta diagnostika',
-      'Reyting → tanbeh → yakun',
-      'Suhbat → ogohlantirish → hisobot',
+      'Chorani o‘zgartirmasdan davom ettirish',
+      'Sabablar va qo‘llangan choraning mosligini qayta tahlil qilish',
+      'Natijani e’tiborsiz qoldirish',
+      'Faqat o‘quvchilarni ayblash',
     ],
     1,
-    'Diagnostika natijasi reja tuzishga, qayta diagnostika esa choraning samarasini baholashga xizmat qiladi.'
+    'Kutilgan natija bo‘lmasa, muammo sababi va tanlangan yechim qayta ko‘rib chiqiladi.'
   ),
 ]
 
 /* =========================================================
    4-DARAJA: KEYS — 10 TA
-   1–5: foydalanuvchi yuborgan keyslar asosida
-   6–10: yangi tuzilgan keyslar
 ========================================================= */
 
 const cases: Question[] = [
   q(
     'm2t1-c01',
-    `107-sonli maktabda 7-sinf o‘quvchisi Azizning ikki chorak davomida o‘zlashtirishi pasaydi. Davomatida uzilishlar bor, darsdagi faolligi kamaygan. Ayrim o‘qituvchilar unga barcha o‘quvchilar bilan bir xil topshiriq bermoqda. Ota-onasi suhbatda oilada ham qiyinchiliklar borligini bildirdi. Direktor muammoni faqat baho bilan emas, qiziqish, psixologik holat, oilaviy muhit va metodik yondashuv bilan birgalikda ko‘rmoqda.
+    `107-sonli maktabda 7-sinf o‘quvchilarining ikki chorakdagi natijalari pasaydi. Tahlilda ayrim o‘quvchilarda tayanch bilim bo‘shlig‘i, ba’zilarida oilaviy zo‘riqish, ayrim fanlarda esa metodik nomuvofiqlik aniqlandi. Direktor muammoni faqat baho bilan izohlashdan voz kechib, sabablar kesimida tahlil qilishni boshladi.
 
-Qaysi boshqaruv qarori eng maqbul?`,
+Direktorning keyingi eng maqbul qarori qaysi?`,
     [
-      'Sabablarni kompleks diagnostika qilib, ota-ona bilan hamkorlik va differensial qo‘llab-quvvatlash rejasini tuzish',
-      'O‘quvchiga ko‘proq uy vazifasi berib, natijani chorak oxirida tekshirish',
-      'Barcha fanlarda bir xil topshiriqlarni saqlab, davomatni kuchaytirish',
-      'O‘quvchini past o‘zlashtiruvchilar guruhiga ajratib, umumiy talabni kamaytirish',
+      'Har bir sababga mos korreksion choralarni belgilab, natijani qayta o‘lchash',
+      'Barcha o‘quvchilarga bir xil qo‘shimcha topshiriq berish',
+      'Faqat davomat nazoratini kuchaytirish',
+      'Faqat past baho qo‘ygan o‘qituvchilarni tanqid qilish',
     ],
     0,
-    'Vaziyatda bir nechta sabab mavjud. Shuning uchun diagnostika, hamkorlik va differensial yordam birgalikda qo‘llanadi.'
+    'Muammo ko‘p omilli bo‘lgani uchun choralar ham bilim, psixologik va metodik omillarga moslashtirilishi kerak.'
   ),
 
   q(
     'm2t1-c02',
-    `134-sonli maktabda darsdan keyingi bo‘sh vaqt tizimi kutilgan natijani bermayapti. Ayrim to‘garaklarga qatnashuv past, o‘quvchilar esa bo‘sh vaqtining bir qismini nazoratsiz o‘tkazmoqda. Tahlilda mavjud to‘garaklarning ayrimlari o‘quvchilar qiziqishiga mos emasligi aniqlandi. Rag‘batlantirish ham asosan yuqori natijalilarga qaratilgan.
+    `134-sonli maktabda darsdan keyingi to‘garaklarga qatnashuv pasaygan. O‘tkazilgan qiziqishlar auditi o‘quvchilarning amaldagi to‘garaklarning ayrimlariga qiziqishi pastligini ko‘rsatdi. Shu bilan birga, rag‘batlantirish tizimi asosan yuqori baholarga ega o‘quvchilarni qamrab olmoqda.
 
-Qaysi fikrlar vaziyatga mos?
-
-1. Qiziqishlar auditini o‘tkazish zarur.
-2. Rag‘batlantirishda o‘sish dinamikasini ham hisobga olish kerak.
-3. To‘garaklar sonini oshirishning o‘zi muammoni hal qiladi.`,
+Quyidagi qarorlardan qaysi biri vaziyatga eng mos?`,
     [
-      '1 — to‘g‘ri, 2 — to‘g‘ri, 3 — noto‘g‘ri',
-      '1 — to‘g‘ri, 2 — noto‘g‘ri, 3 — to‘g‘ri',
-      '1 — noto‘g‘ri, 2 — to‘g‘ri, 3 — to‘g‘ri',
-      '1 — noto‘g‘ri, 2 — noto‘g‘ri, 3 — to‘g‘ri',
+      'Qiziqishlarga mos yo‘nalishlarni qayta tashkil etish va rivojlanish dinamikasini ham rag‘batlantirish',
+      'Barcha mavjud to‘garaklarni o‘zgartirmasdan saqlash',
+      'Faqat to‘garaklar sonini ko‘paytirish',
+      'Rag‘batlantirish tizimini butunlay bekor qilish',
     ],
     0,
-    'Qiziqish va o‘sish dinamikasi hisobga olinadi; faoliyat sonini oshirishning o‘zi yetarli emas.'
+    'Audit natijasi faoliyatni o‘quvchi ehtiyojlariga moslashtirishni, rag‘batlantirish esa rivojlanishni ham qamrab olishini ko‘rsatadi.'
   ),
 
   q(
     'm2t1-c03',
-    `129-sonli maktabda ayrim o‘quvchilarning natijalari pasaydi. Psixolog oilaviy zo‘riqish va o‘ziga ishonchsizlikni qayd etdi. Dars kuzatuvida esa barcha o‘quvchilarga bir xil topshiriqlar berilayotgani aniqlandi. Ota-onalar bilan ayrim suhbatlar bolaning kamchiliklarini sanashga aylanib qolgan.
+    `129-sonli maktabda ayrim o‘quvchilarning natijalari pasaydi. Psixolog oilaviy zo‘riqish va o‘ziga ishonchsizlikni aniqladi. Dars kuzatuvida barcha o‘quvchilarga bir xil topshiriqlar berilayotgani ma’lum bo‘ldi. Ota-onalar bilan suhbatlarda esa ko‘pincha bolaning kamchiliklari sanab o‘tilgan.
 
-Quyidagi fikrlardan qaysilari to‘g‘ri?
-
-1. Past natijani sabablarni izlashga undovchi signal sifatida ko‘rish mumkin.
-2. O‘quvchining kuchli tomonlari motivatsiya uchun resurs bo‘lishi mumkin.
-3. Ota-onalar bilan suhbatni ayblash formatida davom ettirish kerak.`,
+Qaysi boshqaruv strategiyasi eng to‘g‘ri?`,
     [
-      '1 — to‘g‘ri, 2 — to‘g‘ri, 3 — noto‘g‘ri',
-      '1 — to‘g‘ri, 2 — noto‘g‘ri, 3 — to‘g‘ri',
-      '1 — noto‘g‘ri, 2 — noto‘g‘ri, 3 — to‘g‘ri',
-      '1 — noto‘g‘ri, 2 — to‘g‘ri, 3 — to‘g‘ri',
+      'Psixologik qo‘llab-quvvatlash, differensial topshiriq va hamkorlikdagi ota-ona muloqotini birlashtirish',
+      'Faqat nazorat ishlarini ko‘paytirish',
+      'Ota-onalarga qat’iy talablarni kuchaytirish',
+      'Barcha o‘quvchilarga bir xil qo‘shimcha topshiriq berish',
     ],
     0,
-    'Past natija sabablarni izlashga signal bo‘ladi; kuchli tomonlar motivatsiya resursi, ayblash esa hamkorlikni susaytiradi.'
+    'Vaziyat psixologik, metodik va oilaviy omillarni ko‘rsatmoqda; shuning uchun kompleks yondashuv zarur.'
   ),
 
   q(
     'm2t1-c04',
-    `113-sonli maktabda 6–8-sinflarda sust o‘zlashtirish ko‘paydi. Tahlilda bilim bo‘shliqlari, oilaviy muhit, tengdoshlar ta’siri va ayrim metodik nomuvofiqliklar aniqlandi. Ayrim o‘qituvchilar barcha o‘quvchilarga bir xil topshiriq bermoqda. Ota-onalar bilan suhbatlar ham ayrim hollarda ayblash ohangida kechmoqda.
+    `113-sonli maktabda 6–8-sinflarda o‘zlashtirish pasaygan. Tahlilda tayanch bilim bo‘shliqlari, oilaviy muhit, tengdoshlar ta’siri va ayrim metodik nomuvofiqliklar aniqlandi. Direktor muammoni faqat bitta sabab bilan tushuntirish noto‘g‘ri ekanini ta’kidladi.
 
-Qaysi harakatlar vaziyatga mos?
-
-1. Sabablarni kognitiv, psixologik va metodik kesimlarda aniqlash.
-2. Differensial topshiriqlar va kichik g‘alaba vazifalarini joriy etish.
-3. Ota-onalarga qat’iy talablarni kuchaytirishni tavsiya qilish.
-4. Ota-onalar bilan hamkorlikka asoslangan muloqotga o‘tish.
-5. O‘quvchining kuchli tomonlarini qo‘llab-quvvatlash.`,
+Quyidagi harakatlardan qaysi biri kompleks boshqaruvga mos?`,
     [
-      '1, 2, 4, 5',
-      '1, 3, 4',
-      '2, 3, 5',
-      '1, 2, 3, 5',
+      'Sabablarni guruhlash, maqsadli korreksion yordam berish, metodik qo‘llab-quvvatlash va natijani qayta o‘lchash',
+      'Faqat o‘quvchilarga qo‘shimcha uy vazifasi berish',
+      'Faqat ota-onalar bilan intizomiy suhbat o‘tkazish',
+      'Faqat yakuniy baholarni qayta ko‘rib chiqish',
     ],
     0,
-    'Kompleks diagnostika, differensial yordam, hamkorlik va kuchli tomonlarga tayanish vaziyatga mos.'
+    'Kompleks boshqaruv muammoning turli sabablarini hisobga olib, mos choralar va qayta o‘lchashni birlashtiradi.'
   ),
 
   q(
     'm2t1-c05',
-    `146-sonli maktabda ayrim to‘garaklar formallashgan, o‘quvchilar qiziqishi yetarli o‘rganilmagan. Iqtidorli bolalarning ayrimlari boshqa markazlarga ketmoqda. Past o‘zlashtiruvchi, ammo sport, sahna yoki texnikaga qiziqadigan o‘quvchilar esa rag‘batlantirish tizimida yetarli ko‘rinmayapti.
+    `146-sonli maktabda ayrim to‘garaklar formallashgan, o‘quvchilar qiziqishi yetarli o‘rganilmagan. Iqtidorli o‘quvchilarning ayrimlari boshqa markazlarga ketmoqda. Past o‘zlashtiruvchi, biroq sport, sahna yoki texnikaga qiziqadigan o‘quvchilar esa rag‘batlantirish tizimida deyarli ko‘rinmaydi.
 
-Direktor qanday choralarni tanlashi kerak?
-
-1. Qiziqishlar auditini o‘tkazish.
-2. Rag‘batni o‘sish va turli kuchli tomonlarni ham qamrab oladigan qilish.
-3. O‘quvchilarni bo‘sh vaqtni tashkil etishda ishtirok ettirish.
-4. To‘garaklar sonini o‘quvchi ehtiyojidan qat’i nazar ko‘paytirish.`,
+Direktor uchun qaysi strategiya eng maqbul?`,
     [
-      '1, 2, 3',
-      '1, 3, 4',
-      '2, 3, 4',
-      '1, 2, 4',
+      'Qiziqishlar auditini o‘tkazish, faoliyatni moslashtirish va turli kuchli tomonlarni rag‘batlantirish',
+      'Faqat yuqori baholi o‘quvchilar uchun yangi to‘garaklar ochish',
+      'To‘garaklar sonini ehtiyojni o‘rganmasdan ko‘paytirish',
+      'Past o‘zlashtiruvchi o‘quvchilarni qo‘shimcha faoliyatdan cheklash',
     ],
     0,
-    'Audit, kengroq rag‘batlantirish va o‘quvchi ishtiroki mazmunli bo‘sh vaqt tizimini kuchaytiradi.'
+    'Maktab bo‘sh vaqt tizimi o‘quvchi qiziqishi, kuchli tomonlari va rivojlanish ehtiyojlariga mos bo‘lishi kerak.'
   ),
 
   q(
     'm2t1-c06',
-    `152-sonli maktabda bir sinfda chorak baholari yuqori. Biroq direktor mustaqil topshiriq va amaliy vazifalarda o‘quvchilarning natijasi ancha pastligini aniqladi. O‘qituvchi baholarni darsdagi faol ishtirok va og‘zaki javoblarga tayanib qo‘ygan. O‘quvchilar esa bilimni yangi vaziyatga ko‘chirishda qiynalmoqda.
+    `152-sonli maktabda chorak baholari yuqori, biroq mustaqil va amaliy topshiriqlarda o‘quvchilarning natijasi past. Tahlilda o‘qituvchi baholashda asosan og‘zaki javob va darsdagi faollikka tayangani aniqlandi. O‘quvchilar bilimni yangi vaziyatga ko‘chirishda qiynalmoqda.
 
-Direktor uchun eng to‘g‘ri boshqaruv qarori qaysi?`,
+Direktor qanday qaror qabul qilishi kerak?`,
     [
-      'Baholarni saqlab, faqat davomatni nazorat qilish',
-      'Baholash mezonlari va topshiriqlarni kompetensiyani o‘lchash nuqtayi nazaridan audit qilish',
-      'O‘quvchilarga qo‘shimcha nazorat ishlarini ko‘paytirish',
-      'O‘qituvchidan chorak baholarini pasaytirishni talab qilish',
+      'Baholash mezonlari va topshiriqlarni kompetensiyaviy natijalar nuqtayi nazaridan audit qilish',
+      'Chorak baholarini avtomatik pasaytirish',
+      'Faqat uy vazifalari hajmini oshirish',
+      'O‘quvchilarning mustaqil topshiriqlarini bekor qilish',
     ],
-    1,
-    'Yuqori baho va past amaliy natija baholashning mazmuni hamda mezonlarini qayta ko‘rib chiqishni talab qiladi.'
+    0,
+    'Formal baholar va amaliy kompetensiya o‘rtasidagi tafovut baholash mezonlari hamda topshiriqlarini audit qilishni talab qiladi.'
   ),
 
   q(
     'm2t1-c07',
-    `161-sonli maktabda yangi interaktiv metod ikki sinfda pilot tarzda sinovdan o‘tkazildi. 7-A sinfida natija yaxshilandi, 7-B sinfida esa deyarli o‘zgarish bo‘lmadi. Tahlilda 7-Bda o‘qituvchi metodning ayrim bosqichlarini muntazam qo‘llamagani aniqlandi.
+    `161-sonli maktabda yangi interaktiv metod ikki sinfda pilot qilindi. 7-A sinfida natija yaxshilandi, 7-B sinfida esa sezilarli o‘zgarish bo‘lmadi. Dars kuzatuvida 7-B sinfida metodning asosiy bosqichlari to‘liq bajarilmagani aniqlandi.
 
-Direktor qanday yo‘l tutishi kerak?`,
+Direktorning eng maqbul qarori qaysi?`,
     [
-      'Metodni darhol barcha sinflarga joriy qilish',
-      'Metodni bekor qilish va eski usulga qaytish',
-      'Avval amalga oshirish sifati va metodik qo‘llab-quvvatlashni yaxshilab, keyin qayta sinash',
-      'Natija bermagan sinfni qo‘shimcha nazoratga olish',
+      'Metodni darhol butun maktabga joriy qilish',
+      'Metodni butunlay bekor qilish',
+      'O‘qituvchiga metodik yordam berib, amalga oshirish sifatini yaxshilash va qayta sinash',
+      'Faqat 7-B o‘quvchilarini qo‘shimcha nazorat qilish',
     ],
     2,
-    'Pilot natijasidagi farq metodning o‘zidan tashqari uni qanday amalga oshirilganini ham tahlil qilish zarurligini ko‘rsatadi.'
+    'Pilotdagi farq metodning o‘zidan tashqari uni amalga oshirish sifati bilan ham bog‘liq ekanini ko‘rsatadi.'
   ),
 
   q(
     'm2t1-c08',
-    `174-sonli maktabda ota-onalar maktab faoliyatidan mamnunligini bildirmoqda. Biroq diagnostik topshiriqlar o‘quvchilarning mustaqil fikrlashi pastligini ko‘rsatdi. O‘qituvchilar ham darslarda tayyor algoritmlarga ko‘proq tayanmoqda. Direktor ota-onalar fikrini ijobiy deb hisoblab, boshqa ma’lumotlarni e’tiborsiz qoldirishni o‘ylamoqda.
+    `174-sonli maktabda ota-onalar maktab faoliyatidan mamnun. Shu bilan birga, diagnostik topshiriqlar o‘quvchilarning mustaqil fikrlashi pastligini ko‘rsatdi. Dars kuzatuvlarida ham tayyor algoritmlardan ortiqcha foydalanish aniqlandi.
 
-Qaysi qaror dalillarga asoslangan boshqaruvga mos?`,
+Direktor qaysi boshqaruv qarorini tanlashi kerak?`,
     [
-      'Ota-onalar fikri ijobiy bo‘lgani uchun o‘zgarish kiritmaslik',
+      'Ota-onalar mamnunligi sabab o‘zgarish kiritmaslik',
       'Diagnostika, dars kuzatuvi va ota-onalar feedbackini birgalikda tahlil qilish',
-      'Faqat o‘qituvchilarning fikriga tayanish',
+      'Faqat ota-onalar fikriga tayanish',
       'Mustaqil fikrlashni baholashni vaqtincha to‘xtatish',
     ],
     1,
-    'Turli manbalardan olingan dalillarni triangulyatsiya qilish aniqroq boshqaruv qarorini beradi.'
+    'Turli manbalardan kelgan ma’lumotlarni birlashtirish vaziyatni yaxlit ko‘rish va asosli qaror qabul qilish imkonini beradi.'
   ),
 
   q(
     'm2t1-c09',
-    `183-sonli maktabda resurslar cheklangan. Kutubxona kun davomida kam ishlatiladi, ayrim xonalar esa darsdan keyin bo‘sh turadi. Shu bilan birga, o‘quvchilarda loyiha va mustaqil ishlashga ehtiyoj bor.
+    `183-sonli maktabda resurslar cheklangan. Kutubxona kun davomida kam ishlatiladi, ayrim xonalar esa darsdan keyin bo‘sh turadi. Shu bilan birga, o‘quvchilarda loyiha va mustaqil ishlashga ehtiyoj yuqori.
 
-Direktorning qaysi qarori resurslarni optimallashtirishga eng mos?`,
+Qaysi qaror resurslarni strategik boshqarishga eng mos?`,
     [
-      'Yangi xona qurilishini kutish',
-      'Mavjud kutubxona va xonalarni ko‘p funksiyali o‘quv maydoniga aylantirish',
-      'Darsdan keyingi faoliyatni kamaytirish',
-      'Kutubxonadan foydalanishni faqat kitob o‘qish bilan cheklash',
+      'Yangi bino qurilishini kutish',
+      'Mavjud kutubxona va xonalarni ko‘p funksiyali ta’lim maydonlariga moslashtirish',
+      'Darsdan keyingi faoliyatni qisqartirish',
+      'Kutubxonadan faqat kitob o‘qish uchun foydalanish',
     ],
     1,
-    'Cheklangan sharoitda mavjud infratuzilmani bir nechta ta’limiy vazifaga moslashtirish samarali.'
+    'Mavjud resurslarni bir nechta ta’limiy maqsadga moslashtirish cheklangan sharoitda samaradorlikni oshiradi.'
   ),
 
   q(
     'm2t1-c10',
-    `195-sonli maktabda direktor chorak boshida o‘quvchilarning fanlarga moyilligi, qaysi mavzularda qiynalayotgani va rivojlanish dinamikasini aniqladi. Keyin qo‘shimcha mashg‘ulotlar qayta taqsimlandi. Chorak oxirida natijalar yana o‘lchandi.
+    `195-sonli maktabda direktor chorak boshida o‘quvchilarning fanlarga qiziqishi, qaysi mavzularda qiynalayotgani va rivojlanish dinamikasini aniqladi. Natijalarga ko‘ra qo‘shimcha mashg‘ulotlar qayta taqsimlandi. Chorak oxirida o‘quvchilar natijalari yana o‘lchandi.
 
-Bu jarayonning eng kuchli tomoni nimada?`,
+Ushbu boshqaruv jarayonining asosiy kuchli tomoni nimada?`,
     [
-      'Qarorlar diagnostika asosida qabul qilinib, keyin natija qayta tekshirilgan',
-      'Qo‘shimcha mashg‘ulotlar soni ko‘paygan',
-      'O‘quvchilar bir xil guruhlarga ajratilgan',
+      'Qaror diagnostika asosida qabul qilinib, natija qayta o‘lchangan',
+      'Faqat qo‘shimcha mashg‘ulotlar soni oshirilgan',
+      'Barcha o‘quvchilar bir xil guruhlarga ajratilgan',
       'Nazorat davri qisqartirilgan',
     ],
     0,
-    'Bu jarayon diagnostika → qaror → qayta o‘lchash siklini namoyon qiladi.'
+    'Jarayon diagnostika → qaror → amalga oshirish → qayta o‘lchash siklini namoyon qiladi.'
   ),
 ]
 
