@@ -720,11 +720,6 @@ Eng maqbul yechim qaysi?`,
 /* =========================================================
    BARCHA SAVOLLAR
 ========================================================= */
-
-export const CASE_QUESTIONS: Question[] = [
-  // 10 ta haqiqiy case savol
-];
-
 export const M3T3_QUESTIONS: Question[] = [
   ...EASY_QUESTIONS,
   ...MEDIUM_QUESTIONS,
