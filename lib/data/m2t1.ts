@@ -1,138 +1,1428 @@
-// Module 2 — Topic 1: Ta’lim sifatini boshqarish
-// 30 easy + 30 medium + 30 hard + 10 case = 100 questions
+import type { Question } from '../quiz-data'
 
-export type M2T1Question = {
-  id: string
-  text: string
-  options: string[]
-  answer: number
-  explanation: string
-}
+export const M2T1_LEVELS: {
+  easy: Question[]
+  medium: Question[]
+  hard: Question[]
+  case: Question[]
+} = {
+  /* =========================================================
+     🟢 30 TA OSON
+  ========================================================= */
+  easy: [
+    {
+      id: 'm2t1-e01',
+      text: 'Ta’lim sifatini boshqarishning asosiy maqsadi qaysi?',
+      options: [
+        'Faqat o‘qituvchilar faoliyatini nazorat qilish',
+        'Ta’lim natijalari va jarayonlarini tizimli ravishda yaxshilash',
+        'Faqat hujjatlarni tartibga solish',
+        'Faqat yakuniy baholarni oshirish',
+      ],
+      answer: 1,
+      explanation:
+        'Ta’lim sifati natija, jarayon, muhit va resurslarni birgalikda boshqarish orqali doimiy yaxshilanadi.',
+    },
 
-const q = (
-  id: string,
-  text: string,
-  options: string[],
-  answer: number,
-  explanation: string
-): M2T1Question => ({ id, text, options, answer, explanation })
+    {
+      id: 'm2t1-e02',
+      text: 'DTSning asosiy vazifalaridan biri qaysi?',
+      options: [
+        'Ta’lim natijalari va sifatiga qo‘yiladigan talablarni belgilash',
+        'O‘qituvchilarning ish vaqtini belgilash',
+        'Maktab binosini ta’mirlash',
+        'Ota-onalar yig‘ilishini tashkil etish',
+      ],
+      answer: 0,
+      explanation:
+        'DTS ta’lim mazmuni va kutiladigan natijalar hamda ularning sifatiga qo‘yiladigan talablarni belgilaydi.',
+    },
 
+    {
+      id: 'm2t1-e03',
+      text: 'DTT asosan nimani belgilaydi?',
+      options: [
+        'Faqat yakuniy baholarni',
+        'Faqat o‘quvchilar reytingini',
+        'Ta’limni amalga oshirish uchun majburiy talab va shartlarni',
+        'Faqat o‘qituvchi ish haqini',
+      ],
+      answer: 2,
+      explanation:
+        'DTT ta’limni tashkil etishning majburiy tuzilma, mazmun va shartlariga oid talablarni belgilaydi.',
+    },
 
-export const M2T1_EASY = [
-  q("m2t1e01", "Ta’lim sifatini boshqarishning asosiy maqsadi nima?", ["Kutilgan ta’lim natijasini yaxshilash", "Faqat hujjatlarni ko‘paytirish", "Faqat darslarni tekshirish", "Faqat baholarni oshirish"], 0, "Sifat boshqaruvi ta’lim natijalarini tizimli ravishda yaxshilashga qaratiladi."),
-  q("m2t1e02", "Zamonaviy maktab direktori ta’lim sifati masalasida qanday rolni egallaydi?", ["Faqat nazoratchi rolini", "Pedagogik lider rolini", "Faqat xo‘jalik rahbari rolini", "Faqat hujjatchi rolini"], 1, "Direktor pedagogik lider, tahlilchi va o‘zgarishlarni boshqaruvchi bo‘lishi kerak."),
-  q("m2t1e03", "DTS asosan nimani belgilaydi?", ["Maktab binosi talablarini", "O‘qituvchi ish vaqtini", "Erishilishi lozim bo‘lgan natijalar va mezonlarni", "Ota-onalar yig‘ilishi jadvalini"], 2, "DTS ta’lim mazmuni va sifatiga qo‘yiladigan davlat talablarini belgilaydi."),
-  q("m2t1e04", "DTTning asosiy mazmuni qaysi javobda to‘g‘ri berilgan?", ["Faqat yakuniy baholar", "Faqat fanlar ro‘yxati", "Faqat o‘quvchilar soni", "Natijaga erishish uchun majburiy shart va talablar"], 3, "DTT tuzilma, mazmun va zarur shart-sharoitlarga doir majburiy talablarni ifodalaydi."),
-  q("m2t1e05", "Ta’lim sifati ko‘rsatkichlariga qaysi biri kiradi?", ["O‘quvchining kompetensiyasi", "Faqat sinf xonasi soni", "Faqat direktor yoshi", "Faqat dars davomiyligi"], 0, "Kompetensiyalar ta’lim natijasining muhim ko‘rsatkichidir."),
-  q("m2t1e06", "Sifat boshqaruvida dalillarga asoslangan boshqaruv nimani anglatadi?", ["Taxmin bilan qaror qilishni", "Ma’lumot va dalillarga tayangan qaror qilishni", "Faqat tajribaga suyanishni", "Faqat buyruq berishni"], 1, "Dalillarga asoslangan boshqaruv real ma’lumot va dalillarni qarorlar asosiga qo‘yadi."),
-  q("m2t1e07", "Ta’lim sifatini boshqarish jarayonining boshlang‘ich elementi qaysi?", ["Mukofotlash", "Hisobot yozish", "Muammoni aniqlash", "Majlis o‘tkazish"], 2, "Muammo aniqlanmasa, aniq yechim va takomillashtirish chorasi belgilanmaydi."),
-  q("m2t1e08", "Ichki monitoringning asosiy vazifasi nima?", ["Faqat jazolash", "Faqat hujjat yig‘ish", "Faqat reyting tuzish", "Jarayon va natijalarni kuzatib, takomillashtirish"], 3, "Ichki monitoring sifat holatini aniqlash va yaxshilash choralarini belgilashga xizmat qiladi."),
-  q("m2t1e09", "Quyidagilardan qaysi biri ta’lim sifati omili hisoblanadi?", ["O‘qituvchi salohiyati", "Direktor kabinetining kattaligi", "Maktab nomi", "Majlislar soni"], 0, "O‘qituvchining kasbiy salohiyati ta’lim sifatiga bevosita ta’sir qiladi."),
-  q("m2t1e10", "Formativ baholashning muhim jihati qaysi?", ["Faqat yakuniy ball qo‘yish", "O‘quvchiga rivojlantiruvchi fikr-mulohaza berish", "Faqat reyting chiqarish", "Faqat nazorat ishini ko‘paytirish"], 1, "Formativ baholash o‘quv jarayonida o‘quvchining rivojlanishiga xizmat qiluvchi feedback beradi."),
-  q("m2t1e11", "Ta’lim sifatini boshqarishda jarayon ko‘rsatkichi nimani ko‘rsatadi?", ["Faqat yakuniy natijani", "Faqat resurs miqdorini", "Jarayon qanday kechayotganini", "Faqat o‘quvchi sonini"], 2, "Jarayon indikatorlari natijaga olib boruvchi faoliyatlarning holatini ko‘rsatadi."),
-  q("m2t1e12", "Sifat ko‘rsatkichining boshqaruvga foydali bo‘lishi uchun yana nima kerak?", ["Faqat nomi", "Faqat rangli jadval", "Faqat yuqori raqam", "Manba, muddat va mas’ul shaxs"], 3, "Har bir indikatorning manbasi, muddati va mas’uli bo‘lsa, uni boshqarish mumkin."),
-  q("m2t1e13", "Ta’lim sifati faqat kimning vazifasi emas?", ["Faqat o‘qituvchining", "Faqat direktorning", "Faqat psixologning", "Faqat ota-onaning"], 0, "Sifat butun maktab jamoasining tizimli mas’uliyatidir."),
-  q("m2t1e14", "Jarayon yondashuvining mohiyati nimada?", ["Natijani umuman hisobga olmaslikda", "Faoliyatlarni o‘zaro bog‘liq jarayon sifatida boshqarishda", "Faqat hisobotga qarashda", "Faqat yakuniy imtihonni kutishda"], 1, "Jarayon yondashuvi faoliyatlarni kirish, jarayon va natija bilan bog‘liq tizim sifatida ko‘radi."),
-  q("m2t1e15", "Innovatsiyani joriy etishning birinchi bosqichi qaysi?", ["Masshtabni kengaytirish", "Natijani e’lon qilish", "Ehtiyojni aniqlash", "Hisobotni yopish"], 2, "Avvalo qaysi muammo yoki ehtiyoj uchun innovatsiya kerakligi aniqlanadi."),
-  q("m2t1e16", "Innovatsiyaning pilot bosqichi nima uchun kerak?", ["Hamma sinflarni darhol o‘zgartirish uchun", "Hujjatlarni ko‘paytirish uchun", "Nazoratni bekor qilish uchun", "Yondashuvni kichik miqyosda sinab ko‘rish uchun"], 3, "Pilot sinov yondashuvning amaliy samaradorligini xavfi kam sharoitda tekshiradi."),
-  q("m2t1e17", "Ichki monitoring vositalaridan biri qaysi?", ["Dars kuzatuv varaqasi", "Faqat reklama banneri", "Faqat ishga qabul varaqasi", "Faqat inventar ro‘yxati"], 0, "Dars kuzatuv varaqasi ta’lim jarayonini tizimli kuzatish vositasidir."),
-  q("m2t1e18", "Qisqa diagnostika nima uchun qo‘llanadi?", ["Faqat davomatni tekshirish uchun", "O‘quvchilarning bilim va ko‘nikma holatini aniqlash uchun", "Faqat o‘qituvchini baholash uchun", "Faqat hujjatni tekshirish uchun"], 1, "Diagnostika o‘quv natijalaridagi real holatni aniqlashga yordam beradi."),
-  q("m2t1e19", "Mezonli baholash auditida avvalo nima tekshiriladi?", ["Sinf devori bezagi", "O‘quvchi kiyimi", "Baholash mezonlarining izchilligi va qo‘llanishi", "O‘qituvchi kabineti"], 2, "Audit baholash mezonlari aniq va bir xil qo‘llanayotganini tekshiradi."),
-  q("m2t1e20", "Risk guruhi kartasi qanday vazifani bajaradi?", ["Faqat sinflarni bezatadi", "Faqat o‘quvchini mukofotlaydi", "Faqat davomatni e’lon qiladi", "Muammoga moyil o‘quvchilarni kuzatish va qo‘llab-quvvatlashga yordam beradi"], 3, "Risk guruhi kartasi muammoli holatlarni aniqlash va individual choralarni rejalashga xizmat qiladi."),
-  q("m2t1e21", "Ta’lim sifati bo‘yicha ota-ona fikri nimaga xizmat qilishi mumkin?", ["Faqat reklama qilishga", "Jarayon va muammolar haqida qo‘shimcha dalil olishga", "Faqat jazolashga", "Faqat bahoni o‘zgartirishga"], 1, "Ota-ona fikri maktab xizmatlari va muhitini baholashda qo‘shimcha manba bo‘la oladi."),
-  q("m2t1e22", "Sifatni yaxshilash siklining to‘g‘ri ketma-ketligi qaysi?", ["Mukofot–majlis–hisobot–tanaffus", "Natija–bayram–hisobot–nazorat", "Muammo–sabab–yechim–qayta o‘lchash", "Buyruq–jazolash–hisobot–yakun"], 2, "Ichki sifat sikli muammo, sabab, yechim va qayta o‘lchash bosqichlaridan iborat."),
-  q("m2t1e23", "Ta’lim sifatining muhit va resurs indikatoriga qaysi biri yaqin?", ["Psixologik muhit va resurslardan foydalanish", "Faqat test javobi", "Faqat yakuniy baho", "Faqat dars mavzusi"], 0, "Muhit va resurslar o‘quv jarayoni sharoitlarini ifodalaydi."),
-  q("m2t1e24", "Kompetensiyaga asoslangan ta’lim nimaga ko‘proq e’tibor beradi?", ["Faqat mavzuni yodlashga", "Bilimni amaliy vaziyatda qo‘llashga", "Faqat daftar yuritishga", "Faqat darslik soniga"], 1, "Kompetensiya bilim va ko‘nikmalarni real vaziyatlarda qo‘llash bilan namoyon bo‘ladi."),
-  q("m2t1e25", "Inklyuziv va differensial yondashuvning maqsadi nima?", ["Barcha o‘quvchiga bir xil topshiriq berish", "Faqat kuchli o‘quvchilar bilan ishlash", "Turli ehtiyojlarni hisobga olib ta’limni moslashtirish", "Faqat baholarni oshirish"], 2, "Differensial yondashuv o‘quvchilarning ehtiyoj va imkoniyatlarini hisobga oladi."),
-  q("m2t1e26", "Tashqi baholashga tayyorgarlikda dalillar papkasi nima uchun kerak?", ["Faqat arxivni to‘ldirish uchun", "Faqat direktor uchun", "Faqat ota-onaga ko‘rsatish uchun", "Bajarilgan ish va natijalarni tasdiqlovchi dalillarni jamlash uchun"], 3, "Dalillar papkasi boshqaruv choralarining amaliy natijasini ko‘rsatishga yordam beradi."),
-  q("m2t1e27", "Ta’lim sifatini boshqarishda rahbariyatning muhim vazifasi qaysi?", ["Maqsad, monitoring va resurslarni belgilash", "Faqat dars o‘tish", "Faqat jurnal tekshirish", "Faqat yig‘ilish o‘tkazish"], 0, "Rahbariyat tizim maqsadi, monitoringi va zarur resurslarni boshqaradi."),
-  q("m2t1e28", "O‘qituvchining sifat boshqaruvidagi bevosita vazifasi qaysi?", ["Faqat moliyani boshqarish", "Dars, metodika, baholash va feedbackni takomillashtirish", "Faqat xo‘jalikni yuritish", "Faqat ota-onalar yig‘ilishini o‘tkazish"], 1, "O‘qituvchi ta’lim jarayonining metodik va baholash qismini bevosita boshqaradi."),
-  q("m2t1e29", "O‘quvchi natijalarini qayta o‘lchashdan asosiy maqsad nima?", ["Faqat yangi hisobot yaratish", "Faqat reytingni chiqarish", "Ko‘rilgan choralar natijasini aniqlash", "Faqat o‘qituvchini solishtirish"], 2, "Qayta o‘lchash yechimning haqiqiy ta’sirini aniqlash imkonini beradi."),
-  q("m2t1e30", "Ta’lim sifatining eng to‘g‘ri tavsifi qaysi?", ["Faqat yuqori baholar", "Faqat intizom", "Faqat hujjatlar", "Natija, jarayon va muhitning uzluksiz yaxshilanishi"], 3, "Sifat tizimli natija, jarayon va sharoitlarning uzluksiz takomillashuvi bilan belgilanadi."),
-]
+    {
+      id: 'm2t1-e04',
+      text: '“Jarayon yondashuvi” nimani anglatadi?',
+      options: [
+        'Faqat yakuniy natijani tekshirishni',
+        'Ta’lim natijasini unga olib keluvchi jarayonlar bilan bog‘lab boshqarishni',
+        'Faqat tashqi nazoratga tayanishni',
+        'Faqat rahbar tajribasiga ishonishni',
+      ],
+      answer: 1,
+      explanation:
+        'Jarayon yondashuvi natijani dars, baholash, muhit va boshqa o‘zaro bog‘liq jarayonlar bilan birgalikda ko‘radi.',
+    },
 
-export const M2T1_MEDIUM = [
-  q("m2t1m01", "Maktabda baholar yuqori, ammo mustaqil topshiriqlarda natija past. Direktorning birinchi qadami nima?", ["Mustaqil topshiriqlarni tahlil qilish", "Barcha baholarni qayta yozish", "O‘qituvchilarni jazolash", "Nazorat ishlarini bekor qilish"], 0, "Avval yuqori baho bilan real kompetensiya o‘rtasidagi tafovut dalillar asosida aniqlanadi."),
-  q("m2t1m02", "DTS va DTTni boshqaruvda ajratishning eng to‘g‘ri usuli qaysi?", ["DTS shart, DTT natija", "DTS natija va mezon, DTT shart va talab", "Ikkalasi ham faqat baholash", "Ikkalasi ham faqat o‘quv reja"], 1, "DTS kutilgan natija va mezonlarni, DTT esa natijaga erishish uchun majburiy talablarni ifodalaydi."),
-  q("m2t1m03", "Bir fan bo‘yicha ikki o‘qituvchi bir xil ishni turlicha baholamoqda. Eng maqbul chora?", ["Faqat yuqori bahoni qoldirish", "Baholashni vaqtincha to‘xtatish", "Mezonlarni audit qilib, umumiy talqin ishlab chiqish", "Faqat direktor baholashi"], 2, "Muammo baholash mezonlarining izchil qo‘llanmayotganida bo‘lishi mumkin."),
-  q("m2t1m04", "Diagnostika natijasida muammo aniqlandi, lekin sabab o‘rganilmadi. Qaysi bosqich yetishmayapti?", ["Mukofotlash", "Hisobot yozish", "Reklama qilish", "Sabablarni tahlil qilish"], 3, "Muammo ortidagi sabab aniqlanmasa, tanlangan yechim samarasiz bo‘lishi mumkin."),
-  q("m2t1m05", "Dars kuzatuvlarida o‘quvchi faolligi pastligi uch oy takrorlandi. Eng to‘g‘ri boshqaruv qarori?", ["Sababni aniqlab, aniq chora va muddat belgilash", "Faqat kuzatuvlar sonini oshirish", "Muammoni hisobotga yozmaslik", "Barcha darslarni bekor qilish"], 0, "Takroriy muammo kuzatuvning o‘zi bilan emas, sabab va tuzatish chorasi bilan boshqariladi."),
-  q("m2t1m06", "Ota-ona so‘rovida qoniqish yuqori, diagnostikada natija past. Rahbar nimani qiladi?", ["So‘rovni inkor qiladi", "Ikki manbani birgalikda tahlil qiladi", "Faqat so‘rov natijasini oladi", "Faqat diagnostikani bekor qiladi"], 1, "Turli dalillar bir-birini to‘ldiradi va muammoni kengroq ko‘rsatadi."),
-  q("m2t1m07", "Innovatsion metod bir sinfda sinovdan o‘tkazildi va ijobiy natija berdi. Keyingi qadam nima?", ["Darhol barcha sinflarga majburlash", "Sinovni to‘xtatish", "Metodik qo‘llab-quvvatlash va qayta baholash", "Natijani tekshirmaslik"], 2, "Pilotdan keyin metodik yordam va monitoring orqali natija barqarorligi tekshiriladi."),
-  q("m2t1m08", "Sifat indikatori mavjud, ammo uning ma’lumot manbasi ko‘rsatilmagan. Muammo nimada?", ["Indikator rangida", "Indikator nomida", "Indikator hajmida", "Indikatorning tekshiriluvchanligida"], 3, "Manbasiz indikatorni tekshirish va boshqarish qiyin."),
-  q("m2t1m09", "Maktabda davomat yaxshi, ammo murakkab topshiriqlarni bajarish sust. Qaysi indikator ustuvor?", ["Kompetensiya natijalari", "Faqat davomat", "Faqat xonalar soni", "Faqat o‘qituvchi ish staji"], 0, "Muammo aynan murakkab topshiriq va kompetensiya natijasida ko‘rinmoqda."),
-  q("m2t1m10", "Tashqi baholashga tayyorgarlikda hujjatlar to‘liq, ammo natijalar past. Rahbar nimani ustuvor qiladi?", ["Faqat yangi papka ochadi", "Natijani yaxshilash bo‘yicha amaliy choralarni boshlaydi", "Faqat hujjatlarni bezatadi", "Baholashni kutadi"], 1, "Hujjat mavjudligi natijaning o‘zi emas; amaliy sifat muammosi hal qilinishi kerak."),
-  q("m2t1m11", "Bir muammo uchun ko‘plab chora belgilansa, boshqaruv qanday xavfga duch keladi?", ["Natija avtomatik oshadi", "Resurs va mas’uliyat tarqalib ketadi", "Monitoring osonlashadi", "Sabab yo‘qoladi"], 2, "Ortiqcha choralar ustuvorlikni buzib, resurslarni tarqatib yuborishi mumkin."),
-  q("m2t1m12", "Sifat boshqaruvida ‘process’ ko‘rsatkichi uchun qaysi misol mos?", ["Yakuniy sertifikat soni", "Maktab binosi maydoni", "O‘quvchilar soni", "Formativ feedbackning muntazamligi"], 3, "Feedback jarayonning qanday tashkil etilayotganini ko‘rsatadi."),
-  q("m2t1m13", "Maktabda resurs yetishmasligi aniqlansa, rahbarning birinchi vazifasi nima?", ["Muammoning ta’lim natijasiga ta’sirini baholash", "Darhol barcha darslarni qisqartirish", "O‘qituvchini ayblash", "Muammoni yashirish"], 0, "Resurs muammosi avvalo ta’lim sifati va ustuvorliklar bilan bog‘lab tahlil qilinadi."),
-  q("m2t1m14", "Bir xil diagnostika ikki oyda o‘tkazildi. Natija o‘zgarmadi. Bu nimani ko‘rsatishi mumkin?", ["Diagnostika doim noto‘g‘ri", "Ko‘rilgan chora yetarli ta’sir bermagan", "O‘quvchilar javob bera olmaydi", "Monitoring kerak emas"], 1, "Natijaning o‘zgarmasligi chora samarasi yoki amalga oshirilishini qayta ko‘rib chiqishni talab qiladi."),
-  q("m2t1m15", "Direktor o‘qituvchini faqat dars kuzatuviga ko‘ra baholamoqda. Qaysi yondashuv kuchliroq?", ["Faqat direktor fikri", "Faqat o‘quvchi fikri", "Bir nechta dalil manbasini birlashtirish", "Faqat yakuniy baholar"], 2, "Sifat qarori bir nechta ishonchli dalillarni birgalikda ko‘rib chiqishni talab qiladi."),
-  q("m2t1m16", "Risk guruhidagi o‘quvchi davomatini yaxshilash uchun eng mos hamkorlik qaysi?", ["Faqat o‘quvchiga tanbeh", "Faqat sinf jurnalini tekshirish", "Faqat reytingni pasaytirish", "Sinf rahbari, psixolog va oila bilan individual ish"], 3, "Risk holatlarida muhit va oilaviy omillarni hisobga olgan jamoaviy yondashuv samaraliroq."),
-  q("m2t1m17", "Ta’lim sifati bo‘yicha indikatorning muddati belgilanmasa, nima qiyinlashadi?", ["Natijani o‘z vaqtida kuzatish", "Dars mavzusini tanlash", "O‘qituvchini ishga olish", "Sinfni shakllantirish"], 0, "Muddat monitoringni qachon va qaysi davrda amalga oshirishni belgilaydi."),
-  q("m2t1m18", "DTT talablariga mos sharoit mavjud emasligi aniqlansa, direktor nima qiladi?", ["Faqat natijani talab qiladi", "Shart-sharoitni ta’minlash rejasini tuzadi", "Muammoni o‘quvchiga yuklaydi", "DTSni o‘zgartiradi"], 1, "DTT majburiy shartlarni ko‘zda tutgani uchun sharoitni ta’minlash boshqaruv vazifasidir."),
-  q("m2t1m19", "Innovatsiya barcha sinflarga joriy etilishidan oldin nima muhim?", ["Faqat reklama qilish", "Faqat buyruq chiqarish", "Pilot natijasini va qo‘llash shartlarini baholash", "Faqat material tarqatish"], 2, "Masshtablashdan oldin natija va qo‘llash sharoitlari tekshiriladi."),
-  q("m2t1m20", "Baholash mezonlari mavjud, ammo o‘quvchilar ularni bilmaydi. Qaysi yechim mos?", ["Mezonlarni yashirish", "Faqat yakuniy bahoni aytish", "Baholashni kamaytirish", "Mezonlarni oldindan tushuntirish va feedbackda qo‘llash"], 3, "Mezonlar shaffof bo‘lsa, o‘quvchi kutilgan natijani yaxshiroq tushunadi."),
-  q("m2t1m21", "Sifatni boshqarish ‘bir martalik aksiya’ emasligining sababi nima?", ["Natija doimiy kuzatuv va takomillashtirishni talab qiladi", "Faqat hujjatlar ko‘p bo‘lgani uchun", "Faqat direktor band bo‘lgani uchun", "Faqat nazorat mavjudligi uchun"], 0, "Sifat o‘zgaruvchan jarayon bo‘lib, muntazam o‘lchash va yaxshilashni talab qiladi."),
-  q("m2t1m22", "Maktabda bir muammo uchun mas’ul shaxs belgilanmagan. Qaysi oqibat ehtimoliy?", ["Natija tezlashadi", "Ijro mas’uliyati noaniq qoladi", "Monitoring osonlashadi", "Resurslar ko‘payadi"], 1, "Mas’ul shaxs bo‘lmasa, ijroni nazorat qilish va javobgarlikni belgilash qiyinlashadi."),
-  q("m2t1m23", "Kompetensiya natijasini baholashda qaysi topshiriq kuchliroq dalil beradi?", ["Faqat atamalarni yodlash", "Faqat testdagi bitta fakt", "Real vaziyatda bilimni qo‘llash", "Faqat daftarni tekshirish"], 2, "Kompetensiya bilimni vaziyatda qo‘llay olish orqali yaxshiroq namoyon bo‘ladi."),
-  q("m2t1m24", "Maktabda yangi metod o‘qituvchilarga berildi, lekin metodik yordam berilmadi. Qaysi bosqich sust?", ["Ehtiyojni aniqlash", "Natijani e’lon qilish", "Baholashni bekor qilish", "Metodik qo‘llab-quvvatlash"], 3, "Innovatsiyani samarali joriy qilishda o‘qituvchini metodik qo‘llash muhim."),
-  q("m2t1m25", "Tashqi baholashdan oldin kamchiliklar reyestri tuzishning maqsadi nima?", ["Muammolarni ustuvorlik bilan bartaraf etish", "Faqat kamchiliklarni yashirish", "Faqat hisobotni ko‘paytirish", "Faqat mas’ulni jazolash"], 0, "Reyestr muammolarni tizimlashtirib, ularni ketma-ket bartaraf etishga yordam beradi."),
-  q("m2t1m26", "Ta’lim sifati pasayishida o‘qituvchi metodikasi va davomat bir vaqtda muammo bo‘lsa, nima qilish kerak?", ["Faqat metodikani ko‘rish", "Har bir omilni alohida tahlil qilib, bog‘liqligini aniqlash", "Faqat davomatni jazolash", "Faqat baholarni ko‘tarish"], 1, "Bir nechta omil birga ta’sir qilishi mumkin; sabablar tizimli tahlil qilinadi."),
-  q("m2t1m27", "Sifat boshqaruvida ‘qayta o‘lchash’ qachon amalga oshiriladi?", ["Muammo aniqlanishidan oldin", "Faqat yil oxirida", "Chora amalga oshirilgandan keyin", "Faqat tashqi tekshiruvda"], 2, "Qayta o‘lchash ko‘rilgan choradan keyingi o‘zgarishni aniqlaydi."),
-  q("m2t1m28", "Rahbar barcha muammolarni bir oyda hal qilishni rejaladi. Qaysi tamoyil buzilishi mumkin?", ["Inklyuziya", "Davomiylik", "Shaffoflik", "Ustuvorlik va resurslarni oqilona taqsimlash"], 3, "Cheklangan resurslarda muammolar ta’sir va xavfga ko‘ra ustuvorlashtiriladi."),
-  q("m2t1m29", "Jamoaviy sifat boshqaruvida ota-onalar qanday rolga ega?", ["Fikr-mulohaza va hamkorlikni qo‘llab-quvvatlash", "Faqat baho qo‘yish", "Faqat nazorat qilish", "Faqat hujjat yuritish"], 0, "Ota-onalar hamkor va fikr-mulohaza manbai sifatida sifat tizimini qo‘llab-quvvatlaydi."),
-  q("m2t1m30", "Maktab sifati haqida eng ishonchli xulosa qanday olinadi?", ["Faqat direktor fikridan", "Bir nechta indikator va dalillarni birgalikda tahlil qilishdan", "Faqat ota-ona so‘rovidan", "Faqat bitta testdan"], 1, "Sifat murakkab tizim bo‘lgani uchun turli dalillarni birlashtirish ishonchliroq xulosa beradi."),
-]
+    {
+      id: 'm2t1-e05',
+      text: 'Dalilga asoslangan boshqaruvda qarorlar nimaga tayanadi?',
+      options: [
+        'Shaxsiy taxminlarga',
+        'Tasodifiy fikrlarga',
+        'Faqat tajribaga',
+        'Monitoring, diagnostika va ma’lumotlarga',
+      ],
+      answer: 3,
+      explanation:
+        'Dalilga asoslangan boshqaruv qarorlarni ishonchli ma’lumot va ko‘rsatkichlar asosida qabul qilishni nazarda tutadi.',
+    },
 
-export const M2T1_HARD = [
-  q("m2t1h01", "Maktabda yakuniy baholar 90%, standartlashtirilgan diagnostika 68%. Qaysi boshqaruv xulosasi eng asosli?", ["Ichki baholash mezonlari va topshiriqlarini tashqi diagnostika bilan solishtirish", "Barcha o‘qituvchilarni darhol qayta attestatsiyalash", "Diagnostikani bekor qilish", "Yakuniy baholarni yanada oshirish"], 0, "Ikki baholash manbasi orasidagi tafovut avvalo mezon va topshiriqlar mosligini tahlil qilishni talab qiladi."),
-  q("m2t1h02", "DTS natijani, DTT esa shartlarni belgilaydi. Maktab natijani talab qilib, zarur sharoitni yaratmasa, qaysi muammo yuzaga keladi?", ["Faqat monitoring ortadi", "Natijaga erishish talabi resurs va shartlar bilan ta’minlanmaydi", "Baholash avtomatik yaxshilanadi", "DTS kuchini yo‘qotadi"], 1, "Natija talabi uni ta’minlovchi majburiy shartlar bilan uyg‘un boshqarilishi kerak."),
-  q("m2t1h03", "Ikki sinfda bir xil yangi metod qo‘llandi: A sinfda natija oshdi, B sinfda o‘zgarmadi. Eng kuchli keyingi tahlil qaysi?", ["Faqat A sinfni mukofotlash", "Metodni butunlay rad etish", "Qo‘llash sifati, boshlang‘ich holat va o‘qituvchi amaliyotini solishtirish", "B sinf baholarini oshirish"], 2, "Bir xil metodning turli natijasi qo‘llash sharoiti va boshlang‘ich farqlarni tahlil qilishni talab qiladi."),
-  q("m2t1h04", "Bir indikator uch oy ketma-ket pasaydi. Mas’ul shaxs har oy hisobot bergan, ammo chora belgilanmagan. Qaysi nuqson asosiy?", ["Indikator juda aniq", "Hisobot juda ko‘p", "Muddat noto‘g‘ri", "Monitoring natijasi boshqaruv qaroriga ulanmagan"], 3, "Monitoring faqat ma’lumot yig‘ish emas; natija qaror va chora bilan bog‘lanishi kerak."),
-  q("m2t1h05", "O‘quvchilar nazariy savollarga yaxshi, amaliy vaziyatlarga sust javob bermoqda. Qaysi sifat muammosi ustun?", ["Kompetensiyani qo‘llashdagi muammo", "Faqat davomat muammosi", "Faqat resurs muammosi", "Faqat intizom muammosi"], 0, "Nazariy bilimning amaliy vaziyatga ko‘chirilmasligi kompetensiyaviy natijadagi bo‘shliqni ko‘rsatadi."),
-  q("m2t1h06", "Maktabda baholash mezonlari mavjud, ammo fanlar kesimida talqin turlicha. Qaysi yechim tizimliroq?", ["Har fan o‘z mezonini butunlay mustaqil belgilashi", "Umumiy mezonlarni metodik muhokama qilib, amaliy misollar bilan birxillashtirish", "Baholashni faqat direktor zimmasiga yuklash", "Baholarni kamaytirish"], 1, "Bir xil mezonning bir xil talqini metodik kelishuv va amaliy kalibrlashni talab qiladi."),
-  q("m2t1h07", "Davomat 96%, darslar o‘z vaqtida, lekin o‘quvchilarning mustaqil fikrlashi past. Qaysi boshqaruv qarori mantiqan ustuvor?", ["Davomatni yanada oshirish", "Dars sonini ko‘paytirish", "Topshiriqlar va metodikani mustaqil fikrlashga yo‘naltirib pilot qilish", "Faqat nazorat ishlarini ko‘paytirish"], 2, "Jarayonning boshqa ko‘rsatkichlari yaxshi bo‘lsa, asosiy muammo o‘quv faoliyatining mazmuni va metodikasida bo‘lishi mumkin."),
-  q("m2t1h08", "Tashqi baholashdan oldin barcha hujjatlar tayyor, ammo kamchiliklar reyestri yo‘q. Qaysi xavf mavjud?", ["Hujjatlar yo‘qoladi", "Davomat kamayadi", "O‘quvchi soni o‘zgaradi", "Aniqlangan muammolarni tizimli yopish qiyinlashadi"], 3, "Kamchiliklar reyestri tayyorgarlikdagi bo‘shliqlarni ustuvorlashtirish va yopishni nazorat qilishga xizmat qiladi."),
-  q("m2t1h09", "Bir indikator uchun uch xil ma’lumot manbasi turli natija berdi. Rahbarning eng to‘g‘ri harakati nima?", ["Manbalar metodologiyasi va o‘lchov mezonlarini tekshirish", "Eng yuqori natijani olish", "Eng past natijani yashirish", "Indikatorni bekor qilish"], 0, "Turli natijalar o‘lchov usuli yoki ma’lumot sifati farqini ko‘rsatishi mumkin."),
-  q("m2t1h10", "O‘qituvchi yangi metodni to‘g‘ri qo‘llayapti, lekin natija o‘zgarmadi. Qaysi omilni keyin tekshirish maqsadga muvofiq?", ["Faqat darslik rangini", "O‘quvchilarning boshlang‘ich darajasi va topshiriq mosligini", "Faqat sinf eshigini", "Faqat dars davomiyligini"], 1, "Metod to‘g‘ri qo‘llangan bo‘lsa, boshlang‘ich daraja va topshiriqning maqsadga mosligi tahlil qilinadi."),
-  q("m2t1h11", "Maktabda muammo ko‘p, resurs cheklangan. Ustuvorlikni belgilashning eng kuchli mezoni qaysi?", ["Kim ko‘proq shikoyat qilgani", "Kim birinchi aytgani", "Ta’lim natijasiga ta’sir va xavf darajasi", "Qaysi muammo osonligi"], 2, "Cheklangan resursda ta’sir va xavf yuqori bo‘lgan muammolar birinchi o‘ringa qo‘yiladi."),
-  q("m2t1h12", "Pilot natijasi ijobiy, ammo ikki o‘qituvchi metodni turlicha talqin qilgan. Masshtablashdan oldin nima zarur?", ["Metodni bekor qilish", "Faqat o‘qituvchilarni almashtirish", "Natijani yashirish", "Metodik standart va amaliy yo‘riqnomani aniqlashtirish"], 3, "Turli talqin natijaning barqarorligiga ta’sir qiladi; masshtablashdan oldin qo‘llash standarti aniqlashtiriladi."),
-  q("m2t1h13", "Ota-onalar qoniqishi yuqori, lekin o‘quvchilar mustaqil topshiriqlarda sust. Qaysi xulosa eng ehtiyotkor?", ["Qoniqish ta’lim natijasining barcha jihatini to‘liq aks ettirmaydi", "Ota-onalar fikri doim noto‘g‘ri", "Diagnostika doim noto‘g‘ri", "Maktab sifati yuqori emas deb darhol xulosa qilish"], 0, "Qoniqish muhit va xizmat tajribasini ko‘rsatadi, lekin kompetensiya natijasini to‘liq almashtirmaydi."),
-  q("m2t1h14", "Direktor har oy dars kuzatadi, lekin kuzatuv natijalari keyingi oyda takrorlanadi. Qaysi tizimiy o‘zgarish kerak?", ["Kuzatuvni bekor qilish", "Kuzatuv natijasini aniq chora, mas’ul va muddat bilan bog‘lash", "Faqat ko‘proq dars kuzatish", "Faqat hisobot hajmini oshirish"], 1, "Kuzatuvning qiymati natijani boshqaruv sikliga ulash bilan oshadi."),
-  q("m2t1h15", "Bir sinfda o‘quvchi natijasi past, lekin o‘qituvchi metodikasi yaxshi. Qaysi qo‘shimcha dalil eng muhim?", ["O‘qituvchining ish staji", "Sinf xonasining rangi", "O‘quvchilarning boshlang‘ich diagnostikasi va individual ehtiyojlari", "Faqat dars jadvali"], 2, "Boshlang‘ich daraja va ehtiyojlar natijaning sabablarini tushuntirishda muhim dalildir."),
-  q("m2t1h16", "DTT bo‘yicha zarur shartlar bajarilmagan, ammo direktor faqat o‘qituvchilardan natija talab qilmoqda. Boshqaruvdagi xato nima?", ["Natijani o‘lchash", "O‘qituvchini qo‘llash", "Monitoringni ko‘paytirish", "Rahbariyatning tizim sharoitlarini ta’minlash mas’uliyatini e’tiborsiz qoldirish"], 3, "Sifat natija bilan birga uni ta’minlovchi shartlarni ham boshqarishni talab qiladi."),
-  q("m2t1h17", "Bir o‘quvchi davomat, baho va psixologik holat bo‘yicha xavf guruhida. Eng maqbul yondashuv qaysi?", ["Individual holatni jamoaviy qo‘llab-quvvatlash rejasiga kiritish", "Faqat bahosini oshirish", "Faqat ota-onaga tanbeh berish", "Faqat davomatini tekshirish"], 0, "Muammo bir nechta omilga ega bo‘lsa, individual va ko‘p tomonlama yordam zarur."),
-  q("m2t1h18", "Maktabda 10 ta indikator bor, lekin ularning hech biri aniq mas’ulga biriktirilmagan. Eng asosiy xavf nima?", ["Indikatorlar ko‘payadi", "Ijro uchun javobgarlik yo‘qoladi", "Natijalar avtomatik yaxshilanadi", "Hisobot qisqaradi"], 1, "Mas’ul belgilanmasa, indikator natijasiga ta’sir qiluvchi ishni kim bajarishi noaniq qoladi."),
-  q("m2t1h19", "O‘qituvchi feedback beradi, ammo o‘quvchi keyingi ishida xatoni takrorlaydi. Qaysi savol muhim?", ["Feedback soni yetarlimi?", "Feedback yozma bo‘ldimi?", "Feedback o‘quvchini keyingi harakatga yo‘naltirdimi?", "Feedback uzun bo‘ldimi?"], 2, "Sifatli feedback o‘quvchiga keyingi qadamni tushunishga yordam berishi kerak."),
-  q("m2t1h20", "Maktab natijalari yil yakunida yaxshilandi, ammo jarayon indikatorlari yil davomida pasaygan. Qanday xulosa ehtiyotkorroq?", ["Natija doim barqaror", "Muammo yo‘q", "Jarayon ahamiyatsiz", "Natijani ta’minlagan omillar va barqarorlikni qo‘shimcha tekshirish kerak"], 3, "Yakuniy natija ijobiy bo‘lsa ham, jarayonning pasayishi kelajakdagi barqarorlik uchun xavf bo‘lishi mumkin."),
-  q("m2t1h21", "Maktabda yangi baholash mezoni joriy etildi. Birinchi oy natijalari keskin pasaydi. Darhol mezonni bekor qilish to‘g‘rimi?", ["Yo‘q, avval tushunish, qo‘llash sifati va boshlang‘ich natijani tahlil qilish kerak", "Ha, har doim pasayish mezon xatosi", "Ha, eski tizimga qaytish kerak", "Faqat direktor fikriga qarash kerak"], 0, "Yangi tizimning dastlabki pasayishi moslashuv yoki qo‘llash muammosidan kelishi mumkin."),
-  q("m2t1h22", "Bir xil dars kuzatuv varaqasi turli kuzatuvchilarda turli xulosalar berdi. Qaysi chorani tanlash kerak?", ["Kuzatuvni bekor qilish", "Mezonlarni izohlash va kuzatuvchilarni kalibrlash", "Faqat bitta kuzatuvchini qoldirish", "Natijalarni o‘rtacha qilish"], 1, "Kuzatuvchilar bir xil mezonni bir xil talqin qilishi uchun kalibrlash zarur."),
-  q("m2t1h23", "Maktabda innovatsiya ehtiyoji aniqlanmagan holda joriy etildi va natija bermadi. Asosiy boshqaruv xatosi nima?", ["Pilotning qisqaligi", "O‘qituvchi soni", "Muammo va ehtiyojni oldindan aniqlamaslik", "Hisobotning kamligi"], 2, "Innovatsiya aniq ehtiyojga javob bermasa, uning foydasi past bo‘lishi mumkin."),
-  q("m2t1h24", "Tashqi baholash natijasi past chiqdi. Direktor faqat o‘qituvchilarni aybladi. Qaysi yondashuv to‘g‘riroq?", ["Faqat o‘qituvchini tekshirish", "Faqat o‘quvchini tekshirish", "Faqat darslikni almashtirish", "Jarayon, natija, resurs va muhitni tizimli tahlil qilish"], 3, "Ta’lim sifati ko‘p omilli tizim bo‘lgani uchun bitta ishtirokchiga yuklab qo‘yilmaydi."),
-  q("m2t1h25", "O‘quvchi natijasi past, ammo o‘qituvchi va resurslar yaxshi. Qaysi bosqichni tekshirish mantiqiy?", ["Topshiriqning maqsad va murakkablik darajasini", "Faqat direktor ishini", "Faqat sinf xonasini", "Faqat davomatni"], 0, "Yaxshi resurs va metod bo‘lsa, topshiriqning kutilgan kompetensiyaga mosligi muhim tekshiruv nuqtasidir."),
-  q("m2t1h26", "Sifat bo‘yicha uchta muammo aniqlandi: davomat, mezonlar, mustaqil fikrlash. Resurs bitta muammoga yetadi. Qaysi biri birinchi tanlanadi?", ["Eng oson muammo", "Ta’lim natijasiga ta’siri va xavfi yuqori muammo", "Eng ko‘p shikoyat qilingan muammo", "Eng yangi muammo"], 1, "Ustuvorlik ta’sir va xavf asosida belgilanadi, faqat shikoyat soni bilan emas."),
-  q("m2t1h27", "Sifat boshqaruvi siklida yechim joriy qilindi, lekin qayta o‘lchash o‘tkazilmadi. Nima noma’lum qoladi?", ["Muammo nomi", "Mas’ul shaxs", "Yechimning haqiqiy samarasi", "Dars vaqti"], 2, "Qayta o‘lchashsiz choraning natijaga ta’siri haqida ishonchli xulosa qilib bo‘lmaydi."),
-  q("m2t1h28", "Maktab o‘z natijalarini faqat yakuniy test bilan baholayapti. Qaysi jihat yetishmaydi?", ["Faqat hujjat", "Faqat reyting", "Faqat ota-ona fikri", "Jarayon va muhit ko‘rsatkichlari"], 3, "Faqat yakuniy natija sabab va jarayonning holatini to‘liq ko‘rsatmaydi."),
-  q("m2t1h29", "Sifat tizimida rahbariyat, o‘qituvchi, psixolog va ota-ona rollari ajratilgan. Buning asosiy afzalligi nima?", ["Mas’uliyat va hamkorlik chegaralari aniq bo‘ladi", "Hamma bir xil ish qiladi", "Faqat rahbar javob beradi", "Nazorat kamayadi"], 0, "Rollar aniqligi tizimdagi javobgarlik va hamkorlikni kuchaytiradi."),
-  q("m2t1h30", "Maktabda barcha indikatorlar yaxshi, ammo o‘quvchilar o‘zlarini xavfsiz his qilmaydi. Qaysi xulosa to‘g‘ri?", ["Sifat avtomatik yuqori", "Muhit indikatoridagi muammo umumiy sifatga ta’sir qilishi mumkin", "Faqat baholar muhim", "Muammoni hisobga olish shart emas"], 1, "Xavfsiz va rivojlantiruvchi muhit ta’lim sifatining muhim tarkibiy qismidir."),
-]
+    {
+      id: 'm2t1-e06',
+      text: 'Doimiy takomillashtirish tamoyili nimani talab qiladi?',
+      options: [
+        'Muammolarni aniqlab, tuzatish va qayta o‘lchashni',
+        'Faqat yil oxirida nazorat o‘tkazishni',
+        'Har yili bir xil rejani takrorlashni',
+        'Faqat tashqi baholashni kutishni',
+      ],
+      answer: 0,
+      explanation:
+        'Doimiy takomillashtirish muammo, sabab, yechim va qayta o‘lchash sikliga asoslanadi.',
+    },
 
-export const M2T1_CASE = [
-  q("m2t1c01", "8-sinf matematika natijasi 78 foizdan 69 foizga tushdi. Davomat 95 foiz, o‘quv reja bajarilgan, lekin murakkab mustaqil masalalar sust. Direktorning eng kuchli qarori qaysi?", ["Davomatni yanada nazorat qilish", "Barcha baholarni qayta ko‘rib chiqish", "Mustaqil topshiriqlar sababini tahlil qilib, pilot chora va qayta o‘lchash belgilash", "O‘qituvchini boshqa sinfga o‘tkazish"], 2, "Asosiy signal mustaqil murakkab topshiriqlardagi pasayishdir; sabab, pilot chora va qayta o‘lchash zarur."),
-  q("m2t1c02", "7-sinfda ichki baholar yuqori, tashqi diagnostika past. O‘quvchilar darsda faol, ammo amaliy vazifalarda qiynaladi. Eng maqbul qaror?", ["Faqat ichki baholarni qoldirish", "Baholash mezonlari va topshiriqlar mazmunini solishtirib, amaliy kompetensiyani o‘lchash", "Tashqi diagnostikani bekor qilish", "Faqat ko‘proq nazariy test berish"], 1, "Ichki va tashqi baholash tafovuti topshiriq va mezonlarning mosligini tahlil qilishni talab qiladi."),
-  q("m2t1c03", "O‘qituvchilar DTSni ‘mavzularni tugatish’, DTTni esa ‘baholar’ deb talqin qilmoqda. Ayrim sharoitlar ham yetishmaydi. Direktor nima qiladi?", ["Faqat mavzular bajarilishini tekshiradi", "Faqat baholarni oshiradi", "Natija talablari va majburiy shartlarni alohida xaritalaydi", "DTS va DTTni bir tushuncha deb oladi"], 2, "DTS natija va mezon, DTT esa natijaga erishish shartlarini anglatadi."),
-  q("m2t1c04", "6-Ada mustaqil ish past, 6-Bda davomat past, 6-Dda baholash mezonlari turlicha. Rahbar qanday yondashadi?", ["Uchalasiga bitta chora beradi", "Faqat 6-Bni nazorat qiladi", "Faqat baholashni o‘zgartiradi", "Har bir muammo sababiga mos alohida chora belgilaydi"], 3, "Muammolar tabiati turlicha, shuning uchun sababga mos boshqaruv chorasi kerak."),
-  q("m2t1c05", "Ikki sinfda kompetensiyaviy topshiriqlar pilot qilindi. A sinfda natija oshdi, B sinfda yo‘q. O‘qituvchilar topshiriqni turlicha qo‘llagan. Keyingi qadam?", ["Qo‘llash farqlarini tahlil qilib, metodik standartni aniqlashtirish", "B sinfni pilotdan chiqarish", "Topshiriqni barcha sinflarga majburlash", "Natijani hisobga olmaslik"], 0, "Natija farqiga metodni qo‘llash usuli ta’sir qilgan bo‘lishi mumkin."),
-  q("m2t1c06", "Har oy kuzatuvda o‘quvchilarning mustaqil ishlashi pastligi qayd etiladi, ammo o‘zgarish yo‘q. Qaysi boshqaruv xatosi bor?", ["Kuzatuv juda ko‘p", "Natija aniq chora, mas’ul va muddatga aylantirilmagan", "O‘quvchilar soni ko‘p", "Dars kuzatuvi kerak emas"], 1, "Monitoring qayd bilan tugamasligi, aniq tuzatish chorasi bilan davom etishi kerak."),
-  q("m2t1c07", "Tashqi baholashga tayyorgarlikda hujjatlar tartibli, lekin mezonlar turlicha va mustaqil topshiriqlar kam. Nima ustuvor?", ["Yangi papkalar tayyorlash", "Faqat hujjatlarni bezash", "Baholash mezonlarini birxillashtirish va mustaqil topshiriqlarni kuchaytirish", "Tashqi baholashni kutish"], 2, "Haqiqiy sifat muammosi jarayon va baholashda ko‘rinmoqda."),
-  q("m2t1c08", "Ota-ona so‘rovining qoniqishi 87 foiz, ammo diagnostikada natija past va o‘quvchilar mustaqil fikrlashni sust deb baholadi. Rahbar nima qiladi?", ["Faqat ota-onalar fikriga ishonadi", "Faqat diagnostikani oladi", "Muammoni inkor qiladi", "So‘rov, diagnostika va o‘quvchi fikrini birgalikda tahlil qiladi"], 3, "Turli dalillarni birlashtirish muammoning to‘liqroq manzarasini beradi."),
-  q("m2t1c09", "Maktabda davomat 88 foiz, mezonlar turlicha, mustaqil topshiriqlar kam, resurs ham cheklangan. Birinchi chora qanday tanlanadi?", ["Ta’lim natijasiga ta’siri va xavfi yuqori muammoni ustuvorlashtirish", "Faqat eng oson muammoni hal qilish", "Barcha muammoga teng resurs berish", "Faqat resurs muammosini ko‘rish"], 0, "Cheklangan resursda ta’sir va xavf asosida ustuvorlik belgilanadi."),
-  q("m2t1c10", "9-sinf yakuniy baholari yuqori, standart diagnostika o‘rtacha, darslar faol, ammo topshiriqlar asosan reproduktiv. O‘quvchilar murakkab vazifalarni xohlaydi. Eng maqbul reja?", ["Faqat baholarni saqlash", "Faqat faol metodlarni ko‘paytirish", "Kompetensiyaviy topshiriqlarni pilot qilib, natijani qayta o‘lchash", "Standart diagnostikani bekor qilish"], 2, "Faollikning o‘zi yetarli emas; murakkab va kompetensiyaviy topshiriqlar natija bilan tekshiriladi."),
-]
+    {
+      id: 'm2t1-e07',
+      text: 'Ichki monitoringning asosiy maqsadi nima?',
+      options: [
+        'O‘qituvchini jazolash',
+        'Faqat hisobot tayyorlash',
+        'Maktab ichidagi sifat holatini aniqlash va yaxshilash',
+        'Tashqi baholashni bekor qilish',
+      ],
+      answer: 2,
+      explanation:
+        'Ichki monitoring muammolarni erta aniqlash va ularni bartaraf etish uchun xizmat qiladi.',
+    },
 
-export const M2T1_LEVELS = {
-  easy: M2T1_EASY,
-  medium: M2T1_MEDIUM,
-  hard: M2T1_HARD,
-  case: M2T1_CASE,
+    {
+      id: 'm2t1-e08',
+      text: 'Qaysi biri ichki monitoring vositasiga kiradi?',
+      options: [
+        'Dars kuzatuvi',
+        'Faqat bayram tadbiri',
+        'Faqat reklama',
+        'Faqat mukofotlash',
+      ],
+      answer: 0,
+      explanation:
+        'Dars kuzatuvi ichki monitoringning asosiy vositalaridan biridir.',
+    },
+
+    {
+      id: 'm2t1-e09',
+      text: 'Qisqa diagnostika nima uchun qo‘llanadi?',
+      options: [
+        'O‘qituvchining ish haqini hisoblash uchun',
+        'O‘quvchilarning bilim dinamikasini tezkor aniqlash uchun',
+        'Faqat davomatni tekshirish uchun',
+        'Maktab binosini baholash uchun',
+      ],
+      answer: 1,
+      explanation:
+        'Qisqa diagnostika o‘quvchilarning bilim va ko‘nikmalaridagi o‘sish yoki bo‘shliqlarni aniqlashga yordam beradi.',
+    },
+
+    {
+      id: 'm2t1-e10',
+      text: 'Baholash mezonlari auditi nimaga xizmat qiladi?',
+      options: [
+        'Dars jadvalini tuzishga',
+        'O‘qituvchi almashishiga',
+        'Baholashning shaffofligi va adolatliligini tekshirishga',
+        'Faqat davomatni nazorat qilishga',
+      ],
+      answer: 2,
+      explanation:
+        'Audit baholash mezonlarining aniq, adolatli va standartlarga mosligini tekshiradi.',
+    },
+
+    {
+      id: 'm2t1-e11',
+      text: 'Ta’lim sifatining natija indikatori nimani aks ettiradi?',
+      options: [
+        'O‘quvchilarning erishgan natijalarini',
+        'Faqat maktab binosini',
+        'Faqat o‘qituvchilar sonini',
+        'Faqat dars jadvalini',
+      ],
+      answer: 0,
+      explanation:
+        'Natija indikatorlari o‘quvchi yutuqlari va yakuniy natijalar dinamikasini ko‘rsatadi.',
+    },
+
+    {
+      id: 'm2t1-e12',
+      text: 'Jarayon indikatori nimaga misol bo‘ladi?',
+      options: [
+        'Maktab hududi',
+        'Dars sifati va dastur ijrosi',
+        'O‘quvchi bo‘yi',
+        'Maktab binosining rangi',
+      ],
+      answer: 1,
+      explanation:
+        'Jarayon indikatorlari dars sifati, dastur ijrosi va baholash jarayonlarini aks ettiradi.',
+    },
+
+    {
+      id: 'm2t1-e13',
+      text: 'Muhit va resurs indikatorlariga qaysi biri kiradi?',
+      options: [
+        'Faqat yakuniy baho',
+        'Faqat imtihon natijasi',
+        'Faqat olimpiada natijasi',
+        'Psixologik iqlim, xavfsizlik va metodik ta’minot',
+      ],
+      answer: 3,
+      explanation:
+        'Muhit va resurs indikatorlari ta’lim sharoitlari, xavfsizlik, iqlim va resurslarni qamrab oladi.',
+    },
+
+    {
+      id: 'm2t1-e14',
+      text: 'Zamonaviy maktab direktorining asosiy rollaridan biri qaysi?',
+      options: [
+        'Faqat nazoratchi',
+        'Pedagogik lider va o‘zgarishlarni boshqaruvchi',
+        'Faqat hujjatchi',
+        'Faqat xo‘jalik rahbari',
+      ],
+      answer: 1,
+      explanation:
+        'Zamonaviy direktor pedagogik lider, analitik rahbar va o‘zgarishlar menejeri sifatida faoliyat yuritadi.',
+    },
+
+    {
+      id: 'm2t1-e15',
+      text: 'Ta’lim sifatiga ta’sir qiluvchi omillardan biri qaysi?',
+      options: [
+        'O‘qituvchi salohiyati',
+        'Faqat maktab nomi',
+        'Faqat binoning tashqi ko‘rinishi',
+        'Faqat direktorning ish staji',
+      ],
+      answer: 0,
+      explanation:
+        'O‘qituvchi salohiyati ta’lim sifatiga bevosita ta’sir qiluvchi muhim omildir.',
+    },
+
+    {
+      id: 'm2t1-e16',
+      text: 'Formativ baholashning asosiy xususiyati nima?',
+      options: [
+        'Faqat yakuniy natijani qayd etish',
+        'O‘quv jarayonida o‘quvchining rivojlanishini kuzatish va feedback berish',
+        'Faqat reyting tuzish',
+        'Faqat sertifikat berish',
+      ],
+      answer: 1,
+      explanation:
+        'Formativ baholash o‘quv jarayonida rivojlanishni kuzatish va keyingi ta’limni yaxshilashga xizmat qiladi.',
+    },
+
+    {
+      id: 'm2t1-e17',
+      text: 'Raqamli va aralash ta’limning asosiy imkoniyati qaysi?',
+      options: [
+        'Ta’limni faqat kompyuterga o‘tkazish',
+        'An’anaviy darsni butunlay bekor qilish',
+        'Elektron va masofaviy imkoniyatlarni ta’limga integratsiya qilish',
+        'Faqat nazorat ishlarini elektron qilish',
+      ],
+      answer: 2,
+      explanation:
+        'Aralash ta’lim an’anaviy va raqamli ta’lim imkoniyatlarini uyg‘unlashtiradi.',
+    },
+
+    {
+      id: 'm2t1-e18',
+      text: 'Kompetensiyaviy yondashuv nimaga urg‘u beradi?',
+      options: [
+        'Faqat bilimni yodlashga',
+        'Bilimni amaliy ko‘nikma va kompetensiyaga aylantirishga',
+        'Faqat darslikni tugatishga',
+        'Faqat yozma nazoratga',
+      ],
+      answer: 1,
+      explanation:
+        'Kompetensiyaviy yondashuv bilimni amaliy faoliyatda qo‘llash qobiliyatini rivojlantiradi.',
+    },
+
+    {
+      id: 'm2t1-e19',
+      text: 'Tashqi baholash nimani anglatadi?',
+      options: [
+        'Maktabning o‘z-o‘zini baholashi',
+        'Faqat ota-onalar fikri',
+        'Davlat talablari va standartlarga muvofiqlikni tashqi baholash',
+        'Faqat direktorning xulosasi',
+      ],
+      answer: 2,
+      explanation:
+        'Tashqi baholash tashkilot faoliyatiga mustaqil yoki vakolatli tashqi baho berishni anglatadi.',
+    },
+
+    {
+      id: 'm2t1-e20',
+      text: 'Jamoatchilik ishonchini shakllantirishda nima muhim?',
+      options: [
+        'Ochiqlik, shaffoflik va teskari aloqa',
+        'Faqat ichki buyruqlar',
+        'Faqat nazorat',
+        'Faqat reyting',
+      ],
+      answer: 0,
+      explanation:
+        'Ota-ona va hamkorlar bilan ochiq muloqot jamoatchilik ishonchini mustahkamlaydi.',
+    },
+
+    {
+      id: 'm2t1-e21',
+      text: '“Muammo-sabab-yechim-qayta o‘lchash” nimani ifodalaydi?',
+      options: [
+        'Sifatni yaxshilash siklini',
+        'Faqat hisobot tizimini',
+        'Faqat tashqi nazoratni',
+        'Faqat hujjat yuritishni',
+      ],
+      answer: 0,
+      explanation:
+        'Bu sikl muammoni aniqlashdan keyin sababni tahlil qilish, yechim va qayta o‘lchashni nazarda tutadi.',
+    },
+
+    {
+      id: 'm2t1-e22',
+      text: 'Innovatsiyani joriy etishning birinchi bosqichi qaysi?',
+      options: [
+        'Kengaytirish',
+        'Monitoring',
+        'Ehtiyojni aniqlash',
+        'Mukofotlash',
+      ],
+      answer: 2,
+      explanation:
+        'Innovatsiya avvalo mavjud muammo va rivojlanish ehtiyojini aniqlashdan boshlanadi.',
+    },
+
+    {
+      id: 'm2t1-e23',
+      text: 'Pilot sinov nima?',
+      options: [
+        'Innovatsiyani barcha sinflarda birdan joriy etish',
+        'Innovatsiyani cheklangan miqyosda sinab ko‘rish',
+        'Faqat nazorat ishini o‘tkazish',
+        'Innovatsiyani bekor qilish',
+      ],
+      answer: 1,
+      explanation:
+        'Pilot sinov innovatsiyaning samaradorligini cheklangan miqyosda tekshirish imkonini beradi.',
+    },
+
+    {
+      id: 'm2t1-e24',
+      text: 'Innovatsiyadan keyingi muhim bosqich qaysi?',
+      options: [
+        'Metodik qo‘llab-quvvatlash',
+        'Hujjatlarni yopish',
+        'Nazoratni bekor qilish',
+        'Barcha darslarni bir xil qilish',
+      ],
+      answer: 0,
+      explanation:
+        'Pilot jarayonida pedagoglarga metodik yordam, yo‘riqnoma va coaching zarur.',
+    },
+
+    {
+      id: 'm2t1-e25',
+      text: 'Ichki monitoringda ota-onalar fikridan foydalanishning maqsadi nima?',
+      options: [
+        'Faqat reyting tuzish',
+        'Ta’lim sifati haqida qo‘shimcha teskari aloqa olish',
+        'O‘qituvchini jazolash',
+        'Faqat tadbirlarni baholash',
+      ],
+      answer: 1,
+      explanation:
+        'Ota-onalar fikri ta’lim sifati va muhitini baholashda qo‘shimcha dalil beradi.',
+    },
+
+    {
+      id: 'm2t1-e26',
+      text: 'Xavf guruh kartasi nimani erta aniqlashga yordam beradi?',
+      options: [
+        'Davomat va o‘zlashtirishdagi xavf belgilarini',
+        'Faqat iqtidorli o‘quvchilarni',
+        'Faqat o‘qituvchi reytingini',
+        'Faqat moddiy muammolarni',
+      ],
+      answer: 0,
+      explanation:
+        'Xavf guruh kartasi muammoga moyil o‘quvchilarni erta aniqlash va profilaktik choralar ko‘rishga xizmat qiladi.',
+    },
+
+    {
+      id: 'm2t1-e27',
+      text: 'Ta’lim sifatini boshqarishda kimning mas’uliyati muhim?',
+      options: [
+        'Faqat fan o‘qituvchisining',
+        'Faqat psixologning',
+        'Maktab rahbariyati va jamoasining tizimli mas’uliyati',
+        'Faqat ota-onalarning',
+      ],
+      answer: 2,
+      explanation:
+        'Sifatni boshqarish butun maktab jamoasi va rahbariyatning tizimli vazifasidir.',
+    },
+
+    {
+      id: 'm2t1-e28',
+      text: 'Tashqi baholashga tayyorgarlik nimadan boshlanishi maqsadga muvofiq?',
+      options: [
+        'Talablar xaritasini tuzishdan',
+        'Mukofotlashdan',
+        'Yangi reklama tayyorlashdan',
+        'Faqat yig‘ilish o‘tkazishdan',
+      ],
+      answer: 0,
+      explanation:
+        'Avvalo talablar va risk nuqtalari aniqlanadi, keyin dalillar va kamchiliklar reyestri shakllantiriladi.',
+    },
+
+    {
+      id: 'm2t1-e29',
+      text: 'Ta’lim sifati uchun qaysi uch halqa bir-biri bilan bog‘liq?',
+      options: [
+        'Ichki monitoring, tashqi baholash, jamoatchilik ishonchi',
+        'Dars, tanaffus, yig‘ilish',
+        'O‘qituvchi, direktor, kotib',
+        'Reja, buyruq, hisobot',
+      ],
+      answer: 0,
+      explanation:
+        'Sifat boshqaruvining uch halqasi ichki monitoring, tashqi baholash va jamoatchilik ishonchidan iborat.',
+    },
+
+    {
+      id: 'm2t1-e30',
+      text: 'Ta’lim sifatini boshqarishda indikator nima uchun kerak?',
+      options: [
+        'Faqat hisobotni ko‘paytirish uchun',
+        'Holatni o‘lchash va boshqaruv qarorlarini asoslash uchun',
+        'Faqat reyting yaratish uchun',
+        'Faqat tashqi nazorat uchun',
+      ],
+      answer: 1,
+      explanation:
+        'Indikatorlar aniq holatni o‘lchash va natijani boshqaruv qarorlariga bog‘lash imkonini beradi.',
+    },
+  ],
+
+  /* =========================================================
+     🟡 30 TA O‘RTA
+  ========================================================= */
+  medium: [
+    {
+      id: 'm2t1-m01',
+      text: 'Direktor ta’lim natijalari pasayganini faqat yakuniy baholar orqali emas, dars sifati va baholash jarayoni bilan birga tahlil qilmoqda. Bu qaysi yondashuvga mos?',
+      options: [
+        'Jarayon yondashuviga',
+        'Faqat ma’muriy nazoratga',
+        'Faqat tashqi baholashga',
+        'Faqat statistik hisobotga',
+      ],
+      answer: 0,
+      explanation:
+        'Jarayon yondashuvi natijani unga ta’sir qiluvchi o‘zaro bog‘liq jarayonlar bilan birga ko‘rib chiqadi.',
+    },
+
+    {
+      id: 'm2t1-m02',
+      text: 'DTS va DTTni direktor amaliy jihatdan farqlamoqchi. Qaysi juftlik to‘g‘ri?',
+      options: [
+        'DTS — sharoitlar, DTT — yakuniy natijalar',
+        'DTS — natijalar va mezonlar, DTT — majburiy sharoit va talablar',
+        'DTS — faqat resurslar, DTT — faqat baholash',
+        'DTS — monitoring, DTT — hisobot',
+      ],
+      answer: 1,
+      explanation:
+        'DTS ko‘proq kutiladigan natijalar va sifat mezonlarini, DTT esa ta’limni amalga oshirish talablarini belgilaydi.',
+    },
+
+    {
+      id: 'm2t1-m03',
+      text: 'Innovatsiyani samarali joriy etishning to‘g‘ri ketma-ketligi qaysi?',
+      options: [
+        'Pilot → ehtiyoj → monitoring → metodik yordam',
+        'Ehtiyoj → pilot → metodik yordam → monitoring va kengaytirish',
+        'Monitoring → ehtiyoj → kengaytirish → pilot',
+        'Metodik yordam → kengaytirish → ehtiyoj → pilot',
+      ],
+      answer: 1,
+      explanation:
+        'Avval ehtiyoj aniqlanadi, keyin pilot qilinadi, metodik yordam beriladi va natijaga qarab kengaytiriladi.',
+    },
+
+    {
+      id: 'm2t1-m04',
+      text: 'Qaysi to‘plam innovatsiyani joriy etishning 4 bosqichini to‘liq ifodalaydi?',
+      options: [
+        'Nazorat, jazolash, hisobot, mukofot',
+        'Ehtiyoj, pilot, metodik qo‘llab-quvvatlash, monitoring va kengaytirish',
+        'Reja, buyruq, yig‘ilish, hisobot',
+        'Baholash, attestatsiya, reyting, mukofot',
+      ],
+      answer: 1,
+      explanation:
+        'Innovatsiya bosqichma-bosqich joriy etilishi kerak: ehtiyoj, pilot, qo‘llab-quvvatlash, monitoring va kengaytirish.',
+    },
+
+    {
+      id: 'm2t1-m05',
+      text: 'Quyidagi mosliklardan qaysi biri to‘g‘ri?',
+      options: [
+        'Dalilga asoslangan boshqaruv — statistik va monitoring ma’lumotlariga tayangan qaror',
+        'Kompetensiyaviy yondashuv — faqat bilimni yodlash',
+        'Raqamli ta’lim — an’anaviy darsni to‘liq bekor qilish',
+        'Doimiy takomillashtirish — faqat yil oxirida tekshiruv',
+      ],
+      answer: 0,
+      explanation:
+        'Dalilga asoslangan boshqaruv qarorlarni ishonchli ma’lumotlar asosida qabul qiladi.',
+    },
+
+    {
+      id: 'm2t1-m06',
+      text: 'Ta’lim sifatini boshqarish usullarining to‘g‘ri mosligi qaysi?',
+      options: [
+        'Analitik — mentoring va coaching',
+        'Rivojlantiruvchi — o‘quv natijalarini statistik tahlil qilish',
+        'Me’yoriy-uslubiy — DTS/DTTga moslikni ta’minlash',
+        'Tashkiliy-boshqaruv — faqat diagnostika',
+      ],
+      answer: 2,
+      explanation:
+        'Me’yoriy-uslubiy usul DTS/DTT va metodik talablarning bajarilishini ta’minlaydi.',
+    },
+
+    {
+      id: 'm2t1-m07',
+      text: 'Indikatorlarni shakllantirishda qaysi to‘plam eng to‘liq hisoblanadi?',
+      options: [
+        'Natija, jarayon, muhit va resurs',
+        'Faqat natija va baho',
+        'Faqat dars va davomat',
+        'Faqat resurs va hujjatlar',
+      ],
+      answer: 0,
+      explanation:
+        'Sifatni kompleks boshqarishda natija, jarayon, muhit va resurs indikatorlari birgalikda ishlatiladi.',
+    },
+
+    {
+      id: 'm2t1-m08',
+      text: 'Ichki monitoring natijasida muammo aniqlandi. Eng to‘g‘ri keyingi qadam qaysi?',
+      options: [
+        'Muammoni faqat hisobotda qayd etish',
+        'Sababni aniqlab, chora belgilash va qayta o‘lchash',
+        'Darhol o‘qituvchini jazolash',
+        'Tashqi baholashni kutish',
+      ],
+      answer: 1,
+      explanation:
+        'Monitoring natijasi boshqaruv chorasi va keyingi qayta o‘lchash bilan yakunlanishi kerak.',
+    },
+
+    {
+      id: 'm2t1-m09',
+      text: 'Dars kuzatuvi, qisqa diagnostika va ota-ona so‘rovi birgalikda nima beradi?',
+      options: [
+        'Faqat o‘qituvchi reytingini',
+        'Ta’lim sifati haqida turli manbalardan dalil',
+        'Faqat yakuniy baholarni',
+        'Faqat tashqi baholash natijasini',
+      ],
+      answer: 1,
+      explanation:
+        'Turli manbalardan ma’lumot olish muammoni bir tomonlama emas, kompleks tahlil qilishga yordam beradi.',
+    },
+
+    {
+      id: 'm2t1-m10',
+      text: 'Ichki monitoringning uch halqadagi o‘rni qaysi javobda to‘g‘ri ko‘rsatilgan?',
+      options: [
+        'Dars va natijalarni muntazam kuzatish va ichki tuzatishlarni amalga oshirish',
+        'Faqat mustaqil ekspertiza o‘tkazish',
+        'Faqat jamoatchilik fikrini yig‘ish',
+        'Faqat davlat standartlarini ishlab chiqish',
+      ],
+      answer: 0,
+      explanation:
+        'Ichki monitoring maktab ichidagi jarayonlar va natijalarni muntazam kuzatib, tuzatish choralarini belgilaydi.',
+    },
+
+    {
+      id: 'm2t1-m11',
+      text: 'Tashqi baholashga tayyorgarlikning to‘g‘ri ketma-ketligi qaysi?',
+      options: [
+        'Dalillar → talablar → reyestr → qayta o‘lchash',
+        'Talablar xaritasi → kamchiliklar reyestri → dalillar papkasi → qayta o‘lchash',
+        'Kamchiliklar → dalillar → talablar → qayta o‘lchash',
+        'Qayta o‘lchash → talablar → dalillar → reyestr',
+      ],
+      answer: 1,
+      explanation:
+        'Avval talablar va risklar aniqlanadi, keyin kamchiliklar reyestri, dalillar va qayta o‘lchash amalga oshiriladi.',
+    },
+
+    {
+      id: 'm2t1-m12',
+      text: 'Qaysi holat dalilga asoslangan boshqaruvga zid?',
+      options: [
+        'Diagnostika natijasiga qarab chora belgilash',
+        'Indikatorlar dinamikasini tahlil qilish',
+        'Rahbarning shaxsiy taassurotiga asoslanib yakuniy xulosa chiqarish',
+        'Bir nechta ma’lumot manbasini solishtirish',
+      ],
+      answer: 2,
+      explanation:
+        'Subyektiv taassurot dalilga asoslangan boshqaruvning o‘rnini bosa olmaydi.',
+    },
+
+    {
+      id: 'm2t1-m13',
+      text: 'Baholash mezonlari turli o‘qituvchilarda keskin farq qilsa, direktorning birinchi vazifasi nima?',
+      options: [
+        'Barcha baholarni oshirish',
+        'Mezonlar auditi orqali baholashdagi tafovut sababini aniqlash',
+        'Faqat yakuniy baholarni o‘zgartirish',
+        'Tashqi ekspertni kutish',
+      ],
+      answer: 1,
+      explanation:
+        'Baholash mezonlari auditi subyektivlik va mezonlar nomuvofiqligini aniqlashga yordam beradi.',
+    },
+
+    {
+      id: 'm2t1-m14',
+      text: 'Qaysi indikator turi dars sifati va dastur ijrosini aks ettiradi?',
+      options: [
+        'Natija',
+        'Jarayon',
+        'Muhit',
+        'Resurs',
+      ],
+      answer: 1,
+      explanation:
+        'Dars sifati va dastur ijrosi ta’lim jarayonining qanday kechayotganini ko‘rsatadi.',
+    },
+
+    {
+      id: 'm2t1-m15',
+      text: 'Qaysi moslik noto‘g‘ri?',
+      options: [
+        'Natija indikatori — o‘quvchi yutuqlari',
+        'Jarayon indikatori — dars sifati',
+        'Muhit indikatori — psixologik iqlim',
+        'Natija indikatori — metodik ta’minot',
+      ],
+      answer: 3,
+      explanation:
+        'Metodik ta’minot muhit va resurs indikatorlariga yaqin bo‘ladi, natija indikatori emas.',
+    },
+
+    {
+      id: 'm2t1-m16',
+      text: 'Formativ baholashning sifat boshqaruvidagi asosiy foydasi nimada?',
+      options: [
+        'O‘quvchi rivojlanishini jarayon davomida ko‘rish va feedback berish',
+        'Faqat chorak bahosini chiqarish',
+        'Faqat reytingni aniqlash',
+        'Faqat yakuniy nazoratni kuchaytirish',
+      ],
+      answer: 0,
+      explanation:
+        'Formativ baholash joriy ma’lumot asosida o‘quv jarayonini o‘z vaqtida tuzatishga yordam beradi.',
+    },
+
+    {
+      id: 'm2t1-m17',
+      text: 'Kompetensiyaviy yondashuvni direktor qanday qo‘llab-quvvatlashi mumkin?',
+      options: [
+        'Faqat mavzular sonini ko‘paytirish orqali',
+        'Amaliy va kompetensiyaga yo‘naltirilgan topshiriqlarni rag‘batlantirish orqali',
+        'Faqat yakuniy testlarni ko‘paytirish orqali',
+        'Faqat nazorat ishlarini standartlashtirish orqali',
+      ],
+      answer: 1,
+      explanation:
+        'Kompetensiyaviy yondashuv o‘quvchining bilimni real vaziyatda qo‘llashiga e’tibor beradi.',
+    },
+
+    {
+      id: 'm2t1-m18',
+      text: '“Uch halqa” tizimida jamoatchilik ishonchi qaysi faoliyat bilan ko‘proq bog‘liq?',
+      options: [
+        'Ichki diagnostika',
+        'Tashqi attestatsiya',
+        'Ochiq kommunikatsiya va teskari aloqa',
+        'Dars kuzatuvi',
+      ],
+      answer: 2,
+      explanation:
+        'Jamoatchilik ishonchi shaffoflik, ota-onalar va hamkorlar bilan muloqot orqali mustahkamlanadi.',
+    },
+
+    {
+      id: 'm2t1-m19',
+      text: 'Ta’lim sifatini boshqarishda direktor uchun “manba-muddat-mas’ul” uchligi nima beradi?',
+      options: [
+        'Indikator bo‘yicha monitoringning aniq tashkil etilishini',
+        'Faqat hujjatlar sonini',
+        'Faqat o‘qituvchi reytingini',
+        'Faqat tashqi baholashga tayyorgarlikni',
+      ],
+      answer: 0,
+      explanation:
+        'Har bir indikator uchun manba, muddat va mas’ul belgilanib, monitoring boshqariladigan jarayonga aylanadi.',
+    },
+
+    {
+      id: 'm2t1-m20',
+      text: 'Direktor natijalar pasayganini ko‘rdi. Qaysi qaror jarayon yondashuviga mos?',
+      options: [
+        'Faqat past baho olgan o‘quvchilarni aniqlash',
+        'Dars, baholash, dastur ijrosi va muhitni birgalikda tahlil qilish',
+        'Faqat o‘qituvchi reytingini tekshirish',
+        'Faqat ota-onalardan shikoyat so‘rash',
+      ],
+      answer: 1,
+      explanation:
+        'Jarayon yondashuvi natijaning sabablarini tizimdagi bog‘liq jarayonlar orqali izlaydi.',
+    },
+
+    {
+      id: 'm2t1-m21',
+      text: 'Quyidagi mosliklardan qaysi biri to‘g‘ri?',
+      options: [
+        '1.DTS — A.sharoitlar; 2.DTT — B.natijalar',
+        '1.DTS — A.natijalar va mezonlar; 2.DTT — B.sharoitlar',
+        '1.DTS — A.monitoring; 2.DTT — B.diagnostika',
+        '1.DTS — A.resurslar; 2.DTT — B.reyting',
+      ],
+      answer: 1,
+      explanation:
+        'DTS natija va sifat mezonlariga, DTT esa majburiy shart-sharoitlarga yo‘naltiriladi.',
+    },
+
+    {
+      id: 'm2t1-m22',
+      text: 'Qaysi holat doimiy takomillashtirishga eng mos?',
+      options: [
+        'Muammo aniqlanib, sabab tahlil qilinadi, chora ko‘riladi va natija qayta o‘lchanadi',
+        'Muammo aniqlanadi va hujjatda qayd etiladi',
+        'Muammo aniqlanadi va tashqi baholash kutiladi',
+        'Muammo aniqlanadi va javobgar jazolanadi',
+      ],
+      answer: 0,
+      explanation:
+        'Doimiy takomillashtirishning mohiyati qayta o‘lchash orqali choraning samaradorligini tekshirishdir.',
+    },
+
+    {
+      id: 'm2t1-m23',
+      text: 'Innovatsiyani barcha sinflarga birdan joriy etishdan ko‘ra pilot sinovning afzalligi nimada?',
+      options: [
+        'Riskni kamaytirib, samaradorlikni oldindan tekshirishda',
+        'Nazoratni bekor qilishda',
+        'Hujjatlarni kamaytirishda',
+        'Barcha o‘qituvchilarni bir xil ishlashga majburlashda',
+      ],
+      answer: 0,
+      explanation:
+        'Pilot sinov innovatsiyaning kuchli va zaif tomonlarini kengaytirishdan oldin ko‘rishga imkon beradi.',
+    },
+
+    {
+      id: 'm2t1-m24',
+      text: 'Ichki monitoringda bir xil muammo uch oy davomida takrorlansa, nima qilish kerak?',
+      options: [
+        'Faqat yana kuzatish',
+        'Muammo sababini chuqurroq tahlil qilib, aniq chora va muddat belgilash',
+        'Monitoringni to‘xtatish',
+        'Faqat hisobotni yangilash',
+      ],
+      answer: 1,
+      explanation:
+        'Takroriy muammo monitoring natijasi boshqaruv chorasi bilan bog‘lanmaganini ko‘rsatishi mumkin.',
+    },
+
+    {
+      id: 'm2t1-m25',
+      text: 'Ta’lim sifati boshqaruvida “natija” va “jarayon”ni birga ko‘rishning afzalligi nima?',
+      options: [
+        'Faqat natijani qayd etish',
+        'Natijaning yuzaga kelish sabablarini aniqlash',
+        'Faqat jarayonni nazorat qilish',
+        'Faqat o‘qituvchini baholash',
+      ],
+      answer: 1,
+      explanation:
+        'Natija bilan birga jarayonni tahlil qilish muammoning ildiz sabablarini aniqlashga yordam beradi.',
+    },
+
+    {
+      id: 'm2t1-m26',
+      text: 'Tashqi baholashni ichki sifat tizimining davomi sifatida ko‘rish nimani anglatadi?',
+      options: [
+        'Ichki monitoringni bekor qilishni',
+        'Tashqi baholashni sifat sikliga oldindan integratsiya qilishni',
+        'Faqat hujjatlarni tayyorlashni',
+        'Tashqi ekspertga barcha mas’uliyatni berishni',
+      ],
+      answer: 1,
+      explanation:
+        'Tashqi baholash ichki monitoring va dalillar tizimining mantiqiy davomi bo‘lishi kerak.',
+    },
+
+    {
+      id: 'm2t1-m27',
+      text: 'Qaysi javob ichki monitoring vositalarining eng to‘liq to‘plamini beradi?',
+      options: [
+        'Dars kuzatuvi, qisqa diagnostika, mezonlar auditi, teskari aloqa, xavf guruhi kartasi',
+        'Faqat dars kuzatuvi va reyting',
+        'Faqat chorak bahosi va davomat',
+        'Faqat ota-onalar yig‘ilishi',
+      ],
+      answer: 0,
+      explanation:
+        'Ichki monitoring bir nechta manba va vositalardan foydalanilganda ishonchliroq bo‘ladi.',
+    },
+
+    {
+      id: 'm2t1-m28',
+      text: 'Ta’lim sifatini boshqarishda ota-onalar fikri qaysi turdagi ma’lumotni kuchaytiradi?',
+      options: [
+        'Faqat akademik bahoni',
+        'Teskari aloqa va ta’lim muhitiga oid ma’lumotni',
+        'Faqat huquqiy ma’lumotni',
+        'Faqat moliyaviy ma’lumotni',
+      ],
+      answer: 1,
+      explanation:
+        'Ota-onalar fikri ta’lim jarayoni va muhitining qabul qilinishi haqida qo‘shimcha dalil beradi.',
+    },
+
+    {
+      id: 'm2t1-m29',
+      text: 'Qaysi boshqaruv qarori dalilga asoslangan hisoblanadi?',
+      options: [
+        '“Menga shunday tuyuldi” asosida qaror qilish',
+        'Birgina shikoyat asosida choralar ko‘rish',
+        'Diagnostika, kuzatuv va boshqa manbalarni solishtirib qaror qilish',
+        'Faqat o‘tgan yilgi tajribaga tayanish',
+      ],
+      answer: 2,
+      explanation:
+        'Dalilga asoslangan qaror bir nechta ishonchli ma’lumot manbasini tahlil qilishga tayanadi.',
+    },
+
+    {
+      id: 'm2t1-m30',
+      text: 'Ta’lim sifatini boshqarishda eng maqbul mantiq qaysi?',
+      options: [
+        'Muammo → aybdor → jazo',
+        'Natija → hisobot → yakun',
+        'Muammo → sabab → yechim → qayta o‘lchash',
+        'Nazorat → hisobot → nazorat',
+      ],
+      answer: 2,
+      explanation:
+        'Tizimli sifat boshqaruvi muammoning sababini aniqlab, yechimni sinash va natijani qayta o‘lchashga asoslanadi.',
+    },
+  ],
+
+  /* =========================================================
+     🔴 30 TA QIYIN
+  ========================================================= */
+  hard: [
+    {
+      id: 'm2t1-h01',
+      text: 'Direktor yakuniy natijalar pasayganini aniqladi. Dars kuzatuvida metodika yaxshi, biroq formativ baholash va mustaqil topshiriqlar sust. Qaysi qaror eng asosli?',
+      options: [
+        'O‘qituvchilarni umumiy tarzda intizomiy nazoratga olish',
+        'Faqat yakuniy baholarni qayta tekshirish',
+        'Formativ baholash va topshiriqlarni natija dinamikasi bilan bog‘lab pilot chorani sinash',
+        'Tashqi baholash natijasini kutish',
+      ],
+      answer: 2,
+      explanation:
+        'Muammo jarayon bilan bog‘langanligi sababli aniq jarayon omili bo‘yicha chora va qayta o‘lchash kerak.',
+    },
+
+    {
+      id: 'm2t1-h02',
+      text: 'Bir sinfda diagnostika natijalari yuqori, lekin tashqi baholashda mustaqil topshiriqlar natijasi past. Direktor nimani tekshirishi kerak?',
+      options: [
+        'Faqat davomatni',
+        'Ichki baholash topshiriqlarining kompetensiyaga mosligi va mezonlarini',
+        'Faqat o‘qituvchi ish stajini',
+        'Faqat ota-onalar fikrini',
+      ],
+      answer: 1,
+      explanation:
+        'Ichki natija va tashqi natija tafovuti baholash mazmuni va mezonlarining mosligini tekshirishni talab qiladi.',
+    },
+
+    {
+      id: 'm2t1-h03',
+      text: 'DTS mazmuni bajarilgan, ammo ayrim sinflarda zarur ta’lim sharoitlari yetarli emas. Direktor qaysi xulosani chiqarishi kerak?',
+      options: [
+        'DTS bajarilgani uchun muammo yo‘q',
+        'Natija va ta’limni amalga oshirish shartlarini alohida baholash kerak',
+        'Faqat o‘qituvchini baholash kerak',
+        'Faqat yakuniy baholarni oshirish kerak',
+      ],
+      answer: 1,
+      explanation:
+        'DTS natija va sifat talablarini, DTT esa zarur shart-sharoitlarni boshqarish nuqtayi nazaridan ajratishni talab qiladi.',
+    },
+
+    {
+      id: 'm2t1-h04',
+      text: 'Bir xil innovatsiya ikki sinfda turlicha natija berdi. Eng asosli boshqaruv qarori qaysi?',
+      options: [
+        'Innovatsiyani butunlay bekor qilish',
+        'Faqat yaxshi natija bergan sinfni ko‘paytirish',
+        'Qo‘llash sharoiti, metodik yordam va o‘qituvchi amaliyotidagi farqlarni tahlil qilish',
+        'Barcha o‘qituvchilarga bir xil natija talabini qo‘yish',
+      ],
+      answer: 2,
+      explanation:
+        'Turlicha natija innovatsiyaning qo‘llanish sharoiti va metodik amalga oshirilishini tahlil qilishni talab qiladi.',
+    },
+
+    {
+      id: 'm2t1-h05',
+      text: 'Monitoringda bir xil muammo uch marta qayd etilgan, ammo ko‘rsatkich o‘zgarmagan. Qaysi xulosa kuchliroq?',
+      options: [
+        'Monitoring samarasiz',
+        'Muammo qayd etilgan, lekin sababga yo‘naltirilgan boshqaruv choralari yetarli emas',
+        'O‘qituvchilar ma’lumotni yashirmoqda',
+        'Tashqi baholashni kutish kerak',
+      ],
+      answer: 1,
+      explanation:
+        'Qayta-qayta aniqlanayotgan muammo monitoringdan boshqaruv chorasiga o‘tish sustligini ko‘rsatadi.',
+    },
+
+    {
+      id: 'm2t1-h06',
+      text: 'Tashqi baholashga tayyorgarlikda hujjatlar to‘liq, lekin mezonlar amalda bir xil qo‘llanmayapti. Qaysi yondashuv to‘g‘ri?',
+      options: [
+        'Hujjatlarni yana ko‘paytirish',
+        'Faqat direktor buyrug‘ini kuchaytirish',
+        'Amaliy baholash jarayonini audit qilib, mezonlar bo‘yicha metodik yordam berish',
+        'Tashqi ekspertni kutish',
+      ],
+      answer: 2,
+      explanation:
+        'Hujjat mavjudligi amaliyot sifati kafolati emas; mezonlarning real qo‘llanishi tekshirilishi kerak.',
+    },
+
+    {
+      id: 'm2t1-h07',
+      text: 'Ota-onalar qoniqishi yuqori, lekin o‘quvchilar mustaqil fikrlashda past natija ko‘rsatmoqda. Direktor qanday xulosa qilishi kerak?',
+      options: [
+        'Ota-onalar fikri noto‘g‘ri',
+        'Diagnostika va feedback ma’lumotlarini birgalikda tahlil qilish kerak',
+        'Faqat ota-onalar fikriga tayanish kerak',
+        'Faqat o‘quvchilar fikriga tayanish kerak',
+      ],
+      answer: 1,
+      explanation:
+        'Turli manbalardagi ma’lumotlar bir-birini to‘ldiradi va muammoni chuqurroq ko‘rsatadi.',
+    },
+
+    {
+      id: 'm2t1-h08',
+      text: 'Resurslar cheklangan maktabda bir vaqtning o‘zida ko‘plab muammolar aniqlandi. Qaysi boshqaruv qarori maqbul?',
+      options: [
+        'Barcha muammolarni bir xil tezlikda hal qilish',
+        'Faqat eng oson muammoni tanlash',
+        'Ta’sir va xavf darajasi yuqori bo‘lgan muammolarni ustuvorlashtirish',
+        'Faqat tashqi baholash talab qilgan muammolarni tanlash',
+      ],
+      answer: 2,
+      explanation:
+        'Cheklangan resurs sharoitida ta’sir va xavfga asoslangan ustuvorlashtirish boshqaruv samaradorligini oshiradi.',
+    },
+
+    {
+      id: 'm2t1-h09',
+      text: '9-sinfda yakuniy baholar yuqori, standartlashtirilgan diagnostika o‘rtacha, darslar esa asosan reproduktiv. Qaysi chora eng asosli?',
+      options: [
+        'Baholarni yanada oshirish',
+        'Kompetensiyaviy topshiriqlarni pilot qilish va qayta o‘lchash',
+        'Faqat darslik mavzularini tezroq tugatish',
+        'Faqat davomatni nazorat qilish',
+      ],
+      answer: 1,
+      explanation:
+        'Natijalar va dars metodikasi o‘rtasidagi tafovut kompetensiyaviy topshiriqlarni sinab ko‘rishni asoslaydi.',
+    },
+
+    {
+      id: 'm2t1-h10',
+      text: 'Direktor natija indikatorlarini belgiladi, lekin ularga manba, muddat va mas’ul biriktirmadi. Asosiy boshqaruv kamchiligi nima?',
+      options: [
+        'Indikatorlar soni kam',
+        'Monitoring ko‘rsatkichlari ijro mexanizmiga bog‘lanmagan',
+        'Natija indikatorlaridan foydalanish noto‘g‘ri',
+        'Tashqi baholash hisobga olinmagan',
+      ],
+      answer: 1,
+      explanation:
+        'Indikator o‘lchov vositasi bo‘lishi uchun uni kim, qachon va qaysi manbadan kuzatishi aniq bo‘lishi kerak.',
+    },
+
+    {
+      id: 'm2t1-h11',
+      text: 'Bir fan bo‘yicha baholar yuqori, lekin mustaqil topshiriqlarda natija past. Bu holat nimani ko‘rsatishi mumkin?',
+      options: [
+        'Davomat muammosini',
+        'Baholash mazmuni va real kompetensiya natijasi o‘rtasidagi tafovutni',
+        'Faqat psixologik iqlimni',
+        'Faqat resurs yetishmasligini',
+      ],
+      answer: 1,
+      explanation:
+        'Yuqori baho va past mustaqil natija baholashning real kompetensiyani qay darajada o‘lchayotganini tekshirishni talab qiladi.',
+    },
+
+    {
+      id: 'm2t1-h12',
+      text: 'Direktor barcha sinflarda yangi metodni birdan joriy etdi va natijalar pasaydi. Qaysi boshqaruv xatosi ehtimoli yuqori?',
+      options: [
+        'Pilot va ehtiyoj tahlili bosqichlarining o‘tkazib yuborilishi',
+        'Monitoringning haddan tashqari ko‘pligi',
+        'DTSdan foydalanilgani',
+        'Teskari aloqa olingani',
+      ],
+      answer: 0,
+      explanation:
+        'Innovatsiyani keng miqyosda pilot va metodik tayyorgarliksiz joriy qilish riskni oshiradi.',
+    },
+
+    {
+      id: 'm2t1-h13',
+      text: 'Qaysi vaziyat “jarayon yondashuvi”ni eng to‘liq ifodalaydi?',
+      options: [
+        'Natijani faqat yakuniy baho orqali baholash',
+        'Natijani dars, baholash, dastur, muhit va resurslar bilan bog‘lab tahlil qilish',
+        'Faqat tashqi ekspert xulosasiga tayanish',
+        'Faqat o‘qituvchi faoliyatini tekshirish',
+      ],
+      answer: 1,
+      explanation:
+        'Jarayon yondashuvi ta’lim natijasini uni shakllantiruvchi o‘zaro bog‘liq jarayonlar tizimida ko‘radi.',
+    },
+
+    {
+      id: 'm2t1-h14',
+      text: 'Direktor o‘quv natijalarini yaxshilash uchun faqat qo‘shimcha nazorat ishlarini ko‘paytirdi. Nima yetishmayapti?',
+      options: [
+        'Natijalarni ko‘paytirish',
+        'Muammoning sabablarini jarayon va muhit indikatorlari orqali aniqlash',
+        'Baholarni kamaytirish',
+        'Tashqi baholashni bekor qilish',
+      ],
+      answer: 1,
+      explanation:
+        'Faqat nazoratni ko‘paytirish muammoning sababini aniqlamasligi mumkin.',
+    },
+
+    {
+      id: 'm2t1-h15',
+      text: 'Dars kuzatuvida maqsad aniq, lekin o‘quvchi faolligi va feedback sust. Qaysi indikator turi ustuvor?',
+      options: [
+        'Natija',
+        'Jarayon',
+        'Muhit',
+        'Moliyaviy',
+      ],
+      answer: 1,
+      explanation:
+        'O‘quvchi faolligi va feedback dars jarayonining sifatini ifodalaydi.',
+    },
+
+    {
+      id: 'm2t1-h16',
+      text: 'Xavf guruhidagi o‘quvchilar bo‘yicha ma’lumot mavjud, ammo mas’ul shaxs va kuzatuv muddati ko‘rsatilmagan. Muammo nimada?',
+      options: [
+        'Ma’lumotning mavjudligida',
+        'Monitoring ma’lumotining boshqaruv mexanizmiga ulanmaganida',
+        'Xavf guruhlarini aniqlashning o‘zida',
+        'Indikatorlardan foydalanishda',
+      ],
+      answer: 1,
+      explanation:
+        'Ma’lumot qaror va mas’uliyat bilan bog‘lanmasa, u boshqaruv vositasiga to‘liq aylanmaydi.',
+    },
+
+    {
+      id: 'm2t1-h17',
+      text: 'DTT talablarining amaliy boshqaruvdagi ahamiyati nimada?',
+      options: [
+        'Faqat yakuniy bahoni belgilashda',
+        'Ta’limni amalga oshirish uchun zarur shart va talablarni boshqarishda',
+        'Faqat o‘qituvchi malakasini baholashda',
+        'Faqat o‘quvchi reytingini tuzishda',
+      ],
+      answer: 1,
+      explanation:
+        'DTT ta’limni tashkil etishning majburiy shartlari va talablarini belgilash orqali jarayonni boshqarishga xizmat qiladi.',
+    },
+
+    {
+      id: 'm2t1-h18',
+      text: 'DTS va DTTni farqlash direktor qarorlariga qanday ta’sir qiladi?',
+      options: [
+        'Natija va uni ta’minlovchi shartlarni alohida boshqarish imkonini beradi',
+        'Faqat hujjatlarni ko‘paytiradi',
+        'Faqat baholarni standartlashtiradi',
+        'Faqat o‘qituvchi yuklamasini belgilaydi',
+      ],
+      answer: 0,
+      explanation:
+        'DTS natijaviy talablarni, DTT esa ularni ta’minlash shartlarini boshqarishda yo‘nalish beradi.',
+    },
+
+    {
+      id: 'm2t1-h19',
+      text: 'Qaysi vaziyat dalilga asoslangan boshqaruvning kuchli namunasidir?',
+      options: [
+        'Direktor bir darsni ko‘rib, umumiy xulosa chiqaradi',
+        'Diagnostika, dars kuzatuvi, mezonlar auditi va ota-ona fikri solishtiriladi',
+        'Faqat o‘qituvchi fikri olinadi',
+        'Faqat yakuniy baholar tahlil qilinadi',
+      ],
+      answer: 1,
+      explanation:
+        'Bir nechta mustaqil manbalarni triangulyatsiya qilish xulosaning ishonchliligini oshiradi.',
+    },
+
+    {
+      id: 'm2t1-h20',
+      text: 'Ichki monitoringda o‘quvchi va ota-ona fikri yuqori, lekin diagnostika past natija ko‘rsatdi. Eng maqbul xulosa?',
+      options: [
+        'Fikrlarni butunlay rad etish',
+        'Diagnostikani ham, teskari aloqani ham qo‘shimcha kontekst sifatida tahlil qilish',
+        'Faqat ota-ona fikriga tayanish',
+        'Faqat diagnostikaga tayanish',
+      ],
+      answer: 1,
+      explanation:
+        'Turli manbalar turli jihatlarni ko‘rsatadi; ularni birgalikda tahlil qilish kerak.',
+    },
+
+    {
+      id: 'm2t1-h21',
+      text: 'Tashqi baholashda talablar bajarilgan, ammo ichki monitoring natijalari tizimli ravishda qayd etilmagan. Qaysi xavf mavjud?',
+      options: [
+        'Amaliyotning daliliy izlari yetarli bo‘lmasligi',
+        'DTS bekor bo‘lishi',
+        'O‘quv dasturi o‘zgarishi',
+        'Baholash mezonlari yo‘qolishi',
+      ],
+      answer: 0,
+      explanation:
+        'Sifat tizimida bajarilgan ishlarning daliliy bazasi ham muhim boshqaruv komponentidir.',
+    },
+
+    {
+      id: 'm2t1-h22',
+      text: 'Qaysi holatda “doimiy takomillashtirish” tamoyili to‘liq ishlamayapti?',
+      options: [
+        'Muammo aniqlanib, chora ko‘rilib, qayta o‘lchanadi',
+        'Muammo aniqlanadi, chora belgilanadi, lekin natija qayta o‘lchanmaydi',
+        'Indikatorlar belgilanadi',
+        'Monitoring muntazam olib boriladi',
+      ],
+      answer: 1,
+      explanation:
+        'Qayta o‘lchash bo‘lmasa, ko‘rilgan choraning samaradorligi aniqlanmaydi.',
+    },
+
+    {
+      id: 'm2t1-h23',
+      text: 'Direktor metodik yordamni umumiy seminar bilan chekladi, lekin muammo ayrim o‘qituvchilarda aniq ko‘rinmoqda. Qaysi yondashuv samaraliroq?',
+      options: [
+        'Faqat umumiy seminarlarni ko‘paytirish',
+        'Aniq ehtiyoj asosida mentoring, coaching va ustoz-shogird yordamidan foydalanish',
+        'Monitoringni to‘xtatish',
+        'Faqat hisobot talab qilish',
+      ],
+      answer: 1,
+      explanation:
+        'Rivojlantiruvchi boshqaruv individual yoki guruh ehtiyojiga mos metodik yordamni talab qiladi.',
+    },
+
+    {
+      id: 'm2t1-h24',
+      text: 'Bir maktabda davomat pasaydi, lekin o‘quv natijalari o‘zgarmadi. Direktor qanday yo‘l tutishi kerak?',
+      options: [
+        'Davomatni natijaga ta’sir qilmaydi deb hisoblash',
+        'Davomat va boshqa indikatorlar o‘rtasidagi bog‘liqlikni vaqt davomida kuzatish',
+        'Darhol barcha o‘quvchilarni jazolash',
+        'Faqat yakuniy baholarni tekshirish',
+      ],
+      answer: 1,
+      explanation:
+        'Indikatorlar o‘rtasidagi dinamik bog‘liqlikni vaqt davomida kuzatish aniqroq xulosa beradi.',
+    },
+
+    {
+      id: 'm2t1-h25',
+      text: 'Qaysi variant “uch halqa”ni boshqaruv sikliga eng to‘g‘ri joylashtiradi?',
+      options: [
+        'Ichki monitoring → tashqi baholash → jamoatchilik ishonchi',
+        'Tashqi baholash → ichki monitoring → hujjatlar',
+        'Jamoatchilik ishonchi → buyruq → monitoring',
+        'Ichki monitoring → faqat hisobot → tashqi baholash',
+      ],
+      answer: 0,
+      explanation:
+        'Uch halqa o‘zaro bog‘liq: ichki sifat nazorati, tashqi baho va jamoatchilik ishonchi.',
+    },
+
+    {
+      id: 'm2t1-h26',
+      text: 'Qaysi indikator kombinatsiyasi o‘quvchi natijasi pasayishining sababini aniqlashga ko‘proq yordam beradi?',
+      options: [
+        'Faqat yakuniy baholar',
+        'Natija + jarayon + muhit/resurs',
+        'Faqat davomat',
+        'Faqat ota-ona fikri',
+      ],
+      answer: 1,
+      explanation:
+        'Natijani jarayon va muhit bilan bog‘lash sabablarni kompleks tahlil qilish imkonini beradi.',
+    },
+
+    {
+      id: 'm2t1-h27',
+      text: 'Direktor “o‘qituvchi metodik jihatdan sust” degan xulosani faqat bir kuzatuv asosida chiqardi. Qaysi tamoyil buzilgan?',
+      options: [
+        'Dalilga asoslangan boshqaruv',
+        'Doimiy takomillashtirish',
+        'Kompetensiyaviy yondashuv',
+        'Raqamli ta’lim',
+      ],
+      answer: 0,
+      explanation:
+        'Birgina kuzatuv keng xulosa uchun yetarli dalil bo‘lmasligi mumkin.',
+    },
+
+    {
+      id: 'm2t1-h28',
+      text: 'Ta’lim sifati yuqori bo‘lishiga qaramay, psixologik iqlim yomonlashmoqda. Direktor qanday qarashi kerak?',
+      options: [
+        'Natijalar yaxshi ekan, muhitni e’tiborsiz qoldirish',
+        'Muhit indikatorini alohida monitoring qilib, kelajakdagi natijalarga ta’sirini baholash',
+        'Faqat o‘qituvchilarni almashtirish',
+        'Faqat ota-onalar yig‘ilishini ko‘paytirish',
+      ],
+      answer: 1,
+      explanation:
+        'Psixologik iqlim ta’lim sifatining muhim muhit omili bo‘lib, uni oldindan boshqarish zarur.',
+    },
+
+    {
+      id: 'm2t1-h29',
+      text: 'Qaysi boshqaruv qarori “natijaga yo‘naltirilgan” va “jarayonga yo‘naltirilgan” boshqaruvni uyg‘unlashtiradi?',
+      options: [
+        'Faqat yakuniy natijani tekshirish',
+        'Natijani o‘lchab, unga ta’sir qiluvchi jarayonlarni tuzatish',
+        'Faqat dars kuzatuvini ko‘paytirish',
+        'Faqat tashqi baholashga tayyorlanish',
+      ],
+      answer: 1,
+      explanation:
+        'Sifat boshqaruvi natijani o‘lchash va natijaga olib keluvchi jarayonlarni yaxshilashni birlashtiradi.',
+    },
+
+    {
+      id: 'm2t1-h30',
+      text: 'Direktor sifat boshqaruvini kuchaytirish uchun bitta asosiy mexanizm tanlashi kerak. Qaysi variant eng tizimli?',
+      options: [
+        'Faqat nazorat jadvalini ko‘paytirish',
+        'Indikatorlar asosidagi monitoringni muammo-sabab-yechim-qayta o‘lchash sikli bilan bog‘lash',
+        'Faqat yakuniy baholarni tahlil qilish',
+        'Faqat tashqi baholashga tayyorlanish',
+      ],
+      answer: 1,
+      explanation:
+        'Indikatorlar va takomillashtirish sikli monitoringni real boshqaruv mexanizmiga aylantiradi.',
+    },
+  ],
+
+  /* =========================================================
+     🔵 10 TA KEYS
+  ========================================================= */
+  case: [
+    {
+      id: 'm2t1-c01',
+      text: `96-sonli maktabda chorak yakunida ayrim fanlarda natijalar pasaydi, davomat tushdi va baholash mezonlari turlicha qo‘llanayotgani aniqlandi. Ichki monitoring muammo faqat dars sifati emasligini, psixologik iqlim, formativ baholash, dastur ijrosi va xavf guruhidagi o‘quvchilar monitoringi ham muhimligini ko‘rsatdi. Direktor qaysi harakatlar to‘plamini tanlashi eng maqbul?`,
+      options: [
+        'Faqat yakuniy baholarni tekshirish va past natijali o‘qituvchilarni ogohlantirish',
+        'Natija, jarayon va muhit indikatorlarini belgilab, diagnostika, dars kuzatuvi, mezonlar auditi va teskari aloqani muammo-sabab-yechim-qayta o‘lchash sikliga kiritish',
+        'Faqat tashqi baholashga tayyorlanish va hujjatlarni tartibga keltirish',
+        'Faqat davomatni tiklashga qaratilgan choralarni kuchaytirish',
+      ],
+      answer: 1,
+      explanation:
+        'Vaziyat ko‘p omilli. Shuning uchun indikatorlar va turli monitoring vositalarini yagona boshqaruv sikliga birlashtirish kerak.',
+    },
+
+    {
+      id: 'm2t1-c02',
+      text: `87-sonli maktabda natijalar pasaydi. Dastlab direktor ayrim o‘qituvchilarni sabab deb hisoblagan. Keyingi tahlil dastur ijrosi, baholash mezonlari, psixologik muhit, ota-onalar bilan hamkorlik va ichki monitoringda ham muammolar borligini ko‘rsatdi. Eng to‘g‘ri boshqaruv yondashuvini aniqlang.`,
+      options: [
+        'Natijani faqat o‘qituvchi faoliyati bilan bog‘lash',
+        'Natijani dars, dastur, baholash, muhit, davomat va hamkorlik bilan bog‘liq yagona tizim sifatida boshqarish',
+        'Faqat DTS va DTT hujjatlarini tekshirish',
+        'Faqat pasaygan fanlarda tezkor nazoratni kuchaytirish',
+      ],
+      answer: 1,
+      explanation:
+        'Muammo tizimli bo‘lgani uchun natija va unga ta’sir qiluvchi omillar birgalikda boshqarilishi kerak.',
+    },
+
+    {
+      id: 'm2t1-c03',
+      text: `118-sonli maktabda ayrim sinflarda natijalar va davomat pasaydi. Formativ baholash yetarli emas, dastur ijrosida tafovut bor, xavf guruhidagi o‘quvchilar kuzatuvi va ota-onalar bilan aloqa sust. Direktor tizimli boshqaruvni boshlamoqchi. Qaysi variant eng to‘g‘ri?`,
+      options: [
+        'Faqat past natijali sinflarni qo‘shimcha nazoratga olish',
+        'Natijalar bilan birga dastur ijrosi, formativ baholash, xavf guruhi va teskari aloqani indikatorlar orqali kuzatish',
+        'Faqat ota-onalar yig‘ilishini ko‘paytirish',
+        'Faqat o‘qituvchilar malakasini oshirish',
+      ],
+      answer: 1,
+      explanation:
+        'Vaziyatda bir nechta sabab mavjud. Shuning uchun tizimli indikatorlar asosidagi monitoring zarur.',
+    },
+
+    {
+      id: 'm2t1-c04',
+      text: `124-sonli maktabda natijalar pasaydi, diagnostika muntazam olinmaydi, xavf guruhi ma’lumotlari tizimlashtirilmagan va metodik yordam umumiy tavsiyalar bilan cheklangan. Direktor sifat boshqaruvini kuchaytirmoqchi. Qaysi harakatlar to‘plami eng maqbul?`,
+      options: [
+        '1) natija indikatorlari; 2) jarayon va muhit indikatorlari; 3) manba-muddat-mas’ul; 4) qayta o‘lchash',
+        '1) faqat yakuniy baholar; 2) faqat davomat; 3) umumiy yig‘ilish; 4) hisobot',
+        '1) faqat dars kuzatuvi; 2) ogohlantirish; 3) tashqi baholash; 4) mukofot',
+        '1) hujjatlarni ko‘paytirish; 2) barcha o‘qituvchilarga bir xil metod; 3) nazorat; 4) hisobot',
+      ],
+      answer: 0,
+      explanation:
+        'Sifat tizimi indikatorlar, aniq mas’uliyat, muddat va qayta o‘lchash orqali boshqariladigan jarayonga aylanadi.',
+    },
+
+    {
+      id: 'm2t1-c05',
+      text: `101-sonli maktabda natijalar pasayishi sabablarini aniqlash uchun direktor diagnostika, dars kuzatuvi, baholash mezonlari auditi va teskari aloqa ma’lumotlarini yig‘di. Keyingi qadam sifatida nima qilishi kerak?`,
+      options: [
+        'Ma’lumotlarni faqat hisobot sifatida saqlash',
+        'Muammo va sabablarni aniqlab, aniq chora, mas’ul va muddat belgilash hamda qayta o‘lchash',
+        'Faqat eng past natijali o‘qituvchilarni ogohlantirish',
+        'Tashqi baholashni kutish',
+      ],
+      answer: 1,
+      explanation:
+        'Monitoring ma’lumotlari boshqaruv chorasi va qayta o‘lchash bilan yakunlanishi kerak.',
+    },
+
+    {
+      id: 'm2t1-c06',
+      text: `Maktabda yangi kompetensiyaviy metodni joriy qilish rejalashtirildi. Direktor uni birdan barcha sinflarda qo‘llash o‘rniga avval ikki sinfda sinab ko‘rishni rejalashtirdi. Keyin metodik coaching, indikatorlar va qayta o‘lchashni nazarda tutdi. Bu qarorning asosiy afzalligi nimada?`,
+      options: [
+        'Innovatsiyani tezroq majburiylashtirishda',
+        'Pilot orqali riskni kamaytirib, natijani tekshirish va samarali modelni kengaytirishda',
+        'Monitoringni kamaytirishda',
+        'O‘qituvchilarni bir xil usulga majburlashda',
+      ],
+      answer: 1,
+      explanation:
+        'Pilot, metodik yordam va qayta o‘lchash innovatsiyani dalil asosida kengaytirish imkonini beradi.',
+    },
+
+    {
+      id: 'm2t1-c07',
+      text: `Maktabda tashqi baholash yaqinlashmoqda. Hujjatlar tartibli, lekin ayrim baholash mezonlari amaliyotda turlicha qo‘llanadi. Direktor nima qilishi kerak?`,
+      options: [
+        'Faqat hujjatlarni qayta bezash',
+        'Baholash mezonlari auditi, dars kuzatuvi va qisqa diagnostika orqali amaliyotdagi tafovutlarni aniqlash',
+        'Faqat direktor buyrug‘i bilan barcha baholarni tenglashtirish',
+        'Tashqi ekspertlarning kelishini kutish',
+      ],
+      answer: 1,
+      explanation:
+        'Tashqi baholashga tayyorgarlik hujjat bilan birga real amaliyotning standartlarga mosligini ham qamrab oladi.',
+    },
+
+    {
+      id: 'm2t1-c08',
+      text: `Maktabda ota-onalar qoniqishi 87 foiz, biroq o‘quvchilarning mustaqil fikrlash bo‘yicha diagnostika natijalari past. Direktor qaysi qarorni qabul qilishi kerak?`,
+      options: [
+        'Ota-onalar fikrini asosiy va yagona ko‘rsatkich deb olish',
+        'Diagnostika natijasini ham, ota-onalar fikrini ham turli indikator sifatida tahlil qilish',
+        'Faqat diagnostikani rad etish',
+        'Faqat ota-onalar bilan ishlashni kuchaytirish',
+      ],
+      answer: 1,
+      explanation:
+        'Turli ma’lumot manbalari ta’lim sifatining turli jihatlarini ko‘rsatadi va birgalikda tahlil qilinadi.',
+    },
+
+    {
+      id: 'm2t1-c09',
+      text: `Maktabda o‘quv natijalari yuqori, lekin psixologik iqlim bo‘yicha o‘quvchilar fikri salbiylashgan. Davomat ham ayrim sinflarda pasaya boshlagan. Direktor qanday qaror qilishi eng maqbul?`,
+      options: [
+        'Natijalar yuqori bo‘lgani uchun muhit muammosini e’tiborsiz qoldirish',
+        'Muhit va davomat indikatorlarini kuzatib, sabablarni aniqlash va profilaktik chora ko‘rish',
+        'Faqat baholarni oshirish',
+        'Faqat ota-onalar yig‘ilishini o‘tkazish',
+      ],
+      answer: 1,
+      explanation:
+        'Muhitdagi salbiy o‘zgarishlar kelajakdagi natijalarga ta’sir qilishi mumkin, shuning uchun ularni erta boshqarish zarur.',
+    },
+
+    {
+      id: 'm2t1-c10',
+      text: `Maktabda ichki monitoring uch oy davomida bir xil muammoni qayd etdi: baholash mezonlari ayrim fanlarda turlicha qo‘llanmoqda. Direktor avvalgi yig‘ilishlarda bu masalani muhokama qilgan, ammo natija o‘zgarmagan. Endi qaysi harakat eng to‘g‘ri?`,
+      options: [
+        'Yana umumiy yig‘ilish o‘tkazish',
+        'Muammoning aniq sabablarini mezonlar auditi orqali aniqlab, mas’ul, muddat va qayta o‘lchash mezonlarini belgilash',
+        'Faqat o‘qituvchilarga ogohlantirish berish',
+        'Monitoringni vaqtincha to‘xtatish',
+      ],
+      answer: 1,
+      explanation:
+        'Takroriy muammo aniq boshqaruv chorasi va nazorat mexanizmini talab qiladi.',
+    },
+  ],
 }
