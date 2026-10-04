@@ -156,16 +156,16 @@ const MODULE_2: Category = {
     'Ta’lim sifati, o‘quvchi natijalari, kasbga yo‘naltirish va bola farovonligini boshqarish.',
 
   topics: [
-    {
-      id: 'm2t1',
+   {
+  id: 'm2t1',
 
-      title: 'Ta’lim sifatini boshqarish',
+  title: 'Ta’lim sifatini boshqarish',
 
-      description:
-        'Ta’lim sifatini monitoring qilish, tahlil qilish va rivojlantirish.',
+  description:
+    'Ta’lim sifatini tizimli boshqarish, DTS va DTT, ichki monitoring, baholash va ta’lim sifatini uzluksiz takomillashtirish.',
 
-      levels: EMPTY_LEVELS,
-    },
+  levels: M2T1_LEVELS,
+},
 
     {
       id: 'm2t2',
