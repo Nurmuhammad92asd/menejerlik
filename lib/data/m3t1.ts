@@ -1,16 +1,17 @@
 /* =========================================================
  * MENEJERLIK BY NURMUHAMMAD
- * MODULE 3 — KEYS / CASE QUESTIONS
- * 3.1 — ZAMONAVIY RAHBAR XUSUSIYATLARI VA BOSHQARUV
- * KOMPETENSIYASI
  *
- * Fayl: m3t1.ts
+ * MODULE 3 — TOPIC 1
+ * ZAMONAVIY RAHBAR XUSUSIYATLARI VA
+ * BOSHQARUV KOMPETENSIYASI
  *
- * 10 ta keys
- * Module 3
- * Topic 1
+ * FILE:
+ * lib/data/m3t1.ts
  *
- * correctAnswer:
+ * CASE QUESTIONS
+ * 10 ta professional vaziyatli savol
+ *
+ * ANSWER INDEX:
  * A = 0
  * B = 1
  * C = 2
@@ -42,7 +43,13 @@ export const M3T1_CASE_QUESTIONS: Question[] = [
     topicId: TOPIC_3_1_ID,
     difficulty: "case",
 
-    text: `83-sonli umumiy o‘rta ta’lim maktabida direktor faoliyati tahlil qilinganda ikki xil holat kuzatildi. Bir tomondan, hujjatlar yuritilishi, hisobot topshirish, ijro intizomi va tashkiliy tartib yaxshi yo‘lga qo‘yilgan. Ikkinchi tomondan, direktorning ma’muriy boshqaruvga ko‘proq vaqt ajratib, dars sifati, metodik qo‘llab-quvvatlash va o‘qituvchilar bilan individual ishlashga kamroq e’tibor berayotgani aniqlandi. Yosh pedagoglar amaliy yordamga, tajribali o‘qituvchilar esa murabbiylik faoliyatini kuchaytirishga ehtiyoj bildirdi.
+    text: `83-sonli umumiy o‘rta ta’lim maktabida direktor faoliyati tahlil qilinganda ikki xil holat kuzatildi.
+
+Bir tomondan, hujjatlar yuritilishi, hisobot topshirish, ijro intizomi va tashkiliy tartib yaxshi yo‘lga qo‘yilgan.
+
+Ikkinchi tomondan, direktorning ma’muriy boshqaruvga ko‘proq vaqt ajratib, dars sifati, metodik qo‘llab-quvvatlash va o‘qituvchilar bilan individual ishlashga kamroq e’tibor berayotgani aniqlandi.
+
+Yosh pedagoglar amaliy yordamga, tajribali o‘qituvchilar esa murabbiylik faoliyatini kuchaytirishga ehtiyoj bildirdi.
 
 Ushbu vaziyatda zamonaviy direktorning boshqaruv kompetensiyasiga mos harakatlar majmuasi qaysi?`,
 
@@ -55,11 +62,9 @@ Ushbu vaziyatda zamonaviy direktorning boshqaruv kompetensiyasiga mos harakatlar
 
     correctAnswer: 3,
 
-    explanation:
-      `Zamonaviy direktor ma’muriy tartib va ijro intizomini saqlagan holda pedagogik yetakchilik, jamoani rivojlantirish va murabbiylikni ham kuchaytirishi kerak. Shuning uchun 1, 2 va 6-bandlar mazmunan mos keladi.`,
+    explanation: `Zamonaviy direktor ma’muriy tartib va ijro intizomini saqlagan holda pedagogik yetakchilik, jamoani rivojlantirish va murabbiylikni ham kuchaytirishi kerak. Shuning uchun 1, 2 va 6-bandlar mazmunan mos keladi.`,
 
-    source:
-      `3.1-mavzu: Zamonaviy rahbar xususiyatlari va boshqaruv kompetensiyasi`,
+    source: `3.1-mavzu: Zamonaviy rahbar xususiyatlari va boshqaruv kompetensiyasi`,
 
     points: 3,
   },
@@ -74,7 +79,11 @@ Ushbu vaziyatda zamonaviy direktorning boshqaruv kompetensiyasiga mos harakatlar
     topicId: TOPIC_3_1_ID,
     difficulty: "case",
 
-    text: `105-sonli umumiy o‘rta ta’lim maktabida so‘nggi ikki yil davomida tashkiliy intizom, hisobot sifati va ijro nazorati yaxshilandi. Biroq o‘quvchilar natijalari barqaror yuqori darajaga chiqmayapti. Ayrim o‘qituvchilar kasbiy rivojlanish bo‘yicha yetarli yordam olmayotganini, yosh pedagoglar esa metodik yo‘naltirishga ehtiyoj borligini bildirdi. Direktor esa “avvalo tartib, natija keyin keladi” degan pozitsiyani ilgari surdi.
+    text: `105-sonli umumiy o‘rta ta’lim maktabida so‘nggi ikki yil davomida tashkiliy intizom, hisobot sifati va ijro nazorati yaxshilandi.
+
+Biroq o‘quvchilar natijalari barqaror yuqori darajaga chiqmayapti. Ayrim o‘qituvchilar kasbiy rivojlanish bo‘yicha yetarli yordam olmayotganini, yosh pedagoglar esa metodik yo‘naltirishga ehtiyoj borligini bildirdi.
+
+Direktor esa “avvalo tartib, natija keyin keladi” degan pozitsiyani ilgari surdi.
 
 Quyidagi mulohazalarning to‘g‘ri yoki noto‘g‘ri ekanligini aniqlang.
 
@@ -93,11 +102,9 @@ Quyidagi mulohazalarning to‘g‘ri yoki noto‘g‘ri ekanligini aniqlang.
 
     correctAnswer: 1,
 
-    explanation:
-      `1-mulohaza to‘g‘ri: zamonaviy rahbarlik faqat ma’muriy natijalar bilan cheklanmaydi. 2-mulohaza noto‘g‘ri: xalqaro tajriba mahalliy sharoit va jamoa ehtiyojiga moslashtiriladi. 3-mulohaza noto‘g‘ri: rahbar imiji adolat, izchillik, muloqot va inson qadriga hurmat bilan ham shakllanadi.`,
+    explanation: `1-mulohaza to‘g‘ri: zamonaviy rahbarlik faqat ma’muriy natijalar bilan cheklanmaydi. 2-mulohaza noto‘g‘ri: xalqaro tajriba mahalliy sharoit va jamoa ehtiyojiga moslashtiriladi. 3-mulohaza noto‘g‘ri: rahbar imiji adolat, izchillik, muloqot va inson qadriga hurmat bilan ham shakllanadi.`,
 
-    source:
-      `3.1-mavzu: Zamonaviy maktab direktorining shaxsiy fazilatlari va xalqaro tajriba`,
+    source: `3.1-mavzu: Zamonaviy maktab direktorining shaxsiy fazilatlari va xalqaro tajriba`,
 
     points: 3,
   },
@@ -112,7 +119,9 @@ Quyidagi mulohazalarning to‘g‘ri yoki noto‘g‘ri ekanligini aniqlang.
     topicId: TOPIC_3_1_ID,
     difficulty: "case",
 
-    text: `97-sonli umumiy o‘rta ta’lim maktabida direktor ish faoliyatini yangi bosqichga olib chiqish maqsadida jamoa bilan birgalikda ichki tahlil o‘tkazdi. Tahlil natijasida maktabda hisobot va hujjatlar yuritilishi tartibli ekanligi, biroq pedagogik yetakchilik, yosh o‘qituvchilarni qo‘llab-quvvatlash, murabbiylik mexanizmlari va jamoani strategik maqsad atrofida birlashtirish borasida bo‘shliqlar mavjudligi aniqlandi.
+    text: `97-sonli umumiy o‘rta ta’lim maktabida direktor ish faoliyatini yangi bosqichga olib chiqish maqsadida jamoa bilan birgalikda ichki tahlil o‘tkazdi.
+
+Tahlil natijasida maktabda hisobot va hujjatlar yuritilishi tartibli ekanligi, biroq pedagogik yetakchilik, yosh o‘qituvchilarni qo‘llab-quvvatlash, murabbiylik mexanizmlari va jamoani strategik maqsad atrofida birlashtirish borasida bo‘shliqlar mavjudligi aniqlandi.
 
 Direktor xalqaro tajribalarni aynan ko‘chirish emas, balki maktab sharoitiga moslashtirib qo‘llash zarurligini tushundi.
 
@@ -133,11 +142,9 @@ Quyidagi mulohazalarning to‘g‘ri yoki noto‘g‘ri ekanligini aniqlang.
 
     correctAnswer: 3,
 
-    explanation:
-      `Ma’muriy nazoratning o‘zi strategik rivojlanishni ta’minlamaydi. Xalqaro tajriba maktab kontekstiga moslashtirilishi lozim. Murabbiylik esa pedagoglarning kasbiy o‘sishi va tajriba almashinuvini ta’minlaydi.`,
+    explanation: `Ma’muriy nazoratning o‘zi strategik rivojlanishni ta’minlamaydi. Xalqaro tajriba maktab kontekstiga moslashtirilishi lozim. Murabbiylik esa pedagoglarning kasbiy o‘sishi va tajriba almashinuvini ta’minlaydi.`,
 
-    source:
-      `3.1-mavzu: Xalqaro modellar, strategik boshqaruv va murabbiylik`,
+    source: `3.1-mavzu: Xalqaro modellar, strategik boshqaruv va murabbiylik`,
 
     points: 3,
   },
@@ -152,9 +159,13 @@ Quyidagi mulohazalarning to‘g‘ri yoki noto‘g‘ri ekanligini aniqlang.
     topicId: TOPIC_3_1_ID,
     difficulty: "case",
 
-    text: `57-sonli umumiy o‘rta ta’lim maktabida yangi o‘quv yili boshidan direktor maktab faoliyatini qat’iy nazorat asosida boshqarib kelmoqda. U ish kunining asosiy qismini hisobotlar, buyruqlar, topshiriqlar ijrosi va yuqori tashkilotlarga taqdim etiladigan hujjatlar bilan o‘tkazadi.
+    text: `57-sonli umumiy o‘rta ta’lim maktabida yangi o‘quv yili boshidan direktor maktab faoliyatini qat’iy nazorat asosida boshqarib kelmoqda.
 
-Pedagogik jamoa bilan uchrashuvlar asosan topshiriqlarni yetkazish shaklida bo‘lib, o‘qituvchilarning fikri va takliflari kam eshitiladi. Dars sifati, o‘qituvchilarning kasbiy rivoji, metodik yordam va yosh pedagoglarni qo‘llab-quvvatlash masalalari ikkinchi darajaga tushib qolgan.
+U ish kunining asosiy qismini hisobotlar, buyruqlar, topshiriqlar ijrosi va yuqori tashkilotlarga taqdim etiladigan hujjatlar bilan o‘tkazadi.
+
+Pedagogik jamoa bilan uchrashuvlar asosan topshiriqlarni yetkazish shaklida bo‘lib, o‘qituvchilarning fikri va takliflari kam eshitiladi.
+
+Dars sifati, o‘qituvchilarning kasbiy rivoji, metodik yordam va yosh pedagoglarni qo‘llab-quvvatlash masalalari ikkinchi darajaga tushib qolgan.
 
 Chorak yakunida hujjatlar yuritilishida tartib saqlangan bo‘lsa ham, o‘quvchilar natijalarida sezilarli o‘sish kuzatilmadi.
 
@@ -162,18 +173,19 @@ Ushbu vaziyatdan kelib chiqib, zamonaviy maktab boshqaruvi talablariga eng mos x
 
     options: [
       `Direktor faoliyati umumiy jihatdan boshqaruv talablariga mos, chunki hujjatlar yuritilishi va intizomning ta’minlanishi maktab barqarorligi uchun yetarli asos yaratadi.`,
+
       `Direktor faoliyatida intizom va nazorat mavjud, biroq zamonaviy rahbar modelida jamoa bilan hamkorlik va pedagogik rivojlanish masalalari ham kuchaytirilishi lozim.`,
+
       `Direktor faoliyati zamonaviy boshqaruv talablariga to‘liq mos emas, chunki ma’muriy nazorat ustun bo‘lib, pedagogik yetakchilik, jamoaviy boshqaruv, murabbiylik va strategik rivojlanishga yetarli e’tibor berilmagan.`,
+
       `Direktorning asosiy vazifasi tashkiliy tartibni saqlash bo‘lgani sababli ta’lim natijalaridagi o‘zgarishlar keyingi bosqichda alohida ko‘rib chiqilishi mumkin.`,
     ],
 
     correctAnswer: 2,
 
-    explanation:
-      `Vaziyatda ma’muriy boshqaruv mavjud, ammo zamonaviy rahbar modeli strategik boshqaruv, pedagogik liderlik, jamoaviy qarorlar, kasbiy rivojlanish va murabbiylikni ham talab qiladi.`,
+    explanation: `Vaziyatda ma’muriy boshqaruv mavjud, ammo zamonaviy rahbar modeli strategik boshqaruv, pedagogik liderlik, jamoaviy qarorlar, kasbiy rivojlanish va murabbiylikni ham talab qiladi.`,
 
-    source:
-      `3.1-mavzu: Ma’muriy boshqaruvdan strategik va rivojlantiruvchi boshqaruvga o‘tish`,
+    source: `3.1-mavzu: Ma’muriy boshqaruvdan strategik va rivojlantiruvchi boshqaruvga o‘tish`,
 
     points: 3,
   },
@@ -188,7 +200,9 @@ Ushbu vaziyatdan kelib chiqib, zamonaviy maktab boshqaruvi talablariga eng mos x
     topicId: TOPIC_3_1_ID,
     difficulty: "case",
 
-    text: `118-sonli umumiy o‘rta ta’lim maktabida ichki tahlil o‘tkazildi. Maktabda hujjatlar yuritilishi, ijro intizomi va tashkiliy nazorat barqaror yo‘lga qo‘yilgan. Biroq direktorning dars sifati, o‘qituvchilarning kasbiy rivoji, yosh pedagoglarga murabbiylik ko‘magi va jamoani strategik maqsad atrofida birlashtirishga yetarli vaqt ajratmayotgani aniqlandi.
+    text: `118-sonli umumiy o‘rta ta’lim maktabida ichki tahlil o‘tkazildi.
+
+Maktabda hujjatlar yuritilishi, ijro intizomi va tashkiliy nazorat barqaror yo‘lga qo‘yilgan. Biroq direktorning dars sifati, o‘qituvchilarning kasbiy rivoji, yosh pedagoglarga murabbiylik ko‘magi va jamoani strategik maqsad atrofida birlashtirishga yetarli vaqt ajratmayotgani aniqlandi.
 
 Direktor boshqaruvda ma’muriy intizom bilan bir qatorda strategik fikrlash, pedagogik liderlik, boshqaruv etikasi, dalillarga asoslangan qarorlar va murabbiylik faoliyatini uyg‘unlashtirish zarurligini tushundi.
 
@@ -215,11 +229,9 @@ Quyidagi harakatlarning 4 tasi zamonaviy boshqaruv kompetensiyasiga mos keladi.
 
     correctAnswer: 2,
 
-    explanation:
-      `2, 3, 4 va 5-bandlar zamonaviy boshqaruvning moslashtirilgan xalqaro tajriba, analitik qaror, boshqaruv etikasi va murabbiylik tamoyillariga mos keladi.`,
+    explanation: `2, 3, 4 va 5-bandlar zamonaviy boshqaruvning moslashtirilgan xalqaro tajriba, analitik qaror, boshqaruv etikasi va murabbiylik tamoyillariga mos keladi.`,
 
-    source:
-      `3.1-mavzu: Zamonaviy rahbar kompetensiyalari va boshqaruv etikasi`,
+    source: `3.1-mavzu: Zamonaviy rahbar kompetensiyalari va boshqaruv etikasi`,
 
     points: 3,
   },
@@ -234,9 +246,13 @@ Quyidagi harakatlarning 4 tasi zamonaviy boshqaruv kompetensiyasiga mos keladi.
     topicId: TOPIC_3_1_ID,
     difficulty: "case",
 
-    text: `Maktabda o‘quvchilarning funksional savodxonligi so‘nggi davrda pasaygani aniqlandi. Direktor muammoni faqat yakuniy nazorat natijalari orqali baholash bilan cheklanmay, dars kuzatuvlari, o‘qituvchilarning metodik ehtiyojlari va avvalgi natijalarni ham tahlil qildi.
+    text: `Maktabda o‘quvchilarning funksional savodxonligi so‘nggi davrda pasaygani aniqlandi.
 
-Tahlil davomida ayrim fanlarda metodik qo‘llab-quvvatlash yetarli emasligi aniqlandi. Direktor pedagoglar bilan birgalikda rivojlantirish rejasi ishlab chiqishni va keyingi davrda natijalarni qayta tahlil qilishni rejalashtirdi.
+Direktor muammoni faqat yakuniy nazorat natijalari orqali baholash bilan cheklanmay, dars kuzatuvlari, o‘qituvchilarning metodik ehtiyojlari va avvalgi natijalarni ham tahlil qildi.
+
+Tahlil davomida ayrim fanlarda metodik qo‘llab-quvvatlash yetarli emasligi aniqlandi.
+
+Direktor pedagoglar bilan birgalikda rivojlantirish rejasi ishlab chiqishni va keyingi davrda natijalarni qayta tahlil qilishni rejalashtirdi.
 
 Direktorning boshqaruv jarayonini amalga oshirishidagi eng maqbul ketma-ketlikni aniqlang.
 
@@ -255,11 +271,9 @@ Direktorning boshqaruv jarayonini amalga oshirishidagi eng maqbul ketma-ketlikni
 
     correctAnswer: 3,
 
-    explanation:
-      `Rivojlantiruvchi boshqaruv muammoni aniqlash, sabablarni tahlil qilish, reja va yordamni tashkil etish hamda natijani qayta baholashning uzluksiz sikliga asoslanadi. Shuning uchun 1 → 2 → 3 → 4 ketma-ketligi to‘g‘ri.`,
+    explanation: `Rivojlantiruvchi boshqaruv muammoni aniqlash, sabablarni tahlil qilish, reja va yordamni tashkil etish hamda natijani qayta baholashning uzluksiz sikliga asoslanadi. Shuning uchun 1 → 2 → 3 → 4 ketma-ketligi to‘g‘ri.`,
 
-    source:
-      `3.1-mavzu: Nazoratdan rivojlantiruvchi boshqaruvga o‘tish`,
+    source: `3.1-mavzu: Nazoratdan rivojlantiruvchi boshqaruvga o‘tish`,
 
     points: 3,
   },
@@ -274,7 +288,9 @@ Direktorning boshqaruv jarayonini amalga oshirishidagi eng maqbul ketma-ketlikni
     topicId: TOPIC_3_1_ID,
     difficulty: "case",
 
-    text: `Maktabga bir nechta yosh o‘qituvchi ishga qabul qilindi. Ularning nazariy tayyorgarligi yetarli bo‘lsa-da, darsni tashkil etish, baholash va ota-onalar bilan muloqot qilishda amaliy qiyinchiliklar kuzatildi.
+    text: `Maktabga bir nechta yosh o‘qituvchi ishga qabul qilindi.
+
+Ularning nazariy tayyorgarligi yetarli bo‘lsa-da, darsni tashkil etish, baholash va ota-onalar bilan muloqot qilishda amaliy qiyinchiliklar kuzatildi.
 
 Direktor muammolarni faqat nazorat choralariga bog‘lamasdan, tajribali pedagoglar bilan hamkorlikda murabbiylik tizimini yo‘lga qo‘yishni rejalashtirdi.
 
@@ -282,18 +298,19 @@ Ushbu qarorning boshqaruv nuqtayi nazaridan eng muhim mazmuni qaysi?`,
 
     options: [
       `Yosh pedagoglarning mustaqil qarorlarini cheklash va barcha murakkab vazifalarni tajribali xodimlarga topshirish.`,
+
       `Nazorat jarayonining asosiy qismini tajribali o‘qituvchilarga o‘tkazish orqali direktorning tashkiliy yuklamasini kamaytirish.`,
+
       `Inson kapitaliga investitsiya qilish orqali kasbiy rivojlanish, tajriba uzatish va kadrlar barqarorligini kuchaytirish.`,
+
       `Yosh pedagoglar faoliyatini asosan rasmiy baholash mezonlari orqali nazorat qilish.`,
     ],
 
     correctAnswer: 2,
 
-    explanation:
-      `Murabbiylikning maqsadi yosh pedagogni cheklash emas, balki tajribani tizimli uzatish, kasbiy rivojlanish va o‘rganuvchi jamoani shakllantirishdir.`,
+    explanation: `Murabbiylikning maqsadi yosh pedagogni cheklash emas, balki tajribani tizimli uzatish, kasbiy rivojlanish va o‘rganuvchi jamoani shakllantirishdir.`,
 
-    source:
-      `3.1-mavzu: Maktab direktorining murabbiylik faoliyati`,
+    source: `3.1-mavzu: Maktab direktorining murabbiylik faoliyati`,
 
     points: 3,
   },
@@ -308,24 +325,31 @@ Ushbu qarorning boshqaruv nuqtayi nazaridan eng muhim mazmuni qaysi?`,
     topicId: TOPIC_3_1_ID,
     difficulty: "case",
 
-    text: `Maktab direktori xalqaro tajribalarni o‘rganish jarayonida uch xil yondashuvga duch keldi. Birinchi yondashuvda maktab direktori yuqori darajadagi ishonch asosida ichki sifat uchun javobgar bo‘ladi. Ikkinchi yondashuvda direktorlikka nomzodning liderlik salohiyati oldindan aniqlanib, tayinlovdan oldin maxsus tayyorgarlikdan o‘tkaziladi. Uchinchi yondashuvda esa muammo yuzaga kelganda aybdor shaxsni izlashdan ko‘ra tizimni takomillashtirishga urg‘u beriladi.
+    text: `Maktab direktori xalqaro tajribalarni o‘rganish jarayonida uch xil yondashuvga duch keldi.
+
+Birinchi yondashuvda maktab direktori yuqori darajadagi ishonch asosida ichki sifat uchun javobgar bo‘ladi.
+
+Ikkinchi yondashuvda direktorlikka nomzodning liderlik salohiyati oldindan aniqlanib, tayinlovdan oldin maxsus tayyorgarlikdan o‘tkaziladi.
+
+Uchinchi yondashuvda esa muammo yuzaga kelganda aybdor shaxsni izlashdan ko‘ra tizimni takomillashtirishga urg‘u beriladi.
 
 Tavsiflarni mamlakatlar bilan to‘g‘ri moslashtiring.`,
 
     options: [
       `Finlyandiya — ichki sifat va ishonch; Singapur — oldindan tayyorlash va shaxsiy javobgarlik; Yaponiya — uzluksiz takomillashtirish`,
+
       `Singapur — ichki sifat va ishonch; Yaponiya — oldindan tayyorlash va shaxsiy javobgarlik; Finlyandiya — tizimni takomillashtirish`,
+
       `Yaponiya — ichki sifat va ishonch; Finlyandiya — oldindan tayyorlash va shaxsiy javobgarlik; Singapur — uzluksiz takomillashtirish`,
+
       `Finlyandiya — shaxsiy javobgarlik; Yaponiya — direktorlarni oldindan tayyorlash; Singapur — ichki sifat va jamoaviy ishonch`,
     ],
 
     correctAnswer: 0,
 
-    explanation:
-      `Finlyandiya modelida ishonch va ichki sifat mas’uliyati, Singapurda rahbarlik salohiyatini oldindan aniqlash va maxsus tayyorgarlik, Yaponiyada esa uzluksiz takomillashtirish yondashuvi ajralib turadi.`,
+    explanation: `Mazkur mavzu doirasidagi modelga ko‘ra Finlyandiyada ishonch va ichki sifat mas’uliyati, Singapurda rahbarlik salohiyatini oldindan aniqlash va maxsus tayyorgarlik, Yaponiyada esa uzluksiz takomillashtirish yondashuvi ajralib turadi.`,
 
-    source:
-      `3.1-mavzu: Finlyandiya, Singapur va Yaponiya tajribasi`,
+    source: `3.1-mavzu: Finlyandiya, Singapur va Yaponiya tajribasi`,
 
     points: 3,
   },
@@ -340,24 +364,27 @@ Tavsiflarni mamlakatlar bilan to‘g‘ri moslashtiring.`,
     topicId: TOPIC_3_1_ID,
     difficulty: "case",
 
-    text: `Direktor o‘z faoliyatini maktab direktori kasb standarti asosida tahlil qildi. U maktab rivojlanish rejasini ishlab chiqish, resurslarni safarbar etish, o‘quvchilar ta’lim sifatini oshirish, pedagoglarning kasbiy rivojini qo‘llab-quvvatlash, xodimlarni motivatsiyalash va ota-onalar bilan hamkorlikni yo‘lga qo‘yish bo‘yicha ish olib borayotganini aniqladi.
+    text: `Direktor o‘z faoliyatini maktab direktori kasb standarti asosida tahlil qildi.
+
+U maktab rivojlanish rejasini ishlab chiqish, resurslarni safarbar etish, o‘quvchilar ta’lim sifatini oshirish, pedagoglarning kasbiy rivojini qo‘llab-quvvatlash, xodimlarni motivatsiyalash va ota-onalar bilan hamkorlikni yo‘lga qo‘yish bo‘yicha ish olib borayotganini aniqladi.
 
 Ushbu vaziyat bo‘yicha eng to‘g‘ri xulosani aniqlang.`,
 
     options: [
       `Direktor faoliyati asosan ish yuritish va hisobot yo‘nalishidagi mehnat vazifalarini ifodalaydi.`,
+
       `Direktor kasb standartidagi bir nechta umumlashtirilgan mehnat vazifalarini o‘zaro bog‘liq holda amalga oshirmoqda.`,
+
       `Direktor faoliyatida asosan personalni boshqarish kompetensiyasi namoyon bo‘lib, ta’lim sifati bilan bog‘liq yo‘nalishlar unga kirmaydi.`,
+
       `Direktor faoliyatining asosiy mazmuni jamoatchilik va ota-onalar bilan hamkorlikni tashkil etishdan iborat.`,
     ],
 
     correctAnswer: 1,
 
-    explanation:
-      `Vaziyatdagi faoliyatlar maktabni rivojlantirish va o‘quv-tarbiya jarayonini boshqarish, kasbiy rivojlanish, personalni boshqarish hamda jamoatchilik bilan hamkorlik kabi bir nechta mehnat yo‘nalishlarini qamrab oladi.`,
+    explanation: `Vaziyatdagi faoliyatlar maktabni rivojlantirish va o‘quv-tarbiya jarayonini boshqarish, kasbiy rivojlanish, personalni boshqarish hamda jamoatchilik bilan hamkorlik kabi bir nechta mehnat yo‘nalishlarini qamrab oladi.`,
 
-    source:
-      `Maktab direktori kasb standarti; 3.1-mavzu`,
+    source: `Maktab direktori kasb standarti; 3.1-mavzu`,
 
     points: 3,
   },
@@ -372,7 +399,9 @@ Ushbu vaziyat bo‘yicha eng to‘g‘ri xulosani aniqlang.`,
     topicId: TOPIC_3_1_ID,
     difficulty: "case",
 
-    text: `Maktabda hujjatlar va ijro intizomi yaxshi yo‘lga qo‘yilgan. Shunga qaramay, o‘quvchilarning natijalari kutilgan darajada emas. Dars kuzatuvlari muntazam tizimga tushmagan, yosh pedagoglar metodik yordamga muhtoj, jamoada strategik maqsadlar haqida yagona tasavvur shakllanmagan.
+    text: `Maktabda hujjatlar va ijro intizomi yaxshi yo‘lga qo‘yilgan.
+
+Shunga qaramay, o‘quvchilarning natijalari kutilgan darajada emas. Dars kuzatuvlari muntazam tizimga tushmagan, yosh pedagoglar metodik yordamga muhtoj, jamoada strategik maqsadlar haqida yagona tasavvur shakllanmagan.
 
 Direktor vaziyatni tahlil qilib, ma’muriy boshqaruvni saqlab qolgan holda pedagogik liderlik, strategik boshqaruv, murabbiylik, analitik qarorlar va jamoaviy boshqaruvni kuchaytirishga qaror qildi.
 
@@ -394,37 +423,76 @@ Quyidagi harakatlarning 4 tasi zamonaviy boshqaruv kompetensiyasiga eng mos kela
 
     correctAnswer: 0,
 
-    explanation:
-      `1, 2, 3 va 4-bandlar pedagogik liderlik, strategik boshqaruv, murabbiylik va analitik boshqaruv tamoyillarini birlashtiradi. 5 va 6-bandlar esa zamonaviy jamoaviy va rivojlantiruvchi boshqaruvga zid yo‘nalishni kuchaytiradi.`,
+    explanation: `1, 2, 3 va 4-bandlar pedagogik liderlik, strategik boshqaruv, murabbiylik va analitik boshqaruv tamoyillarini birlashtiradi. 5 va 6-bandlar esa zamonaviy jamoaviy va rivojlantiruvchi boshqaruvga zid yo‘nalishni kuchaytiradi.`,
 
-    source:
-      `3.1-mavzu: Strategik, pedagogik, analitik va jamoaviy boshqaruv`,
+    source: `3.1-mavzu: Strategik, pedagogik, analitik va jamoaviy boshqaruv`,
 
     points: 3,
   },
 ];
 
 /* =========================================================
- * VALIDATION
+ * LEVELS
+ *
+ * MARKAZIY QUIZ REGISTRY UCHUN
+ * ========================================================= */
+
+export const M3T1_LEVELS = {
+  easy: [],
+  medium: [],
+  hard: [],
+  case: M3T1_CASE_QUESTIONS,
+};
+
+/* =========================================================
+ * COUNTS
  * ========================================================= */
 
 export const M3T1_CASE_COUNT = M3T1_CASE_QUESTIONS.length;
 
-/*
- * Kutilayotgan natija:
- * 10 ta case savol
+export const M3T1_TOTAL_QUESTIONS =
+  M3T1_LEVELS.easy.length +
+  M3T1_LEVELS.medium.length +
+  M3T1_LEVELS.hard.length +
+  M3T1_LEVELS.case.length;
+
+/* =========================================================
+ * EXPECTED CASE ANSWERS
  *
- * case-001 → D
- * case-002 → B
- * case-003 → D
- * case-004 → C
- * case-005 → C
- * case-006 → D
- * case-007 → C
- * case-008 → A
- * case-009 → B
- * case-010 → A
- */
+ * 001 → D
+ * 002 → B
+ * 003 → D
+ * 004 → C
+ * 005 → C
+ * 006 → D
+ * 007 → C
+ * 008 → A
+ * 009 → B
+ * 010 → A
+ * ========================================================= */
+
+export const M3T1_CASE_ANSWER_KEY = [
+  3,
+  1,
+  3,
+  2,
+  2,
+  3,
+  2,
+  0,
+  1,
+  0,
+] as const;
+
+/* =========================================================
+ * BASIC VALIDATION
+ * ========================================================= */
+
+export const M3T1_CASE_VALIDATION = {
+  expected: 10,
+  actual: M3T1_CASE_COUNT,
+  isValid: M3T1_CASE_COUNT === 10,
+};
 
 /* =========================================================
  * DEFAULT EXPORT
