@@ -1,4 +1,3 @@
-```ts
 /* =========================================================
  * MENEJERLIK BY NURMUHAMMAD
  * QUIZ DATA CORE
@@ -29,8 +28,7 @@
  * Menejerlik by Nurmuhammad
  *
  * VERSION:
- * Quiz Data Core v3.0
- *
+ * Quiz Data Core v4.0
  * ========================================================= */
 
 
@@ -110,12 +108,12 @@ export type LevelKey =
   | 'case'
 
 
-export const LEVEL_KEYS: readonly LevelKey[] = [
+export const LEVEL_KEYS = [
   'easy',
   'medium',
   'hard',
   'case',
-]
+] as const
 
 
 /* =========================================================
@@ -179,13 +177,6 @@ export type Category = {
 
 /* =========================================================
  * EMPTY LEVELS
- * =========================================================
- *
- * Hali test bazasi ulanmagan mavzular uchun.
- *
- * UI yo‘qolib ketmaydi.
- * Faqat testlar mavjud emas deb ko‘rsatiladi.
- *
  * ========================================================= */
 
 export const EMPTY_LEVELS: TopicLevels = {
@@ -201,7 +192,6 @@ export const EMPTY_LEVELS: TopicLevels = {
  * ========================================================= */
 
 const MODULE_1: Category = {
-
   id: 'm1',
 
   title:
@@ -211,10 +201,6 @@ const MODULE_1: Category = {
     'Ta’lim muassasasini samarali boshqarish, strategik menejment, boshqaruv psixologiyasi, korrupsiyaviy xavflar, boshqaruv qarorlari va maktab imijini boshqarish.',
 
   topics: [
-
-    /* -----------------------------------------------------
-     * M1T1
-     * ----------------------------------------------------- */
 
     {
       id: 'm1t1',
@@ -228,11 +214,6 @@ const MODULE_1: Category = {
       levels: M1T1_LEVELS,
     },
 
-
-    /* -----------------------------------------------------
-     * M1T2
-     * ----------------------------------------------------- */
-
     {
       id: 'm1t2',
 
@@ -244,11 +225,6 @@ const MODULE_1: Category = {
 
       levels: M1T2_LEVELS,
     },
-
-
-    /* -----------------------------------------------------
-     * M1T3
-     * ----------------------------------------------------- */
 
     {
       id: 'm1t3',
@@ -262,11 +238,6 @@ const MODULE_1: Category = {
       levels: M1T3_LEVELS,
     },
 
-
-    /* -----------------------------------------------------
-     * M1T4
-     * ----------------------------------------------------- */
-
     {
       id: 'm1t4',
 
@@ -279,11 +250,6 @@ const MODULE_1: Category = {
       levels: M1T4_LEVELS,
     },
 
-
-    /* -----------------------------------------------------
-     * M1T5
-     * ----------------------------------------------------- */
-
     {
       id: 'm1t5',
 
@@ -295,11 +261,6 @@ const MODULE_1: Category = {
 
       levels: M1T5_LEVELS,
     },
-
-
-    /* -----------------------------------------------------
-     * M1T6
-     * ----------------------------------------------------- */
 
     {
       id: 'm1t6',
@@ -322,7 +283,6 @@ const MODULE_1: Category = {
  * ========================================================= */
 
 const MODULE_2: Category = {
-
   id: 'm2',
 
   title:
@@ -332,10 +292,6 @@ const MODULE_2: Category = {
     'Ta’lim sifatini boshqarish, o‘quvchi natijalarini rivojlantirish, kasbga yo‘naltirish, ta’lim sifatini baholash va bola xavfsizligi hamda farovonligini ta’minlash.',
 
   topics: [
-
-    /* -----------------------------------------------------
-     * M2T1
-     * ----------------------------------------------------- */
 
     {
       id: 'm2t1',
@@ -349,11 +305,6 @@ const MODULE_2: Category = {
       levels: M2T1_LEVELS,
     },
 
-
-    /* -----------------------------------------------------
-     * M2T2
-     * ----------------------------------------------------- */
-
     {
       id: 'm2t2',
 
@@ -365,11 +316,6 @@ const MODULE_2: Category = {
 
       levels: M2T2_LEVELS,
     },
-
-
-    /* -----------------------------------------------------
-     * M2T3
-     * ----------------------------------------------------- */
 
     {
       id: 'm2t3',
@@ -383,11 +329,6 @@ const MODULE_2: Category = {
       levels: M2T3_LEVELS,
     },
 
-
-    /* -----------------------------------------------------
-     * M2T4
-     * ----------------------------------------------------- */
-
     {
       id: 'm2t4',
 
@@ -399,11 +340,6 @@ const MODULE_2: Category = {
 
       levels: M2T4_LEVELS,
     },
-
-
-    /* -----------------------------------------------------
-     * M2T5
-     * ----------------------------------------------------- */
 
     {
       id: 'm2t5',
@@ -423,22 +359,8 @@ const MODULE_2: Category = {
 
 /* =========================================================
  * MODULE 3
- * =========================================================
  *
- * 3-MODULDA 3 TA MAVZU MAVJUD:
- *
- * M3T1
- * Zamonaviy rahbar xususiyatlari va boshqaruv
- * kompetentligi
- *
- * M3T2
- * Rahbarning boshqaruv va shaxsiy samaradorligini
- * rivojlantirish
- *
- * M3T3
- * Pedagog xodimlarni kasbiy rivojlantirish va
- * ish samaradorligini oshirish
- *
+ * 3 TA TO‘LIQ MAVZU ULANGAN
  * ========================================================= */
 
 const MODULE_3: Category = {
@@ -481,7 +403,7 @@ const MODULE_3: Category = {
         'Rahbarning boshqaruv va shaxsiy samaradorligini rivojlantirish',
 
       description:
-        'Vaqtni boshqarish, strategik rejalashtirish, delegatsiya, ustuvorliklarni belgilash, shaxsiy rivojlanish, o‘sish tafakkuri, ish samaradorligi va zamonaviy rahbarning o‘zini boshqarish ko‘nikmalari.',
+        'Rahbarning shaxsiy samaradorligi, ma’naviy qiyofasi, axloqiy yetakchiligi, foresight, refleksiya, empatiya, vaqt va ustuvorliklarni boshqarish hamda o‘zini uzluksiz rivojlantirish.',
 
       levels: M3T2_LEVELS,
     },
@@ -901,14 +823,9 @@ const MODULE_10: Category = {
 
 /* =========================================================
  * ALL MODULES
- * =========================================================
- *
- * Barcha modullar faqat shu yerda birlashtiriladi.
- *
  * ========================================================= */
 
 export const CATEGORIES: Category[] = [
-
   MODULE_1,
   MODULE_2,
   MODULE_3,
@@ -919,7 +836,6 @@ export const CATEGORIES: Category[] = [
   MODULE_8,
   MODULE_9,
   MODULE_10,
-
 ]
 
 
@@ -934,21 +850,19 @@ export const PRESCHOOL_CATEGORIES: Category[] = []
  * INTERNAL HELPERS
  * ========================================================= */
 
-
 /**
- * Mavzudagi barcha savollarni
+ * Topic ichidagi barcha savollarni
+ * quyidagi tartibda qaytaradi:
+ *
  * easy → medium → hard → case
- * tartibida yig‘adi.
  */
 function allTopicQuestions(
   topic: Topic,
 ): Question[] {
 
   return LEVEL_KEYS.flatMap(
-    (level) =>
-      topic.levels[level] ?? [],
+    (level) => topic.levels[level] ?? [],
   )
-
 }
 
 
@@ -964,7 +878,6 @@ function allQuestions(): Question[] {
           allTopicQuestions(topic),
       ),
   )
-
 }
 
 
@@ -980,7 +893,6 @@ export function getModuleById(
     (module) =>
       module.id === moduleId,
   )
-
 }
 
 
@@ -996,38 +908,28 @@ export function getTopicById(
 
     const topic =
       module.topics.find(
-        (topic) =>
-          topic.id === topicId,
+        (item) =>
+          item.id === topicId,
       )
 
     if (topic) {
       return topic
     }
-
   }
 
   return undefined
-
 }
 
 
 /* =========================================================
- * GET TOPICS BY MODULE ID
+ * GET MODULE TOPICS
  * ========================================================= */
 
 export function getModuleTopics(
   moduleId: string,
 ): Topic[] {
 
-  const module =
-    getModuleById(moduleId)
-
-  if (!module) {
-    return []
-  }
-
-  return module.topics
-
+  return getModuleById(moduleId)?.topics ?? []
 }
 
 
@@ -1047,7 +949,6 @@ export function getTopicQuestions(
   }
 
   return allTopicQuestions(topic)
-
 }
 
 
@@ -1068,7 +969,6 @@ export function getLevelQuestions(
   }
 
   return topic.levels[level] ?? []
-
 }
 
 
@@ -1091,7 +991,6 @@ export function getModuleQuestions(
     (topic) =>
       allTopicQuestions(topic),
   )
-
 }
 
 
@@ -1109,20 +1008,17 @@ export function getQuestionById(
 
       const question =
         allTopicQuestions(topic).find(
-          (question) =>
-            question.id === questionId,
+          (item) =>
+            item.id === questionId,
         )
 
       if (question) {
         return question
       }
-
     }
-
   }
 
   return undefined
-
 }
 
 
@@ -1145,25 +1041,14 @@ export function getTopicLevelCounts(
       hard: 0,
       case: 0,
     }
-
   }
 
   return {
-
-    easy:
-      topic.levels.easy.length,
-
-    medium:
-      topic.levels.medium.length,
-
-    hard:
-      topic.levels.hard.length,
-
-    case:
-      topic.levels.case.length,
-
+    easy: topic.levels.easy.length,
+    medium: topic.levels.medium.length,
+    hard: topic.levels.hard.length,
+    case: topic.levels.case.length,
   }
-
 }
 
 
@@ -1175,10 +1060,7 @@ export function getTopicQuestionCount(
   topicId: string,
 ): number {
 
-  return getTopicQuestions(
-    topicId,
-  ).length
-
+  return getTopicQuestions(topicId).length
 }
 
 
@@ -1190,10 +1072,7 @@ export function getModuleTopicCount(
   moduleId: string,
 ): number {
 
-  return getModuleTopics(
-    moduleId,
-  ).length
-
+  return getModuleTopics(moduleId).length
 }
 
 
@@ -1205,10 +1084,7 @@ export function getModuleQuestionCount(
   moduleId: string,
 ): number {
 
-  return getModuleQuestions(
-    moduleId,
-  ).length
-
+  return getModuleQuestions(moduleId).length
 }
 
 
@@ -1220,12 +1096,7 @@ export function hasTopicQuestions(
   topicId: string,
 ): boolean {
 
-  return (
-    getTopicQuestionCount(
-      topicId,
-    ) > 0
-  )
-
+  return getTopicQuestionCount(topicId) > 0
 }
 
 
@@ -1238,13 +1109,10 @@ export function hasLevelQuestions(
   level: LevelKey,
 ): boolean {
 
-  return (
-    getLevelQuestions(
-      topicId,
-      level,
-    ).length > 0
-  )
-
+  return getLevelQuestions(
+    topicId,
+    level,
+  ).length > 0
 }
 
 
@@ -1257,32 +1125,14 @@ export function isTopicComplete(
 ): boolean {
 
   const counts =
-    getTopicLevelCounts(
-      topicId,
-    )
+    getTopicLevelCounts(topicId)
 
   return (
-
-    counts.easy >=
-      REQUIRED_LEVEL_COUNTS.easy
-
-    &&
-
-    counts.medium >=
-      REQUIRED_LEVEL_COUNTS.medium
-
-    &&
-
-    counts.hard >=
-      REQUIRED_LEVEL_COUNTS.hard
-
-    &&
-
-    counts.case >=
-      REQUIRED_LEVEL_COUNTS.case
-
+    counts.easy >= REQUIRED_LEVEL_COUNTS.easy &&
+    counts.medium >= REQUIRED_LEVEL_COUNTS.medium &&
+    counts.hard >= REQUIRED_LEVEL_COUNTS.hard &&
+    counts.case >= REQUIRED_LEVEL_COUNTS.case
   )
-
 }
 
 
@@ -1295,9 +1145,7 @@ export function getTopicCompletionPercent(
 ): number {
 
   const counts =
-    getTopicLevelCounts(
-      topicId,
-    )
+    getTopicLevelCounts(topicId)
 
   const current =
     counts.easy +
@@ -1306,18 +1154,12 @@ export function getTopicCompletionPercent(
     counts.case
 
   const percentage =
-    (
-      current /
-      FULL_TOPIC_QUESTION_COUNT
-    ) * 100
+    (current / FULL_TOPIC_QUESTION_COUNT) * 100
 
   return Math.min(
     100,
-    Math.round(
-      percentage,
-    ),
+    Math.round(percentage),
   )
-
 }
 
 
@@ -1360,12 +1202,8 @@ export const TOTAL_MODULES =
 
 export const TOTAL_TOPICS =
   CATEGORIES.reduce(
-    (
-      total,
-      module,
-    ) =>
-      total +
-      module.topics.length,
+    (total, module) =>
+      total + module.topics.length,
     0,
   )
 
@@ -1376,20 +1214,12 @@ export const TOTAL_TOPICS =
 
 export const TOTAL_QUESTIONS =
   CATEGORIES.reduce(
-    (
-      total,
-      module,
-    ) =>
+    (total, module) =>
       total +
       module.topics.reduce(
-        (
-          topicTotal,
-          topic,
-        ) =>
+        (topicTotal, topic) =>
           topicTotal +
-          allTopicQuestions(
-            topic,
-          ).length,
+          allTopicQuestions(topic).length,
         0,
       ),
     0,
@@ -1402,16 +1232,10 @@ export const TOTAL_QUESTIONS =
 
 export const TOTAL_EASY_QUESTIONS =
   CATEGORIES.reduce(
-    (
-      total,
-      module,
-    ) =>
+    (total, module) =>
       total +
       module.topics.reduce(
-        (
-          topicTotal,
-          topic,
-        ) =>
+        (topicTotal, topic) =>
           topicTotal +
           topic.levels.easy.length,
         0,
@@ -1426,16 +1250,10 @@ export const TOTAL_EASY_QUESTIONS =
 
 export const TOTAL_MEDIUM_QUESTIONS =
   CATEGORIES.reduce(
-    (
-      total,
-      module,
-    ) =>
+    (total, module) =>
       total +
       module.topics.reduce(
-        (
-          topicTotal,
-          topic,
-        ) =>
+        (topicTotal, topic) =>
           topicTotal +
           topic.levels.medium.length,
         0,
@@ -1450,16 +1268,10 @@ export const TOTAL_MEDIUM_QUESTIONS =
 
 export const TOTAL_HARD_QUESTIONS =
   CATEGORIES.reduce(
-    (
-      total,
-      module,
-    ) =>
+    (total, module) =>
       total +
       module.topics.reduce(
-        (
-          topicTotal,
-          topic,
-        ) =>
+        (topicTotal, topic) =>
           topicTotal +
           topic.levels.hard.length,
         0,
@@ -1474,16 +1286,10 @@ export const TOTAL_HARD_QUESTIONS =
 
 export const TOTAL_CASE_QUESTIONS =
   CATEGORIES.reduce(
-    (
-      total,
-      module,
-    ) =>
+    (total, module) =>
       total +
       module.topics.reduce(
-        (
-          topicTotal,
-          topic,
-        ) =>
+        (topicTotal, topic) =>
           topicTotal +
           topic.levels.case.length,
         0,
@@ -1494,16 +1300,6 @@ export const TOTAL_CASE_QUESTIONS =
 
 /* =========================================================
  * MIXED TEST
- * =========================================================
- *
- * Barcha mavjud savollar shu yerga yig‘iladi.
- *
- * Muhim:
- *
- * MIXED_QUESTIONS o‘z-o‘zidan random qilinmaydi.
- * Randomlashtirish testni ishga tushiruvchi
- * funksiya/component ichida amalga oshirilgani yaxshi.
- *
  * ========================================================= */
 
 export const MIXED_ID =
@@ -1512,21 +1308,23 @@ export const MIXED_ID =
 export const MIXED_COUNT =
   30
 
+/**
+ * Barcha mavjud savollar.
+ *
+ * Bu pool.
+ *
+ * Testda 30 ta savol olish uchun:
+ *
+ * getRandomMixedQuestions()
+ *
+ * ishlatiladi.
+ */
 export const MIXED_QUESTIONS: Question[] =
   allQuestions()
 
 
 /* =========================================================
- * RANDOM QUESTION HELPER
- * =========================================================
- *
- * Fisher-Yates algoritmi.
- *
- * Oddiy:
- *   sort(() => Math.random() - 0.5)
- *
- * o‘rniga ishlatiladi.
- *
+ * SHUFFLE
  * ========================================================= */
 
 export function shuffleQuestions(
@@ -1537,16 +1335,14 @@ export function shuffleQuestions(
     [...questions]
 
   for (
-    let i =
-      result.length - 1;
+    let i = result.length - 1;
     i > 0;
     i--
   ) {
 
     const j =
       Math.floor(
-        Math.random() *
-        (i + 1),
+        Math.random() * (i + 1),
       )
 
     const temp =
@@ -1557,11 +1353,9 @@ export function shuffleQuestions(
 
     result[j] =
       temp
-
   }
 
   return result
-
 }
 
 
@@ -1575,6 +1369,7 @@ export function getRandomQuestions(
 ): Question[] {
 
   if (
+    !Array.isArray(questions) ||
     questions.length === 0 ||
     count <= 0
   ) {
@@ -1590,7 +1385,6 @@ export function getRandomQuestions(
       questions.length,
     ),
   )
-
 }
 
 
@@ -1604,17 +1398,13 @@ export function getRandomLevelQuestions(
   count: number,
 ): Question[] {
 
-  const questions =
+  return getRandomQuestions(
     getLevelQuestions(
       topicId,
       level,
-    )
-
-  return getRandomQuestions(
-    questions,
+    ),
     count,
   )
-
 }
 
 
@@ -1627,16 +1417,10 @@ export function getRandomTopicQuestions(
   count: number,
 ): Question[] {
 
-  const questions =
-    getTopicQuestions(
-      topicId,
-    )
-
   return getRandomQuestions(
-    questions,
+    getTopicQuestions(topicId),
     count,
   )
-
 }
 
 
@@ -1652,32 +1436,86 @@ export function getRandomMixedQuestions(
     MIXED_QUESTIONS,
     count,
   )
-
 }
 
 
 /* =========================================================
- * DATA HEALTH CHECK
- * =========================================================
+ * GET BALANCED MIXED QUESTIONS
  *
- * Har bir mavzu:
+ * 30 savolni darajalar bo‘yicha imkon qadar
+ * balansli tanlaydi.
  *
- * easy
- * medium
- * hard
- * case
- * total
- * completion
- * ready
- * complete
+ * Default:
  *
- * COMPLETE:
+ * easy   → 8
+ * medium → 8
+ * hard   → 8
+ * case   → 6
  *
- * easy   >= 30
- * medium >= 30
- * hard   >= 30
- * case   >= 10
- *
+ * Jami → 30
+ * ========================================================= */
+
+export function getBalancedMixedQuestions(): Question[] {
+
+  const easy =
+    getRandomQuestions(
+      CATEGORIES.flatMap(
+        (module) =>
+          module.topics.flatMap(
+            (topic) =>
+              topic.levels.easy,
+          ),
+      ),
+      8,
+    )
+
+  const medium =
+    getRandomQuestions(
+      CATEGORIES.flatMap(
+        (module) =>
+          module.topics.flatMap(
+            (topic) =>
+              topic.levels.medium,
+          ),
+      ),
+      8,
+    )
+
+  const hard =
+    getRandomQuestions(
+      CATEGORIES.flatMap(
+        (module) =>
+          module.topics.flatMap(
+            (topic) =>
+              topic.levels.hard,
+          ),
+      ),
+      8,
+    )
+
+  const cases =
+    getRandomQuestions(
+      CATEGORIES.flatMap(
+        (module) =>
+          module.topics.flatMap(
+            (topic) =>
+              topic.levels.case,
+          ),
+      ),
+      6,
+    )
+
+  return shuffleQuestions([
+    ...easy,
+    ...medium,
+    ...hard,
+    ...cases,
+  ])
+}
+
+
+/* =========================================================
+ * TOPIC HEALTH
  * ========================================================= */
 
 export type TopicHealth = {
@@ -1704,6 +1542,10 @@ export type TopicHealth = {
 
 }
 
+
+/* =========================================================
+ * MODULE HEALTH
+ * ========================================================= */
 
 export type ModuleHealth = {
 
@@ -1736,8 +1578,7 @@ export function getDataHealth() {
     CATEGORIES.map(
       (module) => {
 
-        const topics:
-          TopicHealth[] =
+        const topics: TopicHealth[] =
           module.topics.map(
             (topic) => {
 
@@ -1774,10 +1615,10 @@ export function getDataHealth() {
                 total > 0
 
               const complete =
-                easy >= 30 &&
-                medium >= 30 &&
-                hard >= 30 &&
-                caseCount >= 10
+                easy >= REQUIRED_LEVEL_COUNTS.easy &&
+                medium >= REQUIRED_LEVEL_COUNTS.medium &&
+                hard >= REQUIRED_LEVEL_COUNTS.hard &&
+                caseCount >= REQUIRED_LEVEL_COUNTS.case
 
               return {
 
@@ -1803,20 +1644,14 @@ export function getDataHealth() {
                 ready,
 
                 complete,
-
               }
-
             },
           )
 
         const questionCount =
           topics.reduce(
-            (
-              total,
-              topic,
-            ) =>
-              total +
-              topic.total,
+            (total, topic) =>
+              total + topic.total,
             0,
           )
 
@@ -1831,8 +1666,7 @@ export function getDataHealth() {
 
         const complete =
           topics.length > 0 &&
-          completeTopics ===
-            topics.length
+          completeTopics === topics.length
 
         return {
 
@@ -1854,9 +1688,7 @@ export function getDataHealth() {
           complete,
 
           topics,
-
         }
-
       },
     )
 
@@ -1884,9 +1716,7 @@ export function getDataHealth() {
 
     case:
       TOTAL_CASE_QUESTIONS,
-
   }
-
 }
 
 
@@ -1898,14 +1728,12 @@ export function getModuleHealth(
   moduleId: string,
 ): ModuleHealth | undefined {
 
-  const health =
-    getDataHealth()
-
-  return health.modules.find(
-    (module) =>
-      module.id === moduleId,
-  )
-
+  return getDataHealth()
+    .modules
+    .find(
+      (module) =>
+        module.id === moduleId,
+    )
 }
 
 
@@ -1927,18 +1755,16 @@ export function getTopicHealth(
 
     const topic =
       module.topics.find(
-        (topic) =>
-          topic.id === topicId,
+        (item) =>
+          item.id === topicId,
       )
 
     if (topic) {
       return topic
     }
-
   }
 
   return undefined
-
 }
 
 
@@ -1962,30 +1788,22 @@ export function getDuplicateQuestionIds(): string[] {
     counter.set(
       question.id,
       (
-        counter.get(
-          question.id,
-        ) ?? 0
+        counter.get(question.id) ?? 0
       ) + 1,
     )
-
   }
 
   return [
     ...counter.entries(),
   ]
     .filter(
-      (
-        [, count],
-      ) =>
+      ([, count]) =>
         count > 1,
     )
     .map(
-      (
-        [id],
-      ) =>
+      ([id]) =>
         id,
     )
-
 }
 
 
@@ -1998,9 +1816,18 @@ export function validateQuestion(
 ): boolean {
 
   if (
-    !question.id ||
-    !question.text ||
-    !question.explanation
+    !question ||
+    typeof question.id !== 'string' ||
+    typeof question.text !== 'string' ||
+    typeof question.explanation !== 'string'
+  ) {
+    return false
+  }
+
+  if (
+    question.id.trim().length === 0 ||
+    question.text.trim().length === 0 ||
+    question.explanation.trim().length === 0
   ) {
     return false
   }
@@ -2014,8 +1841,25 @@ export function validateQuestion(
   }
 
   if (
-    question.options.length <
-    2
+    question.options.length < 2
+  ) {
+    return false
+  }
+
+  if (
+    question.options.some(
+      (option) =>
+        typeof option !== 'string' ||
+        option.trim().length === 0,
+    )
+  ) {
+    return false
+  }
+
+  if (
+    !Number.isInteger(
+      question.answer,
+    )
   ) {
     return false
   }
@@ -2029,7 +1873,6 @@ export function validateQuestion(
   }
 
   return true
-
 }
 
 
@@ -2045,7 +1888,38 @@ export function getInvalidQuestions(): Question[] {
         question,
       ),
   )
+}
 
+
+/* =========================================================
+ * GET TOPIC INVALID QUESTIONS
+ * ========================================================= */
+
+export function getTopicInvalidQuestions(
+  topicId: string,
+): Question[] {
+
+  return getTopicQuestions(
+    topicId,
+  ).filter(
+    (question) =>
+      !validateQuestion(
+        question,
+      ),
+  )
+}
+
+
+/* =========================================================
+ * GET ALL QUESTION IDS
+ * ========================================================= */
+
+export function getAllQuestionIds(): string[] {
+
+  return allQuestions().map(
+    (question) =>
+      question.id,
+  )
 }
 
 
@@ -2066,10 +1940,7 @@ export function getQuizSystemStatus() {
 
   const completeTopics =
     health.modules.reduce(
-      (
-        total,
-        module,
-      ) =>
+      (total, module) =>
         total +
         module.completeTopics,
       0,
@@ -2077,10 +1948,7 @@ export function getQuizSystemStatus() {
 
   const readyTopics =
     health.modules.reduce(
-      (
-        total,
-        module,
-      ) =>
+      (total, module) =>
         total +
         module.topics.filter(
           (topic) =>
@@ -2088,6 +1956,14 @@ export function getQuizSystemStatus() {
         ).length,
       0,
     )
+
+  const totalExpectedForCompleteTopics =
+    completeTopics *
+    FULL_TOPIC_QUESTION_COUNT
+
+  const systemHealthy =
+    duplicateIds.length === 0 &&
+    invalidQuestions.length === 0
 
   return {
 
@@ -2116,30 +1992,199 @@ export function getQuizSystemStatus() {
 
     completeTopics,
 
+    totalExpectedForCompleteTopics,
+
     duplicateQuestionIds:
       duplicateIds,
 
     invalidQuestionCount:
       invalidQuestions.length,
 
-    systemHealthy:
-      duplicateIds.length === 0 &&
-      invalidQuestions.length === 0,
+    systemHealthy,
 
+    module3Ready:
+      getModuleQuestionCount('m3') > 0,
+
+    module3Complete:
+      getModuleHealth('m3')?.complete ?? false,
+
+    m3t1Complete:
+      isTopicComplete('m3t1'),
+
+    m3t2Complete:
+      isTopicComplete('m3t2'),
+
+    m3t3Complete:
+      isTopicComplete('m3t3'),
   }
-
 }
 
 
 /* =========================================================
- * QUICK STATUS
+ * GET MODULE 3 STATUS
+ * ========================================================= */
+
+export function getModule3Status() {
+
+  return {
+
+    moduleId:
+      'm3',
+
+    topics: {
+
+      m3t1: {
+        questionCount:
+          getTopicQuestionCount('m3t1'),
+
+        completion:
+          getTopicCompletionPercent('m3t1'),
+
+        complete:
+          isTopicComplete('m3t1'),
+      },
+
+      m3t2: {
+        questionCount:
+          getTopicQuestionCount('m3t2'),
+
+        completion:
+          getTopicCompletionPercent('m3t2'),
+
+        complete:
+          isTopicComplete('m3t2'),
+      },
+
+      m3t3: {
+        questionCount:
+          getTopicQuestionCount('m3t3'),
+
+        completion:
+          getTopicCompletionPercent('m3t3'),
+
+        complete:
+          isTopicComplete('m3t3'),
+      },
+
+    },
+
+    totalQuestions:
+      getModuleQuestionCount('m3'),
+
+    complete:
+      (
+        isTopicComplete('m3t1') &&
+        isTopicComplete('m3t2') &&
+        isTopicComplete('m3t3')
+      ),
+  }
+}
+
+
+/* =========================================================
+ * DEVELOPMENT ASSERTIONS
  * =========================================================
  *
- * Console yoki development paytida:
+ * Build vaqtida dasturni yiqitmaydi.
  *
- * const status = getQuizSystemStatus()
- *
- * orqali tekshirish mumkin.
- *
+ * Faqat ma’lumot holatini tekshirish uchun.
  * ========================================================= */
-```
+
+export function getQuizDataDiagnostics() {
+
+  const health =
+    getDataHealth()
+
+  const duplicateIds =
+    getDuplicateQuestionIds()
+
+  const invalidQuestions =
+    getInvalidQuestions()
+
+  const incompleteTopics =
+    health.modules.flatMap(
+      (module) =>
+        module.topics
+          .filter(
+            (topic) =>
+              !topic.complete,
+          )
+          .map(
+            (topic) => ({
+              moduleId:
+                module.id,
+
+              topicId:
+                topic.id,
+
+              title:
+                topic.title,
+
+              easy:
+                topic.easy,
+
+              medium:
+                topic.medium,
+
+              hard:
+                topic.hard,
+
+              case:
+                topic.case,
+
+              total:
+                topic.total,
+
+              completion:
+                topic.completion,
+            }),
+          ),
+    )
+
+  return {
+
+    totalModules:
+      TOTAL_MODULES,
+
+    totalTopics:
+      TOTAL_TOPICS,
+
+    totalQuestions:
+      TOTAL_QUESTIONS,
+
+    completeTopics:
+      health.modules.reduce(
+        (total, module) =>
+          total +
+          module.completeTopics,
+        0,
+      ),
+
+    incompleteTopics,
+
+    duplicateQuestionIds:
+      duplicateIds,
+
+    invalidQuestions:
+
+      invalidQuestions.map(
+        (question) =>
+          question.id,
+      ),
+
+    healthy:
+      duplicateIds.length === 0 &&
+      invalidQuestions.length === 0,
+  }
+}
+
+
+/* =========================================================
+ * DEFAULT EXPORT
+ * =========================================================
+ *
+ * Qo‘shimcha qulaylik uchun.
+ * Named exportlar asosiy hisoblanadi.
+ * ========================================================= */
+
+export default CATEGORIES
