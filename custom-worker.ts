@@ -5,6 +5,35 @@ import {
 } from "./lib/quiz-data";
 
 /* =========================================================
+   MENEJERLIK BY NURMUHAMMAD
+   CLOUDFLARE CUSTOM WORKER
+   =========================================================
+   
+   FLOW:
+
+   /start
+      ↓
+   Telefon tasdiqlash
+      ↓
+   Guruh a'zoligini tekshirish
+      ↓
+   Referral link
+      ↓
+   5 ta yangi registered user
+      ↓
+   TESTLAR
+      ↓
+   Mini App
+
+   OLD CHALLENGE SYSTEM:
+   - hourly challenge
+   - daily leaderboard
+   - D1
+   - quiz-data
+   ========================================================= */
+
+
+/* =========================================================
    TYPES
 ========================================================= */
 
@@ -29,12 +58,27 @@ interface TelegramChat {
   username?: string;
 }
 
+interface TelegramContact {
+  phone_number: string;
+  first_name: string;
+  last_name?: string;
+  user_id?: number;
+}
+
 interface TelegramMessage {
   message_id: number;
   chat: TelegramChat;
   from?: TelegramUser;
   text?: string;
   caption?: string;
+  contact?: TelegramContact;
+}
+
+interface TelegramCallbackQuery {
+  id: string;
+  from: TelegramUser;
+  message?: TelegramMessage;
+  data?: string;
 }
 
 interface TelegramUpdate {
@@ -43,7 +87,7 @@ interface TelegramUpdate {
   edited_message?: TelegramMessage;
   channel_post?: TelegramMessage;
   edited_channel_post?: TelegramMessage;
-  callback_query?: unknown;
+  callback_query?: TelegramCallbackQuery;
 }
 
 interface TelegramApiResponse<T = unknown> {
@@ -51,6 +95,7 @@ interface TelegramApiResponse<T = unknown> {
   result?: T;
   description?: string;
   error_code?: number;
+  parameters?: Record<string, unknown>;
 }
 
 interface TashkentTime {
@@ -60,29 +105,75 @@ interface TashkentTime {
   second: number;
 }
 
+interface DbUser {
+  telegram_id: number;
+  first_name: string | null;
+  username: string | null;
+  phone: string | null;
+  referred_by: number | null;
+  registered_at: number | null;
+  last_seen_at: number | null;
+}
+
+interface GroupMembership {
+  ok: boolean;
+  member: boolean;
+  status?: string;
+  reason?: string;
+}
+
+
 /* =========================================================
    CONFIG
 ========================================================= */
 
-const BOT_NAME = "Menejerlik by Nurmuhammad";
+const BOT_NAME =
+  "Menejerlik by Nurmuhammad";
+
+const BOT_USERNAME =
+  "topmenejerbot";
 
 const MINI_APP_URL =
   "https://menejerlik.vercel.app";
 
+const WORKER_URL =
+  "https://menejerlik.nurmuhammadtalatbekov.workers.dev";
+
 const WEBHOOK_PATH =
   "/telegram/webhook";
 
+/*
+ * Telegram webhook ikkita variantni qabul qiladi:
+
+ * 1) /
+ * 2) /telegram/webhook
+
+ * Shuning uchun mavjud webhookni buzmaymiz.
+ */
+
 const GROUP_CHAT_ID =
-  -1003642158156;
+  "@talim_ilmfan";
 
-const DAILY_START_HOUR = 5;
-const DAILY_END_HOUR = 22;
+const GROUP_URL =
+  "https://t.me/talim_ilmfan";
 
-const DAILY_RESULTS_HOUR = 23;
+const REQUIRED_REFERRALS =
+  5;
 
-const QUESTIONS_PER_CHALLENGE = 25;
+const DAILY_START_HOUR =
+  5;
 
-const POINTS_PER_CORRECT = 2;
+const DAILY_END_HOUR =
+  22;
+
+const DAILY_RESULTS_HOUR =
+  23;
+
+const QUESTIONS_PER_CHALLENGE =
+  25;
+
+const POINTS_PER_CORRECT =
+  2;
 
 const MAX_CHALLENGE_SCORE =
   QUESTIONS_PER_CHALLENGE *
@@ -91,14 +182,9 @@ const MAX_CHALLENGE_SCORE =
 const CHALLENGE_DURATION_SEC =
   50 * 60;
 
-/*
- * 1-kun = 2026-10-01.
- *
- * Keyinchalik kerak bo‘lsa shu sanani
- * bitta joydan o‘zgartirish mumkin.
- */
 const CURRICULUM_START_DATE =
   "2026-10-01";
+
 
 /* =========================================================
    JSON
@@ -123,6 +209,7 @@ function json(
   );
 }
 
+
 /* =========================================================
    TIME
 ========================================================= */
@@ -131,46 +218,63 @@ function getTashkentTime(
   now = new Date(),
 ): TashkentTime {
   const parts =
-    new Intl.DateTimeFormat("en-US", {
-      timeZone: "Asia/Tashkent",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hourCycle: "h23",
-    }).formatToParts(now);
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        timeZone:
+          "Asia/Tashkent",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23",
+      },
+    ).formatToParts(now);
 
-  const get = (type: string) =>
+  const get = (
+    type: string,
+  ) =>
     parts.find(
-      (p) => p.type === type,
+      (p) =>
+        p.type === type,
     )?.value ?? "00";
 
   return {
     date:
       `${get("year")}-${get("month")}-${get("day")}`,
+
     hour:
       Number(get("hour")),
+
     minute:
       Number(get("minute")),
+
     second:
       Number(get("second")),
   };
 }
 
+
 /* =========================================================
    TELEGRAM API
 ========================================================= */
 
-async function telegramRequest<T = unknown>(
+async function telegramRequest<
+  T = unknown,
+>(
   env: Env,
   method: string,
   body: Record<string, unknown>,
-): Promise<TelegramApiResponse<T>> {
-  if (!env.TELEGRAM_BOT_TOKEN) {
+): Promise<
+  TelegramApiResponse<T>
+> {
+  if (
+    !env.TELEGRAM_BOT_TOKEN
+  ) {
     console.error(
-      "[TELEGRAM] Secret mavjud emas",
+      "[TELEGRAM] BOT TOKEN mavjud emas",
     );
 
     return {
@@ -189,21 +293,30 @@ async function telegramRequest<T = unknown>(
 
   try {
     const response =
-      await fetch(url, {
-        method: "POST",
-        headers: {
-          "content-type":
-            "application/json",
+      await fetch(
+        url,
+        {
+          method: "POST",
+
+          headers: {
+            "content-type":
+              "application/json",
+          },
+
+          body:
+            JSON.stringify(
+              body,
+            ),
         },
-        body:
-          JSON.stringify(body),
-      });
+      );
 
     const data =
-      (await response.json()) as
-        TelegramApiResponse<T>;
+      (await response.json()) as TelegramApiResponse<T>;
 
-    if (!response.ok || !data.ok) {
+    if (
+      !response.ok ||
+      !data.ok
+    ) {
       console.error(
         `[TELEGRAM ERROR] ${method}`,
         JSON.stringify(data),
@@ -211,7 +324,9 @@ async function telegramRequest<T = unknown>(
     }
 
     return data;
-  } catch (error) {
+  } catch (
+    error
+  ) {
     console.error(
       `[TELEGRAM NETWORK ERROR] ${method}`,
       error,
@@ -228,8 +343,1488 @@ async function telegramRequest<T = unknown>(
   }
 }
 
+
 /* =========================================================
-   MINI APP
+   DATABASE — ACCESS SYSTEM
+========================================================= */
+
+async function ensureAccessTables(
+  env: Env,
+) {
+  await env.DB
+    .prepare(
+      `
+      CREATE TABLE IF NOT EXISTS bot_users (
+        telegram_id INTEGER PRIMARY KEY,
+        first_name TEXT,
+        username TEXT,
+        phone TEXT,
+        referred_by INTEGER,
+        registered_at INTEGER,
+        last_seen_at INTEGER
+      )
+      `,
+    )
+    .run();
+
+  await env.DB
+    .prepare(
+      `
+      CREATE TABLE IF NOT EXISTS bot_referrals (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        referrer_id INTEGER NOT NULL,
+        referred_id INTEGER NOT NULL UNIQUE,
+        created_at INTEGER NOT NULL
+      )
+      `,
+    )
+    .run();
+
+  await env.DB
+    .prepare(
+      `
+      CREATE INDEX IF NOT EXISTS idx_bot_referrals_referrer
+      ON bot_referrals(referrer_id)
+      `,
+    )
+    .run();
+
+  await env.DB
+    .prepare(
+      `
+      CREATE TABLE IF NOT EXISTS pending_referrals (
+        telegram_id INTEGER PRIMARY KEY,
+        referrer_id INTEGER NOT NULL,
+        created_at INTEGER NOT NULL
+      )
+      `,
+    )
+    .run();
+}
+
+
+/* =========================================================
+   PHONE NORMALIZATION
+========================================================= */
+
+function normalizePhone(
+  phone: string,
+): string {
+  return phone
+    .replace(
+      /[^\d+]/g,
+      "",
+    )
+    .replace(
+      /^00/,
+      "+",
+    );
+}
+
+
+/* =========================================================
+   USER
+========================================================= */
+
+async function getDbUser(
+  env: Env,
+  telegramId: number,
+): Promise<
+  DbUser | null
+> {
+  await ensureAccessTables(
+    env,
+  );
+
+  return await env.DB
+    .prepare(
+      `
+      SELECT
+        telegram_id,
+        first_name,
+        username,
+        phone,
+        referred_by,
+        registered_at,
+        last_seen_at
+      FROM bot_users
+      WHERE telegram_id = ?
+      LIMIT 1
+      `,
+    )
+    .bind(
+      telegramId,
+    )
+    .first<DbUser>();
+}
+
+
+/* =========================================================
+   SAVE PENDING REFERRAL
+========================================================= */
+
+async function savePendingReferral(
+  env: Env,
+  telegramId: number,
+  referrerId: number,
+) {
+  if (
+    telegramId ===
+    referrerId
+  ) {
+    return;
+  }
+
+  const referrer =
+    await getDbUser(
+      env,
+      referrerId,
+    );
+
+  /*
+   * Referral faqat mavjud
+   * registered userdan kelishi mumkin.
+   */
+  if (!referrer) {
+    return;
+  }
+
+  await env.DB
+    .prepare(
+      `
+      INSERT OR IGNORE INTO pending_referrals (
+        telegram_id,
+        referrer_id,
+        created_at
+      )
+      VALUES (?, ?, ?)
+      `,
+    )
+    .bind(
+      telegramId,
+      referrerId,
+      Date.now(),
+    )
+    .run();
+}
+
+
+/* =========================================================
+   GET PENDING REFERRAL
+========================================================= */
+
+async function getPendingReferral(
+  env: Env,
+  telegramId: number,
+): Promise<
+  number | null
+> {
+  await ensureAccessTables(
+    env,
+  );
+
+  const row =
+    await env.DB
+      .prepare(
+        `
+        SELECT referrer_id
+        FROM pending_referrals
+        WHERE telegram_id = ?
+        LIMIT 1
+        `,
+      )
+      .bind(
+        telegramId,
+      )
+      .first<{
+        referrer_id: number;
+      }>();
+
+  return row
+    ? Number(
+        row.referrer_id,
+      )
+    : null;
+}
+
+
+/* =========================================================
+   REGISTER USER
+========================================================= */
+
+async function registerUser(
+  env: Env,
+  message: TelegramMessage,
+) {
+  const from =
+    message.from;
+
+  if (!from) {
+    return {
+      ok: false,
+      newUser: false,
+    };
+  }
+
+  await ensureAccessTables(
+    env,
+  );
+
+  const telegramId =
+    from.id;
+
+  const existing =
+    await getDbUser(
+      env,
+      telegramId,
+    );
+
+  /*
+   * Old user bo‘lsa faqat
+   * ma'lumotini yangilaymiz.
+   */
+  if (existing) {
+    await env.DB
+      .prepare(
+        `
+        UPDATE bot_users
+        SET
+          first_name = ?,
+          username = ?,
+          last_seen_at = ?
+        WHERE telegram_id = ?
+        `,
+      )
+      .bind(
+        from.first_name ??
+          null,
+
+        from.username ??
+          null,
+
+        Date.now(),
+
+        telegramId,
+      )
+      .run();
+
+    return {
+      ok: true,
+      newUser: false,
+      user: existing,
+    };
+  }
+
+  const pending =
+    await getPendingReferral(
+      env,
+      telegramId,
+    );
+
+  let referrerId:
+    number | null =
+    pending;
+
+  if (
+    referrerId ===
+    telegramId
+  ) {
+    referrerId =
+      null;
+  }
+
+  /*
+   * Referral referrer
+   * haqiqatan registered
+   * ekanini tekshiramiz.
+   */
+  if (
+    referrerId !==
+    null
+  ) {
+    const referrer =
+      await getDbUser(
+        env,
+        referrerId,
+      );
+
+    if (!referrer) {
+      referrerId =
+        null;
+    }
+  }
+
+  const now =
+    Date.now();
+
+  await env.DB
+    .prepare(
+      `
+      INSERT INTO bot_users (
+        telegram_id,
+        first_name,
+        username,
+        phone,
+        referred_by,
+        registered_at,
+        last_seen_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+      `,
+    )
+    .bind(
+      telegramId,
+
+      from.first_name ??
+        null,
+
+      from.username ??
+        null,
+
+      null,
+
+      referrerId,
+
+      null,
+
+      now,
+    )
+    .run();
+
+  /*
+   * Referral hali faqat
+   * telefon tasdiqlangandan keyin
+   * haqiqiy hisoblanadi.
+   */
+
+  return {
+    ok: true,
+    newUser: true,
+    user:
+      await getDbUser(
+        env,
+        telegramId,
+      ),
+  };
+}
+
+
+/* =========================================================
+   CONFIRM PHONE
+========================================================= */
+
+async function confirmPhone(
+  env: Env,
+  message: TelegramMessage,
+) {
+  const from =
+    message.from;
+
+  const contact =
+    message.contact;
+
+  if (
+    !from ||
+    !contact
+  ) {
+    return {
+      ok: false,
+      reason:
+        "missing_contact",
+    };
+  }
+
+  /*
+   * Eng muhim xavfsizlik:
+   * kontakt aynan Telegramdagi
+   * shu userniki bo‘lishi kerak.
+   */
+  if (
+    contact.user_id &&
+    contact.user_id !==
+      from.id
+  ) {
+    return {
+      ok: false,
+      reason:
+        "contact_belongs_to_other_user",
+    };
+  }
+
+  const phone =
+    normalizePhone(
+      contact.phone_number,
+    );
+
+  await ensureAccessTables(
+    env,
+  );
+
+  const existing =
+    await getDbUser(
+      env,
+      from.id,
+    );
+
+  const pending =
+    await getPendingReferral(
+      env,
+      from.id,
+    );
+
+  let referrerId:
+    number | null =
+    pending;
+
+  if (
+    referrerId ===
+    from.id
+  ) {
+    referrerId =
+      null;
+  }
+
+  /*
+   * User old bo‘lsa referral
+   * qayta sanalmaydi.
+   */
+  if (!existing) {
+    await registerUser(
+      env,
+      message,
+    );
+  }
+
+  const current =
+    await getDbUser(
+      env,
+      from.id,
+    );
+
+  if (!current) {
+    return {
+      ok: false,
+      reason:
+        "registration_failed",
+    };
+  }
+
+  const wasRegistered =
+    Boolean(
+      current.registered_at,
+    );
+
+  /*
+   * Birinchi marta telefon
+   * tasdiqlanmoqda.
+   */
+  if (
+    !wasRegistered
+  ) {
+    await env.DB
+      .prepare(
+        `
+        UPDATE bot_users
+        SET
+          phone = ?,
+          registered_at = ?,
+          last_seen_at = ?
+        WHERE telegram_id = ?
+        `,
+      )
+      .bind(
+        phone,
+        Date.now(),
+        Date.now(),
+        from.id,
+      )
+      .run();
+
+    /*
+     * Referralni faqat shu yerda
+     * hisoblaymiz.
+     */
+    if (
+      referrerId !==
+      null &&
+      referrerId !==
+        from.id
+    ) {
+      const referrer =
+        await getDbUser(
+          env,
+          referrerId,
+        );
+
+      if (referrer) {
+        await env.DB
+          .prepare(
+            `
+            INSERT OR IGNORE INTO bot_referrals (
+              referrer_id,
+              referred_id,
+              created_at
+            )
+            VALUES (?, ?, ?)
+            `,
+          )
+          .bind(
+            referrerId,
+            from.id,
+            Date.now(),
+          )
+          .run();
+      }
+    }
+  } else {
+    /*
+     * Telefon mavjud bo‘lsa
+     * faqat last_seen yangilanadi.
+     */
+    await env.DB
+      .prepare(
+        `
+        UPDATE bot_users
+        SET
+          last_seen_at = ?
+        WHERE telegram_id = ?
+        `,
+      )
+      .bind(
+        Date.now(),
+        from.id,
+      )
+      .run();
+  }
+
+  await env.DB
+    .prepare(
+      `
+      DELETE FROM pending_referrals
+      WHERE telegram_id = ?
+      `,
+    )
+    .bind(
+      from.id,
+    )
+    .run();
+
+  return {
+    ok: true,
+    phone,
+    newlyRegistered:
+      !wasRegistered,
+  };
+}
+
+
+/* =========================================================
+   REFERRAL COUNT
+========================================================= */
+
+async function getReferralCount(
+  env: Env,
+  telegramId: number,
+): Promise<number> {
+  await ensureAccessTables(
+    env,
+  );
+
+  const row =
+    await env.DB
+      .prepare(
+        `
+        SELECT COUNT(*) AS count
+        FROM bot_referrals
+        WHERE referrer_id = ?
+        `,
+      )
+      .bind(
+        telegramId,
+      )
+      .first<{
+        count: number;
+      }>();
+
+  return Number(
+    row?.count ?? 0,
+  );
+}
+
+
+/* =========================================================
+   GROUP MEMBERSHIP
+========================================================= */
+
+async function checkGroupMembership(
+  env: Env,
+  telegramId: number,
+): Promise<GroupMembership> {
+  const result =
+    await telegramRequest<
+      {
+        status?: string;
+        user?: TelegramUser;
+        is_member?: boolean;
+      }
+    >(
+      env,
+      "getChatMember",
+      {
+        chat_id:
+          GROUP_CHAT_ID,
+
+        user_id:
+          telegramId,
+      },
+    );
+
+  if (!result.ok) {
+    return {
+      ok: false,
+      member: false,
+      reason:
+        result.description ??
+        "Guruhni tekshirib bo‘lmadi",
+    };
+  }
+
+  const member =
+    result.result;
+
+  if (!member) {
+    return {
+      ok: true,
+      member: false,
+    };
+  }
+
+  const status =
+    member.status;
+
+  const isMember =
+    status ===
+      "creator" ||
+    status ===
+      "administrator" ||
+    status ===
+      "member" ||
+    (
+      status ===
+        "restricted" &&
+      member.is_member ===
+        true
+    );
+
+  return {
+    ok: true,
+    member:
+      isMember,
+    status,
+  };
+}
+
+
+/* =========================================================
+   ACCESS STATUS
+========================================================= */
+
+async function getAccessStatus(
+  env: Env,
+  telegramId: number,
+) {
+  const user =
+    await getDbUser(
+      env,
+      telegramId,
+    );
+
+  const phoneVerified =
+    Boolean(
+      user?.registered_at &&
+      user?.phone,
+    );
+
+  const membership =
+    await checkGroupMembership(
+      env,
+      telegramId,
+    );
+
+  const referrals =
+    await getReferralCount(
+      env,
+      telegramId,
+    );
+
+  const referralDone =
+    referrals >=
+    REQUIRED_REFERRALS;
+
+  const canAccess =
+    phoneVerified &&
+    membership.member &&
+    referralDone;
+
+  return {
+    user,
+    phoneVerified,
+    groupMember:
+      membership.member,
+    groupStatus:
+      membership.status ??
+      null,
+    referrals,
+    required:
+      REQUIRED_REFERRALS,
+    remaining:
+      Math.max(
+        0,
+        REQUIRED_REFERRALS -
+          referrals,
+      ),
+    canAccess,
+  };
+}
+
+
+/* =========================================================
+   REFERRAL LINK
+========================================================= */
+
+function referralLink(
+  telegramId: number,
+): string {
+  return (
+    `https://t.me/${BOT_USERNAME}?start=ref_${telegramId}`
+  );
+}
+
+
+/* =========================================================
+   KEYBOARDS
+========================================================= */
+
+function phoneKeyboard() {
+  return {
+    keyboard: [
+      [
+        {
+          text:
+            "📱 TELEFON RAQAMIMNI TASDIQLASH",
+          request_contact:
+            true,
+        },
+      ],
+    ],
+
+    resize_keyboard:
+      true,
+
+    one_time_keyboard:
+      false,
+
+    is_persistent:
+      true,
+  };
+}
+
+
+function groupKeyboard() {
+  return {
+    inline_keyboard: [
+      [
+        {
+          text:
+            "👥 GURUHGA QO‘SHILISH",
+          url:
+            GROUP_URL,
+        },
+      ],
+
+      [
+        {
+          text:
+            "🔄 A'ZOLIKNI TEKSHIRISH",
+          callback_data:
+            "check_access",
+        },
+      ],
+    ],
+  };
+}
+
+
+function referralKeyboard() {
+  return {
+    inline_keyboard: [
+      [
+        {
+          text:
+            "🔗 TAKLIF HAVOLAM",
+          callback_data:
+            "referral",
+        },
+      ],
+
+      [
+        {
+          text:
+            "📊 NATIJAMNI TEKSHIRISH",
+          callback_data:
+            "check_access",
+        },
+      ],
+    ],
+  };
+}
+
+
+function testKeyboard() {
+  return {
+    inline_keyboard: [
+      [
+        {
+          text:
+            "🚀 TESTLARNI BOSHLASH",
+          web_app: {
+            url:
+              MINI_APP_URL,
+          },
+        },
+      ],
+    ],
+  };
+}
+
+
+function removeKeyboard() {
+  return {
+    remove_keyboard:
+      true,
+  };
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+========================================================= */
+
+async function sendBotMessage(
+  env: Env,
+  chatId: number,
+  text: string,
+  replyMarkup?: Record<
+    string,
+    unknown
+  >,
+) {
+  const body:
+    Record<
+      string,
+      unknown
+    > = {
+      chat_id:
+        chatId,
+
+      text,
+
+      parse_mode:
+        "Markdown",
+    };
+
+  if (replyMarkup) {
+    body.reply_markup =
+      replyMarkup;
+  }
+
+  return telegramRequest(
+    env,
+    "sendMessage",
+    body,
+  );
+}
+
+
+/* =========================================================
+   MAIN ACCESS MESSAGE
+========================================================= */
+
+async function sendAccessStatus(
+  env: Env,
+  chatId: number,
+  telegramId: number,
+) {
+  const status =
+    await getAccessStatus(
+      env,
+      telegramId,
+    );
+
+  if (
+    !status.phoneVerified
+  ) {
+    await sendBotMessage(
+      env,
+      chatId,
+      `🎓 *${BOT_NAME}*\n\n` +
+        `Platformaga kirish uchun avval telefon raqamingizni tasdiqlang.\n\n` +
+        `🔐 Telefon raqamingiz faqat ro‘yxatdan o‘tish va foydalanuvchini aniqlash uchun ishlatiladi.\n\n` +
+        `👇 Quyidagi tugmani bosing:`,
+      phoneKeyboard(),
+    );
+
+    return;
+  }
+
+  if (
+    !status.groupMember
+  ) {
+    await sendBotMessage(
+      env,
+      chatId,
+      `✅ Telefon raqamingiz tasdiqlandi.\n\n` +
+        `👥 Endi rasmiy guruhimizga qo‘shiling:\n\n` +
+        `@talim_ilmfan\n\n` +
+        `Guruhga qo‘shilgach, *A'ZOLIKNI TEKSHIRISH* tugmasini bosing.`,
+      groupKeyboard(),
+    );
+
+    return;
+  }
+
+  if (
+    status.referrals <
+    REQUIRED_REFERRALS
+  ) {
+    const remaining =
+      REQUIRED_REFERRALS -
+      status.referrals;
+
+    await sendBotMessage(
+      env,
+      chatId,
+      `🎉 *Siz guruh a'zosisiz!*\n\n` +
+        `Endi testlarga kirish uchun do‘stlaringizni taklif qiling.\n\n` +
+        `👥 Taklif qilinganlar: *${status.referrals}/${REQUIRED_REFERRALS}*\n` +
+        `🎯 Qolgan: *${remaining} ta*\n\n` +
+        `⚠️ Faqat botga kirib, ro‘yxatdan o‘tgan yangi foydalanuvchilar hisoblanadi.\n\n` +
+        `👇 Shaxsiy taklif havolangizni oling:`,
+      referralKeyboard(),
+    );
+
+    return;
+  }
+
+  await sendBotMessage(
+    env,
+    chatId,
+    `🏆 *TABRIKLAYMIZ!*\n\n` +
+      `Siz barcha talablarni bajardingiz.\n\n` +
+      `📱 Telefon — ✅\n` +
+      `👥 Guruh — ✅\n` +
+      `👤 Referral — ${status.referrals}/${REQUIRED_REFERRALS} ✅\n\n` +
+      `🚀 Endi Menejerlik testlarini boshlashingiz mumkin!`,
+    {
+      ...testKeyboard(),
+    },
+  );
+}
+
+
+/* =========================================================
+   REFERRAL MESSAGE
+========================================================= */
+
+async function sendReferralMessage(
+  env: Env,
+  chatId: number,
+  telegramId: number,
+) {
+  const status =
+    await getAccessStatus(
+      env,
+      telegramId,
+    );
+
+  const link =
+    referralLink(
+      telegramId,
+    );
+
+  const remaining =
+    Math.max(
+      0,
+      REQUIRED_REFERRALS -
+        status.referrals,
+    );
+
+  await sendBotMessage(
+    env,
+    chatId,
+    `🔗 *SIZNING SHAXSIY TAKLIF HAVOLANGIZ*\n\n` +
+      `${link}\n\n` +
+      `👥 Hozirgi natija: *${status.referrals}/${REQUIRED_REFERRALS}*\n` +
+      `🎯 Qolgan: *${remaining} ta*\n\n` +
+      `📌 Havolani do‘stlaringizga yuboring.\n` +
+      `Ular botga kirib telefon raqamini tasdiqlaganidan keyin referral avtomatik hisoblanadi.\n\n` +
+      `🚫 Bir foydalanuvchi qayta-qayta hisoblanmaydi.`,
+    referralKeyboard(),
+  );
+}
+
+
+/* =========================================================
+   START PARAM
+========================================================= */
+
+function parseStartParameter(
+  text: string,
+): number | null {
+  const parts =
+    text
+      .trim()
+      .split(/\s+/);
+
+  if (
+    parts.length <
+    2
+  ) {
+    return null;
+  }
+
+  const parameter =
+    parts[1];
+
+  if (
+    !parameter.startsWith(
+      "ref_",
+    )
+  ) {
+    return null;
+  }
+
+  const id =
+    Number(
+      parameter.slice(
+        4,
+      ),
+    );
+
+  if (
+    !Number.isSafeInteger(
+      id,
+    ) ||
+    id <= 0
+  ) {
+    return null;
+  }
+
+  return id;
+}
+
+
+/* =========================================================
+   COMMAND
+========================================================= */
+
+function normalizeCommand(
+  text: string,
+): string {
+  const first =
+    text
+      .trim()
+      .split(/\s+/)[0]
+      ?.toLowerCase() ??
+    "";
+
+  const at =
+    first.indexOf("@");
+
+  return at > 0
+    ? first.slice(
+        0,
+        at,
+      )
+    : first;
+}
+
+
+/* =========================================================
+   EXTRACT MESSAGE
+========================================================= */
+
+function extractMessage(
+  update: TelegramUpdate,
+) {
+  return (
+    update.message ??
+    update.edited_message ??
+    update.channel_post ??
+    update.edited_channel_post
+  );
+}
+
+
+/* =========================================================
+   HANDLE CALLBACK
+========================================================= */
+
+async function handleCallbackQuery(
+  env: Env,
+  callback:
+    TelegramCallbackQuery,
+) {
+  const telegramId =
+    callback.from.id;
+
+  const chatId =
+    callback.message?.chat.id;
+
+  if (!chatId) {
+    return;
+  }
+
+  const data =
+    callback.data ??
+    "";
+
+  await telegramRequest(
+    env,
+    "answerCallbackQuery",
+    {
+      callback_query_id:
+        callback.id,
+    },
+  );
+
+  if (
+    data ===
+    "referral"
+  ) {
+    await sendReferralMessage(
+      env,
+      chatId,
+      telegramId,
+    );
+
+    return;
+  }
+
+  if (
+    data ===
+    "check_access"
+  ) {
+    await sendAccessStatus(
+      env,
+      chatId,
+      telegramId,
+    );
+
+    return;
+  }
+}
+
+
+/* =========================================================
+   HANDLE TELEGRAM UPDATE
+========================================================= */
+
+async function handleTelegramUpdate(
+  env: Env,
+  update: TelegramUpdate,
+) {
+  if (
+    update.callback_query
+  ) {
+    await handleCallbackQuery(
+      env,
+      update.callback_query,
+    );
+
+    return;
+  }
+
+  const message =
+    extractMessage(
+      update,
+    );
+
+  if (!message) {
+    return;
+  }
+
+  const from =
+    message.from;
+
+  const chatId =
+    message.chat.id;
+
+  /*
+   * PRIVATE CHAT uchun access
+   * tizimi ishlaydi.
+   */
+  const isPrivate =
+    message.chat.type ===
+    "private";
+
+  /* -------------------------------------------------------
+     CONTACT
+  ------------------------------------------------------- */
+
+  if (
+    message.contact &&
+    isPrivate
+  ) {
+    const result =
+      await confirmPhone(
+        env,
+        message,
+      );
+
+    if (
+      !result.ok
+    ) {
+      await sendBotMessage(
+        env,
+        chatId,
+        `❌ Telefon raqamini tasdiqlash amalga oshmadi.\n\n` +
+          `Iltimos, *o‘zingizning Telegram telefon raqamingizni* yuboring.`,
+        phoneKeyboard(),
+      );
+
+      return;
+    }
+
+    await sendBotMessage(
+      env,
+      chatId,
+      `✅ *Telefon raqamingiz muvaffaqiyatli tasdiqlandi!*\n\n` +
+        `Endi keyingi bosqichga o‘tamiz...`,
+      removeKeyboard(),
+    );
+
+    await sendAccessStatus(
+      env,
+      chatId,
+      from?.id ??
+        0,
+    );
+
+    return;
+  }
+
+  const text =
+    (
+      message.text ??
+      message.caption ??
+      ""
+    ).trim();
+
+  const command =
+    normalizeCommand(
+      text,
+    );
+
+  /* -------------------------------------------------------
+     START
+  ------------------------------------------------------- */
+
+  if (
+    command ===
+    "/start"
+  ) {
+    if (
+      !isPrivate ||
+      !from
+    ) {
+      return;
+    }
+
+    /*
+     * Avval foydalanuvchini
+     * bazaga yozamiz.
+     */
+    await registerUser(
+      env,
+      message,
+    );
+
+    /*
+     * Referral parametrini
+     * pending sifatida saqlaymiz.
+     */
+    const referrerId =
+      parseStartParameter(
+        text,
+      );
+
+    if (
+      referrerId &&
+      referrerId !==
+        from.id
+    ) {
+      await savePendingReferral(
+        env,
+        from.id,
+        referrerId,
+      );
+    }
+
+    await sendAccessStatus(
+      env,
+      chatId,
+      from.id,
+    );
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     HELP
+  ------------------------------------------------------- */
+
+  if (
+    command ===
+    "/help"
+  ) {
+    await sendBotMessage(
+      env,
+      chatId,
+      `🎓 *${BOT_NAME}*\n\n` +
+        `📱 /start — ro‘yxatdan o‘tish\n` +
+        `🔗 /referral — taklif havolangiz\n` +
+        `📊 /status — holatingiz\n` +
+        `👥 /group — guruh\n` +
+        `🚀 /test — test tizimi\n\n` +
+        `🎯 Testlarga kirish uchun:\n` +
+        `1️⃣ Telefonni tasdiqlang\n` +
+        `2️⃣ Guruhga qo‘shiling\n` +
+        `3️⃣ 5 ta yangi foydalanuvchini taklif qiling`,
+    );
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     REFERRAL
+  ------------------------------------------------------- */
+
+  if (
+    command ===
+    "/referral"
+  ) {
+    if (
+      !from
+    ) {
+      return;
+    }
+
+    await sendReferralMessage(
+      env,
+      chatId,
+      from.id,
+    );
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     STATUS
+  ------------------------------------------------------- */
+
+  if (
+    command ===
+    "/status"
+  ) {
+    if (
+      !from
+    ) {
+      return;
+    }
+
+    await sendAccessStatus(
+      env,
+      chatId,
+      from.id,
+    );
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     GROUP
+  ------------------------------------------------------- */
+
+  if (
+    command ===
+    "/group"
+  ) {
+    await sendBotMessage(
+      env,
+      chatId,
+      `👥 *Rasmiy guruhimiz:*\n\n` +
+        `@talim_ilmfan\n\n` +
+        `Guruhga qo‘shilgach /status buyrug‘i orqali tekshirishingiz mumkin.`,
+      groupKeyboard(),
+    );
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     TEST
+  ------------------------------------------------------- */
+
+  if (
+    command ===
+    "/test"
+  ) {
+    if (
+      !from
+    ) {
+      return;
+    }
+
+    const status =
+      await getAccessStatus(
+        env,
+        from.id,
+      );
+
+    if (
+      !status.canAccess
+    ) {
+      await sendAccessStatus(
+        env,
+        chatId,
+        from.id,
+      );
+
+      return;
+    }
+
+    await sendBotMessage(
+      env,
+      chatId,
+      `🚀 *TESTLAR TAYYOR!*\n\n` +
+        `Siz test tizimiga kirish huquqiga egasiz.\n\n` +
+        `Boshlash uchun quyidagi tugmani bosing:`,
+      testKeyboard(),
+    );
+
+    return;
+  }
+}
+
+
+/* =========================================================
+   MINI APP / CHALLENGE
 ========================================================= */
 
 function challengeUrl(
@@ -253,6 +1848,7 @@ function challengeKeyboard(
         {
           text:
             "🚀 TESTNI BOSHLASH",
+
           web_app: {
             url:
               challengeUrl(
@@ -264,6 +1860,7 @@ function challengeKeyboard(
     ],
   };
 }
+
 
 /* =========================================================
    CURRICULUM
@@ -285,9 +1882,10 @@ function getDayNumber(
   const diff =
     Math.floor(
       (
-        current - start
+        current -
+        start
       ) /
-      86400000,
+        86400000,
     );
 
   return Math.max(
@@ -296,6 +1894,7 @@ function getDayNumber(
   );
 }
 
+
 function getCurriculumModules(
   day: number,
 ): string[] {
@@ -303,10 +1902,14 @@ function getCurriculumModules(
     day >= 1 &&
     day <= 10
   ) {
-    return [`m${day}`];
+    return [
+      `m${day}`,
+    ];
   }
 
-  if (day === 11) {
+  if (
+    day === 11
+  ) {
     return [
       "m1",
       "m2",
@@ -314,7 +1917,9 @@ function getCurriculumModules(
     ];
   }
 
-  if (day === 12) {
+  if (
+    day === 12
+  ) {
     return [
       "m4",
       "m5",
@@ -322,7 +1927,9 @@ function getCurriculumModules(
     ];
   }
 
-  if (day === 13) {
+  if (
+    day === 13
+  ) {
     return [
       "m7",
       "m8",
@@ -331,7 +1938,9 @@ function getCurriculumModules(
     ];
   }
 
-  if (day === 14) {
+  if (
+    day === 14
+  ) {
     return [
       "m1",
       "m2",
@@ -341,7 +1950,9 @@ function getCurriculumModules(
     ];
   }
 
-  if (day === 15) {
+  if (
+    day === 15
+  ) {
     return [
       "m6",
       "m7",
@@ -365,6 +1976,7 @@ function getCurriculumModules(
   ];
 }
 
+
 /* =========================================================
    RANDOM
 ========================================================= */
@@ -384,7 +1996,7 @@ function shuffle<T>(
     const j =
       Math.floor(
         Math.random() *
-        (i + 1),
+          (i + 1),
       );
 
     [
@@ -399,6 +2011,7 @@ function shuffle<T>(
   return result;
 }
 
+
 /* =========================================================
    QUESTION POOL
 ========================================================= */
@@ -412,15 +2025,18 @@ type QuizLevel =
 interface SelectedQuestion {
   id: string;
   topicId: string;
-  categoryId: string | null;
+  categoryId:
+    string | null;
   level: QuizLevel;
 }
+
 
 function collectModuleQuestions(
   moduleIds: string[],
 ): SelectedQuestion[] {
   const result:
-    SelectedQuestion[] = [];
+    SelectedQuestion[] =
+    [];
 
   for (
     const moduleId
@@ -464,10 +2080,13 @@ function collectModuleQuestions(
           result.push({
             id:
               question.id,
+
             topicId:
               topic.id,
+
             categoryId:
               module.id,
+
             level,
           });
         }
@@ -477,6 +2096,7 @@ function collectModuleQuestions(
 
   return result;
 }
+
 
 /* =========================================================
    QUESTION SELECTION
@@ -497,7 +2117,8 @@ function pickQuestions(
     shuffle(
       pool.filter(
         (q) =>
-          q.level === level,
+          q.level ===
+          level,
       ),
     ).slice(
       0,
@@ -509,26 +2130,23 @@ function pickQuestions(
       "easy",
       5,
     ),
+
     ...pickLevel(
       "medium",
       10,
     ),
+
     ...pickLevel(
       "hard",
       7,
     ),
+
     ...pickLevel(
       "case",
       3,
     ),
   ];
 
-  /*
-   * Hozircha ayrim modullarda savollar
-   * hali yo‘q. Shuning uchun tizimni
-   * sindirmaslik uchun mavjud savollar
-   * bilan to‘ldiramiz.
-   */
   if (
     selected.length <
     QUESTIONS_PER_CHALLENGE
@@ -552,6 +2170,7 @@ function pickQuestions(
 
     selected = [
       ...selected,
+
       ...remaining.slice(
         0,
         QUESTIONS_PER_CHALLENGE -
@@ -568,6 +2187,7 @@ function pickQuestions(
   );
 }
 
+
 /* =========================================================
    CHALLENGE ID
 ========================================================= */
@@ -577,9 +2197,15 @@ function makeChallengeId(
   hour: number,
 ): string {
   return (
-    `daily-${date}-${String(hour).padStart(2, "0")}`
+    `daily-${date}-${String(
+      hour,
+    ).padStart(
+      2,
+      "0",
+    )}`
   );
 }
+
 
 /* =========================================================
    CREATE CHALLENGE
@@ -609,10 +2235,6 @@ async function createHourlyChallenge(
       dayNumber,
     );
 
-  /*
-   * Bir xil soatda ikkinchi challenge
-   * yaratilishiga yo‘l qo‘ymaymiz.
-   */
   const existing =
     await env.DB
       .prepare(
@@ -645,16 +2267,9 @@ async function createHourlyChallenge(
     );
 
   if (
-    questions.length === 0
+    questions.length ===
+    0
   ) {
-    console.error(
-      "[CHALLENGE] Savollar topilmadi",
-      {
-        dayNumber,
-        moduleIds,
-      },
-    );
-
     return {
       created: false,
       reason:
@@ -662,10 +2277,6 @@ async function createHourlyChallenge(
     };
   }
 
-  /*
-   * Challenge boshlanishi — shu soat.
-   * Tugashi — 50 daqiqadan keyin.
-   */
   const startAt =
     Date.now();
 
@@ -712,9 +2323,6 @@ async function createHourlyChallenge(
     )
     .run();
 
-  /*
-   * Savollarni tartib bilan saqlaymiz.
-   */
   for (
     let i = 0;
     i < questions.length;
@@ -772,6 +2380,7 @@ async function createHourlyChallenge(
   };
 }
 
+
 /* =========================================================
    TELEGRAM CHALLENGE MESSAGE
 ========================================================= */
@@ -816,6 +2425,7 @@ async function sendChallengeMessage(
     },
   );
 }
+
 
 /* =========================================================
    DAILY CHALLENGE RUNNER
@@ -894,6 +2504,7 @@ async function runHourlyChallenge(
   }
 }
 
+
 /* =========================================================
    DAILY RESULTS
 ========================================================= */
@@ -902,11 +2513,6 @@ async function buildDailyResults(
   env: Env,
   date: string,
 ) {
-  /*
-   * Shu kunning barcha tugallangan
-   * challenge'larini umumlashtiramiz.
-   */
-
   const rows =
     await env.DB
       .prepare(
@@ -943,7 +2549,9 @@ async function buildDailyResults(
 
   for (
     const row
-    of rows.results as Array<Record<string, unknown>>
+    of rows.results as Array<
+      Record<string, unknown>
+    >
   ) {
     const telegramId =
       String(
@@ -994,22 +2602,28 @@ async function buildDailyResults(
         date,
         telegramId,
         Number(
-          row.challenges_count ?? 0,
+          row.challenges_count ??
+            0,
         ),
         Number(
-          row.total_correct ?? 0,
+          row.total_correct ??
+            0,
         ),
         Number(
-          row.total_questions ?? 0,
+          row.total_questions ??
+            0,
         ),
         Number(
-          row.total_score ?? 0,
+          row.total_score ??
+            0,
         ),
         Number(
-          row.total_duration_sec ?? 0,
+          row.total_duration_sec ??
+            0,
         ),
         Number(
-          row.best_score ?? 0,
+          row.best_score ??
+            0,
         ),
         rank,
         now,
@@ -1022,6 +2636,7 @@ async function buildDailyResults(
 
   return rows.results;
 }
+
 
 /* =========================================================
    DAILY TELEGRAM SUMMARY
@@ -1037,7 +2652,9 @@ async function sendDailySummary(
       date,
     );
 
-  if (!rows.length) {
+  if (
+    !rows.length
+  ) {
     console.log(
       "[DAILY] Bugun natija yo‘q",
     );
@@ -1050,22 +2667,28 @@ async function sendDailySummary(
       .slice(0, 10)
       .map(
         (
-          row: Record<string, unknown>,
+          row: Record<
+            string,
+            unknown
+          >,
           index,
         ) => {
           const score =
             Number(
-              row.total_score ?? 0,
+              row.total_score ??
+                0,
             );
 
           const correct =
             Number(
-              row.total_correct ?? 0,
+              row.total_correct ??
+                0,
             );
 
           const total =
             Number(
-              row.total_questions ?? 0,
+              row.total_questions ??
+                0,
             );
 
           const icon =
@@ -1108,137 +2731,6 @@ async function sendDailySummary(
   );
 }
 
-/* =========================================================
-   WEBHOOK COMMANDS
-========================================================= */
-
-function normalizeCommand(
-  text: string,
-): string {
-  const first =
-    text
-      .trim()
-      .split(/\s+/)[0]
-      ?.toLowerCase() ?? "";
-
-  const at =
-    first.indexOf("@");
-
-  return at > 0
-    ? first.slice(
-        0,
-        at,
-      )
-    : first;
-}
-
-function extractMessage(
-  update: TelegramUpdate,
-) {
-  return (
-    update.message ??
-    update.edited_message ??
-    update.channel_post ??
-    update.edited_channel_post
-  );
-}
-
-function getUpdateType(
-  update: TelegramUpdate,
-) {
-  if (update.message)
-    return "message";
-
-  if (update.edited_message)
-    return "edited_message";
-
-  if (update.channel_post)
-    return "channel_post";
-
-  if (update.edited_channel_post)
-    return "edited_channel_post";
-
-  if (update.callback_query)
-    return "callback_query";
-
-  return "unknown";
-}
-
-/* =========================================================
-   WEBHOOK
-========================================================= */
-
-async function handleTelegramUpdate(
-  env: Env,
-  update: TelegramUpdate,
-) {
-  const message =
-    extractMessage(update);
-
-  if (!message) {
-    return;
-  }
-
-  const text =
-    (
-      message.text ??
-      message.caption ??
-      ""
-    ).trim();
-
-  const command =
-    normalizeCommand(
-      text,
-    );
-
-  const chatId =
-    message.chat.id;
-
-  if (
-    command === "/test"
-  ) {
-    await telegramRequest(
-      env,
-      "sendMessage",
-      {
-        chat_id:
-          chatId,
-
-        text:
-          `🚀 *Test tizimi*\n\n` +
-          `Avtomatik challenge tizimi ishlamoqda.\n\n` +
-          `Keyingi challenge bot tomonidan avtomatik yuboriladi.`,
-
-        parse_mode:
-          "Markdown",
-      },
-    );
-
-    return;
-  }
-
-  if (
-    command === "/start" ||
-    command === "/help"
-  ) {
-    await telegramRequest(
-      env,
-      "sendMessage",
-      {
-        chat_id:
-          chatId,
-
-        text:
-          `🎓 *${BOT_NAME}*\n\n` +
-          `Soatlik challenge'lar avtomatik ravishda guruhga yuboriladi.\n\n` +
-          `🚀 Test tugmasini bosib Mini App orqali ishlang.`,
-
-        parse_mode:
-          "Markdown",
-      },
-    );
-  }
-}
 
 /* =========================================================
    CHALLENGE API
@@ -1294,53 +2786,48 @@ async function getChallenge(
       )
       .all();
 
-  /*
-   * Javoblarni browserga yubormaymiz.
-   * Mini App faqat savol matni va variantlarni
-   * oladi.
-   *
-   * Buning uchun keyingi Mini App API
-   * integratsiyasida questionId bo‘yicha
-   * quiz-data'dan savol olinadi.
-   */
-
   const result =
-    questions.results.map(
-      (
-        item: Record<string, unknown>,
-      ) => {
-        const question =
-          findQuestionById(
-            String(
-              item.question_id,
-            ),
-          );
+    questions.results
+      .map(
+        (
+          item: Record<
+            string,
+            unknown
+          >,
+        ) => {
+          const question =
+            findQuestionById(
+              String(
+                item.question_id,
+              ),
+            );
 
-        if (!question) {
-          return null;
-        }
+          if (!question) {
+            return null;
+          }
 
-        return {
-          id:
-            question.id,
+          return {
+            id:
+              question.id,
 
-          text:
-            question.text,
+            text:
+              question.text,
 
-          options:
-            question.options,
+            options:
+              question.options,
 
-          topicId:
-            item.topic_id,
+            topicId:
+              item.topic_id,
 
-          level:
-            item.level,
+            level:
+              item.level,
 
-          order:
-            item.order_index,
-        };
-      },
-    ).filter(Boolean);
+            order:
+              item.order_index,
+          };
+        },
+      )
+      .filter(Boolean);
 
   return json({
     ok: true,
@@ -1350,15 +2837,14 @@ async function getChallenge(
   });
 }
 
+
+/* =========================================================
+   FIND QUESTION
+========================================================= */
+
 function findQuestionById(
   questionId: string,
 ) {
-  /*
-   * quiz-data'dagi barcha mavzular
-   * bo‘yicha qidiramiz.
-   *
-   * Bu fallback sifatida ishlaydi.
-   */
   for (
     let moduleNumber = 1;
     moduleNumber <= 10;
@@ -1369,8 +2855,9 @@ function findQuestionById(
         `m${moduleNumber}`,
       );
 
-    if (!module)
+    if (!module) {
       continue;
+    }
 
     for (
       const topic
@@ -1416,6 +2903,88 @@ function findQuestionById(
   return null;
 }
 
+
+/* =========================================================
+   HEALTH
+========================================================= */
+
+async function health(
+  env: Env,
+) {
+  const time =
+    getTashkentTime();
+
+  return json({
+    ok: true,
+
+    service:
+      "menejerlik-worker",
+
+    bot:
+      BOT_NAME,
+
+    botUsername:
+      `@${BOT_USERNAME}`,
+
+    worker:
+      WORKER_URL,
+
+    webhookPaths: [
+      "/",
+      WEBHOOK_PATH,
+    ],
+
+    telegramConfigured:
+      Boolean(
+        env.TELEGRAM_BOT_TOKEN,
+      ),
+
+    databaseConfigured:
+      Boolean(env.DB),
+
+    group:
+      GROUP_CHAT_ID,
+
+    groupUrl:
+      GROUP_URL,
+
+    access: {
+      requiredReferrals:
+        REQUIRED_REFERRALS,
+    },
+
+    cron:
+      "0 * * * *",
+
+    challenge: {
+      startHour:
+        DAILY_START_HOUR,
+
+      endHour:
+        DAILY_END_HOUR,
+
+      resultsHour:
+        DAILY_RESULTS_HOUR,
+
+      questions:
+        QUESTIONS_PER_CHALLENGE,
+
+      durationMinutes:
+        50,
+
+      pointsPerCorrect:
+        POINTS_PER_CORRECT,
+
+      maxScore:
+        MAX_CHALLENGE_SCORE,
+    },
+
+    tashkentTime:
+      time,
+  });
+}
+
+
 /* =========================================================
    MAIN WORKER
 ========================================================= */
@@ -1427,16 +2996,26 @@ export default {
     ctx: ExecutionContext,
   ): Promise<Response> {
     const url =
-      new URL(request.url);
+      new URL(
+        request.url,
+      );
 
-    /* -----------------------------------------------
+
+    /* =====================================================
        TELEGRAM WEBHOOK
-    ------------------------------------------------ */
+       ROOT + /telegram/webhook
+    ===================================================== */
+
+    const isWebhookPath =
+      url.pathname ===
+        "/" ||
+      url.pathname ===
+        WEBHOOK_PATH;
 
     if (
-      url.pathname ===
-        WEBHOOK_PATH &&
-      request.method === "POST"
+      isWebhookPath &&
+      request.method ===
+        "POST"
     ) {
       try {
         const update =
@@ -1461,7 +3040,14 @@ export default {
           update_id:
             update.update_id,
         });
-      } catch {
+      } catch (
+        error
+      ) {
+        console.error(
+          "[WEBHOOK PARSE ERROR]",
+          error,
+        );
+
         return json(
           {
             ok: false,
@@ -1473,9 +3059,127 @@ export default {
       }
     }
 
-    /* -----------------------------------------------
-       CURRENT CHALLENGE API
-    ------------------------------------------------ */
+
+    /* =====================================================
+       HEALTH
+    ===================================================== */
+
+    if (
+      url.pathname ===
+      "/health"
+    ) {
+      return health(
+        env,
+      );
+    }
+
+
+    /* =====================================================
+       ACCESS STATUS API
+    ===================================================== */
+
+    if (
+      url.pathname ===
+      "/api/access-status"
+    ) {
+      const telegramId =
+        Number(
+          url.searchParams.get(
+            "telegram_id",
+          ),
+        );
+
+      if (
+        !Number.isSafeInteger(
+          telegramId,
+        ) ||
+        telegramId <= 0
+      ) {
+        return json(
+          {
+            ok: false,
+            error:
+              "telegram_id kerak",
+          },
+          400,
+        );
+      }
+
+      const status =
+        await getAccessStatus(
+          env,
+          telegramId,
+        );
+
+      return json({
+        ok: true,
+        status,
+      });
+    }
+
+
+    /* =====================================================
+       REFERRAL API
+    ===================================================== */
+
+    if (
+      url.pathname ===
+      "/api/referral"
+    ) {
+      const telegramId =
+        Number(
+          url.searchParams.get(
+            "telegram_id",
+          ),
+        );
+
+      if (
+        !Number.isSafeInteger(
+          telegramId,
+        ) ||
+        telegramId <= 0
+      ) {
+        return json(
+          {
+            ok: false,
+            error:
+              "telegram_id kerak",
+          },
+          400,
+        );
+      }
+
+      const count =
+        await getReferralCount(
+          env,
+          telegramId,
+        );
+
+      return json({
+        ok: true,
+        telegram_id:
+          telegramId,
+        referrals:
+          count,
+        required:
+          REQUIRED_REFERRALS,
+        remaining:
+          Math.max(
+            0,
+            REQUIRED_REFERRALS -
+              count,
+          ),
+        link:
+          referralLink(
+            telegramId,
+          ),
+      });
+    }
+
+
+    /* =====================================================
+       CHALLENGE API
+    ===================================================== */
 
     if (
       url.pathname ===
@@ -1503,67 +3207,10 @@ export default {
       );
     }
 
-    /* -----------------------------------------------
-       HEALTH
-    ------------------------------------------------ */
 
-    if (
-      url.pathname ===
-      "/health"
-    ) {
-      const time =
-        getTashkentTime();
-
-      return json({
-        ok: true,
-
-        service:
-          "menejerlik-worker",
-
-        bot:
-          BOT_NAME,
-
-        telegramConfigured:
-          Boolean(
-            env.TELEGRAM_BOT_TOKEN,
-          ),
-
-        databaseConfigured:
-          Boolean(env.DB),
-
-        groupChatId:
-          GROUP_CHAT_ID,
-
-        cron:
-          "0 * * * *",
-
-        challenge: {
-          startHour:
-            DAILY_START_HOUR,
-
-          endHour:
-            DAILY_END_HOUR,
-
-          resultsHour:
-            DAILY_RESULTS_HOUR,
-
-          questions:
-            QUESTIONS_PER_CHALLENGE,
-
-          durationMinutes:
-            50,
-
-          pointsPerCorrect:
-            POINTS_PER_CORRECT,
-
-          maxScore:
-            MAX_CHALLENGE_SCORE,
-        },
-
-        tashkentTime:
-          time,
-      });
-    }
+    /* =====================================================
+       NEXT / OPENNEXT
+    ===================================================== */
 
     return nextWorker.fetch(
       request,
@@ -1571,6 +3218,7 @@ export default {
       ctx,
     );
   },
+
 
   /* =======================================================
      CRON
@@ -1589,18 +3237,23 @@ export default {
       JSON.stringify({
         date:
           time.date,
+
         hour:
           time.hour,
+
         minute:
           time.minute,
+
         timezone:
           "Asia/Tashkent",
       }),
     );
 
-    /*
-     * 05:00–22:00
-     */
+
+    /* -----------------------------------------------------
+       HOURLY CHALLENGE
+    ----------------------------------------------------- */
+
     if (
       isChallengeHour(
         time.hour,
@@ -1614,9 +3267,11 @@ export default {
       );
     }
 
-    /*
-     * 23:00
-     */
+
+    /* -----------------------------------------------------
+       DAILY RESULTS
+    ----------------------------------------------------- */
+
     if (
       time.hour ===
       DAILY_RESULTS_HOUR
@@ -1632,6 +3287,11 @@ export default {
     void controller;
   },
 };
+
+
+/* =========================================================
+   CHALLENGE HOURS
+========================================================= */
 
 function isChallengeHour(
   hour: number,
