@@ -1672,17 +1672,17 @@ const MODULE_2: Category = {
       levels: M2T4_LEVELS,
     },
 
-    {
-      id: 'm2t5',
+   {
+  id: 'm2t5',
 
-      title:
-        'Bola xavfsizligi va farovonligini ta’minlash',
+  title:
+    'Bola xavfsizligi va farovonligini ta’minlash',
 
-      description:
-        'Maktab muhitida o‘quvchilarning xavfsizligi, himoyasi, psixologik farovonligi va rivojlanishi uchun qulay sharoit yaratish.',
+  description:
+    'Maktab muhitida o‘quvchilarning xavfsizligi, himoyasi, psixologik farovonligi va rivojlanishi uchun qulay sharoit yaratish.',
 
-      levels: EMPTY_LEVELS,
-    },
+  levels: M2T5_LEVELS,
+},
   ],
 }
 
