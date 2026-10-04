@@ -1714,13 +1714,13 @@ export const M3T2_HARD_QUESTIONS: Question[] = [
     moduleId: MODULE_3_ID,
     topicId: TOPIC_3_2_ID,
     difficulty: "hard",
-    text: "Quyidagi fikrlardan qaysilari ma’ruzaning umumiy falsafasiga mos?
+    text: `Quyidagi fikrlardan qaysilari ma’ruzaning umumiy falsafasiga mos?
 
 1. Rahbarning ma’naviy qiyofasi shaxsiy namuna orqali jamoaga ta’sir qiladi.
 2. Foresayt bugungi qarorlarni kelajak oqibatlari bilan bog‘laydi.
 3. Ma’naviy kompetensiya real boshqaruv vaziyatida namoyon bo‘ladi.
 4. Texnologik samaradorlik axloqiy mezonlardan ustun turishi kerak.
-5. Iqtidor va odob uyg‘unligi muhim.",
+5. Iqtidor va odob uyg‘unligi muhim."`,
     options: [
       "1, 2, 3, 5",
       "1, 2, 4, 5",
