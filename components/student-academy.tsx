@@ -74,6 +74,7 @@ type TestQuestion = {
 
 type Props = {
   onBack?: () => void;
+  onPisa?: () => void;
 };
 
 /* =========================================================
@@ -1332,6 +1333,7 @@ const englishLevels = [
 
 export default function StudentAcademy({
   onBack,
+  onPisa,
 }: Props) {
   const [screen, setScreen] =
     useState<Screen>("academy");
@@ -1447,24 +1449,24 @@ export default function StudentAcademy({
      NAVIGATION
   ======================================================= */
 
-  const openTrack = (
-    id: TrackId,
-  ) => {
-    setTrack(id);
+ const openTrack = (id: TrackId) => {
+  setTrack(id);
 
-    if (id === "english") {
-      setScreen("english");
-      return;
-    }
+  // 🎯 PISA — asosiy PISA Academy komponentiga o'tadi
+  if (id === "pisa") {
+    onPisa?.();
+    return;
+  }
 
-    /*
-     * Other academies are intentionally
-     * kept inside the Student Academy
-     * architecture and can be connected
-     * to their dedicated components later.
-     */
-    setScreen("academy");
-  };
+  // 🇬🇧 English Academy
+  if (id === "english") {
+    setScreen("english");
+    return;
+  }
+
+  // Boshqa yo'nalishlar
+  setScreen("academy");
+};
 
   const openFoundation = () => {
     const firstIncomplete =
