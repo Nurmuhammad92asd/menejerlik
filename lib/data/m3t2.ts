@@ -1216,13 +1216,13 @@ export const M3T2_HARD_QUESTIONS: Question[] = [
     moduleId: MODULE_3_ID,
     topicId: TOPIC_3_2_ID,
     difficulty: "hard",
-    text: "Quyidagi fikrlardan qaysilari ma’ruzadagi kelajak rahbarining ma’naviy portretiga mos?
+    text: `Quyidagi fikrlardan qaysilari ma’ruzadagi kelajak rahbarining ma’naviy portretiga mos?
 
 1. Adolat va halollikni texnologik samaradorlikdan ustun qo‘yish.
 2. Texnologiyalarni insoniy qadriyatlar bilan uyg‘unlashtirish.
 3. Global o‘zgarishlarda milliy qadriyatlarga sobit turish.
 4. Texnologik natija uchun axloqiy mezonlarni ikkinchi o‘ringa qo‘yish.
-5. Axborot xurujlari sharoitida ma’naviy chidamlilikni saqlash.",
+5. Axborot xurujlari sharoitida ma’naviy chidamlilikni saqlash.`,
     options: [
       "1, 2, 3, 5",
       "1, 2, 4, 5",
