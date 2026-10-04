@@ -1288,3 +1288,4 @@ export async function GET() {
       MINI_APP_URL,
   })
 }
+ 
