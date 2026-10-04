@@ -722,7 +722,7 @@ Eng maqbul yechim qaysi?`,
 ========================================================= */
 
 export const CASE_QUESTIONS: Question[] = [
-  // ... 10 ta case savol
+  // bu yerda 10 ta case savol bo‘lsin
 ];
 
 export const M3T3_QUESTIONS: Question[] = [
@@ -734,7 +734,6 @@ export const M3T3_QUESTIONS: Question[] = [
 
 export const M3T3_QUESTION_COUNT = M3T3_QUESTIONS.length;
 
-// ← SHU QATORNI QO‘SHING
 export const M3T3_LEVELS = {
   easy: EASY_QUESTIONS,
   medium: MEDIUM_QUESTIONS,
