@@ -1,4417 +1,4547 @@
 /* =========================================================
  * 🇬🇧 MENEJERLIK BY NURMUHAMMAD
- * ENGLISH ACADEMY — FOUNDATION DATA
+ * ENGLISH ACADEMY
+ * FOUNDATION COURSE — PROFESSIONAL DATA
  * =========================================================
  *
- * FOUNDATION
- * 30 BOSQICHLI INTERAKTIV ENGLISH KURSI
+ * FOUNDATION / PRE-A1
  *
- * FLOW:
+ * 30 TA BOSQICHMA-BOSQICH DARS
  *
- * Lesson
- *   ↓
- * Vocabulary
- *   ↓
- * Explanation
- *   ↓
- * Examples
- *   ↓
- * Interactive Activity
- *   ↓
- * Speaking
- *   ↓
- * Final Test
- *   ↓
- * Pass 70%
- *   ↓
- * Next Lesson Unlock
+ * HAR BIR DARS:
+ * ├── 🎯 Objectives
+ * ├── 📚 Vocabulary
+ * ├── 🧠 Grammar
+ * ├── 🧱 Sentence Structure
+ * ├── 💡 Explanation
+ * ├── ✍️ Examples
+ * ├── 🔊 Pronunciation
+ * ├── 📖 Reading
+ * ├── 🎮 Activities
+ * ├── 🗣️ Speaking
+ * ├── ✍️ Writing
+ * ├── 🔄 Review
+ * ├── 🏆 Challenge
+ * └── 📝 Final Test
  *
- * Rasmlar hozir emoji + image path bilan tayyorlangan.
- * Keyinchalik /public/english/images/ ichiga haqiqiy
- * professional rasmlarni joylashtirish mumkin.
+ * PRINCIPLE:
+ * Learn → Understand → Practice → Use → Test → Unlock
  * ========================================================= */
 
 import type {
+  EnglishCourse,
   EnglishLesson,
+  EnglishUnit,
   EnglishVocabulary,
-  EnglishActivity,
+  EnglishGrammar,
+  EnglishSentenceStructure,
   EnglishExplanation,
   EnglishExample,
+  EnglishActivity,
   EnglishSpeaking,
+  EnglishWriting,
+  EnglishReading,
+  EnglishReview,
+  EnglishChallenge,
   EnglishLessonTest,
   EnglishLessonReward,
-  EnglishGrammar,
+  EnglishPronunciation,
+  EnglishLessonTheme,
+  EnglishTestQuestion,
 } from './english-types'
 
+
 /* =========================================================
-   🧩 HELPERS
+   🏷️ COURSE
 ========================================================= */
 
-const vocabulary = (
-  items: Array<
-    Omit<EnglishVocabulary, 'id'> & {
-      id?: string
-    }
-  >,
-  lessonNumber: number,
-): EnglishVocabulary[] =>
-  items.map((item, index) => ({
-    ...item,
-    id: item.id ?? `foundation-${lessonNumber}-word-${index + 1}`,
-  }))
+export const FOUNDATION_COURSE: EnglishCourse = {
+  id: 'foundation-main',
+  level: 'foundation',
+  title: 'English Foundation',
+  shortTitle: 'Foundation',
+  description:
+    'Ingliz tilini noldan mustahkam poydevor bilan o‘rganish kursi. O‘quvchi so‘z, gap tuzilishi, asosiy grammatika, talaffuz va kundalik muloqotni bosqichma-bosqich egallaydi.',
+  emoji: '🇬🇧',
+  cefr: 'pre-a1',
+  lessonCount: 30,
+  estimatedMinutes: 720,
+  status: 'available',
+  color: 'blue',
+  gradient: 'from-blue-600 via-indigo-600 to-purple-600',
+  goals: [
+    'Ingliz tilidagi asosiy so‘zlarni faol ishlatish',
+    'Oddiy gaplarni mustaqil tuzish',
+    'Subject + Verb + Object strukturasini tushunish',
+    'am / is / are ni to‘g‘ri qo‘llash',
+    'have / has ni ishlatish',
+    'Present Simple asoslarini egallash',
+    'Oddiy savollar va javoblarni tuzish',
+    'Kundalik vaziyatlarda inglizcha muloqot qilish',
+    'Oddiy matnlarni o‘qib tushunish',
+    'O‘z fikrini sodda gaplar bilan ifodalash',
+  ],
+  skills: [
+    'vocabulary',
+    'grammar',
+    'reading',
+    'listening',
+    'speaking',
+    'writing',
+    'pronunciation',
+    'communication',
+  ],
+  recommendedAge: '7+',
+  certificateTitle: 'English Foundation Achievement Certificate',
+}
 
-const activity = (
-  item: Omit<EnglishActivity, 'id'> & { id?: string },
-  lessonNumber: number,
-  index: number,
-): EnglishActivity => ({
-  ...item,
-  id: item.id ?? `foundation-${lessonNumber}-activity-${index + 1}`,
+
+/* =========================================================
+   🧩 UNITS
+========================================================= */
+
+export const FOUNDATION_UNITS: EnglishUnit[] = [
+  {
+    id: 'foundation-unit-1',
+    courseId: 'foundation-main',
+    unitNumber: 1,
+    title: 'First Steps',
+    subtitle: 'Ingliz tilidagi birinchi qadamlar',
+    description:
+      'Salomlashish, o‘zini tanishtirish, olmoshlar va gap qurishning eng muhim asoslari.',
+    emoji: '🚀',
+    lessonIds: [
+      'foundation-01',
+      'foundation-02',
+      'foundation-03',
+      'foundation-04',
+      'foundation-05',
+    ],
+    goals: [
+      'Salomlashish',
+      'O‘zini tanishtirish',
+      'Subject pronouns',
+      'To be',
+      'Oddiy gaplar',
+    ],
+    status: 'available',
+  },
+
+  {
+    id: 'foundation-unit-2',
+    courseId: 'foundation-main',
+    unitNumber: 2,
+    title: 'My World',
+    subtitle: 'Men va mening dunyom',
+    description:
+      'Oila, uy, maktab va atrofdagi narsalarni ingliz tilida tasvirlash.',
+    emoji: '🌍',
+    lessonIds: [
+      'foundation-06',
+      'foundation-07',
+      'foundation-08',
+      'foundation-09',
+      'foundation-10',
+    ],
+    goals: [
+      'Family',
+      'Home',
+      'School',
+      'This / That',
+      'There is / There are',
+    ],
+    status: 'locked',
+  },
+
+  {
+    id: 'foundation-unit-3',
+    courseId: 'foundation-main',
+    unitNumber: 3,
+    title: 'Building Sentences',
+    subtitle: 'Gap qurishni o‘rganamiz',
+    description:
+      'Have/has, sifatlar, predloglar va sentence structure orqali uzunroq gaplar tuzish.',
+    emoji: '🧱',
+    lessonIds: [
+      'foundation-11',
+      'foundation-12',
+      'foundation-13',
+      'foundation-14',
+      'foundation-15',
+    ],
+    goals: [
+      'Have / Has',
+      'Adjectives',
+      'Prepositions',
+      'Sentence building',
+      'Questions',
+    ],
+    status: 'locked',
+  },
+
+  {
+    id: 'foundation-unit-4',
+    courseId: 'foundation-main',
+    unitNumber: 4,
+    title: 'Everyday English',
+    subtitle: 'Kundalik ingliz tili',
+    description:
+      'Ovqat, kiyim, vaqt, kun tartibi va kundalik faoliyatlar haqida gapirish.',
+    emoji: '☀️',
+    lessonIds: [
+      'foundation-16',
+      'foundation-17',
+      'foundation-18',
+      'foundation-19',
+      'foundation-20',
+    ],
+    goals: [
+      'Food',
+      'Clothes',
+      'Time',
+      'Daily routine',
+      'Present Simple',
+    ],
+    status: 'locked',
+  },
+
+  {
+    id: 'foundation-unit-5',
+    courseId: 'foundation-main',
+    unitNumber: 5,
+    title: 'Communication Lab',
+    subtitle: 'Haqiqiy muloqot',
+    description:
+      'Savol berish, iltimos qilish, qobiliyat, joylar va kundalik suhbatlarni rivojlantirish.',
+    emoji: '💬',
+    lessonIds: [
+      'foundation-21',
+      'foundation-22',
+      'foundation-23',
+      'foundation-24',
+      'foundation-25',
+    ],
+    goals: [
+      'Question words',
+      'Can / Can’t',
+      'Imperatives',
+      'Shopping',
+      'Directions',
+    ],
+    status: 'locked',
+  },
+
+  {
+    id: 'foundation-unit-6',
+    courseId: 'foundation-main',
+    unitNumber: 6,
+    title: 'Foundation Mastery',
+    subtitle: 'Bilimlarni birlashtiramiz',
+    description:
+      'Oldingi bilimlarni takrorlash, gap tuzish, reading, speaking va yakuniy challenge.',
+    emoji: '🏆',
+    lessonIds: [
+      'foundation-26',
+      'foundation-27',
+      'foundation-28',
+      'foundation-29',
+      'foundation-30',
+    ],
+    goals: [
+      'Review',
+      'Sentence mastery',
+      'Reading',
+      'Speaking',
+      'Final challenge',
+    ],
+    status: 'locked',
+  },
+]
+
+
+/* =========================================================
+   🧰 HELPERS
+========================================================= */
+
+const v = (
+  id: string,
+  word: string,
+  translation: string,
+  category: EnglishVocabulary['category'],
+  example: string,
+  exampleTranslation: string,
+  emoji?: string,
+  pronunciation?: string,
+): EnglishVocabulary => ({
+  id,
+  word,
+  translation,
+  category,
+  example,
+  exampleTranslation,
+  emoji,
+  pronunciation,
+  importance: 'core',
 })
 
-const explanation = (
-  item: Omit<EnglishExplanation, 'id'> & { id?: string },
-  lessonNumber: number,
-  index: number,
-): EnglishExplanation => ({
-  ...item,
-  id: item.id ?? `foundation-${lessonNumber}-explanation-${index + 1}`,
+
+const grammar = (
+  id: string,
+  title: string,
+  category: EnglishGrammar['category'],
+  shortRule: string,
+  explanation: string,
+  formula: string,
+  examples: EnglishGrammar['examples'],
+  tips: string[] = [],
+  commonMistakes: EnglishGrammar['commonMistakes'] = [],
+): EnglishGrammar => ({
+  id,
+  title,
+  category,
+  difficulty: 'starter',
+  shortRule,
+  explanation,
+  formula,
+  examples,
+  tips,
+  commonMistakes,
 })
+
 
 const example = (
-  item: Omit<EnglishExample, 'id'> & { id?: string },
-  lessonNumber: number,
-  index: number,
+  id: string,
+  english: string,
+  uzbek: string,
+  highlight?: string,
 ): EnglishExample => ({
-  ...item,
-  id: item.id ?? `foundation-${lessonNumber}-example-${index + 1}`,
+  id,
+  english,
+  uzbek,
+  highlight,
 })
 
-const speaking = (
-  item: Omit<EnglishSpeaking, 'id'> & { id?: string },
-  lessonNumber: number,
-): EnglishSpeaking => ({
-  ...item,
-  id: item.id ?? `foundation-${lessonNumber}-speaking`,
-})
 
-const test = (
-  lessonNumber: number,
-  questions: EnglishLessonTest['questions'],
-): EnglishLessonTest => ({
-  id: `foundation-${lessonNumber}-test`,
-  title: '📝 Lesson Test',
-  description:
-    'Darsni yakunlash uchun bilimlaringizni tekshiring.',
-  questionCount: questions.length,
-  passingScore: 70,
-  maxScore: questions.reduce(
-    (sum, question) => sum + question.points,
-    0,
-  ),
-  timeLimitMinutes: 5,
-  questions,
-})
-
-const rewards = (
-  lessonNumber: number,
-): EnglishLessonReward => ({
-  xp: 100,
-  bonusXp: 50,
-  stars: 3,
-  badgeId:
-    lessonNumber === 30
-      ? 'foundation-champion'
-      : undefined,
-  badgeTitle:
-    lessonNumber === 30
-      ? '🏆 Foundation Champion'
-      : undefined,
-  unlockNextLesson: true,
-})
-
-const baseLesson = (
-  lessonNumber: number,
+const explanation = (
+  id: string,
+  type: EnglishExplanation['type'],
   title: string,
-  subtitle: string,
-  emoji: string,
-  description: string,
-  topics: string[],
-  words: EnglishVocabulary[],
-  explanations: EnglishExplanation[],
-  examples: EnglishExample[],
-  activities: EnglishActivity[],
-  speakingData: EnglishSpeaking,
-  testData: EnglishLessonTest,
-): EnglishLesson => ({
-  id: `foundation-${lessonNumber}`,
-  courseId: 'english-foundation',
-  lessonNumber,
+  content: string,
+  emoji?: string,
+): EnglishExplanation => ({
+  id,
+  type,
   title,
-  subtitle,
+  content,
   emoji,
-  description,
-  status: lessonNumber === 1 ? 'available' : 'locked',
-  estimatedMinutes: 12,
-  objectives: topics,
-  topics,
-  vocabulary: words,
-  explanations,
-  examples,
-  activities,
-  speaking: speakingData,
-  test: testData,
-  rewards: rewards(lessonNumber),
-  nextLessonId:
-    lessonNumber < 30
-      ? `foundation-${lessonNumber + 1}`
-      : undefined,
-  previousLessonId:
-    lessonNumber > 1
-      ? `foundation-${lessonNumber - 1}`
-      : undefined,
 })
 
-/* =========================================================
-   📝 TEST QUESTION BUILDER
-========================================================= */
 
-const mcq = (
+const activity = (
+  id: string,
+  type: EnglishActivity['type'],
+  title: string,
+  instruction: string,
+  question: string,
+  correctAnswer: string | string[],
+  options?: string[],
+  explanation?: string,
+): EnglishActivity => ({
+  id,
+  type,
+  title,
+  instruction,
+  question,
+  correctAnswer,
+  points: 10,
+  difficulty: 'easy',
+  options: options?.map((text, index) => ({
+    id: `${id}-option-${index + 1}`,
+    text,
+  })),
+  explanation,
+})
+
+
+const testQuestion = (
   id: string,
   question: string,
+  correctAnswer: string | string[],
   options: string[],
-  correctAnswer: string,
-  explanation: string,
-  emoji?: string,
-) => ({
+  explanationText: string,
+): EnglishTestQuestion => ({
   id,
-  type: 'multiple-choice' as const,
+  type: 'multiple-choice',
   question,
   points: 2,
   options: options.map((text, index) => ({
-    id: `${id}-${index + 1}`,
+    id: `${id}-o${index + 1}`,
     text,
   })),
   correctAnswer,
-  explanation,
+  explanation: explanationText,
+})
+
+
+const theme = (
+  emoji: string,
+  gradient: string,
+  accent: string,
+): EnglishLessonTheme => ({
+  theme: 'blue',
   emoji,
+  gradient,
+  accent,
 })
 
-const trueFalse = (
-  id: string,
-  question: string,
-  correctAnswer: 'true' | 'false',
-  explanation: string,
-) => ({
-  id,
-  type: 'true-false' as const,
-  question,
-  points: 2,
-  options: [
-    {
-      id: `${id}-true`,
-      text: 'True',
-    },
-    {
-      id: `${id}-false`,
-      text: 'False',
-    },
-  ],
-  correctAnswer,
-  explanation,
+
+const standardReward = (
+  xp = 100,
+): EnglishLessonReward => ({
+  xp,
+  bonusXp: 25,
+  stars: 3,
+  unlockNextLesson: true,
+  perfectScoreBonus: 50,
 })
 
-/* =========================================================
-   01 — HELLO
-========================================================= */
-
-const lesson01 = baseLesson(
-  1,
-  'Hello!',
-  'Let’s start speaking English 👋',
-  '👋',
-  'Birinchi darsda ingliz tilida salomlashish va xayrlashishni o‘rganamiz.',
-  [
-    'Hello va Hi',
-    'Good morning',
-    'Good afternoon',
-    'Goodbye',
-  ],
-  vocabulary(
-    [
-      {
-        word: 'Hello',
-        translation: 'Salom',
-        pronunciation: 'heh-LOU',
-        emoji: '👋',
-        category: 'greeting',
-        partOfSpeech: 'interjection',
-        example: 'Hello, Ali!',
-      },
-      {
-        word: 'Hi',
-        translation: 'Salom',
-        pronunciation: 'hai',
-        emoji: '😊',
-        category: 'greeting',
-        partOfSpeech: 'interjection',
-        example: 'Hi, Sara!',
-      },
-      {
-        word: 'Good morning',
-        translation: 'Xayrli tong',
-        emoji: '🌅',
-        category: 'greeting',
-        partOfSpeech: 'phrase',
-        example: 'Good morning, teacher!',
-      },
-      {
-        word: 'Good afternoon',
-        translation: 'Xayrli kun',
-        emoji: '☀️',
-        category: 'greeting',
-        partOfSpeech: 'phrase',
-      },
-      {
-        word: 'Goodbye',
-        translation: 'Xayr',
-        emoji: '👋',
-        category: 'greeting',
-        partOfSpeech: 'interjection',
-      },
-    ],
-    1,
-  ),
-  [
-    explanation(
-      {
-        type: 'intro',
-        title: '👋 English starts with a greeting',
-        content:
-          'Hello va Hi ingliz tilidagi eng asosiy salomlashish so‘zlaridir.',
-        emoji: '🌟',
-      },
-      1,
-      1,
-    ),
-    explanation(
-      {
-        type: 'tip',
-        title: '💡 Remember',
-        content:
-          'Morning — tong, afternoon — kunning ikkinchi qismi.',
-        emoji: '🧠',
-      },
-      1,
-      2,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'Hello! My name is Ali.',
-        uzbek: 'Salom! Mening ismim Ali.',
-        emoji: '👦',
-        highlight: 'Hello',
-      },
-      1,
-      1,
-    ),
-    example(
-      {
-        english: 'Good morning, teacher!',
-        uzbek: 'Xayrli tong, ustoz!',
-        emoji: '🌅',
-      },
-      1,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🎯 Choose the greeting',
-        instruction: '“Salom” uchun mos inglizcha so‘zni tanlang.',
-        points: 10,
-        difficulty: 'easy',
-        question: '“Salom” ingliz tilida qanday aytiladi?',
-        emoji: '👋',
-        options: [
-          { id: 'a', text: 'Hello', emoji: '👋' },
-          { id: 'b', text: 'Apple', emoji: '🍎' },
-          { id: 'c', text: 'House', emoji: '🏠' },
-          { id: 'd', text: 'Book', emoji: '📚' },
-        ],
-        correctAnswer: 'Hello',
-        explanation: 'Hello ingliz tilida “Salom” degani.',
-      },
-      1,
-      1,
-    ),
-    activity(
-      {
-        type: 'word-order',
-        title: '🧩 Build the sentence',
-        instruction: 'So‘zlarni to‘g‘ri tartibga keltiring.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Salom, Ali!',
-        words: ['Ali', 'Hello', '!'],
-        correctAnswer: 'Hello Ali !',
-        explanation:
-          'Ingliz tilida greeting avval keladi: Hello, Ali!',
-      },
-      1,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Say Hello!',
-      instruction:
-        'Avval audio orqali eshiting, keyin ovoz chiqarib takrorlang.',
-      mode: 'listen-repeat',
-      phrase: 'Hello! Good morning!',
-      translation: 'Salom! Xayrli tong!',
-      emoji: '🎤',
-      repetitions: 3,
-      targetWords: ['Hello', 'Good morning'],
-    },
-    1,
-  ),
-  test(1, [
-    mcq(
-      'f1-q1',
-      '“Hello” nimani anglatadi?',
-      ['Salom', 'Rahmat', 'Xayr', 'Iltimos'],
-      'Salom',
-      'Hello — salomlashish uchun ishlatiladi.',
-      '👋',
-    ),
-    mcq(
-      'f1-q2',
-      'Ertalab qanday salomlashamiz?',
-      ['Good morning', 'Good night', 'Goodbye', 'Thank you'],
-      'Good morning',
-      'Good morning — xayrli tong degani.',
-      '🌅',
-    ),
-    mcq(
-      'f1-q3',
-      '“Hi” so‘zining ma’nosi nima?',
-      ['Salom', 'Uy', 'Kitob', 'Maktab'],
-      'Salom',
-      'Hi ham norasmiy salomlashish shaklidir.',
-      '😊',
-    ),
-    mcq(
-      'f1-q4',
-      'Qaysi so‘z xayrlashishda ishlatiladi?',
-      ['Goodbye', 'Hello', 'Hi', 'Morning'],
-      'Goodbye',
-      'Goodbye — xayr degani.',
-      '👋',
-    ),
-    trueFalse(
-      'f1-q5',
-      '“Good morning” ertalab salomlashishda ishlatiladi.',
-      'true',
-      'Good morning ertalabki salomlashuvdir.',
-    ),
-  ]),
-)
 
 /* =========================================================
-   02 — INTRODUCING YOURSELF
+   🧱 LESSON 01
+   HELLO & INTRODUCTIONS
 ========================================================= */
 
-const lesson02 = baseLesson(
-  2,
-  'My Name Is...',
-  'Introduce yourself 🙋',
-  '🙋',
-  'O‘zingizni tanishtirishni va ismingizni aytishni o‘rganing.',
-  ['My name is...', 'I am...', 'Nice to meet you'],
-  vocabulary(
-    [
-      {
-        word: 'name',
-        translation: 'ism',
-        emoji: '🏷️',
-        category: 'person',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'my',
-        translation: 'mening',
-        emoji: '🙋',
-        category: 'person',
-        partOfSpeech: 'determiner',
-      },
-      {
-        word: 'I',
-        translation: 'men',
-        emoji: '👤',
-        category: 'person',
-        partOfSpeech: 'pronoun',
-      },
-      {
-        word: 'meet',
-        translation: 'uchrashmoq',
-        emoji: '🤝',
-        category: 'general',
-        partOfSpeech: 'verb',
-      },
-      {
-        word: 'nice',
-        translation: 'yoqimli',
-        emoji: '😊',
-        category: 'general',
-        partOfSpeech: 'adjective',
-      },
-    ],
-    2,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '🙋 Introduce yourself',
-        content:
-          '“My name is...” — Mening ismim... degani. Bu o‘zingizni tanishtirishning asosiy usullaridan biridir.',
-        emoji: '🙋',
-      },
-      2,
-      1,
-    ),
-    explanation(
-      {
-        type: 'memory',
-        title: '🧠 Easy pattern',
-        content:
-          'My name is + ism. Masalan: My name is Ali.',
-        emoji: '💡',
-      },
-      2,
-      2,
-    ),
+const LESSON_01: EnglishLesson = {
+  id: 'foundation-01',
+  courseId: 'foundation-main',
+  unitId: 'foundation-unit-1',
+  lessonNumber: 1,
+  title: 'Hello, I’m ...',
+  subtitle: 'Salomlashish va o‘zini tanishtirish',
+  emoji: '👋',
+  description:
+    'Ingliz tilidagi birinchi real suhbatni o‘rganing. Salomlashish, ism aytish va oddiy savollarga javob berishni boshlang.',
+  type: 'foundation',
+  difficulty: 'starter',
+  status: 'available',
+  estimatedMinutes: 25,
+
+  objectives: [
+    'Hello, Hi, Good morning kabi iboralarni ishlatish',
+    'O‘z ismini inglizcha aytish',
+    'What is your name? savoliga javob berish',
+    'I am va My name is strukturalarini farqlash',
+    'Oddiy tanishuv dialogini olib borish',
   ],
-  [
-    example(
-      {
-        english: 'My name is Ali.',
-        uzbek: 'Mening ismim Ali.',
-        emoji: '👦',
-        highlight: 'My name is',
-      },
-      2,
-      1,
-    ),
-    example(
-      {
-        english: 'Nice to meet you.',
-        uzbek: 'Siz bilan tanishganimdan xursandman.',
-        emoji: '🤝',
-      },
-      2,
-      2,
-    ),
+
+  skills: [
+    'vocabulary',
+    'grammar',
+    'speaking',
+    'pronunciation',
+    'communication',
   ],
-  [
-    activity(
-      {
-        type: 'sentence-builder',
-        title: '🧩 Build it',
-        instruction: 'O‘zingizni ingliz tilida tanishtiring.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Mening ismim Ali.',
-        words: ['My', 'name', 'is', 'Ali'],
-        correctAnswer: 'My name is Ali',
-        explanation: 'To‘g‘ri gap: My name is Ali.',
-      },
-      2,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🎯 Choose',
-        instruction: 'To‘g‘ri iborani toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: '“Mening ismim Sara” qanday bo‘ladi?',
-        options: [
-          { id: 'a', text: 'My name is Sara' },
-          { id: 'b', text: 'I name Sara' },
-          { id: 'c', text: 'Name my Sara' },
-          { id: 'd', text: 'Sara my name' },
-        ],
-        correctAnswer: 'My name is Sara',
-        explanation:
-          'Ingliz tilidagi to‘g‘ri struktura: My name is + ism.',
-      },
-      2,
-      2,
-    ),
+
+  topics: [
+    'Greetings',
+    'Introductions',
+    'Names',
+    'Basic conversation',
   ],
-  speaking(
-    {
-      title: '🎤 Introduce yourself',
-      instruction: 'Ismingizni ingliz tilida ayting.',
-      mode: 'read-aloud',
-      phrase: 'Hello! My name is Ali. Nice to meet you!',
-      translation:
-        'Salom! Mening ismim Ali. Siz bilan tanishganimdan xursandman!',
-      emoji: '🗣️',
-      repetitions: 3,
-      targetWords: ['Hello', 'name', 'Nice', 'meet'],
-    },
-    2,
-  ),
-  test(2, [
-    mcq(
-      'f2-q1',
-      '“Mening ismim Ali” qanday bo‘ladi?',
+
+  vocabulary: [
+    v('f01-v01', 'hello', 'salom', 'greeting', 'Hello, Ali!', 'Salom, Ali!', '👋'),
+    v('f01-v02', 'hi', 'salom', 'greeting', 'Hi, Sara!', 'Salom, Sara!', '😊'),
+    v('f01-v03', 'goodbye', 'xayr', 'greeting', 'Goodbye, teacher!', 'Xayr, o‘qituvchi!', '👋'),
+    v('f01-v04', 'morning', 'ertalab', 'time', 'Good morning!', 'Xayrli tong!', '🌅'),
+    v('f01-v05', 'afternoon', 'tushdan keyin', 'time', 'Good afternoon!', 'Xayrli kun!', '☀️'),
+    v('f01-v06', 'evening', 'kechqurun', 'time', 'Good evening!', 'Xayrli kech!', '🌆'),
+    v('f01-v07', 'name', 'ism', 'person', 'My name is Ali.', 'Mening ismim Ali.', '🪪'),
+    v('f01-v08', 'student', 'o‘quvchi', 'school', 'I am a student.', 'Men o‘quvchiman.', '🎓'),
+    v('f01-v09', 'teacher', 'o‘qituvchi', 'school', 'She is a teacher.', 'U o‘qituvchi.', '👩‍🏫'),
+    v('f01-v10', 'friend', 'do‘st', 'person', 'He is my friend.', 'U mening do‘stim.', '🤝'),
+    v('f01-v11', 'nice', 'yoqimli', 'general', 'Nice to meet you.', 'Tanishganimdan xursandman.', '⭐'),
+    v('f01-v12', 'meet', 'uchrashmoq/tanishmoq', 'action', 'Nice to meet you.', 'Tanishganimdan xursandman.', '🤝'),
+    v('f01-v13', 'please', 'iltimos', 'general', 'Please sit down.', 'Iltimos, o‘tiring.', '🙏'),
+    v('f01-v14', 'thank', 'rahmat aytmoq', 'general', 'Thank you!', 'Rahmat!', '🙏'),
+    v('f01-v15', 'yes', 'ha', 'general', 'Yes, I am.', 'Ha, men ...man.', '✅'),
+    v('f01-v16', 'no', 'yo‘q', 'general', 'No, I am not.', 'Yo‘q, men ... emasman.', '❌'),
+  ],
+
+  grammar: [
+    grammar(
+      'f01-g01',
+      'Subject Pronouns',
+      'pronouns',
+      'I, you, he, she, it, we, they — gapdagi shaxsni bildiradi.',
+      'Ingliz tilida fe’l oldidan kim harakat qilayotganini ko‘rsatish juda muhim. I — men, you — sen/siz, he — u (erkak), she — u (ayol), it — narsa/hayvon, we — biz, they — ular.',
+      'Subject + Verb',
       [
-        'My name is Ali',
-        'I name Ali',
-        'Ali is my',
-        'Name Ali I',
+        {
+          english: 'I am a student.',
+          uzbek: 'Men o‘quvchiman.',
+        },
+        {
+          english: 'She is a teacher.',
+          uzbek: 'U o‘qituvchi.',
+        },
+        {
+          english: 'They are friends.',
+          uzbek: 'Ular do‘stlar.',
+        },
       ],
-      'My name is Ali',
-      'To‘g‘ri struktura: My name is + ism.',
-    ),
-    mcq(
-      'f2-q2',
-      '“My” so‘zining tarjimasi?',
-      ['Mening', 'Men', 'Sening', 'Uning'],
-      'Mening',
-      'My — mening.',
-    ),
-    mcq(
-      'f2-q3',
-      '“I” nimani anglatadi?',
-      ['Men', 'Sen', 'U', 'Biz'],
-      'Men',
-      'I — men.',
-    ),
-    mcq(
-      'f2-q4',
-      '“Nice to meet you” qachon ishlatiladi?',
       [
-        'Tanishganda',
-        'Uxlaganda',
-        'Ovqatlanganda',
-        'Xayrlashganda',
+        'Ingliz tilida subject ko‘pincha tushirib qoldirilmaydi.',
+        'He erkak uchun, she ayol uchun ishlatiladi.',
       ],
-      'Tanishganda',
-      'Nice to meet you — tanishganimdan xursandman.',
+      [
+        {
+          wrong: 'Am a student.',
+          correct: 'I am a student.',
+          explanation: 'Ingliz tilida gapda subject kerak.',
+        },
+      ],
     ),
-    trueFalse(
-      'f2-q5',
-      '“My name is...” o‘zini tanishtirishda ishlatiladi.',
-      'true',
-      'Bu o‘zini tanishtirishning asosiy iboralaridan biridir.',
+
+    grammar(
+      'f01-g02',
+      'Verb TO BE: am / is / are',
+      'verb-to-be',
+      'I bilan am, he/she/it bilan is, you/we/they bilan are ishlatiladi.',
+      'To be hozirgi zamonda shaxs yoki holatni ifodalash uchun ishlatiladi.',
+      'Subject + am/is/are + complement',
+      [
+        {
+          english: 'I am Ali.',
+          uzbek: 'Men Aliman.',
+        },
+        {
+          english: 'She is a student.',
+          uzbek: 'U o‘quvchi.',
+        },
+        {
+          english: 'We are friends.',
+          uzbek: 'Biz do‘stmiz.',
+        },
+      ],
+      [
+        'I → am',
+        'He/She/It → is',
+        'You/We/They → are',
+      ],
+      [
+        {
+          wrong: 'I is a student.',
+          correct: 'I am a student.',
+          explanation: 'I bilan faqat am ishlatiladi.',
+        },
+        {
+          wrong: 'They is friends.',
+          correct: 'They are friends.',
+          explanation: 'They bilan are ishlatiladi.',
+        },
+      ],
     ),
-  ]),
-)
+  ],
 
-/* =========================================================
-   03 — ALPHABET
-========================================================= */
+  sentenceStructures: [
+    {
+      id: 'f01-s01',
+      title: 'Subject + BE + Noun',
+      type: 'subject-be-noun',
+      formula: 'Subject + am/is/are + noun',
+      explanation:
+        'Bu struktura kim yoki nima ekanini aytish uchun ishlatiladi.',
+      parts: [
+        {
+          label: 'S',
+          name: 'Subject',
+          description: 'Kim?',
+        },
+        {
+          label: 'BE',
+          name: 'am / is / are',
+          description: 'Bog‘lovchi fe’l',
+        },
+        {
+          label: 'N',
+          name: 'Noun',
+          description: 'Kim/nima?',
+        },
+      ],
+      examples: [
+        {
+          english: 'I am a student.',
+          uzbek: 'Men o‘quvchiman.',
+        },
+        {
+          english: 'She is a teacher.',
+          uzbek: 'U o‘qituvchi.',
+        },
+      ],
+    },
+  ],
 
-const lesson03 = baseLesson(
-  3,
-  'ABC',
-  'Meet the English alphabet 🔤',
-  '🔤',
-  'Ingliz alifbosidagi harflar va ularning nomlarini o‘rganing.',
-  ['English alphabet', 'Letter names', 'Spelling'],
-  vocabulary(
-    [
+  explanations: [
+    explanation(
+      'f01-e01',
+      'intro',
+      'Bugungi missiya',
+      'Bugun siz ingliz tilida o‘zingizni tanishtira oladigan darajaga chiqasiz.',
+      '🚀',
+    ),
+    explanation(
+      'f01-e02',
+      'rule',
+      'Eng muhim formula',
+      'Ingliz tilidagi oddiy gaplarning asosiy siri — gap boshida subject bo‘lishi va fe’lning to‘g‘ri ishlatilishidir.',
+      '🧠',
+    ),
+    explanation(
+      'f01-e03',
+      'tip',
+      'Mini memory',
+      'I → am. He/She/It → is. You/We/They → are. Shu uchlikni yaxshi o‘zlashtiring.',
+      '💡',
+    ),
+  ],
+
+  examples: [
+    example('f01-ex01', 'Hello! My name is Ali.', 'Salom! Mening ismim Ali.'),
+    example('f01-ex02', 'I am a student.', 'Men o‘quvchiman.', 'am'),
+    example('f01-ex03', 'I am ten years old.', 'Men o‘n yoshdaman.', 'am'),
+    example('f01-ex04', 'She is my teacher.', 'U mening o‘qituvchim.', 'is'),
+    example('f01-ex05', 'He is my friend.', 'U mening do‘stim.', 'is'),
+    example('f01-ex06', 'We are students.', 'Biz o‘quvchilarmiz.', 'are'),
+    example('f01-ex07', 'They are friends.', 'Ular do‘stlar.', 'are'),
+    example('f01-ex08', 'Nice to meet you.', 'Tanishganimdan xursandman.'),
+  ],
+
+  pronunciation: [
+    {
+      id: 'f01-p01',
+      wordOrPhrase: 'hello',
+      pronunciation: '/həˈləʊ/',
+      explanation: 'Ikkinchi bo‘g‘inga urg‘u tushadi.',
+      example: 'Hello, my friend!',
+      translation: 'Salom, do‘stim!',
+    },
+    {
+      id: 'f01-p02',
+      wordOrPhrase: 'name',
+      pronunciation: '/neɪm/',
+      explanation: 'Oxiridagi e tovushsiz, so‘z /neɪm/ tarzida aytiladi.',
+      example: 'My name is Ali.',
+      translation: 'Mening ismim Ali.',
+    },
+  ],
+
+  reading: [
+    {
+      id: 'f01-r01',
+      title: 'Meet Ali',
+      level: 'starter',
+      passage:
+        'Hello! My name is Ali. I am ten years old. I am a student. I am from Uzbekistan. My friend is Tom. He is a student too.',
+      vocabulary: [],
+      questions: [
+        {
+          id: 'f01-rq01',
+          question: 'What is the boy’s name?',
+          options: [
+            { id: 'a', text: 'Ali' },
+            { id: 'b', text: 'Tom' },
+            { id: 'c', text: 'John' },
+            { id: 'd', text: 'Sam' },
+          ],
+          correctAnswer: 'Ali',
+          explanation: 'Matnda “My name is Ali” deb aytilgan.',
+        },
+        {
+          id: 'f01-rq02',
+          question: 'How old is Ali?',
+          options: [
+            { id: 'a', text: 'Eight' },
+            { id: 'b', text: 'Nine' },
+            { id: 'c', text: 'Ten' },
+            { id: 'd', text: 'Eleven' },
+          ],
+          correctAnswer: 'Ten',
+          explanation: 'Ali “I am ten years old” deydi.',
+        },
+      ],
+    },
+  ],
+
+  activities: [
+    activity(
+      'f01-a01',
+      'multiple-choice',
+      'Choose the verb',
+      'To‘g‘ri variantni tanlang.',
+      'I ___ a student.',
+      'am',
+      ['am', 'is', 'are', 'be'],
+      'I bilan am ishlatiladi.',
+    ),
+    activity(
+      'f01-a02',
+      'multiple-choice',
+      'Choose the pronoun',
+      'To‘g‘ri olmoshni tanlang.',
+      '___ is my teacher. (ayol)',
+      'She',
+      ['He', 'She', 'They', 'It'],
+      'Ayol kishi uchun she ishlatiladi.',
+    ),
+    activity(
+      'f01-a03',
+      'word-order',
+      'Build the sentence',
+      'So‘zlarni to‘g‘ri tartiblang.',
+      'I / student / am / a',
+      'I am a student.',
+    ),
+    activity(
+      'f01-a04',
+      'fill-gap',
+      'Complete',
+      'Bo‘sh joyni to‘ldiring.',
+      'They ___ friends.',
+      'are',
+    ),
+    activity(
+      'f01-a05',
+      'translate',
+      'Translate',
+      'Gapni ingliz tiliga tarjima qiling.',
+      'Men o‘quvchiman.',
+      'I am a student.',
+    ),
+  ],
+
+  speaking: {
+    id: 'f01-sp01',
+    title: 'Introduce Yourself',
+    instruction:
+      'O‘zingizni ingliz tilida tanishtiring. Kamida 4 ta gap ayting.',
+    mode: 'self-introduction',
+    phrase: 'Hello! My name is ___. I am ___ years old. I am a student. Nice to meet you.',
+    translation:
+      'Salom! Mening ismim ___. Men ___ yoshdaman. Men o‘quvchiman. Tanishganimdan xursandman.',
+    emoji: '🎤',
+    repetitions: 3,
+    targetWords: ['hello', 'name', 'student', 'nice'],
+    targetGrammar: ['f01-g01', 'f01-g02'],
+    successCriteria: [
+      'O‘z ismini aytish',
+      'Yoshini aytish',
+      'Student so‘zini ishlatish',
+      'To be fe’lini to‘g‘ri ishlatish',
+    ],
+  },
+
+  writing: {
+    id: 'f01-w01',
+    title: 'My Introduction',
+    instruction: 'O‘zingiz haqingizda 4–5 ta oddiy gap yozing.',
+    prompt:
+      'Write about yourself: name, age, student status and one friend.',
+    minimumWords: 15,
+    targetGrammar: ['f01-g01', 'f01-g02'],
+    targetVocabulary: ['name', 'student', 'friend'],
+    example:
+      'My name is Ali. I am ten years old. I am a student. My friend is Tom.',
+    checklist: [
+      'Gaplar bosh harf bilan boshlanganmi?',
+      'I am to‘g‘ri ishlatilganmi?',
+      'Nuqtalar qo‘yilganmi?',
+    ],
+  },
+
+  review: {
+    id: 'f01-review',
+    title: 'Quick Review',
+    description: 'Bugungi asosiy bilimlarni tekshiring.',
+    vocabularyIds: [
+      'f01-v01',
+      'f01-v02',
+      'f01-v07',
+      'f01-v08',
+      'f01-v09',
+    ],
+    grammarIds: ['f01-g01', 'f01-g02'],
+    questions: [
+      testQuestion(
+        'f01-rv01',
+        'Choose: She ___ a teacher.',
+        'is',
+        ['am', 'is', 'are', 'be'],
+        'She bilan is ishlatiladi.',
+      ),
+      testQuestion(
+        'f01-rv02',
+        'Choose: ___ are students.',
+        'They',
+        ['He', 'She', 'They', 'It'],
+        'They ko‘plikdagi shaxslar uchun ishlatiladi.',
+      ),
+    ],
+  },
+
+  challenge: {
+    id: 'f01-ch01',
+    title: 'First Conversation Challenge',
+    description:
+      'O‘zingizni tanishtiring va sherigingizdan ismini so‘rang.',
+    difficulty: 'challenge',
+    timeLimitMinutes: 3,
+    bonusXp: 30,
+    tasks: [
       {
-        word: 'letter',
-        translation: 'harf',
-        emoji: '🔤',
-        category: 'school',
-        partOfSpeech: 'noun',
+        id: 'f01-ct01',
+        instruction: 'Savolni tuzing.',
+        type: 'build-sentence',
+        prompt: 'your / What / name / is?',
+        correctAnswer: 'What is your name?',
+        explanation: 'Savol formulasi: What + is + your + name?',
       },
       {
-        word: 'alphabet',
-        translation: 'alifbo',
-        emoji: '🔠',
-        category: 'school',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'spell',
-        translation: 'harflab aytmoq',
-        emoji: '📝',
-        category: 'general',
-        partOfSpeech: 'verb',
-      },
-      {
-        word: 'word',
-        translation: 'so‘z',
-        emoji: '📖',
-        category: 'school',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'English',
-        translation: 'ingliz tili',
-        emoji: '🇬🇧',
-        category: 'general',
-        partOfSpeech: 'noun',
+        id: 'f01-ct02',
+        instruction: 'Javobni tuzing.',
+        type: 'build-sentence',
+        prompt: 'Ali / name / My / is',
+        correctAnswer: 'My name is Ali.',
       },
     ],
-    3,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '🔤 The English Alphabet',
-        content:
-          'Ingliz tilida 26 ta harf bor. Har bir harfning o‘z nomi va tovushi mavjud.',
-        emoji: '🔤',
-      },
-      3,
-      1,
-    ),
-    explanation(
-      {
-        type: 'tip',
-        title: '🧠 Spell it!',
-        content:
-          'Ism yoki so‘zni harflab aytishda harflarning nomlarini ketma-ket aytamiz.',
-        emoji: '📝',
-      },
-      3,
-      2,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'A — B — C',
-        uzbek: 'A — B — C',
-        emoji: '🔤',
-      },
-      3,
-      1,
-    ),
-    example(
-      {
-        english: 'My name is Ali. A-L-I.',
-        uzbek: 'Mening ismim Ali. A-L-I.',
-        emoji: '🏷️',
-      },
-      3,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🔤 Find the letter',
-        instruction: 'To‘g‘ri harfni tanlang.',
-        points: 10,
-        difficulty: 'easy',
-        question: '“Apple” so‘zi qaysi harf bilan boshlanadi?',
-        options: [
-          { id: 'a', text: 'A', emoji: '🅰️' },
-          { id: 'b', text: 'B', emoji: '🅱️' },
-          { id: 'c', text: 'C', emoji: '©️' },
-          { id: 'd', text: 'D', emoji: '🔤' },
+  },
+
+  test: {
+    id: 'f01-test',
+    title: 'Lesson 1 Final Test',
+    description: 'Keyingi darsni ochish uchun kamida 70% natija kerak.',
+    questionCount: 10,
+    passingScore: 70,
+    maxScore: 20,
+    timeLimitMinutes: 8,
+    retryAllowed: true,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    questions: [
+      testQuestion(
+        'f01-t01',
+        'I ___ a student.',
+        'am',
+        ['am', 'is', 'are', 'be'],
+        'I bilan am ishlatiladi.',
+      ),
+      testQuestion(
+        'f01-t02',
+        'She ___ my teacher.',
+        'is',
+        ['am', 'is', 'are', 'be'],
+        'She bilan is ishlatiladi.',
+      ),
+      testQuestion(
+        'f01-t03',
+        'They ___ friends.',
+        'are',
+        ['am', 'is', 'are', 'be'],
+        'They bilan are ishlatiladi.',
+      ),
+      testQuestion(
+        'f01-t04',
+        'Choose the correct pronoun: ___ am Ali.',
+        'I',
+        ['I', 'He', 'She', 'They'],
+        'O‘zingiz haqida gapirganda I ishlatiladi.',
+      ),
+      testQuestion(
+        'f01-t05',
+        'What is your ___?',
+        'name',
+        ['teacher', 'name', 'student', 'friend'],
+        'What is your name? — Ismingiz nima?',
+      ),
+      testQuestion(
+        'f01-t06',
+        '“Tanishganimdan xursandman” qaysi?',
+        'Nice to meet you.',
+        [
+          'Goodbye to you.',
+          'Nice to meet you.',
+          'See you morning.',
+          'Thank your name.',
         ],
-        correctAnswer: 'A',
-        explanation: 'Apple A harfi bilan boshlanadi.',
-      },
-      3,
-      1,
-    ),
-    activity(
-      {
-        type: 'word-order',
-        title: '🧩 Spell the word',
-        instruction: 'Harflarni to‘g‘ri tartibga qo‘ying.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'ALI',
-        words: ['A', 'L', 'I'],
-        correctAnswer: 'A L I',
-        explanation: 'Ali so‘zi A-L-I harflaridan tuziladi.',
-      },
-      3,
-      2,
+        'Nice to meet you — tanishganimdan xursandman.',
+      ),
+      testQuestion(
+        'f01-t07',
+        'Choose the correct sentence.',
+        'I am a student.',
+        [
+          'I is a student.',
+          'I are a student.',
+          'I am a student.',
+          'I be a student.',
+        ],
+        'I bilan am ishlatiladi.',
+      ),
+      testQuestion(
+        'f01-t08',
+        'Choose the correct sentence.',
+        'She is a teacher.',
+        [
+          'She am a teacher.',
+          'She are a teacher.',
+          'She is a teacher.',
+          'She be a teacher.',
+        ],
+        'She bilan is ishlatiladi.',
+      ),
+      testQuestion(
+        'f01-t09',
+        '“Salom”ning tabiiy variantini tanlang.',
+        'Hello',
+        ['Goodbye', 'Hello', 'Sorry', 'Thank'],
+        'Hello salomlashish uchun ishlatiladi.',
+      ),
+      testQuestion(
+        'f01-t10',
+        'Choose the correct question.',
+        'What is your name?',
+        [
+          'What your is name?',
+          'What is your name?',
+          'Your what is name?',
+          'What are your name?',
+        ],
+        'What + is + your + name? to‘g‘ri struktura.',
+      ),
+    ],
+  },
+
+  rewards: standardReward(100),
+
+  theme: theme(
+    '👋',
+    'from-blue-600 via-indigo-600 to-purple-600',
+    'blue',
+  ),
+
+  nextLessonId: 'foundation-02',
+}
+
+
+/* =========================================================
+   🧱 LESSON 02
+   NUMBERS, AGE & PERSONAL INFORMATION
+========================================================= */
+
+const LESSON_02: EnglishLesson = {
+  id: 'foundation-02',
+  courseId: 'foundation-main',
+  unitId: 'foundation-unit-1',
+  lessonNumber: 2,
+  title: 'About Me',
+  subtitle: 'Yosh, raqamlar va shaxsiy ma’lumotlar',
+  emoji: '🙋',
+  description:
+    'Raqamlar, yosh, telefon raqami va oddiy shaxsiy ma’lumotlarni ingliz tilida aytishni o‘rganing.',
+  type: 'mixed',
+  difficulty: 'easy',
+  status: 'locked',
+  estimatedMinutes: 25,
+
+  objectives: [
+    '0–20 raqamlarini aytish',
+    'Yosh haqida gapirish',
+    'How old are you? savolini tushunish',
+    'I am ... years old strukturasini ishlatish',
+    'Oddiy personal information savollariga javob berish',
+  ],
+
+  skills: [
+    'vocabulary',
+    'grammar',
+    'speaking',
+    'listening',
+    'writing',
+  ],
+
+  topics: [
+    'Numbers',
+    'Age',
+    'Personal information',
+  ],
+
+  vocabulary: [
+    v('f02-v01', 'one', 'bir', 'number', 'I have one book.', 'Menda bitta kitob bor.', '1️⃣'),
+    v('f02-v02', 'two', 'ikki', 'number', 'I have two pens.', 'Menda ikkita ruchka bor.', '2️⃣'),
+    v('f02-v03', 'three', 'uch', 'number', 'Three students are here.', 'Bu yerda uchta o‘quvchi bor.', '3️⃣'),
+    v('f02-v04', 'five', 'besh', 'number', 'I am five.', 'Men besh yoshdaman.', '5️⃣'),
+    v('f02-v05', 'ten', 'o‘n', 'number', 'I am ten years old.', 'Men o‘n yoshdaman.', '🔟'),
+    v('f02-v06', 'age', 'yosh', 'general', 'What is your age?', 'Yoshingiz nechada?', '🎂'),
+    v('f02-v07', 'old', 'yoshdagi', 'general', 'I am ten years old.', 'Men o‘n yoshdaman.', '🎂'),
+    v('f02-v08', 'year', 'yil', 'time', 'One year.', 'Bir yil.', '📅'),
+    v('f02-v09', 'number', 'raqam', 'number', 'What is your phone number?', 'Telefon raqamingiz nima?', '🔢'),
+    v('f02-v10', 'phone', 'telefon', 'general', 'This is my phone.', 'Bu mening telefonim.', '📱'),
+  ],
+
+  grammar: [
+    grammar(
+      'f02-g01',
+      'Age with TO BE',
+      'verb-to-be',
+      'Yoshni aytganda ingliz tilida be fe’li ishlatiladi.',
+      'O‘zbek tilida “Men 10 yoshdaman” deyiladi. Ingliz tilida ham shu mazmun to be orqali beriladi: I am ten years old.',
+      'Subject + am/is/are + number + years old',
+      [
+        {
+          english: 'I am ten years old.',
+          uzbek: 'Men o‘n yoshdaman.',
+        },
+        {
+          english: 'She is eight years old.',
+          uzbek: 'U sakkiz yoshda.',
+        },
+      ],
+      [
+        'How old are you? — I am ten years old.',
+        'Age bilan have emas, be ishlatiladi.',
+      ],
+      [
+        {
+          wrong: 'I have ten years old.',
+          correct: 'I am ten years old.',
+          explanation: 'Yoshni aytishda be fe’li ishlatiladi.',
+        },
+      ],
     ),
   ],
-  speaking(
+
+  sentenceStructures: [
     {
-      title: '🎤 Alphabet practice',
-      instruction:
-        'A, B, C harflarini aniq talaffuz qilib takrorlang.',
-      mode: 'pronunciation',
-      phrase: 'A — B — C',
-      emoji: '🔤',
-      repetitions: 3,
-      targetWords: ['A', 'B', 'C'],
+      id: 'f02-s01',
+      title: 'Age Sentence',
+      type: 'subject-be-adjective',
+      formula: 'Subject + am/is/are + number + years old',
+      explanation: 'Yoshni aytish uchun ishlatiladi.',
+      parts: [
+        {
+          label: 'S',
+          name: 'Subject',
+          description: 'Kim?',
+        },
+        {
+          label: 'BE',
+          name: 'am/is/are',
+          description: 'To be',
+        },
+        {
+          label: 'AGE',
+          name: 'number + years old',
+          description: 'Yosh',
+        },
+      ],
+      examples: [
+        {
+          english: 'I am twelve years old.',
+          uzbek: 'Men o‘n ikki yoshdaman.',
+        },
+        {
+          english: 'He is seven years old.',
+          uzbek: 'U yetti yoshda.',
+        },
+      ],
     },
-    3,
+  ],
+
+  explanations: [
+    explanation(
+      'f02-e01',
+      'concept',
+      'How old...?',
+      'How old are you? — yoshingizni so‘rashning eng tabiiy shakllaridan biri.',
+      '🎂',
+    ),
+    explanation(
+      'f02-e02',
+      'warning',
+      'Muhim!',
+      'Ingliz tilida yosh bilan have ishlatmaymiz. I have ten years old noto‘g‘ri. I am ten years old to‘g‘ri.',
+      '⚠️',
+    ),
+  ],
+
+  examples: [
+    example('f02-ex01', 'How old are you?', 'Yoshingiz nechada?'),
+    example('f02-ex02', 'I am ten years old.', 'Men o‘n yoshdaman.'),
+    example('f02-ex03', 'How old is Ali?', 'Ali necha yoshda?'),
+    example('f02-ex04', 'Ali is eleven years old.', 'Ali o‘n bir yoshda.'),
+    example('f02-ex05', 'My phone number is 123.', 'Mening telefon raqamim 123.'),
+  ],
+
+  activities: [
+    activity(
+      'f02-a01',
+      'multiple-choice',
+      'Age',
+      'To‘g‘ri variantni tanlang.',
+      'I ___ ten years old.',
+      'am',
+      ['am', 'is', 'are', 'have'],
+    ),
+    activity(
+      'f02-a02',
+      'multiple-choice',
+      'Question',
+      'Yoshni so‘rash uchun to‘g‘ri savolni toping.',
+      '___ old are you?',
+      'How',
+      ['What', 'How', 'Who', 'Where'],
+    ),
+    activity(
+      'f02-a03',
+      'word-order',
+      'Build',
+      'Gapni tuzing.',
+      'old / am / I / ten / years',
+      'I am ten years old.',
+    ),
+    activity(
+      'f02-a04',
+      'translate',
+      'Translate',
+      'Tarjima qiling.',
+      'Men o‘n ikki yoshdaman.',
+      'I am twelve years old.',
+    ),
+  ],
+
+  speaking: {
+    id: 'f02-sp01',
+    title: 'My Age',
+    instruction: 'O‘zingizning yoshingiz haqida 3 ta gap ayting.',
+    mode: 'self-introduction',
+    phrase:
+      'My name is ___. I am ___ years old. I am a student.',
+    translation:
+      'Mening ismim ___. Men ___ yoshdaman. Men o‘quvchiman.',
+    emoji: '🎤',
+    repetitions: 3,
+    targetWords: ['name', 'old', 'years', 'student'],
+    targetGrammar: ['f02-g01'],
+  },
+
+  writing: {
+    id: 'f02-w01',
+    title: 'About Me',
+    instruction: 'Ismingiz va yoshingiz haqida yozing.',
+    prompt: 'Write 3–4 sentences about yourself.',
+    minimumWords: 10,
+    targetGrammar: ['f02-g01'],
+    targetVocabulary: ['name', 'old', 'student'],
+  },
+
+  review: {
+    id: 'f02-review',
+    title: 'Numbers & Age Review',
+    description: 'Raqamlar va yoshni mustahkamlang.',
+    questions: [
+      testQuestion(
+        'f02-r01',
+        'Choose: I ___ nine years old.',
+        'am',
+        ['am', 'is', 'are', 'have'],
+        'I bilan am ishlatiladi.',
+      ),
+      testQuestion(
+        'f02-r02',
+        'Choose the correct question.',
+        'How old are you?',
+        [
+          'What old are you?',
+          'How old are you?',
+          'Who old are you?',
+          'Where old are you?',
+        ],
+        'How old are you? yoshni so‘rash uchun ishlatiladi.',
+      ),
+    ],
+  },
+
+  challenge: {
+    id: 'f02-ch01',
+    title: 'Personal Information Challenge',
+    description: 'Ism, yosh va student ekaningizni ayting.',
+    difficulty: 'challenge',
+    bonusXp: 30,
+    tasks: [
+      {
+        id: 'f02-ct01',
+        instruction: 'Gap tuzing.',
+        type: 'build-sentence',
+        prompt: 'old / am / years / I / twelve',
+        correctAnswer: 'I am twelve years old.',
+      },
+    ],
+  },
+
+  test: {
+    id: 'f02-test',
+    title: 'Lesson 2 Final Test',
+    description: '70% yoki undan yuqori natija keyingi darsni ochadi.',
+    questionCount: 10,
+    passingScore: 70,
+    maxScore: 20,
+    timeLimitMinutes: 8,
+    retryAllowed: true,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    questions: [
+      testQuestion(
+        'f02-t01',
+        'I ___ eight years old.',
+        'am',
+        ['am', 'is', 'are', 'have'],
+        'I bilan am ishlatiladi.',
+      ),
+      testQuestion(
+        'f02-t02',
+        'How ___ are you?',
+        'old',
+        ['old', 'age', 'years', 'many'],
+        'How old are you? — Yoshingiz nechada?',
+      ),
+      testQuestion(
+        'f02-t03',
+        'She ___ twelve years old.',
+        'is',
+        ['am', 'is', 'are', 'have'],
+        'She bilan is ishlatiladi.',
+      ),
+      testQuestion(
+        'f02-t04',
+        'Choose the correct sentence.',
+        'I am ten years old.',
+        [
+          'I have ten years old.',
+          'I am ten years old.',
+          'I is ten years old.',
+          'I are ten years old.',
+        ],
+        'Age bilan am/is/are ishlatiladi.',
+      ),
+      testQuestion(
+        'f02-t05',
+        'What does “age” mean?',
+        'yosh',
+        ['ism', 'yosh', 'maktab', 'do‘st'],
+        'Age — yosh.',
+      ),
+      testQuestion(
+        'f02-t06',
+        'What does “phone” mean?',
+        'telefon',
+        ['telefon', 'kitob', 'ruchka', 'uy'],
+        'Phone — telefon.',
+      ),
+      testQuestion(
+        'f02-t07',
+        'Choose the correct question.',
+        'How old is Ali?',
+        [
+          'How age Ali is?',
+          'How old is Ali?',
+          'What old Ali?',
+          'Who is Ali old?',
+        ],
+        'How old is + person yoshni so‘rash uchun ishlatiladi.',
+      ),
+      testQuestion(
+        'f02-t08',
+        'Choose: Ali ___ eleven years old.',
+        'is',
+        ['am', 'is', 'are', 'have'],
+        'Ali — he, shuning uchun is.',
+      ),
+      testQuestion(
+        'f02-t09',
+        '“Men o‘n yoshdaman” qaysi?',
+        'I am ten years old.',
+        [
+          'I have ten years.',
+          'I am ten years old.',
+          'I ten am old.',
+          'I is ten old.',
+        ],
+        'To‘g‘ri formula: I am + number + years old.',
+      ),
+      testQuestion(
+        'f02-t10',
+        'Choose the correct answer: How old are you?',
+        'I am eleven years old.',
+        [
+          'My name is Ali.',
+          'I am eleven years old.',
+          'I am a teacher.',
+          'I have a phone.',
+        ],
+        'How old are you? savoliga yosh bilan javob beriladi.',
+      ),
+    ],
+  },
+
+  rewards: standardReward(110),
+
+  theme: theme(
+    '🙋',
+    'from-cyan-500 via-blue-600 to-indigo-600',
+    'cyan',
   ),
-  test(3, [
-    mcq(
-      'f3-q1',
-      'Ingliz alifbosida nechta harf bor?',
-      ['26', '24', '28', '30'],
-      '26',
-      'Ingliz alifbosida 26 ta harf mavjud.',
+
+  previousLessonId: 'foundation-01',
+  nextLessonId: 'foundation-03',
+  prerequisiteLessonIds: ['foundation-01'],
+}
+
+
+/* =========================================================
+   📚 LESSON 03
+   FAMILY & POSSESSIVES
+========================================================= */
+
+const LESSON_03: EnglishLesson = {
+  id: 'foundation-03',
+  courseId: 'foundation-main',
+  unitId: 'foundation-unit-1',
+  lessonNumber: 3,
+  title: 'My Family',
+  subtitle: 'Oila a’zolari va my / your / his / her',
+  emoji: '👨‍👩‍👧‍👦',
+  description:
+    'Oila a’zolarini tanishtiring va egalikni my, your, his, her orqali ifodalashni o‘rganing.',
+  type: 'mixed',
+  difficulty: 'easy',
+  status: 'locked',
+  estimatedMinutes: 25,
+
+  objectives: [
+    'Family vocabulary',
+    'my / your / his / her',
+    'This is my...',
+    'Who is he/she?',
+    'Oila haqida sodda gaplar tuzish',
+  ],
+
+  skills: [
+    'vocabulary',
+    'grammar',
+    'speaking',
+    'reading',
+    'writing',
+  ],
+
+  topics: [
+    'Family',
+    'Possessives',
+    'People',
+  ],
+
+  vocabulary: [
+    v('f03-v01', 'family', 'oila', 'family', 'This is my family.', 'Bu mening oilam.', '👨‍👩‍👧‍👦'),
+    v('f03-v02', 'mother', 'ona', 'family', 'My mother is kind.', 'Mening onam mehribon.', '👩'),
+    v('f03-v03', 'father', 'ota', 'family', 'My father is tall.', 'Mening otam baland bo‘yli.', '👨'),
+    v('f03-v04', 'brother', 'aka/uka', 'family', 'My brother is young.', 'Mening ukam yosh.', '👦'),
+    v('f03-v05', 'sister', 'opa/singil', 'family', 'My sister is nice.', 'Mening singlim yoqimli.', '👧'),
+    v('f03-v06', 'parents', 'ota-ona', 'family', 'My parents are kind.', 'Ota-onam mehribon.', '❤️'),
+    v('f03-v07', 'son', 'o‘g‘il', 'family', 'He is my son.', 'U mening o‘g‘lim.', '👦'),
+    v('f03-v08', 'daughter', 'qiz farzand', 'family', 'She is my daughter.', 'U mening qizim.', '👧'),
+    v('f03-v09', 'grandmother', 'buvi', 'family', 'My grandmother is kind.', 'Buvim mehribon.', '👵'),
+    v('f03-v10', 'grandfather', 'bobo', 'family', 'My grandfather is old.', 'Bobom keksa.', '👴'),
+    v('f03-v11', 'my', 'mening', 'general', 'This is my book.', 'Bu mening kitobim.', '🫶'),
+    v('f03-v12', 'your', 'sening/sizning', 'general', 'Is this your bag?', 'Bu sening sumkangmi?', '🎒'),
+    v('f03-v13', 'his', 'uning (erkak)', 'general', 'This is his book.', 'Bu uning kitobi.', '👦'),
+    v('f03-v14', 'her', 'uning (ayol)', 'general', 'This is her pen.', 'Bu uning ruchkasi.', '👧'),
+  ],
+
+  grammar: [
+    grammar(
+      'f03-g01',
+      'Possessive Adjectives',
+      'possessive',
+      'my, your, his, her otning kimga tegishli ekanini bildiradi.',
+      'Egalik sifatlari otdan oldin keladi: my book, your bag, his father, her sister.',
+      'Possessive + Noun',
+      [
+        {
+          english: 'This is my book.',
+          uzbek: 'Bu mening kitobim.',
+        },
+        {
+          english: 'This is her sister.',
+          uzbek: 'Bu uning singlisi.',
+        },
+        {
+          english: 'That is his father.',
+          uzbek: 'U uning otasi.',
+        },
+      ],
+      [
+        'my + noun',
+        'your + noun',
+        'his + noun',
+        'her + noun',
+      ],
+      [
+        {
+          wrong: 'This is me book.',
+          correct: 'This is my book.',
+          explanation: 'Egalik uchun my ishlatiladi.',
+        },
+      ],
+    ),
+  ],
+
+  sentenceStructures: [
+    {
+      id: 'f03-s01',
+      title: 'Possessive Structure',
+      type: 'custom',
+      formula: 'Possessive + Noun',
+      explanation:
+        'Kimga tegishli ekanini aytish uchun egalik sifatidan keyin ot keladi.',
+      parts: [
+        {
+          label: 'P',
+          name: 'Possessive',
+          description: 'my / your / his / her',
+        },
+        {
+          label: 'N',
+          name: 'Noun',
+          description: 'narsa yoki shaxs',
+        },
+      ],
+      examples: [
+        {
+          english: 'my mother',
+          uzbek: 'mening onam',
+        },
+        {
+          english: 'her brother',
+          uzbek: 'uning akasi/ukasi',
+        },
+      ],
+    },
+  ],
+
+  explanations: [
+    explanation(
+      'f03-e01',
+      'concept',
+      'My Family',
+      'Oila haqida gapirganda family members bilan possessive words juda ko‘p ishlatiladi.',
+      '👨‍👩‍👧‍👦',
+    ),
+    explanation(
+      'f03-e02',
+      'memory',
+      '4 ta asosiy egalik so‘zi',
+      'my = mening, your = sening/sizning, his = uning (erkak), her = uning (ayol).',
+      '🧠',
+    ),
+  ],
+
+  examples: [
+    example('f03-ex01', 'This is my mother.', 'Bu mening onam.'),
+    example('f03-ex02', 'This is my father.', 'Bu mening otam.'),
+    example('f03-ex03', 'He is my brother.', 'U mening akam/ukam.'),
+    example('f03-ex04', 'She is my sister.', 'U mening opam/singlim.'),
+    example('f03-ex05', 'This is her book.', 'Bu uning kitobi.', 'her'),
+    example('f03-ex06', 'This is his bag.', 'Bu uning sumkasi.', 'his'),
+  ],
+
+  activities: [
+    activity(
+      'f03-a01',
+      'multiple-choice',
+      'Possessive',
+      'To‘g‘ri so‘zni tanlang.',
+      'This is ___ mother. (mening)',
+      'my',
+      ['my', 'your', 'his', 'her'],
+    ),
+    activity(
+      'f03-a02',
+      'multiple-choice',
+      'His or her?',
+      'Ayol uchun to‘g‘ri variantni tanlang.',
+      'This is ___ sister. (u — qiz)',
+      'her',
+      ['his', 'her', 'my', 'your'],
+    ),
+    activity(
+      'f03-a03',
+      'word-order',
+      'Build',
+      'Gap tuzing.',
+      'my / This / mother / is',
+      'This is my mother.',
+    ),
+    activity(
+      'f03-a04',
+      'translate',
+      'Translate',
+      'Tarjima qiling.',
+      'Bu mening otam.',
+      'This is my father.',
+    ),
+  ],
+
+  speaking: {
+    id: 'f03-sp01',
+    title: 'Introduce Your Family',
+    instruction:
+      'Oiladagi kamida 4 kishini ingliz tilida tanishtiring.',
+    mode: 'self-introduction',
+    phrase:
+      'This is my mother. This is my father. This is my brother. This is my sister.',
+    emoji: '👨‍👩‍👧‍👦',
+    repetitions: 2,
+    targetWords: ['mother', 'father', 'brother', 'sister'],
+    targetGrammar: ['f03-g01'],
+  },
+
+  writing: {
+    id: 'f03-w01',
+    title: 'My Family',
+    instruction: 'Oilangiz haqida 5–6 ta gap yozing.',
+    prompt: 'Write about your family.',
+    minimumWords: 20,
+    targetGrammar: ['f03-g01'],
+    targetVocabulary: ['family', 'mother', 'father', 'brother', 'sister'],
+  },
+
+  activities: [
+    activity(
+      'f03-a01',
+      'multiple-choice',
+      'Choose',
+      'To‘g‘ri javobni tanlang.',
+      'This is ___ mother.',
+      'my',
+      ['my', 'his', 'her', 'your'],
+    ),
+    activity(
+      'f03-a02',
+      'multiple-choice',
+      'His or Her',
+      'Ayolga tegishli variantni toping.',
+      'This is ___ book. (girl)',
+      'her',
+      ['his', 'her', 'my', 'your'],
+    ),
+    activity(
+      'f03-a03',
+      'word-order',
+      'Build a sentence',
+      'Gapni tuzing.',
+      'is / This / father / my',
+      'This is my father.',
+    ),
+    activity(
+      'f03-a04',
+      'translate',
+      'Translate',
+      'Tarjima qiling.',
+      'U mening singlim.',
+      'She is my sister.',
+    ),
+  ],
+
+  test: {
+    id: 'f03-test',
+    title: 'Lesson 3 Final Test',
+    questionCount: 10,
+    passingScore: 70,
+    maxScore: 20,
+    timeLimitMinutes: 8,
+    retryAllowed: true,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    questions: [
+      testQuestion(
+        'f03-t01',
+        'This is ___ mother.',
+        'my',
+        ['my', 'his', 'her', 'your'],
+        'O‘zingizning onangiz haqida gapirganda my ishlatiladi.',
+      ),
+      testQuestion(
+        'f03-t02',
+        'This is ___ sister. (girl)',
+        'her',
+        ['his', 'her', 'my', 'your'],
+        'Qizga tegishli narsa uchun her ishlatiladi.',
+      ),
+      testQuestion(
+        'f03-t03',
+        'This is ___ father. (boy)',
+        'his',
+        ['his', 'her', 'my', 'your'],
+        'O‘g‘il/erkak uchun his ishlatiladi.',
+      ),
+      testQuestion(
+        'f03-t04',
+        '“ona” ingliz tilida?',
+        'mother',
+        ['mother', 'father', 'sister', 'brother'],
+        'Mother — ona.',
+      ),
+      testQuestion(
+        'f03-t05',
+        '“ota” ingliz tilida?',
+        'father',
+        ['father', 'mother', 'son', 'daughter'],
+        'Father — ota.',
+      ),
+      testQuestion(
+        'f03-t06',
+        'Choose the correct sentence.',
+        'This is my family.',
+        [
+          'This my is family.',
+          'This is my family.',
+          'My this family is.',
+          'This are my family.',
+        ],
+        'This is + possessive + noun to‘g‘ri struktura.',
+      ),
+      testQuestion(
+        'f03-t07',
+        'Choose: He is ___ brother.',
+        'my',
+        ['my', 'her', 'his', 'your'],
+        'Gap egasining ukasi/akasi haqida: my brother.',
+      ),
+      testQuestion(
+        'f03-t08',
+        'What does “sister” mean?',
+        'opa/singil',
+        ['ona', 'opa/singil', 'ota', 'aka/uka'],
+        'Sister — opa yoki singil.',
+      ),
+      testQuestion(
+        'f03-t09',
+        'Choose: ___ father is a teacher. (mening)',
+        'My',
+        ['My', 'His', 'Her', 'Your'],
+        'Mening — my.',
+      ),
+      testQuestion(
+        'f03-t10',
+        'Choose the correct phrase.',
+        'her sister',
+        ['she sister', 'her sister', 'hers sister', 'she’s sister'],
+        'Possessive adjective + noun: her sister.',
+      ),
+    ],
+  },
+
+  rewards: standardReward(120),
+
+  theme: theme(
+    '👨‍👩‍👧‍👦',
+    'from-pink-500 via-rose-500 to-orange-500',
+    'pink',
+  ),
+
+  previousLessonId: 'foundation-02',
+  nextLessonId: 'foundation-04',
+  prerequisiteLessonIds: ['foundation-02'],
+}
+
+
+/* =========================================================
+   📦 LESSON 04
+   ARTICLES + OBJECTS
+========================================================= */
+
+const LESSON_04: EnglishLesson = {
+  id: 'foundation-04',
+  courseId: 'foundation-main',
+  unitId: 'foundation-unit-1',
+  lessonNumber: 4,
+  title: 'A, An & Everyday Objects',
+  subtitle: 'Narsalar va artikllarning boshlanishi',
+  emoji: '🎒',
+  description:
+    'Kundalik buyumlarni nomlash va a/an artikllarini to‘g‘ri qo‘llashni o‘rganing.',
+  type: 'grammar',
+  difficulty: 'easy',
+  status: 'locked',
+  estimatedMinutes: 25,
+
+  objectives: [
+    'a va an ni farqlash',
+    'Kundalik buyumlarni nomlash',
+    'This is a... strukturasini ishlatish',
+    'Unli tovush bilan boshlanuvchi so‘zlarda an ishlatish',
+  ],
+
+  skills: [
+    'vocabulary',
+    'grammar',
+    'reading',
+    'speaking',
+  ],
+
+  topics: [
+    'Articles',
+    'Objects',
+    'Singular nouns',
+  ],
+
+  vocabulary: [
+    v('f04-v01', 'book', 'kitob', 'school', 'This is a book.', 'Bu kitob.', '📕'),
+    v('f04-v02', 'pen', 'ruchka', 'school', 'This is a pen.', 'Bu ruchka.', '🖊️'),
+    v('f04-v03', 'pencil', 'qalam', 'school', 'I have a pencil.', 'Menda qalam bor.', '✏️'),
+    v('f04-v04', 'bag', 'sumka', 'school', 'This is a bag.', 'Bu sumka.', '🎒'),
+    v('f04-v05', 'apple', 'olma', 'food', 'It is an apple.', 'Bu olma.', '🍎'),
+    v('f04-v06', 'orange', 'apelsin', 'food', 'It is an orange.', 'Bu apelsin.', '🍊'),
+    v('f04-v07', 'egg', 'tuxum', 'food', 'It is an egg.', 'Bu tuxum.', '🥚'),
+    v('f04-v08', 'umbrella', 'soyabon', 'general', 'It is an umbrella.', 'Bu soyabon.', '☂️'),
+    v('f04-v09', 'chair', 'stul', 'home', 'This is a chair.', 'Bu stul.', '🪑'),
+    v('f04-v10', 'table', 'stol', 'home', 'This is a table.', 'Bu stol.', '🪵'),
+  ],
+
+  grammar: [
+    grammar(
+      'f04-g01',
+      'A and AN',
+      'articles',
+      'a undosh tovush oldidan, an unli tovush oldidan ishlatiladi.',
+      'A va an birlikdagi sanaladigan ot oldidan keladi. Tanlashda yozilishdan ko‘ra tovushga e’tibor berish kerak.',
+      'a + consonant sound / an + vowel sound',
+      [
+        {
+          english: 'a book',
+          uzbek: 'bir kitob',
+        },
+        {
+          english: 'a pen',
+          uzbek: 'bir ruchka',
+        },
+        {
+          english: 'an apple',
+          uzbek: 'bir olma',
+        },
+        {
+          english: 'an egg',
+          uzbek: 'bir tuxum',
+        },
+      ],
+      [
+        'a book',
+        'a teacher',
+        'an apple',
+        'an orange',
+      ],
+      [
+        {
+          wrong: 'a apple',
+          correct: 'an apple',
+          explanation: 'Apple unli tovush bilan boshlanadi.',
+        },
+      ],
+    ),
+  ],
+
+  sentenceStructures: [
+    {
+      id: 'f04-s01',
+      title: 'This is + Article + Noun',
+      type: 'custom',
+      formula: 'This is + a/an + noun',
+      explanation:
+        'Bitta predmetni ko‘rsatib nomlash uchun ishlatiladi.',
+      parts: [
+        {
+          label: 'THIS',
+          name: 'This',
+          description: 'Bu',
+        },
+        {
+          label: 'BE',
+          name: 'is',
+          description: 'to be',
+        },
+        {
+          label: 'A/AN',
+          name: 'article',
+          description: 'a yoki an',
+        },
+        {
+          label: 'N',
+          name: 'noun',
+          description: 'narsa',
+        },
+      ],
+      examples: [
+        {
+          english: 'This is a book.',
+          uzbek: 'Bu kitob.',
+        },
+        {
+          english: 'This is an apple.',
+          uzbek: 'Bu olma.',
+        },
+      ],
+    },
+  ],
+
+  explanations: [
+    explanation(
+      'f04-e01',
+      'concept',
+      'A yoki AN?',
+      'A undosh tovush oldidan, an esa unli tovush oldidan ishlatiladi.',
       '🔤',
     ),
-    mcq(
-      'f3-q2',
-      '“Apple” qaysi harf bilan boshlanadi?',
-      ['A', 'B', 'C', 'D'],
-      'A',
-      'Apple A harfi bilan boshlanadi.',
-      '🍎',
+    explanation(
+      'f04-e02',
+      'tip',
+      'Tovushni tinglang',
+      'Qoidani faqat harfga qarab emas, so‘zning boshidagi tovushga qarab qo‘llang.',
+      '👂',
     ),
-    mcq(
-      'f3-q3',
-      '“Spell” nimani anglatadi?',
-      ['Harflab aytmoq', 'O‘qimoq', 'Yozmoq', 'Tinglamoq'],
-      'Harflab aytmoq',
-      'Spell — so‘zni harflab aytish.',
-    ),
-    trueFalse(
-      'f3-q4',
-      'Ingliz alifbosida 26 ta harf mavjud.',
-      'true',
-      'Standart English alphabet 26 ta harfdan iborat.',
-    ),
-    mcq(
-      'f3-q5',
-      '“Letter” nimani anglatadi?',
-      ['Harf', 'So‘z', 'Gap', 'Kitob'],
-      'Harf',
-      'Letter — harf.',
-    ),
-  ]),
-)
+  ],
 
-/* =========================================================
-   04 — NUMBERS
-========================================================= */
+  examples: [
+    example('f04-ex01', 'This is a book.', 'Bu kitob.'),
+    example('f04-ex02', 'This is a pen.', 'Bu ruchka.'),
+    example('f04-ex03', 'This is an apple.', 'Bu olma.'),
+    example('f04-ex04', 'This is an orange.', 'Bu apelsin.'),
+    example('f04-ex05', 'I have a pencil.', 'Menda qalam bor.'),
+    example('f04-ex06', 'I have an umbrella.', 'Menda soyabon bor.'),
+  ],
 
-const lesson04 = baseLesson(
-  4,
-  'Numbers',
-  'Count in English 🔢',
-  '🔢',
-  '1 dan 100 gacha sonlarni ingliz tilida tanish va aytishni boshlang.',
-  ['Numbers 1–20', 'Counting', 'Age'],
-  vocabulary(
-    [
+  activities: [
+    activity(
+      'f04-a01',
+      'multiple-choice',
+      'Article',
+      'To‘g‘ri artiklni tanlang.',
+      '___ apple',
+      'an',
+      ['a', 'an', 'the', 'no article'],
+    ),
+    activity(
+      'f04-a02',
+      'multiple-choice',
+      'Article',
+      'To‘g‘ri variantni tanlang.',
+      '___ book',
+      'a',
+      ['a', 'an', 'the', 'no article'],
+    ),
+    activity(
+      'f04-a03',
+      'fill-gap',
+      'Complete',
+      'Gapni to‘ldiring.',
+      'This is ___ orange.',
+      'an',
+    ),
+    activity(
+      'f04-a04',
+      'word-order',
+      'Build',
+      'Gap tuzing.',
+      'a / is / This / book',
+      'This is a book.',
+    ),
+  ],
+
+  speaking: {
+    id: 'f04-sp01',
+    title: 'My Objects',
+    instruction:
+      'Atrofingizdagi 5 ta narsani ingliz tilida nomlang.',
+    mode: 'conversation',
+    phrase:
+      'This is a book. This is a pen. This is an apple.',
+    emoji: '🎒',
+    repetitions: 2,
+    targetWords: ['book', 'pen', 'apple', 'bag'],
+    targetGrammar: ['f04-g01'],
+  },
+
+  writing: {
+    id: 'f04-w01',
+    title: 'My Things',
+    instruction: 'Atrofingizdagi narsalar haqida 5 ta gap yozing.',
+    prompt: 'Write five sentences using a or an.',
+    minimumWords: 15,
+    targetGrammar: ['f04-g01'],
+  },
+
+  review: {
+    id: 'f04-review',
+    title: 'Articles Review',
+    description: 'A/an qoidasini mustahkamlang.',
+    questions: [
+      testQuestion(
+        'f04-r01',
+        'Choose: ___ apple.',
+        'an',
+        ['a', 'an', 'the', 'is'],
+        'Apple unli tovush bilan boshlanadi.',
+      ),
+      testQuestion(
+        'f04-r02',
+        'Choose: ___ book.',
+        'a',
+        ['a', 'an', 'the', 'are'],
+        'Book undosh tovush bilan boshlanadi.',
+      ),
+    ],
+  },
+
+  challenge: {
+    id: 'f04-ch01',
+    title: 'Object Hunter',
+    description:
+      'Xonadagi 5 ta buyumni toping va a/an bilan gap tuzing.',
+    difficulty: 'challenge',
+    bonusXp: 30,
+    tasks: [
       {
-        word: 'one',
-        translation: 'bir',
-        emoji: '1️⃣',
-        category: 'number',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'two',
-        translation: 'ikki',
-        emoji: '2️⃣',
-        category: 'number',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'three',
-        translation: 'uch',
-        emoji: '3️⃣',
-        category: 'number',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'ten',
-        translation: 'o‘n',
-        emoji: '🔟',
-        category: 'number',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'twenty',
-        translation: 'yigirma',
-        emoji: '2️⃣0️⃣',
-        category: 'number',
-        partOfSpeech: 'noun',
+        id: 'f04-ct01',
+        instruction: 'Gap tuzing.',
+        type: 'build-sentence',
+        prompt: 'apple / an / is / This',
+        correctAnswer: 'This is an apple.',
       },
     ],
-    4,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '🔢 Count with English',
-        content:
-          'Sonlarni ingliz tilida aytish kundalik hayotda juda ko‘p kerak bo‘ladi.',
-        emoji: '🔢',
-      },
-      4,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'I am ten years old.',
-        uzbek: 'Men o‘n yoshdaman.',
-        emoji: '🎂',
-      },
-      4,
-      1,
-    ),
-    example(
-      {
-        english: 'I have two books.',
-        uzbek: 'Menda ikkita kitob bor.',
-        emoji: '📚',
-      },
-      4,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🔢 Count',
-        instruction: 'Sonning inglizcha shaklini toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: '“3” ingliz tilida qanday?',
-        options: [
-          { id: 'a', text: 'Three' },
-          { id: 'b', text: 'Two' },
-          { id: 'c', text: 'Four' },
-          { id: 'd', text: 'Five' },
+  },
+
+  test: {
+    id: 'f04-test',
+    title: 'Lesson 4 Final Test',
+    questionCount: 10,
+    passingScore: 70,
+    maxScore: 20,
+    timeLimitMinutes: 8,
+    retryAllowed: true,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    questions: [
+      testQuestion(
+        'f04-t01',
+        '___ apple',
+        'an',
+        ['a', 'an', 'the', 'is'],
+        'Apple unli tovush bilan boshlanadi.',
+      ),
+      testQuestion(
+        'f04-t02',
+        '___ book',
+        'a',
+        ['a', 'an', 'the', 'is'],
+        'Book undosh tovush bilan boshlanadi.',
+      ),
+      testQuestion(
+        'f04-t03',
+        'This is ___ pen.',
+        'a',
+        ['a', 'an', 'the', 'are'],
+        'Pen undosh tovush bilan boshlanadi.',
+      ),
+      testQuestion(
+        'f04-t04',
+        'This is ___ orange.',
+        'an',
+        ['a', 'an', 'the', 'are'],
+        'Orange unli tovush bilan boshlanadi.',
+      ),
+      testQuestion(
+        'f04-t05',
+        'Choose the correct sentence.',
+        'This is an egg.',
+        [
+          'This is a egg.',
+          'This is an egg.',
+          'This an is egg.',
+          'This are an egg.',
         ],
-        correctAnswer: 'Three',
-        explanation: '3 = three.',
-      },
-      4,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🎂 How old?',
-        instruction: 'Yoshni ifodalovchi gapni toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: '“Men 10 yoshdaman”',
-        options: [
-          { id: 'a', text: 'I am ten years old.' },
-          { id: 'b', text: 'I have ten years.' },
-          { id: 'c', text: 'I ten old.' },
-          { id: 'd', text: 'Ten I am.' },
+        'Egg oldidan an ishlatiladi.',
+      ),
+      testQuestion(
+        'f04-t06',
+        'What does “bag” mean?',
+        'sumka',
+        ['sumka', 'kitob', 'stol', 'olma'],
+        'Bag — sumka.',
+      ),
+      testQuestion(
+        'f04-t07',
+        'Choose the correct phrase.',
+        'a teacher',
+        ['an teacher', 'a teacher', 'teacher a', 'the teacher a'],
+        'Teacher undosh tovush bilan boshlanadi.',
+      ),
+      testQuestion(
+        'f04-t08',
+        'Choose the correct phrase.',
+        'an umbrella',
+        ['a umbrella', 'an umbrella', 'umbrella an', 'the umbrella an'],
+        'Umbrella unli tovush bilan boshlanadi.',
+      ),
+      testQuestion(
+        'f04-t09',
+        '“Bu qalam” qaysi?',
+        'This is a pencil.',
+        [
+          'This a pencil is.',
+          'This is a pencil.',
+          'This are pencil.',
+          'This is an pencil.',
         ],
-        correctAnswer: 'I am ten years old.',
-        explanation:
-          'Yoshni aytishda: I am + number + years old.',
-      },
-      4,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Count!',
-      instruction: '1 dan 10 gacha ingliz tilida sanang.',
-      mode: 'read-aloud',
-      phrase:
-        'One, two, three, four, five, six, seven, eight, nine, ten.',
-      emoji: '🔢',
-      repetitions: 2,
-      targetWords: [
-        'one',
-        'two',
-        'three',
-        'four',
-        'five',
-      ],
-    },
-    4,
+        'This is + a + noun strukturasidan foydalaniladi.',
+      ),
+      testQuestion(
+        'f04-t10',
+        'Choose the correct sentence.',
+        'I have an apple.',
+        [
+          'I have a apple.',
+          'I has an apple.',
+          'I have an apple.',
+          'I am an apple.',
+        ],
+        'Apple oldidan an ishlatiladi va I bilan have keladi.',
+      ),
+    ],
+  },
+
+  rewards: standardReward(120),
+
+  theme: theme(
+    '🎒',
+    'from-violet-600 via-purple-600 to-fuchsia-600',
+    'purple',
   ),
-  test(4, [
-    mcq(
-      'f4-q1',
-      '3 ingliz tilida qanday?',
-      ['Three', 'Two', 'Four', 'Five'],
-      'Three',
-      '3 = three.',
-    ),
-    mcq(
-      'f4-q2',
-      '10 ingliz tilida qanday?',
-      ['Ten', 'Two', 'Twenty', 'One'],
-      'Ten',
-      '10 = ten.',
-    ),
-    mcq(
-      'f4-q3',
-      '“Two” qaysi son?',
-      ['2', '3', '4', '5'],
-      '2',
-      'Two = 2.',
-    ),
-    mcq(
-      'f4-q4',
-      '“I am ten years old” nimani bildiradi?',
+
+  previousLessonId: 'foundation-03',
+  nextLessonId: 'foundation-05',
+  prerequisiteLessonIds: ['foundation-03'],
+}
+
+
+/* =========================================================
+   🏫 LESSON 05
+   SCHOOL & THIS / THAT
+========================================================= */
+
+const LESSON_05: EnglishLesson = {
+  id: 'foundation-05',
+  courseId: 'foundation-main',
+  unitId: 'foundation-unit-1',
+  lessonNumber: 5,
+  title: 'My School',
+  subtitle: 'Maktab, sinf va this / that',
+  emoji: '🏫',
+  description:
+    'Maktabdagi asosiy joylar va buyumlarni tasvirlang. This, that, these, those bilan tanishing.',
+  type: 'mixed',
+  difficulty: 'easy',
+  status: 'locked',
+  estimatedMinutes: 28,
+
+  objectives: [
+    'School vocabulary',
+    'This / That',
+    'These / Those',
+    'Yaqin va uzoq predmetlarni farqlash',
+    'Maktab haqida oddiy gaplar tuzish',
+  ],
+
+  skills: [
+    'vocabulary',
+    'grammar',
+    'speaking',
+    'reading',
+  ],
+
+  topics: [
+    'School',
+    'Demonstratives',
+    'Objects',
+  ],
+
+  vocabulary: [
+    v('f05-v01', 'school', 'maktab', 'school', 'My school is big.', 'Mening maktabim katta.', '🏫'),
+    v('f05-v02', 'classroom', 'sinf xonasi', 'school', 'This is my classroom.', 'Bu mening sinfim.', '🏫'),
+    v('f05-v03', 'desk', 'parta', 'school', 'This is my desk.', 'Bu mening partam.', '🪑'),
+    v('f05-v04', 'board', 'doska', 'school', 'The board is white.', 'Doska oq.', '⬜'),
+    v('f05-v05', 'teacher', 'o‘qituvchi', 'school', 'My teacher is kind.', 'O‘qituvchim mehribon.', '👩‍🏫'),
+    v('f05-v06', 'student', 'o‘quvchi', 'school', 'I am a student.', 'Men o‘quvchiman.', '🎓'),
+    v('f05-v07', 'lesson', 'dars', 'school', 'The lesson is easy.', 'Dars oson.', '📚'),
+    v('f05-v08', 'class', 'sinf', 'school', 'My class is nice.', 'Sinfim yaxshi.', '👨‍🎓'),
+    v('f05-v09', 'door', 'eshik', 'home', 'The door is open.', 'Eshik ochiq.', '🚪'),
+    v('f05-v10', 'window', 'deraza', 'home', 'The window is big.', 'Deraza katta.', '🪟'),
+  ],
+
+  grammar: [
+    grammar(
+      'f05-g01',
+      'This and That',
+      'demonstratives',
+      'This — yaqin birlik, that — uzoq birlik uchun.',
+      'Ko‘rsatish olmoshlari predmetning masofasini ko‘rsatadi.',
+      'This + is + noun / That + is + noun',
       [
-        'Men 10 yoshdaman',
-        'Menda 10 kitob bor',
-        'Men 10 ta kitobman',
-        'Men 10 yoshli emasman',
+        {
+          english: 'This is my book.',
+          uzbek: 'Bu mening kitobim.',
+        },
+        {
+          english: 'That is your bag.',
+          uzbek: 'U sening sumkang.',
+        },
       ],
-      'Men 10 yoshdaman',
-      'Bu gap yoshni bildiradi.',
-    ),
-    trueFalse(
-      'f4-q5',
-      '“Twenty” 20 sonini bildiradi.',
-      'true',
-      'Twenty = 20.',
-    ),
-  ]),
-)
-
-/* =========================================================
-   05 — COLORS
-========================================================= */
-
-const lesson05 = baseLesson(
-  5,
-  'Colors',
-  'See the world in English 🎨',
-  '🎨',
-  'Asosiy ranglarni ingliz tilida o‘rganing.',
-  ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White'],
-  vocabulary(
-    [
-      {
-        word: 'red',
-        translation: 'qizil',
-        emoji: '🔴',
-        category: 'color',
-        partOfSpeech: 'adjective',
-      },
-      {
-        word: 'blue',
-        translation: 'ko‘k',
-        emoji: '🔵',
-        category: 'color',
-        partOfSpeech: 'adjective',
-      },
-      {
-        word: 'green',
-        translation: 'yashil',
-        emoji: '🟢',
-        category: 'color',
-        partOfSpeech: 'adjective',
-      },
-      {
-        word: 'yellow',
-        translation: 'sariq',
-        emoji: '🟡',
-        category: 'color',
-        partOfSpeech: 'adjective',
-      },
-      {
-        word: 'black',
-        translation: 'qora',
-        emoji: '⚫',
-        category: 'color',
-        partOfSpeech: 'adjective',
-      },
-      {
-        word: 'white',
-        translation: 'oq',
-        emoji: '⚪',
-        category: 'color',
-        partOfSpeech: 'adjective',
-      },
-    ],
-    5,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '🎨 Colors everywhere',
-        content:
-          'Ranglarni bilish narsalarni tasvirlash va kundalik suhbatda juda foydali.',
-        emoji: '🌈',
-      },
-      5,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'The apple is red.',
-        uzbek: 'Olma qizil.',
-        emoji: '🍎',
-        highlight: 'red',
-      },
-      5,
-      1,
-    ),
-    example(
-      {
-        english: 'The sky is blue.',
-        uzbek: 'Osmon ko‘k.',
-        emoji: '🌤️',
-        highlight: 'blue',
-      },
-      5,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'image-choice',
-        title: '🎨 Pick the color',
-        instruction: 'Qizil rangni toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Which color is red?',
-        emoji: '🔴',
-        options: [
-          { id: 'a', text: 'Red', emoji: '🔴' },
-          { id: 'b', text: 'Blue', emoji: '🔵' },
-          { id: 'c', text: 'Green', emoji: '🟢' },
-          { id: 'd', text: 'Yellow', emoji: '🟡' },
-        ],
-        correctAnswer: 'Red',
-        explanation: 'Red = qizil.',
-      },
-      5,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🌈 Complete',
-        instruction: 'Gapni to‘ldiring.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'The sky is ____.',
-        options: [
-          { id: 'a', text: 'blue', emoji: '🔵' },
-          { id: 'b', text: 'red', emoji: '🔴' },
-          { id: 'c', text: 'black', emoji: '⚫' },
-          { id: 'd', text: 'yellow', emoji: '🟡' },
-        ],
-        correctAnswer: 'blue',
-        explanation: 'The sky is blue.',
-      },
-      5,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Colors around me',
-      instruction: 'Atrofingizdagi ranglarni ayting.',
-      mode: 'read-aloud',
-      phrase: 'Red, blue, green, yellow, black, white.',
-      emoji: '🎨',
-      repetitions: 2,
-      targetWords: ['red', 'blue', 'green', 'yellow'],
-    },
-    5,
-  ),
-  test(5, [
-    mcq(
-      'f5-q1',
-      'Red qaysi rang?',
-      ['Qizil', 'Ko‘k', 'Yashil', 'Sariq'],
-      'Qizil',
-      'Red = qizil.',
-    ),
-    mcq(
-      'f5-q2',
-      'Blue qaysi rang?',
-      ['Ko‘k', 'Qora', 'Oq', 'Yashil'],
-      'Ko‘k',
-      'Blue = ko‘k.',
-    ),
-    mcq(
-      'f5-q3',
-      'Green qaysi rang?',
-      ['Yashil', 'Qizil', 'Sariq', 'Qora'],
-      'Yashil',
-      'Green = yashil.',
-    ),
-    mcq(
-      'f5-q4',
-      'The sky is usually...',
-      ['blue', 'red', 'black', 'yellow'],
-      'blue',
-      'The sky is commonly described as blue.',
-    ),
-    trueFalse(
-      'f5-q5',
-      'White oq rangni bildiradi.',
-      'true',
-      'White = oq.',
-    ),
-  ]),
-)
-
-/* =========================================================
-   06 — FAMILY
-========================================================= */
-
-const lesson06 = baseLesson(
-  6,
-  'My Family',
-  'Meet the family 👨‍👩‍👧',
-  '👨‍👩‍👧',
-  'Oila a’zolarini ingliz tilida aytishni o‘rganing.',
-  ['Family members', 'My family', 'Possessive my'],
-  vocabulary(
-    [
-      {
-        word: 'mother',
-        translation: 'ona',
-        emoji: '👩',
-        category: 'family',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'father',
-        translation: 'ota',
-        emoji: '👨',
-        category: 'family',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'brother',
-        translation: 'aka / uka',
-        emoji: '👦',
-        category: 'family',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'sister',
-        translation: 'opa / singil',
-        emoji: '👧',
-        category: 'family',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'family',
-        translation: 'oila',
-        emoji: '👨‍👩‍👧‍👦',
-        category: 'family',
-        partOfSpeech: 'noun',
-      },
-    ],
-    6,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '👨‍👩‍👧 Family',
-        content:
-          'Family — oila. Mother — ona, father — ota, brother — aka/uka, sister — opa/singil.',
-        emoji: '❤️',
-      },
-      6,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'This is my mother.',
-        uzbek: 'Bu mening onam.',
-        emoji: '👩',
-      },
-      6,
-      1,
-    ),
-    example(
-      {
-        english: 'I have one brother.',
-        uzbek: 'Mening bitta akam/ukam bor.',
-        emoji: '👦',
-      },
-      6,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'image-choice',
-        title: '👨‍👩‍👧 Who is she?',
-        instruction: 'To‘g‘ri so‘zni tanlang.',
-        points: 10,
-        difficulty: 'easy',
-        question: '👩',
-        options: [
-          { id: 'a', text: 'Mother', emoji: '👩' },
-          { id: 'b', text: 'Father', emoji: '👨' },
-          { id: 'c', text: 'Brother', emoji: '👦' },
-          { id: 'd', text: 'Sister', emoji: '👧' },
-        ],
-        correctAnswer: 'Mother',
-        explanation: 'Mother = ona.',
-      },
-      6,
-      1,
-    ),
-    activity(
-      {
-        type: 'sentence-builder',
-        title: '🧩 Build',
-        instruction: 'Gapni tuzing.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Bu mening otam.',
-        words: ['This', 'is', 'my', 'father'],
-        correctAnswer: 'This is my father',
-        explanation: 'This is my father.',
-      },
-      6,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 My family',
-      instruction: 'Oilangiz haqida bitta gap ayting.',
-      mode: 'read-aloud',
-      phrase: 'This is my family.',
-      translation: 'Bu mening oilam.',
-      emoji: '❤️',
-      repetitions: 3,
-      targetWords: ['family', 'mother', 'father'],
-    },
-    6,
-  ),
-  test(6, [
-    mcq(
-      'f6-q1',
-      'Mother nimani anglatadi?',
-      ['Ona', 'Ota', 'Aka', 'Singil'],
-      'Ona',
-      'Mother = ona.',
-    ),
-    mcq(
-      'f6-q2',
-      'Father nimani anglatadi?',
-      ['Ota', 'Ona', 'Uka', 'Opa'],
-      'Ota',
-      'Father = ota.',
-    ),
-    mcq(
-      'f6-q3',
-      'Brother nimani anglatadi?',
-      ['Aka yoki uka', 'Ona', 'Ota', 'Oila'],
-      'Aka yoki uka',
-      'Brother erkak farzand yoki aka/ukani bildiradi.',
-    ),
-    mcq(
-      'f6-q4',
-      '“This is my mother” tarjimasi?',
       [
-        'Bu mening onam',
-        'Bu mening otam',
-        'Bu mening akam',
-        'Bu mening oilam',
+        'This = bu, yaqin',
+        'That = u, uzoq',
       ],
-      'Bu mening onam',
-      'Mother = ona.',
     ),
-    trueFalse(
-      'f6-q5',
-      'Family “oila” degani.',
-      'true',
-      'Family = oila.',
-    ),
-  ]),
-)
-
-/* =========================================================
-   07 — MY HOME
-========================================================= */
-
-const lesson07 = baseLesson(
-  7,
-  'My Home',
-  'Welcome to my house 🏠',
-  '🏠',
-  'Uy va xonalar nomlarini ingliz tilida o‘rganing.',
-  ['House', 'Room', 'Kitchen', 'Bedroom', 'Bathroom'],
-  vocabulary(
-    [
-      {
-        word: 'house',
-        translation: 'uy',
-        emoji: '🏠',
-        category: 'home',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'room',
-        translation: 'xona',
-        emoji: '🚪',
-        category: 'home',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'kitchen',
-        translation: 'oshxona',
-        emoji: '🍳',
-        category: 'home',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'bedroom',
-        translation: 'yotoqxona',
-        emoji: '🛏️',
-        category: 'home',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'bathroom',
-        translation: 'hammom',
-        emoji: '🛁',
-        category: 'home',
-        partOfSpeech: 'noun',
-      },
-    ],
-    7,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '🏠 My Home',
-        content:
-          'House — uy. Room — xona. Kitchen — oshxona. Bedroom — yotoqxona.',
-        emoji: '🏠',
-      },
-      7,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'This is my house.',
-        uzbek: 'Bu mening uyim.',
-        emoji: '🏠',
-      },
-      7,
-      1,
-    ),
-    example(
-      {
-        english: 'This is my bedroom.',
-        uzbek: 'Bu mening yotoqxonam.',
-        emoji: '🛏️',
-      },
-      7,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'image-choice',
-        title: '🏠 Find the room',
-        instruction: 'Yotoqxonani toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Where do you sleep?',
-        options: [
-          { id: 'a', text: 'Bedroom', emoji: '🛏️' },
-          { id: 'b', text: 'Kitchen', emoji: '🍳' },
-          { id: 'c', text: 'Bathroom', emoji: '🛁' },
-          { id: 'd', text: 'Garden', emoji: '🌳' },
-        ],
-        correctAnswer: 'Bedroom',
-        explanation: 'Bedroom — yotoqxona.',
-      },
-      7,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🎯 Choose',
-        instruction: 'To‘g‘ri tarjimani tanlang.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Kitchen = ?',
-        options: [
-          { id: 'a', text: 'Oshxona' },
-          { id: 'b', text: 'Yotoqxona' },
-          { id: 'c', text: 'Hammom' },
-          { id: 'd', text: 'Bog‘' },
-        ],
-        correctAnswer: 'Oshxona',
-        explanation: 'Kitchen = oshxona.',
-      },
-      7,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 My home',
-      instruction: 'Uyingiz haqida gapiring.',
-      mode: 'read-aloud',
-      phrase: 'This is my house. This is my bedroom.',
-      translation: 'Bu mening uyim. Bu mening yotoqxonam.',
-      emoji: '🏠',
-      repetitions: 2,
-      targetWords: ['house', 'bedroom'],
-    },
-    7,
-  ),
-  test(7, [
-    mcq('f7-q1', 'House = ?', ['Uy', 'Xona', 'Oshxona', 'Bog‘'], 'Uy', 'House = uy.'),
-    mcq('f7-q2', 'Kitchen = ?', ['Oshxona', 'Hammom', 'Yotoqxona', 'Uy'], 'Oshxona', 'Kitchen = oshxona.'),
-    mcq('f7-q3', 'Bedroom = ?', ['Yotoqxona', 'Oshxona', 'Hammom', 'Mehmonxona'], 'Yotoqxona', 'Bedroom = yotoqxona.'),
-    mcq('f7-q4', 'Where do you sleep?', ['Bedroom', 'Kitchen', 'Bathroom', 'Garden'], 'Bedroom', 'Odatda bedroomda uxlaymiz.'),
-    trueFalse('f7-q5', 'Room “xona” degani.', 'true', 'Room = xona.'),
-  ]),
-)
-
-/* =========================================================
-   08 — SCHOOL
-========================================================= */
-
-const lesson08 = baseLesson(
-  8,
-  'At School',
-  'English at school 🎒',
-  '🎒',
-  'Maktabdagi asosiy buyumlarni ingliz tilida o‘rganing.',
-  ['Book', 'Pen', 'Pencil', 'Bag', 'Teacher'],
-  vocabulary(
-    [
-      {
-        word: 'book',
-        translation: 'kitob',
-        emoji: '📚',
-        category: 'school',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'pen',
-        translation: 'ruchka',
-        emoji: '🖊️',
-        category: 'school',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'pencil',
-        translation: 'qalam',
-        emoji: '✏️',
-        category: 'school',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'bag',
-        translation: 'sumka',
-        emoji: '🎒',
-        category: 'school',
-        partOfSpeech: 'noun',
-      },
-      {
-        word: 'teacher',
-        translation: 'o‘qituvchi',
-        emoji: '👩‍🏫',
-        category: 'school',
-        partOfSpeech: 'noun',
-      },
-    ],
-    8,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '🎒 At School',
-        content:
-          'Maktabdagi narsalarni ingliz tilida bilish oddiy gaplarni tuzishga yordam beradi.',
-        emoji: '🏫',
-      },
-      8,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'This is my book.',
-        uzbek: 'Bu mening kitobim.',
-        emoji: '📚',
-      },
-      8,
-      1,
-    ),
-    example(
-      {
-        english: 'I have a pencil.',
-        uzbek: 'Menda qalam bor.',
-        emoji: '✏️',
-      },
-      8,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'image-choice',
-        title: '✏️ What is it?',
-        instruction: 'Rasmga mos so‘zni tanlang.',
-        points: 10,
-        difficulty: 'easy',
-        question: '✏️',
-        options: [
-          { id: 'a', text: 'Pencil', emoji: '✏️' },
-          { id: 'b', text: 'Book', emoji: '📚' },
-          { id: 'c', text: 'Bag', emoji: '🎒' },
-          { id: 'd', text: 'Pen', emoji: '🖊️' },
-        ],
-        correctAnswer: 'Pencil',
-        explanation: 'Pencil = qalam.',
-      },
-      8,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🎒 School words',
-        instruction: 'Tarjimani toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Teacher = ?',
-        options: [
-          { id: 'a', text: 'O‘qituvchi' },
-          { id: 'b', text: 'O‘quvchi' },
-          { id: 'c', text: 'Kitob' },
-          { id: 'd', text: 'Sumka' },
-        ],
-        correctAnswer: 'O‘qituvchi',
-        explanation: 'Teacher = o‘qituvchi.',
-      },
-      8,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 My school bag',
-      instruction: 'Sumkangizdagi narsalar haqida gapiring.',
-      mode: 'read-aloud',
-      phrase: 'I have a book and a pencil.',
-      translation: 'Menda kitob va qalam bor.',
-      emoji: '🎒',
-      repetitions: 3,
-      targetWords: ['book', 'pencil', 'have'],
-    },
-    8,
-  ),
-  test(8, [
-    mcq('f8-q1', 'Book = ?', ['Kitob', 'Qalam', 'Sumka', 'Ruchka'], 'Kitob', 'Book = kitob.'),
-    mcq('f8-q2', 'Pencil = ?', ['Qalam', 'Kitob', 'O‘qituvchi', 'Sumka'], 'Qalam', 'Pencil = qalam.'),
-    mcq('f8-q3', 'Teacher = ?', ['O‘qituvchi', 'O‘quvchi', 'Kitob', 'Maktab'], 'O‘qituvchi', 'Teacher = o‘qituvchi.'),
-    mcq('f8-q4', '“I have a book” tarjimasi?', ['Menda kitob bor', 'Men kitobman', 'Men kitob o‘qidim', 'Kitob mening'], 'Menda kitob bor', 'Have egalikni ifodalashda ishlatiladi.'),
-    trueFalse('f8-q5', 'Bag “sumka” degani.', 'true', 'Bag = sumka.'),
-  ]),
-)
-
-/* =========================================================
-   09 — ANIMALS
-========================================================= */
-
-const lesson09 = baseLesson(
-  9,
-  'Animals',
-  'Meet the animals 🐶',
-  '🐶',
-  'Hayvonlarning inglizcha nomlarini o‘rganing.',
-  ['Dog', 'Cat', 'Bird', 'Fish', 'Horse'],
-  vocabulary(
-    [
-      { word: 'dog', translation: 'it', emoji: '🐶', category: 'animal', partOfSpeech: 'noun' },
-      { word: 'cat', translation: 'mushuk', emoji: '🐱', category: 'animal', partOfSpeech: 'noun' },
-      { word: 'bird', translation: 'qush', emoji: '🐦', category: 'animal', partOfSpeech: 'noun' },
-      { word: 'fish', translation: 'baliq', emoji: '🐟', category: 'animal', partOfSpeech: 'noun' },
-      { word: 'horse', translation: 'ot', emoji: '🐴', category: 'animal', partOfSpeech: 'noun' },
-    ],
-    9,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '🐾 Animal World',
-        content:
-          'Hayvonlarni rasm bilan bog‘lab o‘rganish yangi so‘zlarni tezroq eslab qolishga yordam beradi.',
-        emoji: '🐾',
-      },
-      9,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'I have a cat.',
-        uzbek: 'Menda mushuk bor.',
-        emoji: '🐱',
-      },
-      9,
-      1,
-    ),
-    example(
-      {
-        english: 'The dog is big.',
-        uzbek: 'It katta.',
-        emoji: '🐶',
-      },
-      9,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'image-choice',
-        title: '🐾 Who is it?',
-        instruction: 'Hayvonni aniqlang.',
-        points: 10,
-        difficulty: 'easy',
-        question: '🐱',
-        options: [
-          { id: 'a', text: 'Cat', emoji: '🐱' },
-          { id: 'b', text: 'Dog', emoji: '🐶' },
-          { id: 'c', text: 'Bird', emoji: '🐦' },
-          { id: 'd', text: 'Horse', emoji: '🐴' },
-        ],
-        correctAnswer: 'Cat',
-        explanation: 'Cat = mushuk.',
-      },
-      9,
-      1,
-    ),
-    activity(
-      {
-        type: 'matching',
-        title: '🧩 Match',
-        instruction: 'So‘zlarni ma’nosi bilan moslang.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Match the animals.',
-        pairs: [
-          { left: 'dog', right: 'it' },
-          { left: 'cat', right: 'mushuk' },
-          { left: 'fish', right: 'baliq' },
-        ],
-        correctAnswer: ['dog-it', 'cat-mushuk', 'fish-baliq'],
-        explanation: 'Har bir hayvonni to‘g‘ri tarjimasi bilan bog‘lang.',
-      },
-      9,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Animal sounds',
-      instruction: 'Hayvonlarni ingliz tilida ayting.',
-      mode: 'read-aloud',
-      phrase: 'Dog, cat, bird, fish, horse.',
-      emoji: '🐾',
-      repetitions: 2,
-      targetWords: ['dog', 'cat', 'bird', 'fish'],
-    },
-    9,
-  ),
-  test(9, [
-    mcq('f9-q1', 'Dog = ?', ['It', 'Mushuk', 'Ot', 'Baliq'], 'It', 'Dog = it.'),
-    mcq('f9-q2', 'Cat = ?', ['Mushuk', 'It', 'Qush', 'Ot'], 'Mushuk', 'Cat = mushuk.'),
-    mcq('f9-q3', 'Fish = ?', ['Baliq', 'Qush', 'It', 'Ot'], 'Baliq', 'Fish = baliq.'),
-    mcq('f9-q4', '🐴 qaysi hayvon?', ['Horse', 'Bird', 'Cat', 'Fish'], 'Horse', 'Horse = ot.'),
-    trueFalse('f9-q5', 'Bird “qush” degani.', 'true', 'Bird = qush.'),
-  ]),
-)
-
-/* =========================================================
-   10 — FOOD
-========================================================= */
-
-const lesson10 = baseLesson(
-  10,
-  'Food & Drinks',
-  'Let’s eat! 🍎',
-  '🍎',
-  'Oziq-ovqat va ichimliklarning asosiy nomlarini o‘rganing.',
-  ['Apple', 'Bread', 'Water', 'Milk', 'Tea'],
-  vocabulary(
-    [
-      { word: 'apple', translation: 'olma', emoji: '🍎', category: 'food', partOfSpeech: 'noun' },
-      { word: 'bread', translation: 'non', emoji: '🍞', category: 'food', partOfSpeech: 'noun' },
-      { word: 'water', translation: 'suv', emoji: '💧', category: 'food', partOfSpeech: 'noun' },
-      { word: 'milk', translation: 'sut', emoji: '🥛', category: 'food', partOfSpeech: 'noun' },
-      { word: 'tea', translation: 'choy', emoji: '🍵', category: 'food', partOfSpeech: 'noun' },
-    ],
-    10,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '🍎 Food around us',
-        content:
-          'Food so‘zlari kundalik suhbatning eng muhim qismlaridan biridir.',
-        emoji: '🍽️',
-      },
-      10,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'I like apples.',
-        uzbek: 'Men olmalarni yaxshi ko‘raman.',
-        emoji: '🍎',
-      },
-      10,
-      1,
-    ),
-    example(
-      {
-        english: 'I drink water.',
-        uzbek: 'Men suv ichaman.',
-        emoji: '💧',
-      },
-      10,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'image-choice',
-        title: '🍎 What is it?',
-        instruction: 'Rasmga mos so‘zni toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: '🍎',
-        options: [
-          { id: 'a', text: 'Apple', emoji: '🍎' },
-          { id: 'b', text: 'Bread', emoji: '🍞' },
-          { id: 'c', text: 'Milk', emoji: '🥛' },
-          { id: 'd', text: 'Tea', emoji: '🍵' },
-        ],
-        correctAnswer: 'Apple',
-        explanation: 'Apple = olma.',
-      },
-      10,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '💧 Choose',
-        instruction: 'Ichimlikni tanlang.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Which one is a drink?',
-        options: [
-          { id: 'a', text: 'Water', emoji: '💧' },
-          { id: 'b', text: 'Bread', emoji: '🍞' },
-          { id: 'c', text: 'Apple', emoji: '🍎' },
-          { id: 'd', text: 'Book', emoji: '📚' },
-        ],
-        correctAnswer: 'Water',
-        explanation: 'Water — suv va ichimlik.',
-      },
-      10,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 I like...',
-      instruction: 'O‘zingiz yoqtiradigan ovqat haqida ayting.',
-      mode: 'read-aloud',
-      phrase: 'I like apples. I drink water.',
-      translation: 'Men olmalarni yaxshi ko‘raman. Men suv ichaman.',
-      emoji: '🍎',
-      repetitions: 2,
-      targetWords: ['like', 'apples', 'drink', 'water'],
-    },
-    10,
-  ),
-  test(10, [
-    mcq('f10-q1', 'Apple = ?', ['Olma', 'Non', 'Suv', 'Sut'], 'Olma', 'Apple = olma.'),
-    mcq('f10-q2', 'Bread = ?', ['Non', 'Olma', 'Choy', 'Suv'], 'Non', 'Bread = non.'),
-    mcq('f10-q3', 'Water = ?', ['Suv', 'Sut', 'Choy', 'Non'], 'Suv', 'Water = suv.'),
-    mcq('f10-q4', '“I drink water” tarjimasi?', ['Men suv ichaman', 'Men suv yeyman', 'Men suv ko‘raman', 'Menda suv yo‘q'], 'Men suv ichaman', 'Drink — ichmoq.'),
-    trueFalse('f10-q5', 'Milk “sut” degani.', 'true', 'Milk = sut.'),
-  ]),
-)
-
-/* =========================================================
-   11 — CLOTHES
-========================================================= */
-
-const lesson11 = baseLesson(
-  11,
-  'Clothes',
-  'What are you wearing? 👕',
-  '👕',
-  'Kiyimlarning asosiy nomlarini o‘rganing.',
-  ['Shirt', 'T-shirt', 'Shoes', 'Hat', 'Dress'],
-  vocabulary(
-    [
-      { word: 'shirt', translation: 'ko‘ylak', emoji: '👔', category: 'clothes', partOfSpeech: 'noun' },
-      { word: 'T-shirt', translation: 'futbolka', emoji: '👕', category: 'clothes', partOfSpeech: 'noun' },
-      { word: 'shoes', translation: 'poyabzal', emoji: '👟', category: 'clothes', partOfSpeech: 'noun' },
-      { word: 'hat', translation: 'shlyapa / bosh kiyim', emoji: '🧢', category: 'clothes', partOfSpeech: 'noun' },
-      { word: 'dress', translation: 'ko‘ylak', emoji: '👗', category: 'clothes', partOfSpeech: 'noun' },
-    ],
-    11,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '👕 Clothes',
-        content:
-          'Kiyimlarni nomlash va ularning rangini aytish orqali sodda tasvirlar tuzish mumkin.',
-        emoji: '👕',
-      },
-      11,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'My T-shirt is blue.',
-        uzbek: 'Mening futbolkam ko‘k.',
-        emoji: '👕',
-      },
-      11,
-      1,
-    ),
-    example(
-      {
-        english: 'These are my shoes.',
-        uzbek: 'Bular mening poyabzalim.',
-        emoji: '👟',
-      },
-      11,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'image-choice',
-        title: '👟 Find it',
-        instruction: 'Poyabzalni toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Which one is shoes?',
-        options: [
-          { id: 'a', text: 'Shoes', emoji: '👟' },
-          { id: 'b', text: 'Hat', emoji: '🧢' },
-          { id: 'c', text: 'Dress', emoji: '👗' },
-          { id: 'd', text: 'T-shirt', emoji: '👕' },
-        ],
-        correctAnswer: 'Shoes',
-        explanation: 'Shoes = poyabzal.',
-      },
-      11,
-      1,
-    ),
-    activity(
-      {
-        type: 'sentence-builder',
-        title: '🧩 Describe it',
-        instruction: 'Gapni tuzing.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Mening futbolkam ko‘k.',
-        words: ['My', 'T-shirt', 'is', 'blue'],
-        correctAnswer: 'My T-shirt is blue',
-        explanation: 'My T-shirt is blue.',
-      },
-      11,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 What are you wearing?',
-      instruction: 'Kiyimingiz haqida bitta gap ayting.',
-      mode: 'read-aloud',
-      phrase: 'My T-shirt is blue.',
-      translation: 'Mening futbolkam ko‘k.',
-      emoji: '👕',
-      repetitions: 3,
-      targetWords: ['T-shirt', 'blue'],
-    },
-    11,
-  ),
-  test(11, [
-    mcq('f11-q1', 'T-shirt = ?', ['Futbolka', 'Poyabzal', 'Shlyapa', 'Ko‘ylak'], 'Futbolka', 'T-shirt = futbolka.'),
-    mcq('f11-q2', 'Shoes = ?', ['Poyabzal', 'Futbolka', 'Shlyapa', 'Ko‘ylak'], 'Poyabzal', 'Shoes = poyabzal.'),
-    mcq('f11-q3', 'Hat = ?', ['Bosh kiyim', 'Poyabzal', 'Futbolka', 'Shim'], 'Bosh kiyim', 'Hat = bosh kiyim.'),
-    mcq('f11-q4', '“My T-shirt is blue” tarjimasi?', ['Mening futbolkam ko‘k', 'Mening poyabzalim ko‘k', 'Mening uyim ko‘k', 'Mening ko‘ylagim qizil'], 'Mening futbolkam ko‘k', 'T-shirt = futbolka, blue = ko‘k.'),
-    trueFalse('f11-q5', 'Shoes poyabzalni bildiradi.', 'true', 'Shoes = poyabzal.'),
-  ]),
-)
-
-/* =========================================================
-   12 — BODY
-========================================================= */
-
-const lesson12 = baseLesson(
-  12,
-  'My Body',
-  'Learn body parts 🧍',
-  '🧍',
-  'Tana a’zolarining asosiy nomlarini o‘rganing.',
-  ['Head', 'Eyes', 'Ears', 'Nose', 'Mouth'],
-  vocabulary(
-    [
-      { word: 'head', translation: 'bosh', emoji: '🙂', category: 'body', partOfSpeech: 'noun' },
-      { word: 'eye', translation: 'ko‘z', emoji: '👁️', category: 'body', partOfSpeech: 'noun' },
-      { word: 'ear', translation: 'quloq', emoji: '👂', category: 'body', partOfSpeech: 'noun' },
-      { word: 'nose', translation: 'burun', emoji: '👃', category: 'body', partOfSpeech: 'noun' },
-      { word: 'mouth', translation: 'og‘iz', emoji: '👄', category: 'body', partOfSpeech: 'noun' },
-    ],
-    12,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '🧍 My Body',
-        content:
-          'Tana a’zolarini rasm bilan bog‘lab yodlash oson.',
-        emoji: '🧠',
-      },
-      12,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'I have two eyes.',
-        uzbek: 'Mening ikkita ko‘zim bor.',
-        emoji: '👀',
-      },
-      12,
-      1,
-    ),
-    example(
-      {
-        english: 'This is my nose.',
-        uzbek: 'Bu mening burnim.',
-        emoji: '👃',
-      },
-      12,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'image-choice',
-        title: '👀 Find it',
-        instruction: 'Ko‘zni toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Which word means ko‘z?',
-        options: [
-          { id: 'a', text: 'Eye', emoji: '👁️' },
-          { id: 'b', text: 'Ear', emoji: '👂' },
-          { id: 'c', text: 'Nose', emoji: '👃' },
-          { id: 'd', text: 'Mouth', emoji: '👄' },
-        ],
-        correctAnswer: 'Eye',
-        explanation: 'Eye = ko‘z.',
-      },
-      12,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🧠 Remember',
-        instruction: 'Tarjimani toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Nose = ?',
-        options: [
-          { id: 'a', text: 'Burun' },
-          { id: 'b', text: 'Quloq' },
-          { id: 'c', text: 'Ko‘z' },
-          { id: 'd', text: 'Og‘iz' },
-        ],
-        correctAnswer: 'Burun',
-        explanation: 'Nose = burun.',
-      },
-      12,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 My body',
-      instruction: 'Tana a’zolarini ayting.',
-      mode: 'read-aloud',
-      phrase: 'Head, eyes, ears, nose, mouth.',
-      emoji: '🧍',
-      repetitions: 2,
-      targetWords: ['head', 'eyes', 'ears', 'nose'],
-    },
-    12,
-  ),
-  test(12, [
-    mcq('f12-q1', 'Eye = ?', ['Ko‘z', 'Quloq', 'Burun', 'Og‘iz'], 'Ko‘z', 'Eye = ko‘z.'),
-    mcq('f12-q2', 'Ear = ?', ['Quloq', 'Ko‘z', 'Burun', 'Bosh'], 'Quloq', 'Ear = quloq.'),
-    mcq('f12-q3', 'Nose = ?', ['Burun', 'Og‘iz', 'Ko‘z', 'Quloq'], 'Burun', 'Nose = burun.'),
-    mcq('f12-q4', 'Mouth = ?', ['Og‘iz', 'Bosh', 'Quloq', 'Burun'], 'Og‘iz', 'Mouth = og‘iz.'),
-    trueFalse('f12-q5', 'Head “bosh” degani.', 'true', 'Head = bosh.'),
-  ]),
-)
-
-/* =========================================================
-   13 — FEELINGS
-========================================================= */
-
-const lesson13 = baseLesson(
-  13,
-  'Feelings',
-  'How do you feel? 😊',
-  '😊',
-  'His-tuyg‘ularni ingliz tilida ifodalashni o‘rganing.',
-  ['Happy', 'Sad', 'Angry', 'Tired', 'Fine'],
-  vocabulary(
-    [
-      { word: 'happy', translation: 'xursand', emoji: '😊', category: 'emotion', partOfSpeech: 'adjective' },
-      { word: 'sad', translation: 'xafa', emoji: '😢', category: 'emotion', partOfSpeech: 'adjective' },
-      { word: 'angry', translation: 'jahli chiqqan', emoji: '😠', category: 'emotion', partOfSpeech: 'adjective' },
-      { word: 'tired', translation: 'charchagan', emoji: '😴', category: 'emotion', partOfSpeech: 'adjective' },
-      { word: 'fine', translation: 'yaxshi', emoji: '🙂', category: 'emotion', partOfSpeech: 'adjective' },
-    ],
-    13,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '😊 How do you feel?',
-        content:
-          '“How are you?” savoliga his-tuyg‘uni bildiruvchi so‘zlar bilan javob beramiz.',
-        emoji: '💬',
-      },
-      13,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'I am happy.',
-        uzbek: 'Men xursandman.',
-        emoji: '😊',
-      },
-      13,
-      1,
-    ),
-    example(
-      {
-        english: 'I am tired.',
-        uzbek: 'Men charchaganman.',
-        emoji: '😴',
-      },
-      13,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'image-choice',
-        title: '😊 Match the feeling',
-        instruction: 'Rasmga mos so‘zni tanlang.',
-        points: 10,
-        difficulty: 'easy',
-        question: '😊',
-        options: [
-          { id: 'a', text: 'Happy', emoji: '😊' },
-          { id: 'b', text: 'Sad', emoji: '😢' },
-          { id: 'c', text: 'Angry', emoji: '😠' },
-          { id: 'd', text: 'Tired', emoji: '😴' },
-        ],
-        correctAnswer: 'Happy',
-        explanation: 'Happy = xursand.',
-      },
-      13,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '💬 Answer',
-        instruction: 'Savolga mos javobni toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'How are you?',
-        options: [
-          { id: 'a', text: 'I am fine.' },
-          { id: 'b', text: 'My name book.' },
-          { id: 'c', text: 'I house.' },
-          { id: 'd', text: 'Goodbye morning.' },
-        ],
-        correctAnswer: 'I am fine.',
-        explanation: 'How are you? — I am fine.',
-      },
-      13,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 How are you?',
-      instruction: 'Savol va javobni takrorlang.',
-      mode: 'conversation',
-      phrase: 'How are you? — I am fine, thank you!',
-      translation: 'Qalaysiz? — Yaxshiman, rahmat!',
-      emoji: '😊',
-      repetitions: 3,
-      targetWords: ['How', 'fine', 'thank'],
-    },
-    13,
-  ),
-  test(13, [
-    mcq('f13-q1', 'Happy = ?', ['Xursand', 'Xafa', 'Charchagan', 'Jahldor'], 'Xursand', 'Happy = xursand.'),
-    mcq('f13-q2', 'Sad = ?', ['Xafa', 'Xursand', 'Yaxshi', 'Charchagan'], 'Xafa', 'Sad = xafa.'),
-    mcq('f13-q3', 'Tired = ?', ['Charchagan', 'Xursand', 'Jahldor', 'Yaxshi'], 'Charchagan', 'Tired = charchagan.'),
-    mcq('f13-q4', 'How are you? ga mos javob?', ['I am fine.', 'My name is Ali.', 'Good morning.', 'This is a book.'], 'I am fine.', 'How are you? holatni so‘raydi.'),
-    trueFalse('f13-q5', 'Happy xursand degani.', 'true', 'Happy = xursand.'),
-  ]),
-)
-
-/* =========================================================
-   14 — WEATHER
-========================================================= */
-
-const lesson14 = baseLesson(
-  14,
-  'Weather',
-  'What’s the weather like? ☀️',
-  '☀️',
-  'Ob-havo haqida sodda gaplar tuzishni o‘rganing.',
-  ['Sunny', 'Rainy', 'Cold', 'Hot', 'Windy'],
-  vocabulary(
-    [
-      { word: 'sunny', translation: 'quyoshli', emoji: '☀️', category: 'weather', partOfSpeech: 'adjective' },
-      { word: 'rainy', translation: 'yomg‘irli', emoji: '🌧️', category: 'weather', partOfSpeech: 'adjective' },
-      { word: 'cold', translation: 'sovuq', emoji: '🥶', category: 'weather', partOfSpeech: 'adjective' },
-      { word: 'hot', translation: 'issiq', emoji: '🔥', category: 'weather', partOfSpeech: 'adjective' },
-      { word: 'windy', translation: 'shamolli', emoji: '💨', category: 'weather', partOfSpeech: 'adjective' },
-    ],
-    14,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '☀️ Talk about weather',
-        content:
-          'Ob-havo haqida gapirganda “It is...” strukturasidan foydalanishni boshlaymiz.',
-        emoji: '🌤️',
-      },
-      14,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'It is sunny today.',
-        uzbek: 'Bugun havo quyoshli.',
-        emoji: '☀️',
-      },
-      14,
-      1,
-    ),
-    example(
-      {
-        english: 'It is cold.',
-        uzbek: 'Havo sovuq.',
-        emoji: '🥶',
-      },
-      14,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'image-choice',
-        title: '☀️ Weather',
-        instruction: 'Rasmga mos ob-havoni toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: '☀️',
-        options: [
-          { id: 'a', text: 'Sunny', emoji: '☀️' },
-          { id: 'b', text: 'Rainy', emoji: '🌧️' },
-          { id: 'c', text: 'Cold', emoji: '🥶' },
-          { id: 'd', text: 'Windy', emoji: '💨' },
-        ],
-        correctAnswer: 'Sunny',
-        explanation: 'Sunny = quyoshli.',
-      },
-      14,
-      1,
-    ),
-    activity(
-      {
-        type: 'sentence-builder',
-        title: '🧩 Build',
-        instruction: 'Gapni tuzing.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Bugun havo quyoshli.',
-        words: ['It', 'is', 'sunny', 'today'],
-        correctAnswer: 'It is sunny today',
-        explanation: 'It is sunny today.',
-      },
-      14,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Weather report',
-      instruction: 'Bugungi ob-havoni ayting.',
-      mode: 'read-aloud',
-      phrase: 'It is sunny today.',
-      translation: 'Bugun havo quyoshli.',
-      emoji: '☀️',
-      repetitions: 3,
-      targetWords: ['sunny', 'today'],
-    },
-    14,
-  ),
-  test(14, [
-    mcq('f14-q1', 'Sunny = ?', ['Quyoshli', 'Yomg‘irli', 'Sovuq', 'Shamolli'], 'Quyoshli', 'Sunny = quyoshli.'),
-    mcq('f14-q2', 'Rainy = ?', ['Yomg‘irli', 'Quyoshli', 'Issiq', 'Qorli'], 'Yomg‘irli', 'Rainy = yomg‘irli.'),
-    mcq('f14-q3', 'Cold = ?', ['Sovuq', 'Issiq', 'Shamolli', 'Quyoshli'], 'Sovuq', 'Cold = sovuq.'),
-    mcq('f14-q4', '“It is sunny today” tarjimasi?', ['Bugun havo quyoshli', 'Bugun havo sovuq', 'Bugun yomg‘ir yog‘moqda', 'Bugun shamol bor'], 'Bugun havo quyoshli', 'Sunny = quyoshli.'),
-    trueFalse('f14-q5', 'Hot “issiq” degani.', 'true', 'Hot = issiq.'),
-  ]),
-)
-
-/* =========================================================
-   15 — DAYS & MONTHS
-========================================================= */
-
-const lesson15 = baseLesson(
-  15,
-  'Days & Months',
-  'Time on the calendar 📅',
-  '📅',
-  'Hafta kunlari va oylarning asosiy nomlarini o‘rganing.',
-  ['Monday', 'Tuesday', 'Friday', 'January', 'March'],
-  vocabulary(
-    [
-      { word: 'Monday', translation: 'dushanba', emoji: '📅', category: 'time', partOfSpeech: 'noun' },
-      { word: 'Tuesday', translation: 'seshanba', emoji: '📅', category: 'time', partOfSpeech: 'noun' },
-      { word: 'Friday', translation: 'juma', emoji: '📅', category: 'time', partOfSpeech: 'noun' },
-      { word: 'January', translation: 'yanvar', emoji: '❄️', category: 'time', partOfSpeech: 'noun' },
-      { word: 'March', translation: 'mart', emoji: '🌱', category: 'time', partOfSpeech: 'noun' },
-    ],
-    15,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '📅 Calendar English',
-        content:
-          'Hafta kunlari va oylar ingliz tilida bosh harf bilan yoziladi.',
-        emoji: '📅',
-      },
-      15,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'Today is Monday.',
-        uzbek: 'Bugun dushanba.',
-        emoji: '📅',
-      },
-      15,
-      1,
-    ),
-    example(
-      {
-        english: 'My birthday is in March.',
-        uzbek: 'Mening tug‘ilgan kunim mart oyida.',
-        emoji: '🎂',
-      },
-      15,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '📅 Day',
-        instruction: 'Hafta kunini toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: '“Monday” qaysi kun?',
-        options: [
-          { id: 'a', text: 'Dushanba' },
-          { id: 'b', text: 'Seshanba' },
-          { id: 'c', text: 'Juma' },
-          { id: 'd', text: 'Yakshanba' },
-        ],
-        correctAnswer: 'Dushanba',
-        explanation: 'Monday = dushanba.',
-      },
-      15,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🎂 Month',
-        instruction: 'Oyni toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'March = ?',
-        options: [
-          { id: 'a', text: 'Mart' },
-          { id: 'b', text: 'Yanvar' },
-          { id: 'c', text: 'May' },
-          { id: 'd', text: 'Iyul' },
-        ],
-        correctAnswer: 'Mart',
-        explanation: 'March = mart.',
-      },
-      15,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Calendar',
-      instruction: 'Bugungi kunni ingliz tilida ayting.',
-      mode: 'read-aloud',
-      phrase: 'Today is Monday.',
-      translation: 'Bugun dushanba.',
-      emoji: '📅',
-      repetitions: 3,
-      targetWords: ['today', 'Monday'],
-    },
-    15,
-  ),
-  test(15, [
-    mcq('f15-q1', 'Monday = ?', ['Dushanba', 'Seshanba', 'Juma', 'Yakshanba'], 'Dushanba', 'Monday = dushanba.'),
-    mcq('f15-q2', 'Tuesday = ?', ['Seshanba', 'Dushanba', 'Juma', 'Chorshanba'], 'Seshanba', 'Tuesday = seshanba.'),
-    mcq('f15-q3', 'Friday = ?', ['Juma', 'Dushanba', 'Shanba', 'Yakshanba'], 'Juma', 'Friday = juma.'),
-    mcq('f15-q4', 'March = ?', ['Mart', 'Yanvar', 'Aprel', 'May'], 'Mart', 'March = mart.'),
-    trueFalse('f15-q5', 'January yanvar oyini bildiradi.', 'true', 'January = yanvar.'),
-  ]),
-)
-
-/* =========================================================
-   16 — TIME
-========================================================= */
-
-const lesson16 = baseLesson(
-  16,
-  'What Time?',
-  'Let’s tell the time ⏰',
-  '⏰',
-  'Vaqt haqida oddiy savol-javoblarni o‘rganing.',
-  ['Time', 'O’clock', 'Morning', 'Afternoon'],
-  vocabulary(
-    [
-      { word: 'time', translation: 'vaqt', emoji: '⏰', category: 'time', partOfSpeech: 'noun' },
-      { word: 'clock', translation: 'soat', emoji: '🕐', category: 'time', partOfSpeech: 'noun' },
-      { word: 'morning', translation: 'ertalab', emoji: '🌅', category: 'time', partOfSpeech: 'noun' },
-      { word: 'afternoon', translation: 'tushdan keyin', emoji: '☀️', category: 'time', partOfSpeech: 'noun' },
-      { word: 'today', translation: 'bugun', emoji: '📅', category: 'time', partOfSpeech: 'adverb' },
-    ],
-    16,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '⏰ What time is it?',
-        content:
-          'Vaqtni so‘rash uchun “What time is it?” savolidan foydalanamiz.',
-        emoji: '⏰',
-      },
-      16,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'What time is it?',
-        uzbek: 'Soat necha?',
-        emoji: '⏰',
-      },
-      16,
-      1,
-    ),
-    example(
-      {
-        english: 'It is three o’clock.',
-        uzbek: 'Soat uch.',
-        emoji: '🕒',
-      },
-      16,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '⏰ Ask the time',
-        instruction: 'To‘g‘ri savolni tanlang.',
-        points: 10,
-        difficulty: 'easy',
-        question: '“Soat necha?”',
-        options: [
-          { id: 'a', text: 'What time is it?' },
-          { id: 'b', text: 'What name is it?' },
-          { id: 'c', text: 'Where time?' },
-          { id: 'd', text: 'How name?' },
-        ],
-        correctAnswer: 'What time is it?',
-        explanation: 'Vaqtni so‘rashning asosiy shakli shu.',
-      },
-      16,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🕒 Answer',
-        instruction: 'Mos javobni toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'What time is it? 🕒',
-        options: [
-          { id: 'a', text: 'It is three o’clock.' },
-          { id: 'b', text: 'My name is Ali.' },
-          { id: 'c', text: 'I am fine.' },
-          { id: 'd', text: 'It is blue.' },
-        ],
-        correctAnswer: 'It is three o’clock.',
-        explanation: 'Soatga javob berishda It is ... o’clock ishlatiladi.',
-      },
-      16,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Tell the time',
-      instruction: 'Vaqtni ingliz tilida ayting.',
-      mode: 'read-aloud',
-      phrase: 'It is three o’clock.',
-      translation: 'Soat uch.',
-      emoji: '⏰',
-      repetitions: 3,
-      targetWords: ['three', 'o’clock'],
-    },
-    16,
-  ),
-  test(16, [
-    mcq('f16-q1', '“Soat necha?” qanday?', ['What time is it?', 'What is your name?', 'Where are you?', 'How are you?'], 'What time is it?', 'Bu vaqtni so‘rash savoli.'),
-    mcq('f16-q2', '“It is three o’clock” = ?', ['Soat uch', 'Soat besh', 'Bugun uch', 'Uchta soat'], 'Soat uch', 'Three o’clock = soat uch.'),
-    mcq('f16-q3', 'Morning = ?', ['Ertalab', 'Kechqurun', 'Tushdan keyin', 'Tun'], 'Ertalab', 'Morning = ertalab.'),
-    mcq('f16-q4', 'Clock = ?', ['Soat', 'Vaqt', 'Kun', 'Oy'], 'Soat', 'Clock = soat.'),
-    trueFalse('f16-q5', '“What time is it?” vaqtni so‘raydi.', 'true', 'Bu savol soatni so‘rash uchun ishlatiladi.'),
-  ]),
-)
-
-/* =========================================================
-   17 — PLACES
-========================================================= */
-
-const lesson17 = baseLesson(
-  17,
-  'Places',
-  'Where are we? 📍',
-  '📍',
-  'Kundalik joylarning inglizcha nomlarini o‘rganing.',
-  ['School', 'Park', 'Shop', 'Hospital', 'Home'],
-  vocabulary(
-    [
-      { word: 'school', translation: 'maktab', emoji: '🏫', category: 'place', partOfSpeech: 'noun' },
-      { word: 'park', translation: 'bog‘', emoji: '🌳', category: 'place', partOfSpeech: 'noun' },
-      { word: 'shop', translation: 'do‘kon', emoji: '🛒', category: 'place', partOfSpeech: 'noun' },
-      { word: 'hospital', translation: 'kasalxona', emoji: '🏥', category: 'place', partOfSpeech: 'noun' },
-      { word: 'home', translation: 'uy', emoji: '🏠', category: 'place', partOfSpeech: 'noun' },
-    ],
-    17,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '📍 Places around us',
-        content:
-          'Joy nomlarini bilish qayerda ekanligimizni aytishga yordam beradi.',
-        emoji: '🗺️',
-      },
-      17,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'I am at school.',
-        uzbek: 'Men maktabdaman.',
-        emoji: '🏫',
-      },
-      17,
-      1,
-    ),
-    example(
-      {
-        english: 'I am at home.',
-        uzbek: 'Men uydaman.',
-        emoji: '🏠',
-      },
-      17,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'image-choice',
-        title: '🏫 Find the place',
-        instruction: 'Maktabni toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Where do students study?',
-        options: [
-          { id: 'a', text: 'School', emoji: '🏫' },
-          { id: 'b', text: 'Park', emoji: '🌳' },
-          { id: 'c', text: 'Shop', emoji: '🛒' },
-          { id: 'd', text: 'Hospital', emoji: '🏥' },
-        ],
-        correctAnswer: 'School',
-        explanation: 'School = maktab.',
-      },
-      17,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '📍 Where?',
-        instruction: 'Tarjimani toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'Hospital = ?',
-        options: [
-          { id: 'a', text: 'Kasalxona' },
-          { id: 'b', text: 'Maktab' },
-          { id: 'c', text: 'Do‘kon' },
-          { id: 'd', text: 'Bog‘' },
-        ],
-        correctAnswer: 'Kasalxona',
-        explanation: 'Hospital = kasalxona.',
-      },
-      17,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Where are you?',
-      instruction: 'Qayerda ekaningizni ayting.',
-      mode: 'conversation',
-      phrase: 'I am at school.',
-      translation: 'Men maktabdaman.',
-      emoji: '🏫',
-      repetitions: 3,
-      targetWords: ['school', 'home'],
-    },
-    17,
-  ),
-  test(17, [
-    mcq('f17-q1', 'School = ?', ['Maktab', 'Bog‘', 'Do‘kon', 'Uy'], 'Maktab', 'School = maktab.'),
-    mcq('f17-q2', 'Park = ?', ['Bog‘', 'Kasalxona', 'Maktab', 'Uy'], 'Bog‘', 'Park = bog‘.'),
-    mcq('f17-q3', 'Shop = ?', ['Do‘kon', 'Maktab', 'Bog‘', 'Uy'], 'Do‘kon', 'Shop = do‘kon.'),
-    mcq('f17-q4', '“I am at home” = ?', ['Men uydaman', 'Men maktabdaman', 'Men bog‘daman', 'Men do‘kondaman'], 'Men uydaman', 'Home = uy.'),
-    trueFalse('f17-q5', 'Hospital kasalxonani bildiradi.', 'true', 'Hospital = kasalxona.'),
-  ]),
-)
-
-/* =========================================================
-   18 — PREPOSITIONS
-========================================================= */
-
-const lesson18 = baseLesson(
-  18,
-  'Where Is It?',
-  'In, on, under 📍',
-  '📍',
-  'Narsalarning joylashuvini ifodalashni o‘rganing.',
-  ['in', 'on', 'under', 'near'],
-  vocabulary(
-    [
-      { word: 'in', translation: 'ichida', emoji: '📦', category: 'place', partOfSpeech: 'preposition' },
-      { word: 'on', translation: 'ustida', emoji: '⬆️', category: 'place', partOfSpeech: 'preposition' },
-      { word: 'under', translation: 'ostida', emoji: '⬇️', category: 'place', partOfSpeech: 'preposition' },
-      { word: 'near', translation: 'yonida / yaqinida', emoji: '📍', category: 'place', partOfSpeech: 'preposition' },
-      { word: 'table', translation: 'stol', emoji: '🪑', category: 'home', partOfSpeech: 'noun' },
-    ],
-    18,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '📍 Where is it?',
-        content:
-          'Prepositions narsaning boshqa narsaga nisbatan qayerda ekanini ko‘rsatadi.',
-        emoji: '🧭',
-      },
-      18,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'The book is on the table.',
-        uzbek: 'Kitob stol ustida.',
-        emoji: '📚',
-      },
-      18,
-      1,
-    ),
-    example(
-      {
-        english: 'The cat is under the table.',
-        uzbek: 'Mushuk stol ostida.',
-        emoji: '🐱',
-      },
-      18,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '📍 Choose',
-        instruction: 'To‘g‘ri predlogni toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: 'The book is ___ the table.',
-        options: [
-          { id: 'a', text: 'on' },
-          { id: 'b', text: 'under' },
-          { id: 'c', text: 'in' },
-          { id: 'd', text: 'near' },
-        ],
-        correctAnswer: 'on',
-        explanation: 'Stol ustida = on the table.',
-      },
-      18,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🐱 Where?',
-        instruction: 'Rasmga qarab gapni toping.',
-        points: 10,
-        difficulty: 'easy',
-        question: '🐱⬇️🪑',
-        options: [
-          { id: 'a', text: 'The cat is under the table.' },
-          { id: 'b', text: 'The cat is on the table.' },
-          { id: 'c', text: 'The cat is in the table.' },
-          { id: 'd', text: 'The cat is near the table.' },
-        ],
-        correctAnswer: 'The cat is under the table.',
-        explanation: 'Under = ostida.',
-      },
-      18,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Where is the book?',
-      instruction: 'Joylashuvni ayting.',
-      mode: 'read-aloud',
-      phrase: 'The book is on the table.',
-      translation: 'Kitob stol ustida.',
-      emoji: '📚',
-      repetitions: 3,
-      targetWords: ['book', 'on', 'table'],
-    },
-    18,
-  ),
-  test(18, [
-    mcq('f18-q1', 'In = ?', ['Ichida', 'Ustida', 'Ostida', 'Yaqinida'], 'Ichida', 'In = ichida.'),
-    mcq('f18-q2', 'On = ?', ['Ustida', 'Ichida', 'Ostida', 'Yonida'], 'Ustida', 'On = ustida.'),
-    mcq('f18-q3', 'Under = ?', ['Ostida', 'Ustida', 'Ichida', 'Yaqinida'], 'Ostida', 'Under = ostida.'),
-    mcq('f18-q4', '“The book is on the table” = ?', ['Kitob stol ustida', 'Kitob stol ostida', 'Kitob uyda', 'Kitob sumkada'], 'Kitob stol ustida', 'On = ustida.'),
-    trueFalse('f18-q5', 'Under “ostida” degani.', 'true', 'Under = ostida.'),
-  ]),
-)
-
-/* =========================================================
-   19 — THIS / THAT
-========================================================= */
-
-const lesson19 = baseLesson(
-  19,
-  'This / That',
-  'Point and say 👉',
-  '👉',
-  'Yaqin va uzoq narsalarni ko‘rsatish uchun this va thatdan foydalaning.',
-  ['this', 'that', 'these', 'those'],
-  vocabulary(
-    [
-      { word: 'this', translation: 'bu', emoji: '👉', category: 'general', partOfSpeech: 'pronoun' },
-      { word: 'that', translation: 'u / ana u', emoji: '👆', category: 'general', partOfSpeech: 'pronoun' },
-      { word: 'these', translation: 'bular', emoji: '👈', category: 'general', partOfSpeech: 'pronoun' },
-      { word: 'those', translation: 'anavilar', emoji: '👉', category: 'general', partOfSpeech: 'pronoun' },
-      { word: 'object', translation: 'narsa', emoji: '📦', category: 'general', partOfSpeech: 'noun' },
-    ],
-    19,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '👉 Point and say',
-        content:
-          'This — yaqin birlik. That — uzoq birlik. These — yaqin ko‘plik. Those — uzoq ko‘plik.',
-        emoji: '🧠',
-      },
-      19,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'This is a book.',
-        uzbek: 'Bu kitob.',
-        emoji: '📚',
-      },
-      19,
-      1,
-    ),
-    example(
-      {
-        english: 'That is a house.',
-        uzbek: 'U uy.',
-        emoji: '🏠',
-      },
-      19,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '👉 Choose',
-        instruction: 'Yaqindagi bitta narsani ko‘rsating.',
-        points: 10,
-        difficulty: 'easy',
-        question: '___ is a book. 📚',
-        options: [
-          { id: 'a', text: 'This' },
-          { id: 'b', text: 'Those' },
-          { id: 'c', text: 'These' },
-          { id: 'd', text: 'They' },
-        ],
-        correctAnswer: 'This',
-        explanation: 'Yaqin birlik uchun this ishlatiladi.',
-      },
-      19,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '👆 Far away',
-        instruction: 'Uzoqdagi bitta narsani tanlang.',
-        points: 10,
-        difficulty: 'easy',
-        question: '___ is a house. 🏠',
-        options: [
-          { id: 'a', text: 'That' },
-          { id: 'b', text: 'This' },
-          { id: 'c', text: 'These' },
-          { id: 'd', text: 'Those' },
-        ],
-        correctAnswer: 'That',
-        explanation: 'Uzoqdagi birlik uchun that ishlatiladi.',
-      },
-      19,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 This is...',
-      instruction: 'Atrofingizdagi narsalarni ko‘rsatib ayting.',
-      mode: 'read-aloud',
-      phrase: 'This is a book. That is a house.',
-      translation: 'Bu kitob. U uy.',
-      emoji: '👉',
-      repetitions: 3,
-      targetWords: ['this', 'that'],
-    },
-    19,
-  ),
-  test(19, [
-    mcq('f19-q1', 'This qachon ishlatiladi?', ['Yaqin birlikda', 'Uzoq birlikda', 'Yaqin ko‘plikda', 'Uzoq ko‘plikda'], 'Yaqin birlikda', 'This — yaqin bitta narsa.'),
-    mcq('f19-q2', 'That qachon ishlatiladi?', ['Uzoq birlikda', 'Yaqin birlikda', 'Yaqin ko‘plikda', 'Uzoq ko‘plikda'], 'Uzoq birlikda', 'That — uzoq bitta narsa.'),
-    mcq('f19-q3', 'These = ?', ['Bular', 'Bu', 'U', 'Anavilar'], 'Bular', 'These — yaqin ko‘plik.'),
-    mcq('f19-q4', '“This is a book” = ?', ['Bu kitob', 'U kitob', 'Bular kitoblar', 'Anavilar kitoblar'], 'Bu kitob', 'This = bu.'),
-    trueFalse('f19-q5', 'Those uzoqdagi ko‘plik uchun ishlatiladi.', 'true', 'Those — uzoqdagi ko‘plik.'),
-  ]),
-)
-
-/* =========================================================
-   20 — THERE IS / THERE ARE
-========================================================= */
-
-const lesson20 = baseLesson(
-  20,
-  'There Is / There Are',
-  'What is in the room? 🏠',
-  '🏠',
-  'Xonada yoki joyda nimalar borligini aytishni o‘rganing.',
-  ['There is', 'There are', 'Singular', 'Plural'],
-  vocabulary(
-    [
-      { word: 'there', translation: 'u yerda', emoji: '📍', category: 'place', partOfSpeech: 'adverb' },
-      { word: 'chair', translation: 'stul', emoji: '🪑', category: 'home', partOfSpeech: 'noun' },
-      { word: 'table', translation: 'stol', emoji: '🪑', category: 'home', partOfSpeech: 'noun' },
-      { word: 'window', translation: 'deraza', emoji: '🪟', category: 'home', partOfSpeech: 'noun' },
-      { word: 'door', translation: 'eshik', emoji: '🚪', category: 'home', partOfSpeech: 'noun' },
-    ],
-    20,
-  ),
-  [
-    explanation(
-      {
-        type: 'rule',
-        title: '🏠 One or many?',
-        content:
-          'There is — bitta narsa. There are — bir nechta narsa.',
-        emoji: '🧠',
-      },
-      20,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'There is a table.',
-        uzbek: 'Stol bor.',
-        emoji: '🪑',
-      },
-      20,
-      1,
-    ),
-    example(
-      {
-        english: 'There are two chairs.',
-        uzbek: 'Ikkita stul bor.',
-        emoji: '🪑',
-      },
-      20,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '1️⃣ One thing',
-        instruction: 'Bitta narsa uchun to‘g‘ri shaklni tanlang.',
-        points: 10,
-        difficulty: 'easy',
-        question: '___ a book on the table.',
-        options: [
-          { id: 'a', text: 'There is' },
-          { id: 'b', text: 'There are' },
-          { id: 'c', text: 'They is' },
-          { id: 'd', text: 'There am' },
-        ],
-        correctAnswer: 'There is',
-        explanation: 'Bitta narsa: There is.',
-      },
-      20,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '2️⃣ Many things',
-        instruction: 'Ko‘plik uchun to‘g‘ri shaklni tanlang.',
-        points: 10,
-        difficulty: 'easy',
-        question: '___ two chairs.',
-        options: [
-          { id: 'a', text: 'There are' },
-          { id: 'b', text: 'There is' },
-          { id: 'c', text: 'There am' },
-          { id: 'd', text: 'There be' },
-        ],
-        correctAnswer: 'There are',
-        explanation: 'Ko‘plik: There are.',
-      },
-      20,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Describe the room',
-      instruction: 'Xonadagi narsalarni ayting.',
-      mode: 'read-aloud',
-      phrase: 'There is a table. There are two chairs.',
-      translation: 'Stol bor. Ikkita stul bor.',
-      emoji: '🏠',
-      repetitions: 2,
-      targetWords: ['there', 'table', 'chairs'],
-    },
-    20,
-  ),
-  test(20, [
-    mcq('f20-q1', 'Bitta narsa uchun nima ishlatiladi?', ['There is', 'There are', 'They are', 'There am'], 'There is', 'There is birlik uchun.'),
-    mcq('f20-q2', 'Ko‘plik uchun nima ishlatiladi?', ['There are', 'There is', 'There am', 'There be'], 'There are', 'There are ko‘plik uchun.'),
-    mcq('f20-q3', '“There is a table” = ?', ['Stol bor', 'Stullar bor', 'Stol yo‘q', 'Stol katta'], 'Stol bor', 'There is + birlik.'),
-    mcq('f20-q4', '“There are two chairs” = ?', ['Ikkita stul bor', 'Bitta stul bor', 'Ikki stol bor', 'Stul yo‘q'], 'Ikkita stul bor', 'There are + two chairs.'),
-    trueFalse('f20-q5', 'There are ko‘plik bilan ishlatiladi.', 'true', 'There are ko‘plik uchun ishlatiladi.'),
-  ]),
-)
-
-/* =========================================================
-   21 — AM / IS / ARE
-========================================================= */
-
-const lesson21 = baseLesson(
-  21,
-  'I Am / You Are',
-  'Meet the verb BE 🧠',
-  '🧠',
-  'Am, is, are bilan sodda gaplar tuzishni o‘rganing.',
-  ['I am', 'You are', 'He is', 'She is'],
-  vocabulary(
-    [
-      { word: 'am', translation: 'man', emoji: '🙋', category: 'general', partOfSpeech: 'verb' },
-      { word: 'is', translation: 'dir / bo‘ladi', emoji: '🔗', category: 'general', partOfSpeech: 'verb' },
-      { word: 'are', translation: 'siz/biz/ular ...miz', emoji: '👥', category: 'general', partOfSpeech: 'verb' },
-      { word: 'student', translation: 'o‘quvchi', emoji: '🎓', category: 'school', partOfSpeech: 'noun' },
-      { word: 'teacher', translation: 'o‘qituvchi', emoji: '👩‍🏫', category: 'school', partOfSpeech: 'noun' },
-    ],
-    21,
-  ),
-  [
-    explanation(
-      {
-        type: 'rule',
-        title: '🧠 Be verb',
-        content:
-          'I bilan am, he/she/it bilan is, you/we/they bilan are ishlatiladi.',
-        emoji: '🔑',
-      },
-      21,
-      1,
-    ),
-    explanation(
-      {
-        type: 'memory',
-        title: '⚡ Easy memory',
-        content:
-          'I am. You are. He is. She is. We are. They are.',
-        emoji: '💡',
-      },
-      21,
-      2,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'I am a student.',
-        uzbek: 'Men o‘quvchiman.',
-        emoji: '🎓',
-      },
-      21,
-      1,
-    ),
-    example(
-      {
-        english: 'She is a teacher.',
-        uzbek: 'U o‘qituvchi.',
-        emoji: '👩‍🏫',
-      },
-      21,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🧠 Choose the verb',
-        instruction: 'To‘g‘ri shaklni tanlang.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'I ___ a student.',
-        options: [
-          { id: 'a', text: 'am' },
-          { id: 'b', text: 'is' },
-          { id: 'c', text: 'are' },
-          { id: 'd', text: 'be' },
-        ],
-        correctAnswer: 'am',
-        explanation: 'I bilan am ishlatiladi.',
-      },
-      21,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '👩‍🏫 Complete',
-        instruction: 'Gapni to‘ldiring.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'She ___ a teacher.',
-        options: [
-          { id: 'a', text: 'is' },
-          { id: 'b', text: 'am' },
-          { id: 'c', text: 'are' },
-          { id: 'd', text: 'be' },
-        ],
-        correctAnswer: 'is',
-        explanation: 'He/She/It bilan is ishlatiladi.',
-      },
-      21,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Introduce yourself',
-      instruction: 'O‘zingiz haqingizda ikki gap ayting.',
-      mode: 'read-aloud',
-      phrase: 'I am a student. I am happy.',
-      translation: 'Men o‘quvchiman. Men xursandman.',
-      emoji: '🎓',
-      repetitions: 3,
-      targetWords: ['I', 'am', 'student', 'happy'],
-    },
-    21,
-  ),
-  test(21, [
-    mcq('f21-q1', 'I ___ a student.', ['am', 'is', 'are', 'be'], 'am', 'I bilan am ishlatiladi.'),
-    mcq('f21-q2', 'She ___ a teacher.', ['is', 'am', 'are', 'be'], 'is', 'She bilan is ishlatiladi.'),
-    mcq('f21-q3', 'You ___ happy.', ['are', 'is', 'am', 'be'], 'are', 'You bilan are ishlatiladi.'),
-    mcq('f21-q4', 'He ___ my brother.', ['is', 'are', 'am', 'be'], 'is', 'He bilan is ishlatiladi.'),
-    trueFalse('f21-q5', 'I bilan am ishlatiladi.', 'true', 'I am — to‘g‘ri birikma.'),
-  ]),
-)
-
-/* =========================================================
-   22 — HAVE / HAS
-========================================================= */
-
-const lesson22 = baseLesson(
-  22,
-  'Have / Has',
-  'What do you have? 🎒',
-  '🎒',
-  'Egalikni ifodalashda have va hasdan foydalanishni o‘rganing.',
-  ['have', 'has', 'I have', 'She has'],
-  vocabulary(
-    [
-      { word: 'have', translation: 'ega bo‘lmoq / bor', emoji: '🎒', category: 'general', partOfSpeech: 'verb' },
-      { word: 'has', translation: 'ega / bor', emoji: '📦', category: 'general', partOfSpeech: 'verb' },
-      { word: 'book', translation: 'kitob', emoji: '📚', category: 'school', partOfSpeech: 'noun' },
-      { word: 'car', translation: 'mashina', emoji: '🚗', category: 'general', partOfSpeech: 'noun' },
-      { word: 'dog', translation: 'it', emoji: '🐶', category: 'animal', partOfSpeech: 'noun' },
-    ],
-    22,
-  ),
-  [
-    explanation(
-      {
-        type: 'rule',
-        title: '🎒 Have or has?',
-        content:
-          'I/you/we/they bilan have. He/she/it bilan has.',
-        emoji: '🧠',
-      },
-      22,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'I have a book.',
-        uzbek: 'Menda kitob bor.',
-        emoji: '📚',
-      },
-      22,
-      1,
-    ),
-    example(
-      {
-        english: 'She has a dog.',
-        uzbek: 'Uning iti bor.',
-        emoji: '🐶',
-      },
-      22,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🎒 Choose',
-        instruction: 'To‘g‘ri shaklni tanlang.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'I ___ a book.',
-        options: [
-          { id: 'a', text: 'have' },
-          { id: 'b', text: 'has' },
-          { id: 'c', text: 'is' },
-          { id: 'd', text: 'are' },
-        ],
-        correctAnswer: 'have',
-        explanation: 'I bilan have ishlatiladi.',
-      },
-      22,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🐶 Complete',
-        instruction: 'Gapni to‘ldiring.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'She ___ a dog.',
-        options: [
-          { id: 'a', text: 'has' },
-          { id: 'b', text: 'have' },
-          { id: 'c', text: 'are' },
-          { id: 'd', text: 'am' },
-        ],
-        correctAnswer: 'has',
-        explanation: 'She bilan has ishlatiladi.',
-      },
-      22,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 What do you have?',
-      instruction: 'O‘zingizdagi narsalar haqida gapiring.',
-      mode: 'read-aloud',
-      phrase: 'I have a book. I have a pen.',
-      translation: 'Menda kitob bor. Menda ruchka bor.',
-      emoji: '🎒',
-      repetitions: 3,
-      targetWords: ['have', 'book', 'pen'],
-    },
-    22,
-  ),
-  test(22, [
-    mcq('f22-q1', 'I ___ a book.', ['have', 'has', 'is', 'are'], 'have', 'I bilan have ishlatiladi.'),
-    mcq('f22-q2', 'She ___ a dog.', ['has', 'have', 'is', 'are'], 'has', 'She bilan has ishlatiladi.'),
-    mcq('f22-q3', 'They ___ two books.', ['have', 'has', 'is', 'am'], 'have', 'They bilan have ishlatiladi.'),
-    mcq('f22-q4', '“She has a car” = ?', ['Uning mashinasi bor', 'U mashina', 'U mashina haydamaydi', 'Mening mashinam bor'], 'Uning mashinasi bor', 'Has egalikni bildiradi.'),
-    trueFalse('f22-q5', 'He bilan has ishlatiladi.', 'true', 'He has — to‘g‘ri shakl.'),
-  ]),
-)
-
-/* =========================================================
-   23 — LIKES
-========================================================= */
-
-const lesson23 = baseLesson(
-  23,
-  'I Like / I Don’t Like',
-  'Tell what you love ❤️',
-  '❤️',
-  'Yoqtirish va yoqtirmaslikni sodda gaplarda ifodalang.',
-  ['like', 'don’t like', 'food', 'hobbies'],
-  vocabulary(
-    [
-      { word: 'like', translation: 'yoqtirmoq', emoji: '❤️', category: 'general', partOfSpeech: 'verb' },
-      { word: 'love', translation: 'juda yaxshi ko‘rmoq', emoji: '💖', category: 'general', partOfSpeech: 'verb' },
-      { word: 'play', translation: 'o‘ynamoq', emoji: '🎮', category: 'action', partOfSpeech: 'verb' },
-      { word: 'read', translation: 'o‘qimoq', emoji: '📖', category: 'action', partOfSpeech: 'verb' },
-      { word: 'music', translation: 'musiqa', emoji: '🎵', category: 'general', partOfSpeech: 'noun' },
-    ],
-    23,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '❤️ Say what you like',
-        content:
-          'I like — men yoqtiraman. I don’t like — men yoqtirmayman.',
-        emoji: '❤️',
-      },
-      23,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'I like English.',
-        uzbek: 'Men ingliz tilini yoqtiraman.',
-        emoji: '🇬🇧',
-      },
-      23,
-      1,
-    ),
-    example(
-      {
-        english: 'I don’t like cold weather.',
-        uzbek: 'Men sovuq ob-havoni yoqtirmayman.',
-        emoji: '🥶',
-      },
-      23,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '❤️ Choose',
-        instruction: 'Yoqtirishni ifodalovchi gapni toping.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'Men ingliz tilini yoqtiraman.',
-        options: [
-          { id: 'a', text: 'I like English.' },
-          { id: 'b', text: 'I am English.' },
-          { id: 'c', text: 'I English like.' },
-          { id: 'd', text: 'English I am.' },
-        ],
-        correctAnswer: 'I like English.',
-        explanation: 'I like + noun.',
-      },
-      23,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🚫 Don’t like',
-        instruction: 'Yoqtirmaslikni toping.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'Men sovuqni yoqtirmayman.',
-        options: [
-          { id: 'a', text: 'I don’t like cold.' },
-          { id: 'b', text: 'I like cold.' },
-          { id: 'c', text: 'I am cold like.' },
-          { id: 'd', text: 'I don’t cold.' },
-        ],
-        correctAnswer: 'I don’t like cold.',
-        explanation: 'I don’t like ... — yoqtirmayman.',
-      },
-      23,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 My likes',
-      instruction: 'Nimani yoqtirishingizni ayting.',
-      mode: 'conversation',
-      phrase: 'I like English. I like music.',
-      translation: 'Men ingliz tilini yoqtiraman. Men musiqani yoqtiraman.',
-      emoji: '❤️',
-      repetitions: 3,
-      targetWords: ['like', 'English', 'music'],
-    },
-    23,
-  ),
-  test(23, [
-    mcq('f23-q1', 'Like = ?', ['Yoqtirmoq', 'Yozmoq', 'O‘qimoq', 'Yemoq'], 'Yoqtirmoq', 'Like = yoqtirmoq.'),
-    mcq('f23-q2', '“I like English” = ?', ['Men ingliz tilini yoqtiraman', 'Men ingliz tiliman', 'Men ingliz tilida gapirmayman', 'Men ingliz tilini bilmayman'], 'Men ingliz tilini yoqtiraman', 'I like = men yoqtiraman.'),
-    mcq('f23-q3', 'Yoqtirmaslik qanday?', ['I don’t like', 'I not like', 'I no like', 'I am not like'], 'I don’t like', 'Standart boshlang‘ich shakl: I don’t like.'),
-    mcq('f23-q4', 'Read = ?', ['O‘qimoq', 'O‘ynamoq', 'Yemoq', 'Ichmoq'], 'O‘qimoq', 'Read = o‘qimoq.'),
-    trueFalse('f23-q5', '“I don’t like” yoqtirmaslikni bildiradi.', 'true', 'I don’t like = men yoqtirmayman.'),
-  ]),
-)
-
-/* =========================================================
-   24 — DAILY ROUTINE
-========================================================= */
-
-const lesson24 = baseLesson(
-  24,
-  'Daily Life',
-  'My everyday routine 🌅',
-  '🌅',
-  'Kundalik ishlar haqida sodda gaplar tuzing.',
-  ['Wake up', 'Go to school', 'Study', 'Eat', 'Sleep'],
-  vocabulary(
-    [
-      { word: 'wake up', translation: 'uyg‘onmoq', emoji: '⏰', category: 'daily-life', partOfSpeech: 'phrase' },
-      { word: 'go', translation: 'bormoq', emoji: '🚶', category: 'action', partOfSpeech: 'verb' },
-      { word: 'study', translation: 'o‘qimoq / o‘rganmoq', emoji: '📚', category: 'action', partOfSpeech: 'verb' },
-      { word: 'eat', translation: 'yemoq', emoji: '🍽️', category: 'action', partOfSpeech: 'verb' },
-      { word: 'sleep', translation: 'uxlamoq', emoji: '😴', category: 'action', partOfSpeech: 'verb' },
-    ],
-    24,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '🌅 My daily routine',
-        content:
-          'Har kuni takrorlanadigan ishlarni ingliz tilida sodda fe’llar bilan tasvirlash mumkin.',
-        emoji: '🔄',
-      },
-      24,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'I wake up at seven.',
-        uzbek: 'Men soat yettida uyg‘onaman.',
-        emoji: '⏰',
-      },
-      24,
-      1,
-    ),
-    example(
-      {
-        english: 'I go to school.',
-        uzbek: 'Men maktabga boraman.',
-        emoji: '🏫',
-      },
-      24,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'word-order',
-        title: '🔄 Build my day',
-        instruction: 'Gapni to‘g‘ri tuzing.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'Men maktabga boraman.',
-        words: ['I', 'go', 'to', 'school'],
-        correctAnswer: 'I go to school',
-        explanation: 'I go to school.',
-      },
-      24,
-      1,
-    ),
-    activity(
-      {
-        type: 'matching',
-        title: '🧩 Match actions',
-        instruction: 'Fe’llarni tarjimasi bilan moslang.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'Match.',
-        pairs: [
-          { left: 'wake up', right: 'uyg‘onmoq' },
-          { left: 'eat', right: 'yemoq' },
-          { left: 'sleep', right: 'uxlamoq' },
-        ],
-        correctAnswer: [
-          'wake up-uyg‘onmoq',
-          'eat-yemoq',
-          'sleep-uxlamoq',
-        ],
-        explanation: 'Kundalik harakatlarni moslang.',
-      },
-      24,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 My day',
-      instruction: 'Kun tartibingizni ayting.',
-      mode: 'read-aloud',
-      phrase: 'I wake up. I go to school. I study.',
-      translation: 'Men uyg‘onaman. Maktabga boraman. O‘qiyman.',
-      emoji: '🌅',
-      repetitions: 2,
-      targetWords: ['wake up', 'go', 'study'],
-    },
-    24,
-  ),
-  test(24, [
-    mcq('f24-q1', 'Wake up = ?', ['Uyg‘onmoq', 'Uxlamoq', 'Yemoq', 'Bormoq'], 'Uyg‘onmoq', 'Wake up = uyg‘onmoq.'),
-    mcq('f24-q2', 'Go = ?', ['Bormoq', 'Yemoq', 'Uxlamoq', 'O‘qimoq'], 'Bormoq', 'Go = bormoq.'),
-    mcq('f24-q3', 'Study = ?', ['O‘qimoq / o‘rganmoq', 'Yemoq', 'Uxlamoq', 'Uyg‘onmoq'], 'O‘qimoq / o‘rganmoq', 'Study = o‘qimoq/o‘rganmoq.'),
-    mcq('f24-q4', '“I go to school” = ?', ['Men maktabga boraman', 'Men maktabda uxlayman', 'Men maktabni yoqtirmayman', 'Men maktabdan keldim'], 'Men maktabga boraman', 'Go to school = maktabga bormoq.'),
-    trueFalse('f24-q5', 'Sleep “uxlamoq” degani.', 'true', 'Sleep = uxlamoq.'),
-  ]),
-)
-
-/* =========================================================
-   25 — QUESTION WORDS
-========================================================= */
-
-const lesson25 = baseLesson(
-  25,
-  'Question Words',
-  'Ask smart questions ❓',
-  '❓',
-  'What, where, who, when, why va how kabi savol so‘zlarini o‘rganing.',
-  ['What', 'Where', 'Who', 'When', 'How'],
-  vocabulary(
-    [
-      { word: 'what', translation: 'nima', emoji: '❓', category: 'general', partOfSpeech: 'pronoun' },
-      { word: 'where', translation: 'qayerda / qayerga', emoji: '📍', category: 'place', partOfSpeech: 'adverb' },
-      { word: 'who', translation: 'kim', emoji: '👤', category: 'person', partOfSpeech: 'pronoun' },
-      { word: 'when', translation: 'qachon', emoji: '⏰', category: 'time', partOfSpeech: 'adverb' },
-      { word: 'how', translation: 'qanday', emoji: '🧠', category: 'general', partOfSpeech: 'adverb' },
-    ],
-    25,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '❓ Ask questions',
-        content:
-          'Savol so‘zlari suhbatda kerakli ma’lumotni topishga yordam beradi.',
-        emoji: '🧠',
-      },
-      25,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'What is your name?',
-        uzbek: 'Ismingiz nima?',
-        emoji: '🏷️',
-      },
-      25,
-      1,
-    ),
-    example(
-      {
-        english: 'Where are you?',
-        uzbek: 'Siz qayerdasiz?',
-        emoji: '📍',
-      },
-      25,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '❓ Choose the question word',
-        instruction: '“Kim?” uchun to‘g‘ri so‘zni toping.',
-        points: 10,
-        difficulty: 'medium',
-        question: '___ is he?',
-        options: [
-          { id: 'a', text: 'Who' },
-          { id: 'b', text: 'Where' },
-          { id: 'c', text: 'What' },
-          { id: 'd', text: 'When' },
-        ],
-        correctAnswer: 'Who',
-        explanation: 'Who = kim.',
-      },
-      25,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '📍 Where?',
-        instruction: 'Joyni so‘rash uchun mos so‘zni toping.',
-        points: 10,
-        difficulty: 'medium',
-        question: '___ are you?',
-        options: [
-          { id: 'a', text: 'Where' },
-          { id: 'b', text: 'Who' },
-          { id: 'c', text: 'When' },
-          { id: 'd', text: 'What' },
-        ],
-        correctAnswer: 'Where',
-        explanation: 'Where = qayerda/qayerga.',
-      },
-      25,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Ask me!',
-      instruction: 'Savol so‘zlarini baland ovozda ayting.',
-      mode: 'read-aloud',
-      phrase: 'What? Where? Who? When? How?',
-      emoji: '❓',
-      repetitions: 3,
-      targetWords: ['what', 'where', 'who', 'when', 'how'],
-    },
-    25,
-  ),
-  test(25, [
-    mcq('f25-q1', 'What = ?', ['Nima', 'Kim', 'Qayerda', 'Qachon'], 'Nima', 'What = nima.'),
-    mcq('f25-q2', 'Where = ?', ['Qayerda/qayerga', 'Kim', 'Nima', 'Qachon'], 'Qayerda/qayerga', 'Where joyni bildiradi.'),
-    mcq('f25-q3', 'Who = ?', ['Kim', 'Nima', 'Qachon', 'Qanday'], 'Kim', 'Who = kim.'),
-    mcq('f25-q4', 'When = ?', ['Qachon', 'Qayerda', 'Kim', 'Nima'], 'Qachon', 'When = qachon.'),
-    trueFalse('f25-q5', 'How “qanday” ma’nosida ishlatilishi mumkin.', 'true', 'How ko‘pincha “qanday” ma’nosida ishlatiladi.'),
-  ]),
-)
-
-/* =========================================================
-   26 — CAN / CAN'T
-========================================================= */
-
-const lesson26 = baseLesson(
-  26,
-  'Can / Can’t',
-  'I can do it! 💪',
-  '💪',
-  'Qobiliyat va qila olmaslikni ifodalashni o‘rganing.',
-  ['can', 'cannot / can’t', 'abilities'],
-  vocabulary(
-    [
-      { word: 'can', translation: 'qila olmoq', emoji: '💪', category: 'action', partOfSpeech: 'verb' },
-      { word: 'cannot', translation: 'qila olmaslik', emoji: '🚫', category: 'action', partOfSpeech: 'verb' },
-      { word: 'run', translation: 'yugurmoq', emoji: '🏃', category: 'action', partOfSpeech: 'verb' },
-      { word: 'swim', translation: 'suzmoq', emoji: '🏊', category: 'action', partOfSpeech: 'verb' },
-      { word: 'read', translation: 'o‘qimoq', emoji: '📖', category: 'action', partOfSpeech: 'verb' },
-    ],
-    26,
-  ),
-  [
-    explanation(
-      {
-        type: 'rule',
-        title: '💪 I can!',
-        content:
-          'Can qobiliyatni bildiradi. Can’t esa qila olmaslikni bildiradi.',
-        emoji: '💪',
-      },
-      26,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'I can swim.',
-        uzbek: 'Men suza olaman.',
-        emoji: '🏊',
-      },
-      26,
-      1,
-    ),
-    example(
-      {
-        english: 'I can’t fly.',
-        uzbek: 'Men ucha olmayman.',
-        emoji: '🚫',
-      },
-      26,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '💪 Can',
-        instruction: 'Qobiliyatni ifodalovchi gapni tanlang.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'Men suza olaman.',
-        options: [
-          { id: 'a', text: 'I can swim.' },
-          { id: 'b', text: 'I swim can.' },
-          { id: 'c', text: 'I am swim.' },
-          { id: 'd', text: 'I can swimming.' },
-        ],
-        correctAnswer: 'I can swim.',
-        explanation: 'Can + fe’lning asosiy shakli.',
-      },
-      26,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🚫 Can’t',
-        instruction: 'Qila olmaslikni toping.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'Men ucha olmayman.',
-        options: [
-          { id: 'a', text: 'I can’t fly.' },
-          { id: 'b', text: 'I can fly.' },
-          { id: 'c', text: 'I am fly.' },
-          { id: 'd', text: 'I fly can’t.' },
-        ],
-        correctAnswer: 'I can’t fly.',
-        explanation: 'Can’t + fe’l qila olmaslikni bildiradi.',
-      },
-      26,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 I can!',
-      instruction: 'Qila oladigan ishingiz haqida ayting.',
-      mode: 'read-aloud',
-      phrase: 'I can read. I can run. I can learn English!',
-      translation: 'Men o‘qiy olaman. Yugura olaman. Ingliz tilini o‘rgana olaman!',
-      emoji: '💪',
-      repetitions: 2,
-      targetWords: ['can', 'read', 'run', 'learn'],
-    },
-    26,
-  ),
-  test(26, [
-    mcq('f26-q1', 'Can = ?', ['Qila olmoq', 'Qila olmaslik', 'Yemoq', 'Uxlamoq'], 'Qila olmoq', 'Can qobiliyatni bildiradi.'),
-    mcq('f26-q2', '“I can swim” = ?', ['Men suza olaman', 'Men suza olmayman', 'Men yuguraman', 'Men suzishni yoqtirmayman'], 'Men suza olaman', 'Can swim = suza olmoq.'),
-    mcq('f26-q3', 'Can’t nimani bildiradi?', ['Qila olmaslik', 'Qila olish', 'Yoqtirish', 'Bilish'], 'Qila olmaslik', 'Can’t = cannot.'),
-    mcq('f26-q4', 'Can dan keyin fe’l qanday keladi?', ['Asosiy shaklda', 'Doim -ing bilan', 'Doim -ed bilan', 'Faqat ot'], 'Asosiy shaklda', 'Can + base verb.'),
-    trueFalse('f26-q5', '“I can read” grammatik jihatdan boshlang‘ich darajada to‘g‘ri gap.', 'true', 'Can + read to‘g‘ri tuzilma.'),
-  ]),
-)
-
-/* =========================================================
-   27 — READING
-========================================================= */
-
-const lesson27 = baseLesson(
-  27,
-  'Simple Reading',
-  'Read a tiny story 📖',
-  '📖',
-  'Qisqa inglizcha matnni tushunish va asosiy ma’noni topishni mashq qiling.',
-  ['Reading', 'Simple sentences', 'Comprehension'],
-  vocabulary(
-    [
-      { word: 'live', translation: 'yashamoq', emoji: '🏠', category: 'general', partOfSpeech: 'verb' },
-      { word: 'small', translation: 'kichik', emoji: '🔹', category: 'general', partOfSpeech: 'adjective' },
-      { word: 'big', translation: 'katta', emoji: '🔸', category: 'general', partOfSpeech: 'adjective' },
-      { word: 'friend', translation: 'do‘st', emoji: '🤝', category: 'person', partOfSpeech: 'noun' },
-      { word: 'every', translation: 'har bir / har', emoji: '🔄', category: 'general', partOfSpeech: 'determiner' },
-    ],
-    27,
-  ),
-  [
-    explanation(
-      {
-        type: 'concept',
-        title: '📖 Read for meaning',
-        content:
-          'Har bir so‘zni tarjima qilish shart emas. Avval matnning umumiy ma’nosini tushunishga harakat qiling.',
-        emoji: '🧠',
-      },
-      27,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english:
-          'My name is Ali. I am a student. I live in a small house. I like English.',
-        uzbek:
-          'Mening ismim Ali. Men o‘quvchiman. Men kichik uyda yashayman. Men ingliz tilini yoqtiraman.',
-        emoji: '📖',
-      },
-      27,
-      1,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'reading',
-        title: '📖 Read & answer',
-        instruction: 'Matnni o‘qing va javobni toping.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'What is Ali?',
-        passage:
-          'My name is Ali. I am a student. I live in a small house. I like English.',
-        options: [
-          { id: 'a', text: 'A student' },
-          { id: 'b', text: 'A teacher' },
-          { id: 'c', text: 'A doctor' },
-          { id: 'd', text: 'A driver' },
-        ],
-        correctAnswer: 'A student',
-        explanation: 'Matnda “I am a student” deb yozilgan.',
-      },
-      27,
-      1,
-    ),
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🔎 Find the detail',
-        instruction: 'Matndan ma’lumot toping.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'What does Ali like?',
-        passage:
-          'My name is Ali. I am a student. I live in a small house. I like English.',
-        options: [
-          { id: 'a', text: 'English' },
-          { id: 'b', text: 'Football' },
-          { id: 'c', text: 'Math' },
-          { id: 'd', text: 'Music' },
-        ],
-        correctAnswer: 'English',
-        explanation: 'Matnda “I like English” deyiladi.',
-      },
-      27,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Read aloud',
-      instruction: 'Matnni sekin va aniq o‘qing.',
-      mode: 'read-aloud',
-      phrase: 'My name is Ali. I am a student. I like English.',
-      translation: 'Mening ismim Ali. Men o‘quvchiman. Men ingliz tilini yoqtiraman.',
-      emoji: '📖',
-      repetitions: 2,
-      targetWords: ['student', 'live', 'English'],
-    },
-    27,
-  ),
-  test(27, [
-    mcq('f27-q1', 'Ali kim?', ['A student', 'A teacher', 'A doctor', 'A driver'], 'A student', 'Matnda Ali student ekanligi aytilgan.'),
-    mcq('f27-q2', 'Ali nimani yoqtiradi?', ['English', 'Football', 'Music', 'Math'], 'English', 'Matnda I like English deyiladi.'),
-    mcq('f27-q3', 'Live = ?', ['Yashamoq', 'O‘qimoq', 'Yemoq', 'Uxlamoq'], 'Yashamoq', 'Live = yashamoq.'),
-    mcq('f27-q4', 'Small = ?', ['Kichik', 'Katta', 'Yangi', 'Eski'], 'Kichik', 'Small = kichik.'),
-    trueFalse('f27-q5', 'Ali o‘quvchi.', 'true', 'Matnda “I am a student” deyiladi.'),
-  ]),
-)
-
-/* =========================================================
-   28 — LISTENING
-========================================================= */
-
-const lesson28 = baseLesson(
-  28,
-  'Listening Time',
-  'Train your ears 🎧',
-  '🎧',
-  'Oddiy inglizcha gaplarni eshitib tushunishga tayyorlaning.',
-  ['Listen', 'Recognize', 'Understand'],
-  vocabulary(
-    [
-      { word: 'listen', translation: 'tinglamoq', emoji: '🎧', category: 'action', partOfSpeech: 'verb' },
-      { word: 'hear', translation: 'eshitmoq', emoji: '👂', category: 'action', partOfSpeech: 'verb' },
-      { word: 'say', translation: 'aytmoq', emoji: '🗣️', category: 'action', partOfSpeech: 'verb' },
-      { word: 'again', translation: 'yana', emoji: '🔄', category: 'general', partOfSpeech: 'adverb' },
-      { word: 'slowly', translation: 'sekin', emoji: '🐢', category: 'general', partOfSpeech: 'adverb' },
-    ],
-    28,
-  ),
-  [
-    explanation(
-      {
-        type: 'tip',
-        title: '🎧 Listening secret',
-        content:
-          'Birinchi tinglashda hamma so‘zni tushunmasangiz ham xavotir olmang. Asosiy ma’noni ushlashga harakat qiling.',
-        emoji: '🧠',
-      },
-      28,
-      1,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'Listen and repeat.',
-        uzbek: 'Tinglang va takrorlang.',
-        emoji: '🎧',
-      },
-      28,
-      1,
-    ),
-    example(
-      {
-        english: 'Please say it again.',
-        uzbek: 'Iltimos, yana ayting.',
-        emoji: '🔄',
-      },
-      28,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'listen-choice',
-        title: '🎧 Listen & choose',
-        instruction: 'Audio orqali eshitgan so‘zingizni tanlang.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'Which word do you hear?',
-        audioUrl: '/english/audio/foundation-28-hello.mp3',
-        options: [
-          { id: 'a', text: 'Hello' },
-          { id: 'b', text: 'Goodbye' },
-          { id: 'c', text: 'Morning' },
-          { id: 'd', text: 'House' },
-        ],
-        correctAnswer: 'Hello',
-        explanation: 'Eshitilgan so‘z Hello.',
-      },
-      28,
-      1,
-    ),
-    activity(
-      {
-        type: 'listen-choice',
-        title: '🎧 Listen again',
-        instruction: 'Audioni yana tinglang.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'Which sentence do you hear?',
-        audioUrl: '/english/audio/foundation-28-name.mp3',
-        options: [
-          { id: 'a', text: 'My name is Ali.' },
-          { id: 'b', text: 'I am at school.' },
-          { id: 'c', text: 'I like apples.' },
-          { id: 'd', text: 'It is sunny.' },
-        ],
-        correctAnswer: 'My name is Ali.',
-        explanation: 'Audio shu gapni aytadi.',
-      },
-      28,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Listen & repeat',
-      instruction: 'Audioni tinglang va takrorlang.',
-      mode: 'listen-repeat',
-      phrase: 'Listen and repeat.',
-      translation: 'Tinglang va takrorlang.',
-      audioUrl: '/english/audio/foundation-28-repeat.mp3',
-      emoji: '🎧',
-      repetitions: 3,
-      targetWords: ['listen', 'repeat'],
-    },
-    28,
-  ),
-  test(28, [
-    mcq('f28-q1', 'Listen = ?', ['Tinglamoq', 'Gapirmoq', 'O‘qimoq', 'Yemoq'], 'Tinglamoq', 'Listen = tinglamoq.'),
-    mcq('f28-q2', 'Hear = ?', ['Eshitmoq', 'Ko‘rmoq', 'Yozmoq', 'O‘qimoq'], 'Eshitmoq', 'Hear = eshitmoq.'),
-    mcq('f28-q3', 'Again = ?', ['Yana', 'Sekin', 'Tez', 'Bugun'], 'Yana', 'Again = yana.'),
-    mcq('f28-q4', '“Listen and repeat” = ?', ['Tinglang va takrorlang', 'O‘qing va yozing', 'Keling va o‘ynang', 'Turing va boring'], 'Tinglang va takrorlang', 'Listen = tinglamoq, repeat = takrorlamoq.'),
-    trueFalse('f28-q5', 'Listening mashqida barcha so‘zlarni birinchi marta tushunmaslik tabiiy.', 'true', 'Listening asta-sekin rivojlanadigan ko‘nikmadir.'),
-  ]),
-)
-
-/* =========================================================
-   29 — BIG REVIEW
-========================================================= */
-
-const lesson29 = baseLesson(
-  29,
-  'Big Review',
-  'Everything you learned 🧠',
-  '🧠',
-  'Foundation kursining asosiy bilimlarini bir joyda takrorlang.',
-  [
-    'Vocabulary',
-    'Greetings',
-    'Family',
-    'Colors',
-    'Grammar',
-    'Daily English',
-  ],
-  vocabulary(
-    [
-      { word: 'hello', translation: 'salom', emoji: '👋', category: 'greeting', partOfSpeech: 'interjection' },
-      { word: 'family', translation: 'oila', emoji: '👨‍👩‍👧‍👦', category: 'family', partOfSpeech: 'noun' },
-      { word: 'school', translation: 'maktab', emoji: '🏫', category: 'school', partOfSpeech: 'noun' },
-      { word: 'happy', translation: 'xursand', emoji: '😊', category: 'emotion', partOfSpeech: 'adjective' },
-      { word: 'learn', translation: 'o‘rganmoq', emoji: '🧠', category: 'action', partOfSpeech: 'verb' },
-    ],
-    29,
-  ),
-  [
-    explanation(
-      {
-        type: 'summary',
-        title: '🧠 You are ready!',
-        content:
-          'Siz Foundation kursining asosiy mavzularini o‘rgandingiz. Endi ularni aralashtirib ishlatamiz.',
-        emoji: '🚀',
-      },
-      29,
-      1,
-    ),
-    explanation(
-      {
-        type: 'tip',
-        title: '🎯 Think in English',
-        content:
-          'Har bir gapni tarjima qilishdan ko‘ra, inglizcha iborani vaziyat bilan bog‘lashga harakat qiling.',
-        emoji: '💡',
-      },
-      29,
-      2,
-    ),
-  ],
-  [
-    example(
-      {
-        english: 'Hello! My name is Ali. I am a student.',
-        uzbek: 'Salom! Mening ismim Ali. Men o‘quvchiman.',
-        emoji: '👋',
-      },
-      29,
-      1,
-    ),
-    example(
-      {
-        english: 'I like English and I can read.',
-        uzbek: 'Men ingliz tilini yoqtiraman va o‘qiy olaman.',
-        emoji: '🇬🇧',
-      },
-      29,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🧠 Mixed challenge',
-        instruction: 'Bilimlaringizni aralashtirib sinang.',
-        points: 10,
-        difficulty: 'medium',
-        question: '___ name is Ali.',
-        options: [
-          { id: 'a', text: 'My' },
-          { id: 'b', text: 'I' },
-          { id: 'c', text: 'Me' },
-          { id: 'd', text: 'Mine' },
-        ],
-        correctAnswer: 'My',
-        explanation: 'My name is Ali.',
-      },
-      29,
-      1,
-    ),
-    activity(
-      {
-        type: 'sentence-builder',
-        title: '🚀 Build a sentence',
-        instruction: 'So‘zlarni to‘g‘ri tartiblang.',
-        points: 10,
-        difficulty: 'medium',
-        question: 'Men ingliz tilini yoqtiraman.',
-        words: ['I', 'like', 'English'],
-        correctAnswer: 'I like English',
-        explanation: 'I like English.',
-      },
-      29,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Review speaking',
-      instruction: 'O‘zingizni ingliz tilida tanishtiring.',
-      mode: 'conversation',
-      phrase:
-        'Hello! My name is Ali. I am a student. I like English.',
-      translation:
-        'Salom! Mening ismim Ali. Men o‘quvchiman. Men ingliz tilini yoqtiraman.',
-      emoji: '🚀',
-      repetitions: 2,
-      targetWords: ['Hello', 'name', 'student', 'English'],
-    },
-    29,
-  ),
-  test(29, [
-    mcq('f29-q1', '“Mening ismim Ali” = ?', ['My name is Ali', 'I name Ali', 'Ali my name', 'Name Ali'], 'My name is Ali', 'My name is — tanishtirish strukturasi.'),
-    mcq('f29-q2', '“Men o‘quvchiman” = ?', ['I am a student', 'I have student', 'I student am', 'I is student'], 'I am a student', 'I bilan am ishlatiladi.'),
-    mcq('f29-q3', '“Men ingliz tilini yoqtiraman” = ?', ['I like English', 'I English like', 'I am English', 'I like Englishing'], 'I like English', 'I like + object.'),
-    mcq('f29-q4', '“Men suza olaman” = ?', ['I can swim', 'I swim can', 'I am swim', 'I can swimming'], 'I can swim', 'Can + fe’lning asosiy shakli.'),
-    trueFalse('f29-q5', 'Foundation kursida o‘rgangan so‘zlarni gaplarda ishlatish muhim.', 'true', 'So‘zlarni kontekstda ishlatish ularni faol bilimga aylantiradi.'),
-  ]),
-)
-
-/* =========================================================
-   30 — FOUNDATION FINAL
-========================================================= */
-
-const lesson30 = baseLesson(
-  30,
-  'Foundation Final',
-  'You made it! 🏆',
-  '🏆',
-  'Foundation kursining yakuniy darsi. Barcha asosiy bilimlarni sinovdan o‘tkazing.',
-  [
-    'Vocabulary',
-    'Basic grammar',
-    'Reading',
-    'Daily English',
-    'Communication',
-  ],
-  vocabulary(
-    [
-      { word: 'learn', translation: 'o‘rganmoq', emoji: '🧠', category: 'action', partOfSpeech: 'verb' },
-      { word: 'speak', translation: 'gapirmoq', emoji: '🗣️', category: 'action', partOfSpeech: 'verb' },
-      { word: 'read', translation: 'o‘qimoq', emoji: '📖', category: 'action', partOfSpeech: 'verb' },
-      { word: 'listen', translation: 'tinglamoq', emoji: '🎧', category: 'action', partOfSpeech: 'verb' },
-      { word: 'practice', translation: 'mashq qilmoq', emoji: '🏋️', category: 'action', partOfSpeech: 'verb' },
-    ],
-    30,
-  ),
-  [
-    explanation(
-      {
-        type: 'summary',
-        title: '🏆 You made it!',
-        content:
-          'Siz Foundation bosqichining barcha asosiy mavzularini tugatdingiz. Endi yakuniy sinov va keyingi bosqichga tayyorgarlik vaqti.',
-        emoji: '🏆',
-      },
-      30,
-      1,
-    ),
-    explanation(
-      {
-        type: 'tip',
-        title: '🚀 Keep learning',
-        content:
-          'Til o‘rganishda eng kuchli qurol — muntazamlik. Har kuni ozgina bo‘lsa ham ingliz tili bilan shug‘ullaning.',
-        emoji: '🔥',
-      },
-      30,
-      2,
-    ),
-  ],
-  [
-    example(
-      {
-        english:
-          'I learn English every day.',
-        uzbek:
-          'Men har kuni ingliz tilini o‘rganaman.',
-        emoji: '🇬🇧',
-      },
-      30,
-      1,
-    ),
-    example(
-      {
-        english:
-          'I can speak, read and listen in English.',
-        uzbek:
-          'Men ingliz tilida gapira, o‘qiy va tinglay olaman.',
-        emoji: '🎓',
-      },
-      30,
-      2,
-    ),
-  ],
-  [
-    activity(
-      {
-        type: 'multiple-choice',
-        title: '🏆 Final Challenge',
-        instruction: 'Eng yaxshi javobni tanlang.',
-        points: 10,
-        difficulty: 'hard',
-        question: 'Which sentence is correct?',
-        options: [
-          { id: 'a', text: 'I learn English every day.' },
-          { id: 'b', text: 'I English learn every day.' },
-          { id: 'c', text: 'I am learn English.' },
-          { id: 'd', text: 'I learns English every day.' },
-        ],
-        correctAnswer: 'I learn English every day.',
-        explanation:
-          'Boshlang‘ich darajada to‘g‘ri gap: I learn English every day.',
-      },
-      30,
-      1,
-    ),
-    activity(
-      {
-        type: 'sentence-builder',
-        title: '🚀 Final sentence',
-        instruction: 'O‘zingiz haqingizda gap tuzing.',
-        points: 10,
-        difficulty: 'hard',
-        question: 'Men ingliz tilini o‘rganyapman.',
-        words: ['I', 'learn', 'English'],
-        correctAnswer: 'I learn English',
-        explanation:
-          'Foundation darajasida bu asosiy va to‘g‘ri modeldir.',
-      },
-      30,
-      2,
-    ),
-  ],
-  speaking(
-    {
-      title: '🎤 Foundation Speech',
-      instruction:
-        'O‘zingizni 3–4 gap bilan ingliz tilida tanishtiring.',
-      mode: 'conversation',
-      phrase:
-        'Hello! My name is Ali. I am a student. I like English. I can learn English!',
-      translation:
-        'Salom! Mening ismim Ali. Men o‘quvchiman. Men ingliz tilini yoqtiraman. Men ingliz tilini o‘rgana olaman!',
-      emoji: '🏆',
-      repetitions: 2,
-      targetWords: [
-        'Hello',
-        'name',
-        'student',
-        'like',
-        'English',
-      ],
-    },
-    30,
-  ),
-  test(30, [
-    mcq(
-      'f30-q1',
-      '“I learn English every day” tarjimasi?',
+    grammar(
+      'f05-g02',
+      'These and Those',
+      'demonstratives',
+      'These — yaqin ko‘plik, those — uzoq ko‘plik.',
+      'Bir nechta predmetni ko‘rsatishda these va those ishlatiladi.',
+      'These are + plural / Those are + plural',
       [
-        'Men har kuni ingliz tilini o‘rganaman',
-        'Men ingliz tilini yoqtirmayman',
-        'Men kecha ingliz tilini o‘rgandim',
-        'Men ingliz tilida gapirmayman',
+        {
+          english: 'These are my books.',
+          uzbek: 'Bular mening kitoblarim.',
+        },
+        {
+          english: 'Those are your bags.',
+          uzbek: 'Anavilar sizning sumkalaringiz.',
+        },
       ],
-      'Men har kuni ingliz tilini o‘rganaman',
-      'Learn English every day — har kuni ingliz tilini o‘rganmoq.',
     ),
-    mcq(
-      'f30-q2',
-      '“I can speak English” nimani anglatadi?',
-      [
-        'Men ingliz tilida gapira olaman',
-        'Men ingliz tilini yozaman',
-        'Men ingliz tilini yoqtirmayman',
-        'Men ingliz tilini o‘rganmayman',
+  ],
+
+  sentenceStructures: [
+    {
+      id: 'f05-s01',
+      title: 'Demonstrative Sentence',
+      type: 'custom',
+      formula: 'This/That + is + noun',
+      explanation: 'Bitta predmetni ko‘rsatish.',
+      parts: [
+        {
+          label: 'THIS',
+          name: 'This / That',
+          description: 'Ko‘rsatish',
+        },
+        {
+          label: 'BE',
+          name: 'is',
+          description: 'To be',
+        },
+        {
+          label: 'N',
+          name: 'Noun',
+          description: 'Predmet',
+        },
       ],
-      'Men ingliz tilida gapira olaman',
-      'Can speak — gapira olmoq.',
-    ),
-    mcq(
-      'f30-q3',
-      '“Practice” nimani anglatadi?',
-      [
-        'Mashq qilmoq',
-        'Uxlamoq',
-        'Yemoq',
-        'Xayrlashmoq',
+      examples: [
+        {
+          english: 'This is a book.',
+          uzbek: 'Bu kitob.',
+        },
+        {
+          english: 'That is a door.',
+          uzbek: 'U eshik.',
+        },
       ],
-      'Mashq qilmoq',
-      'Practice = mashq qilmoq.',
+    },
+  ],
+
+  explanations: [
+    explanation(
+      'f05-e01',
+      'concept',
+      'Masofani his qiling',
+      'Qo‘lingizdagi kitob — this. Uzoqdagi eshik — that.',
+      '👆',
     ),
-    mcq(
-      'f30-q4',
-      'Foundation kursini tugatgandan keyingi eng muhim qadam nima?',
-      [
-        'Muntazam davom etish',
-        'Ingliz tilini to‘xtatish',
-        'Faqat tarjima qilish',
-        'Faqat test yodlash',
-      ],
-      'Muntazam davom etish',
-      'Til ko‘nikmasi muntazam amaliyot bilan rivojlanadi.',
+    explanation(
+      'f05-e02',
+      'memory',
+      'Birlik va ko‘plik',
+      'This/That birlik bilan, These/Those ko‘plik bilan ishlatiladi.',
+      '🧠',
     ),
-    trueFalse(
-      'f30-q5',
-      'Muntazam mashq qilish ingliz tilini rivojlantirishga yordam beradi.',
-      'true',
-      'Muntazam amaliyot til ko‘nikmalarini mustahkamlaydi.',
+  ],
+
+  examples: [
+    example('f05-ex01', 'This is my book.', 'Bu mening kitobim.'),
+    example('f05-ex02', 'That is the door.', 'U eshik.'),
+    example('f05-ex03', 'These are my pens.', 'Bular mening ruchkalarim.'),
+    example('f05-ex04', 'Those are desks.', 'Anavilar partalar.'),
+    example('f05-ex05', 'This is my classroom.', 'Bu mening sinfim.'),
+  ],
+
+  activities: [
+    activity(
+      'f05-a01',
+      'multiple-choice',
+      'This or That',
+      'Yaqindagi predmetni tanlang.',
+      '___ is my book. (yaqin)',
+      'This',
+      ['This', 'That', 'These', 'Those'],
     ),
-  ]),
-)
+    activity(
+      'f05-a02',
+      'multiple-choice',
+      'These or Those',
+      'Yaqin ko‘plikni tanlang.',
+      '___ are my books. (yaqin)',
+      'These',
+      ['This', 'That', 'These', 'Those'],
+    ),
+    activity(
+      'f05-a03',
+      'word-order',
+      'Build',
+      'Gap tuzing.',
+      'my / This / classroom / is',
+      'This is my classroom.',
+    ),
+    activity(
+      'f05-a04',
+      'translate',
+      'Translate',
+      'Tarjima qiling.',
+      'Bular mening kitoblarim.',
+      'These are my books.',
+    ),
+  ],
+
+  speaking: {
+    id: 'f05-sp01',
+    title: 'My Classroom',
+    instruction:
+      'Sinfingizdagi kamida 5 ta predmetni ko‘rsatib gapiring.',
+    mode: 'conversation',
+    phrase:
+      'This is my desk. This is a book. That is the board. These are my pens.',
+    emoji: '🏫',
+    repetitions: 2,
+    targetWords: ['classroom', 'desk', 'board', 'book', 'pen'],
+    targetGrammar: ['f05-g01', 'f05-g02'],
+  },
+
+  writing: {
+    id: 'f05-w01',
+    title: 'My Classroom',
+    instruction: 'Sinfingiz haqida 5–7 ta gap yozing.',
+    prompt: 'Describe your classroom using this, that, these and those.',
+    minimumWords: 25,
+    targetGrammar: ['f05-g01', 'f05-g02'],
+  },
+
+  review: {
+    id: 'f05-review',
+    title: 'School Review',
+    description: 'School vocabulary va demonstratives.',
+    questions: [
+      testQuestion(
+        'f05-r01',
+        '___ is my desk. (yaqin)',
+        'This',
+        ['This', 'That', 'These', 'Those'],
+        'Yaqin birlik uchun this.',
+      ),
+      testQuestion(
+        'f05-r02',
+        '___ are my books. (yaqin)',
+        'These',
+        ['This', 'That', 'These', 'Those'],
+        'Yaqin ko‘plik uchun these.',
+      ),
+    ],
+  },
+
+  challenge: {
+    id: 'f05-ch01',
+    title: 'Classroom Explorer',
+    description: 'Sinfingizni ingliz tilida tasvirlang.',
+    difficulty: 'challenge',
+    bonusXp: 35,
+    tasks: [
+      {
+        id: 'f05-ct01',
+        instruction: 'Gap tuzing.',
+        type: 'build-sentence',
+        prompt: 'are / These / books / my',
+        correctAnswer: 'These are my books.',
+      },
+    ],
+  },
+
+  test: {
+    id: 'f05-test',
+    title: 'Lesson 5 Final Test',
+    questionCount: 10,
+    passingScore: 70,
+    maxScore: 20,
+    timeLimitMinutes: 8,
+    retryAllowed: true,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    questions: [
+      testQuestion(
+        'f05-t01',
+        '___ is my book. (near)',
+        'This',
+        ['This', 'That', 'These', 'Those'],
+        'Yaqin birlik uchun this.',
+      ),
+      testQuestion(
+        'f05-t02',
+        '___ is the door. (far)',
+        'That',
+        ['This', 'That', 'These', 'Those'],
+        'Uzoq birlik uchun that.',
+      ),
+      testQuestion(
+        'f05-t03',
+        '___ are my books. (near)',
+        'These',
+        ['This', 'That', 'These', 'Those'],
+        'Yaqin ko‘plik uchun these.',
+      ),
+      testQuestion(
+        'f05-t04',
+        '___ are your bags. (far)',
+        'Those',
+        ['This', 'That', 'These', 'Those'],
+        'Uzoq ko‘plik uchun those.',
+      ),
+      testQuestion(
+        'f05-t05',
+        'What does “classroom” mean?',
+        'sinf xonasi',
+        ['sinf xonasi', 'maktab', 'doska', 'o‘qituvchi'],
+        'Classroom — sinf xonasi.',
+      ),
+      testQuestion(
+        'f05-t06',
+        'Choose the correct sentence.',
+        'This is my classroom.',
+        [
+          'This are my classroom.',
+          'This is my classroom.',
+          'These is my classroom.',
+          'That are my classroom.',
+        ],
+        'This + is birlikdagi predmet uchun.',
+      ),
+      testQuestion(
+        'f05-t07',
+        'Choose the correct plural sentence.',
+        'These are my books.',
+        [
+          'This are my books.',
+          'These is my books.',
+          'These are my books.',
+          'Those is my books.',
+        ],
+        'These + are + plural noun.',
+      ),
+      testQuestion(
+        'f05-t08',
+        '“maktab” ingliz tilida?',
+        'school',
+        ['school', 'classroom', 'desk', 'lesson'],
+        'School — maktab.',
+      ),
+      testQuestion(
+        'f05-t09',
+        'Choose: ___ is my teacher. (near)',
+        'This',
+        ['This', 'These', 'Those', 'They'],
+        'Yaqin birlik uchun this.',
+      ),
+      testQuestion(
+        'f05-t10',
+        'Choose: ___ are desks. (far)',
+        'Those',
+        ['This', 'That', 'These', 'Those'],
+        'Uzoq ko‘plik uchun those.',
+      ),
+    ],
+  },
+
+  rewards: standardReward(130),
+
+  theme: theme(
+    '🏫',
+    'from-emerald-500 via-teal-600 to-cyan-600',
+    'green',
+  ),
+
+  previousLessonId: 'foundation-04',
+  nextLessonId: 'foundation-06',
+  prerequisiteLessonIds: ['foundation-04'],
+}
+
 
 /* =========================================================
-   🇬🇧 FOUNDATION LESSONS
+   🔥 LESSON 06
+   TO BE — POSITIVE / NEGATIVE
+========================================================= */
+
+const LESSON_06: EnglishLesson = {
+  id: 'foundation-06',
+  courseId: 'foundation-main',
+  unitId: 'foundation-unit-2',
+  lessonNumber: 6,
+  title: 'I Am, You Are, He Is',
+  subtitle: 'To be: positive va negative',
+  emoji: '⚡',
+  description:
+    'am/is/are ni chuqurroq o‘rganing: tasdiq, inkor va qisqartma shakllar.',
+  type: 'grammar',
+  difficulty: 'medium',
+  status: 'locked',
+  estimatedMinutes: 30,
+
+  objectives: [
+    'am/is/are ni avtomatik tanlash',
+    'Positive sentences',
+    'Negative sentences',
+    'isn’t / aren’t',
+    'I’m / he’s / they’re qisqartmalarini tushunish',
+  ],
+
+  skills: [
+    'grammar',
+    'speaking',
+    'writing',
+    'communication',
+  ],
+
+  topics: [
+    'To be',
+    'Positive',
+    'Negative',
+    'Contractions',
+  ],
+
+  vocabulary: [
+    v('f06-v01', 'happy', 'xursand', 'emotion', 'I am happy.', 'Men xursandman.', '😊'),
+    v('f06-v02', 'sad', 'xafa', 'emotion', 'She is sad.', 'U xafa.', '😢'),
+    v('f06-v03', 'tired', 'charchagan', 'emotion', 'I am tired.', 'Men charchaganman.', '😴'),
+    v('f06-v04', 'hungry', 'och', 'emotion', 'They are hungry.', 'Ular och.', '🍽️'),
+    v('f06-v05', 'ready', 'tayyor', 'general', 'We are ready.', 'Biz tayyormiz.', '✅'),
+    v('f06-v06', 'busy', 'band', 'general', 'He is busy.', 'U band.', '⏳'),
+    v('f06-v07', 'kind', 'mehribon', 'emotion', 'She is kind.', 'U mehribon.', '❤️'),
+    v('f06-v08', 'young', 'yosh', 'general', 'He is young.', 'U yosh.', '👦'),
+  ],
+
+  grammar: [
+    grammar(
+      'f06-g01',
+      'Positive To Be',
+      'verb-to-be',
+      'am/is/are orqali shaxs, holat va kasbni tasdiqlaymiz.',
+      'Positive sentence inkorsiz tasdiq gapdir.',
+      'Subject + am/is/are + complement',
+      [
+        {
+          english: 'I am happy.',
+          uzbek: 'Men xursandman.',
+        },
+        {
+          english: 'He is tired.',
+          uzbek: 'U charchagan.',
+        },
+        {
+          english: 'They are ready.',
+          uzbek: 'Ular tayyor.',
+        },
+      ],
+    ),
+    grammar(
+      'f06-g02',
+      'Negative To Be',
+      'negatives',
+      'Inkor qilish uchun am not, is not yoki are not ishlatiladi.',
+      'To be dan keyin not qo‘shiladi.',
+      'Subject + am/is/are + not + complement',
+      [
+        {
+          english: 'I am not tired.',
+          uzbek: 'Men charchagan emasman.',
+        },
+        {
+          english: 'He is not busy.',
+          uzbek: 'U band emas.',
+        },
+        {
+          english: 'They are not hungry.',
+          uzbek: 'Ular och emas.',
+        },
+      ],
+      [
+        'is not → isn’t',
+        'are not → aren’t',
+        'am not odatda I’m not shaklida ishlatiladi.',
+      ],
+    ),
+  ],
+
+  sentenceStructures: [
+    {
+      id: 'f06-s01',
+      title: 'Positive Sentence',
+      type: 'subject-be-adjective',
+      formula: 'Subject + BE + adjective',
+      explanation: 'Holat yoki sifatni aytish.',
+      parts: [
+        { label: 'S', name: 'Subject', description: 'Kim?' },
+        { label: 'BE', name: 'am/is/are', description: 'To be' },
+        { label: 'ADJ', name: 'Adjective', description: 'Sifat/holat' },
+      ],
+      examples: [
+        {
+          english: 'I am happy.',
+          uzbek: 'Men xursandman.',
+        },
+        {
+          english: 'She is kind.',
+          uzbek: 'U mehribon.',
+        },
+      ],
+    },
+    {
+      id: 'f06-s02',
+      title: 'Negative Sentence',
+      type: 'negative',
+      formula: 'Subject + BE + NOT + complement',
+      explanation: 'Gapni inkor qilish.',
+      parts: [
+        { label: 'S', name: 'Subject', description: 'Kim?' },
+        { label: 'BE', name: 'am/is/are', description: 'To be' },
+        { label: 'NOT', name: 'not', description: 'Inkor' },
+      ],
+      examples: [
+        {
+          english: 'I am not tired.',
+          uzbek: 'Men charchagan emasman.',
+        },
+        {
+          english: 'He is not busy.',
+          uzbek: 'U band emas.',
+        },
+      ],
+    },
+  ],
+
+  explanations: [
+    explanation(
+      'f06-e01',
+      'rule',
+      'Positive → Negative',
+      'Positive gapdagi am/is/are dan keyin not qo‘shsangiz, inkor gap hosil bo‘ladi.',
+      '🔄',
+    ),
+    explanation(
+      'f06-e02',
+      'memory',
+      'Short Forms',
+      'I am → I’m, he is → he’s, she is → she’s, we are → we’re, they are → they’re.',
+      '⚡',
+    ),
+  ],
+
+  examples: [
+    example('f06-ex01', 'I am happy.', 'Men xursandman.', 'am'),
+    example('f06-ex02', 'I am not sad.', 'Men xafa emasman.', 'am not'),
+    example('f06-ex03', 'He is tired.', 'U charchagan.', 'is'),
+    example('f06-ex04', 'He isn’t busy.', 'U band emas.', 'isn’t'),
+    example('f06-ex05', 'They are ready.', 'Ular tayyor.', 'are'),
+    example('f06-ex06', 'They aren’t hungry.', 'Ular och emas.', 'aren’t'),
+  ],
+
+  activities: [
+    activity(
+      'f06-a01',
+      'multiple-choice',
+      'Choose',
+      'To‘g‘ri fe’lni tanlang.',
+      'She ___ happy.',
+      'is',
+      ['am', 'is', 'are', 'be'],
+    ),
+    activity(
+      'f06-a02',
+      'multiple-choice',
+      'Negative',
+      'Inkor shaklini toping.',
+      'He ___ tired.',
+      'isn’t',
+      ['aren’t', 'isn’t', 'am not', 'don’t'],
+    ),
+    activity(
+      'f06-a03',
+      'word-order',
+      'Build',
+      'Gap tuzing.',
+      'not / am / I / tired',
+      'I am not tired.',
+    ),
+    activity(
+      'f06-a04',
+      'translate',
+      'Translate',
+      'Tarjima qiling.',
+      'U band emas.',
+      'He is not busy.',
+    ),
+  ],
+
+  speaking: {
+    id: 'f06-sp01',
+    title: 'How Do You Feel?',
+    instruction:
+      'Bugungi holatingiz haqida positive va negative gaplar ayting.',
+    mode: 'conversation',
+    phrase:
+      'I am happy. I am not tired. I am ready. My friend is happy.',
+    emoji: '😊',
+    repetitions: 3,
+    targetWords: ['happy', 'tired', 'ready', 'busy'],
+    targetGrammar: ['f06-g01', 'f06-g02'],
+  },
+
+  writing: {
+    id: 'f06-w01',
+    title: 'Positive & Negative',
+    instruction:
+      '3 ta positive va 3 ta negative sentence yozing.',
+    prompt:
+      'Write six sentences using am, is, are and negative forms.',
+    minimumWords: 25,
+    targetGrammar: ['f06-g01', 'f06-g02'],
+  },
+
+  review: {
+    id: 'f06-review',
+    title: 'To Be Review',
+    description: 'am/is/are va negative shakllarni takrorlang.',
+    questions: [
+      testQuestion(
+        'f06-r01',
+        'She ___ happy.',
+        'is',
+        ['am', 'is', 'are', 'be'],
+        'She bilan is ishlatiladi.',
+      ),
+      testQuestion(
+        'f06-r02',
+        'They ___ tired.',
+        'aren’t',
+        ['isn’t', 'aren’t', 'am not', 'doesn’t'],
+        'They bilan are, inkorda aren’t ishlatiladi.',
+      ),
+    ],
+  },
+
+  challenge: {
+    id: 'f06-ch01',
+    title: 'Positive vs Negative',
+    description:
+      'Bir xil fikrni positive va negative shaklda ayting.',
+    difficulty: 'challenge',
+    bonusXp: 40,
+    tasks: [
+      {
+        id: 'f06-ct01',
+        instruction: 'Negative sentence tuzing.',
+        type: 'correct-mistake',
+        prompt: 'I am tired → inkor qiling.',
+        correctAnswer: 'I am not tired.',
+      },
+    ],
+  },
+
+  test: {
+    id: 'f06-test',
+    title: 'Lesson 6 Final Test',
+    questionCount: 10,
+    passingScore: 70,
+    maxScore: 20,
+    timeLimitMinutes: 8,
+    retryAllowed: true,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    questions: [
+      testQuestion(
+        'f06-t01',
+        'I ___ happy.',
+        'am',
+        ['am', 'is', 'are', 'be'],
+        'I bilan am.',
+      ),
+      testQuestion(
+        'f06-t02',
+        'She ___ tired.',
+        'is',
+        ['am', 'is', 'are', 'be'],
+        'She bilan is.',
+      ),
+      testQuestion(
+        'f06-t03',
+        'They ___ ready.',
+        'are',
+        ['am', 'is', 'are', 'be'],
+        'They bilan are.',
+      ),
+      testQuestion(
+        'f06-t04',
+        'I ___ not sad.',
+        'am',
+        ['am', 'is', 'are', 'be'],
+        'I am not.',
+      ),
+      testQuestion(
+        'f06-t05',
+        'He ___ not busy.',
+        'is',
+        ['am', 'is', 'are', 'be'],
+        'He is not.',
+      ),
+      testQuestion(
+        'f06-t06',
+        'They ___ not hungry.',
+        'are',
+        ['am', 'is', 'are', 'be'],
+        'They are not.',
+      ),
+      testQuestion(
+        'f06-t07',
+        'Choose the contraction: she is',
+        'she’s',
+        ['she’m', 'she’s', 'she’re', 'shes are'],
+        'She is → she’s.',
+      ),
+      testQuestion(
+        'f06-t08',
+        'Choose the contraction: they are',
+        'they’re',
+        ['they’s', 'they’re', 'they’m', 'they is'],
+        'They are → they’re.',
+      ),
+      testQuestion(
+        'f06-t09',
+        'Choose the correct sentence.',
+        'I am not tired.',
+        [
+          'I not am tired.',
+          'I am not tired.',
+          'I is not tired.',
+          'I are not tired.',
+        ],
+        'Negative formula: Subject + am/is/are + not.',
+      ),
+      testQuestion(
+        'f06-t10',
+        'Choose the correct sentence.',
+        'They aren’t hungry.',
+        [
+          'They isn’t hungry.',
+          'They aren’t hungry.',
+          'They am not hungry.',
+          'They not are hungry.',
+        ],
+        'They are not → They aren’t.',
+      ),
+    ],
+  },
+
+  rewards: standardReward(140),
+
+  theme: theme(
+    '⚡',
+    'from-orange-500 via-amber-500 to-yellow-500',
+    'orange',
+  ),
+
+  previousLessonId: 'foundation-05',
+  nextLessonId: 'foundation-07',
+  prerequisiteLessonIds: ['foundation-05'],
+}
+
+
+/* =========================================================
+   🏠 LESSON 07
+   MY HOME
+========================================================= */
+
+const LESSON_07: EnglishLesson = {
+  id: 'foundation-07',
+  courseId: 'foundation-main',
+  unitId: 'foundation-unit-2',
+  lessonNumber: 7,
+  title: 'My Home',
+  subtitle: 'Uy va xonalar',
+  emoji: '🏠',
+  description:
+    'Uy, xonalar va kundalik buyumlarni tasvirlashni o‘rganing.',
+  type: 'mixed',
+  difficulty: 'easy',
+  status: 'locked',
+  estimatedMinutes: 25,
+
+  objectives: [
+    'Home vocabulary',
+    'Room names',
+    'This is / It is',
+    'Adjectives bilan tasvirlash',
+    'Uy haqida 5–7 ta gap tuzish',
+  ],
+
+  skills: [
+    'vocabulary',
+    'grammar',
+    'speaking',
+    'reading',
+  ],
+
+  topics: [
+    'Home',
+    'Rooms',
+    'Description',
+  ],
+
+  vocabulary: [
+    v('f07-v01', 'home', 'uy', 'home', 'My home is small.', 'Mening uyim kichik.', '🏠'),
+    v('f07-v02', 'room', 'xona', 'home', 'This is my room.', 'Bu mening xonam.', '🚪'),
+    v('f07-v03', 'bedroom', 'yotoqxona', 'home', 'My bedroom is clean.', 'Yotoqxonam toza.', '🛏️'),
+    v('f07-v04', 'kitchen', 'oshxona', 'home', 'The kitchen is big.', 'Oshxona katta.', '🍳'),
+    v('f07-v05', 'bathroom', 'hammom', 'home', 'The bathroom is clean.', 'Hammom toza.', '🚿'),
+    v('f07-v06', 'living room', 'mehmonxona', 'home', 'The living room is nice.', 'Mehmonxona yaxshi.', '🛋️'),
+    v('f07-v07', 'bed', 'karavot', 'home', 'The bed is soft.', 'Karavot yumshoq.', '🛏️'),
+    v('f07-v08', 'sofa', 'divan', 'home', 'The sofa is big.', 'Divan katta.', '🛋️'),
+    v('f07-v09', 'clean', 'toza', 'general', 'My room is clean.', 'Xonam toza.', '✨'),
+    v('f07-v10', 'small', 'kichik', 'general', 'My room is small.', 'Xonam kichik.', '🔹'),
+  ],
+
+  grammar: [
+    grammar(
+      'f07-g01',
+      'BE + Adjective',
+      'adjectives',
+      'Predmet yoki joyni tasvirlash uchun be + adjective ishlatiladi.',
+      'Sifat predmetning holati yoki xususiyatini bildiradi.',
+      'Subject + am/is/are + adjective',
+      [
+        {
+          english: 'My room is clean.',
+          uzbek: 'Xonam toza.',
+        },
+        {
+          english: 'The kitchen is big.',
+          uzbek: 'Oshxona katta.',
+        },
+        {
+          english: 'The rooms are small.',
+          uzbek: 'Xonalar kichik.',
+        },
+      ],
+    ),
+  ],
+
+  sentenceStructures: [
+    {
+      id: 'f07-s01',
+      title: 'Describe a Place',
+      type: 'subject-be-adjective',
+      formula: 'Subject + BE + adjective',
+      explanation: 'Joy yoki predmetni tasvirlash.',
+      parts: [
+        { label: 'S', name: 'Subject', description: 'Nima?' },
+        { label: 'BE', name: 'am/is/are', description: 'To be' },
+        { label: 'ADJ', name: 'Adjective', description: 'Qanday?' },
+      ],
+      examples: [
+        {
+          english: 'My room is clean.',
+          uzbek: 'Xonam toza.',
+        },
+        {
+          english: 'My house is big.',
+          uzbek: 'Uyim katta.',
+        },
+      ],
+    },
+  ],
+
+  explanations: [
+    explanation(
+      'f07-e01',
+      'concept',
+      'Describe your world',
+      'Ingliz tilida biror narsani tasvirlash uchun be + adjective juda muhim.',
+      '🏠',
+    ),
+    explanation(
+      'f07-e02',
+      'tip',
+      'Gapni kengaytirish',
+      'My room is clean. → My room is small and clean. Bir nechta sifatni and bilan bog‘lash mumkin.',
+      '💡',
+    ),
+  ],
+
+  examples: [
+    example('f07-ex01', 'My home is big.', 'Mening uyim katta.'),
+    example('f07-ex02', 'My room is small.', 'Xonam kichik.'),
+    example('f07-ex03', 'The kitchen is clean.', 'Oshxona toza.'),
+    example('f07-ex04', 'The living room is nice.', 'Mehmonxona yaxshi.'),
+    example('f07-ex05', 'My bedroom is clean and small.', 'Yotoqxonam toza va kichik.'),
+  ],
+
+  activities: [
+    activity(
+      'f07-a01',
+      'multiple-choice',
+      'Choose',
+      'To‘g‘ri fe’lni tanlang.',
+      'My room ___ clean.',
+      'is',
+      ['am', 'is', 'are', 'be'],
+    ),
+    activity(
+      'f07-a02',
+      'multiple-choice',
+      'Vocabulary',
+      'To‘g‘ri tarjimani toping.',
+      'bedroom',
+      'yotoqxona',
+      ['oshxona', 'yotoqxona', 'hammom', 'mehmonxona'],
+    ),
+    activity(
+      'f07-a03',
+      'word-order',
+      'Build',
+      'Gap tuzing.',
+      'is / My / clean / room',
+      'My room is clean.',
+    ),
+    activity(
+      'f07-a04',
+      'translate',
+      'Translate',
+      'Tarjima qiling.',
+      'Oshxona katta.',
+      'The kitchen is big.',
+    ),
+  ],
+
+  speaking: {
+    id: 'f07-sp01',
+    title: 'Describe Your Home',
+    instruction:
+      'Uyingiz haqida kamida 6 ta inglizcha gap ayting.',
+    mode: 'conversation',
+    phrase:
+      'My home is ___. My room is ___. The kitchen is ___.',
+    emoji: '🏠',
+    repetitions: 2,
+    targetWords: ['home', 'room', 'kitchen', 'bedroom', 'clean'],
+    targetGrammar: ['f07-g01'],
+  },
+
+  writing: {
+    id: 'f07-w01',
+    title: 'My Home',
+    instruction: 'Uyingiz haqida 6–8 ta gap yozing.',
+    prompt: 'Describe your home and rooms.',
+    minimumWords: 30,
+    targetGrammar: ['f07-g01'],
+  },
+
+  review: {
+    id: 'f07-review',
+    title: 'Home Review',
+    description: 'Home vocabulary va adjective sentences.',
+    questions: [
+      testQuestion(
+        'f07-r01',
+        'My room ___ clean.',
+        'is',
+        ['am', 'is', 'are', 'be'],
+        'Room birlikda, shuning uchun is.',
+      ),
+      testQuestion(
+        'f07-r02',
+        '“yotoqxona” qaysi?',
+        'bedroom',
+        ['kitchen', 'bedroom', 'bathroom', 'home'],
+        'Bedroom — yotoqxona.',
+      ),
+    ],
+  },
+
+  challenge: {
+    id: 'f07-ch01',
+    title: 'Home Designer',
+    description: 'Tasavvuriy uy yarating va uni tasvirlang.',
+    difficulty: 'challenge',
+    bonusXp: 35,
+    tasks: [
+      {
+        id: 'f07-ct01',
+        instruction: 'Gap tuzing.',
+        type: 'build-sentence',
+        prompt: 'room / is / My / clean',
+        correctAnswer: 'My room is clean.',
+      },
+    ],
+  },
+
+  test: {
+    id: 'f07-test',
+    title: 'Lesson 7 Final Test',
+    questionCount: 10,
+    passingScore: 70,
+    maxScore: 20,
+    timeLimitMinutes: 8,
+    retryAllowed: true,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    questions: [
+      testQuestion(
+        'f07-t01',
+        'My room ___ clean.',
+        'is',
+        ['am', 'is', 'are', 'be'],
+        'My room birlikda, shuning uchun is.',
+      ),
+      testQuestion(
+        'f07-t02',
+        'The kitchen ___ big.',
+        'is',
+        ['am', 'is', 'are', 'be'],
+        'Kitchen birlikda.',
+      ),
+      testQuestion(
+        'f07-t03',
+        'The rooms ___ small.',
+        'are',
+        ['am', 'is', 'are', 'be'],
+        'Rooms ko‘plik, shuning uchun are.',
+      ),
+      testQuestion(
+        'f07-t04',
+        'What does bedroom mean?',
+        'yotoqxona',
+        ['oshxona', 'yotoqxona', 'hammom', 'mehmonxona'],
+        'Bedroom — yotoqxona.',
+      ),
+      testQuestion(
+        'f07-t05',
+        'What does kitchen mean?',
+        'oshxona',
+        ['oshxona', 'yotoqxona', 'uy', 'xona'],
+        'Kitchen — oshxona.',
+      ),
+      testQuestion(
+        'f07-t06',
+        'Choose the correct sentence.',
+        'My home is big.',
+        [
+          'My home are big.',
+          'My home is big.',
+          'My home am big.',
+          'My home be big.',
+        ],
+        'Home birlikda: is.',
+      ),
+      testQuestion(
+        'f07-t07',
+        'Choose the adjective.',
+        'My room is clean.',
+        ['room', 'is', 'clean', 'my'],
+        'Clean — sifat.',
+      ),
+      testQuestion(
+        'f07-t08',
+        '“mehmonxona” qaysi?',
+        'living room',
+        ['bedroom', 'living room', 'bathroom', 'kitchen'],
+        'Living room — mehmonxona.',
+      ),
+      testQuestion(
+        'f07-t09',
+        'Choose: The rooms ___ clean.',
+        'are',
+        ['am', 'is', 'are', 'has'],
+        'Rooms ko‘plik.',
+      ),
+      testQuestion(
+        'f07-t10',
+        'Choose the correct sentence.',
+        'The kitchen is clean.',
+        [
+          'The kitchen are clean.',
+          'The kitchen is clean.',
+          'The kitchen am clean.',
+          'The kitchen clean is.',
+        ],
+        'Subject + is + adjective.',
+      ),
+    ],
+  },
+
+  rewards: standardReward(140),
+
+  theme: theme(
+    '🏠',
+    'from-sky-500 via-blue-600 to-indigo-600',
+    'blue',
+  ),
+
+  previousLessonId: 'foundation-06',
+  nextLessonId: 'foundation-08',
+  prerequisiteLessonIds: ['foundation-06'],
+}
+
+
+/* =========================================================
+   📍 LESSON 08
+   PREPOSITIONS OF PLACE
+========================================================= */
+
+const LESSON_08: EnglishLesson = {
+  id: 'foundation-08',
+  courseId: 'foundation-main',
+  unitId: 'foundation-unit-2',
+  lessonNumber: 8,
+  title: 'Where Is It?',
+  subtitle: 'Joylashuv: in, on, under, next to',
+  emoji: '📍',
+  description:
+    'Predmetlar qayerda joylashganini ingliz tilida aniq aytishni o‘rganing.',
+  type: 'grammar',
+  difficulty: 'medium',
+  status: 'locked',
+  estimatedMinutes: 28,
+
+  objectives: [
+    'in, on, under',
+    'next to, near',
+    'Joylashuvni so‘rash',
+    'Where is...? savoli',
+    'There is bilan joylashuvni tasvirlash',
+  ],
+
+  skills: [
+    'vocabulary',
+    'grammar',
+    'speaking',
+    'reading',
+  ],
+
+  topics: [
+    'Prepositions',
+    'Location',
+    'Where',
+  ],
+
+  vocabulary: [
+    v('f08-v01', 'in', 'ichida', 'place', 'The book is in the bag.', 'Kitob sumka ichida.', '📦'),
+    v('f08-v02', 'on', 'ustida', 'place', 'The book is on the table.', 'Kitob stol ustida.', '⬆️'),
+    v('f08-v03', 'under', 'ostida', 'place', 'The bag is under the desk.', 'Sumka parta ostida.', '⬇️'),
+    v('f08-v04', 'next to', 'yonida', 'place', 'The chair is next to the table.', 'Stul stol yonida.', '↔️'),
+    v('f08-v05', 'near', 'yaqinida', 'place', 'The school is near my home.', 'Maktab uyimga yaqin.', '📍'),
+    v('f08-v06', 'behind', 'orqasida', 'place', 'The bag is behind the chair.', 'Sumka stul orqasida.', '🔙'),
+    v('f08-v07', 'box', 'quti', 'home', 'The book is in the box.', 'Kitob qutida.', '📦'),
+    v('f08-v08', 'floor', 'pol', 'home', 'The bag is on the floor.', 'Sumka polda.', '🏠'),
+  ],
+
+  grammar: [
+    grammar(
+      'f08-g01',
+      'Prepositions of Place',
+      'prepositions',
+      'Predmetning joylashuvini ko‘rsatish uchun prepositions ishlatiladi.',
+      'In — ichida, on — ustida, under — ostida, next to — yonida.',
+      'Subject + BE + preposition + place',
+      [
+        {
+          english: 'The book is on the table.',
+          uzbek: 'Kitob stol ustida.',
+        },
+        {
+          english: 'The bag is under the desk.',
+          uzbek: 'Sumka parta ostida.',
+        },
+        {
+          english: 'The pen is in the bag.',
+          uzbek: 'Ruchka sumka ichida.',
+        },
+      ],
+    ),
+  ],
+
+  sentenceStructures: [
+    {
+      id: 'f08-s01',
+      title: 'Location Sentence',
+      type: 'custom',
+      formula: 'Subject + BE + Preposition + Place',
+      explanation:
+        'Predmet qayerda ekanini aytish uchun ishlatiladi.',
+      parts: [
+        { label: 'S', name: 'Subject', description: 'Nima?' },
+        { label: 'BE', name: 'is/are', description: 'To be' },
+        { label: 'PREP', name: 'Preposition', description: 'Joylashuv' },
+        { label: 'PLACE', name: 'Place', description: 'Joy' },
+      ],
+      examples: [
+        {
+          english: 'The book is on the table.',
+          uzbek: 'Kitob stol ustida.',
+        },
+      ],
+    },
+  ],
+
+  explanations: [
+    explanation(
+      'f08-e01',
+      'concept',
+      'Where is it?',
+      'Where is...? — bitta predmetning joylashuvini so‘rash uchun ishlatiladi.',
+      '📍',
+    ),
+    explanation(
+      'f08-e02',
+      'memory',
+      'Three magic words',
+      'in = ichida, on = ustida, under = ostida.',
+      '🧠',
+    ),
+  ],
+
+  examples: [
+    example('f08-ex01', 'The book is on the table.', 'Kitob stol ustida.'),
+    example('f08-ex02', 'The pen is in the bag.', 'Ruchka sumka ichida.'),
+    example('f08-ex03', 'The bag is under the desk.', 'Sumka parta ostida.'),
+    example('f08-ex04', 'The chair is next to the table.', 'Stul stol yonida.'),
+  ],
+
+  activities: [
+    activity(
+      'f08-a01',
+      'multiple-choice',
+      'Preposition',
+      'To‘g‘ri predlogni tanlang.',
+      'The book is ___ the table.',
+      'on',
+      ['in', 'on', 'under', 'behind'],
+    ),
+    activity(
+      'f08-a02',
+      'multiple-choice',
+      'Preposition',
+      'To‘g‘ri variantni tanlang.',
+      'The pen is ___ the bag.',
+      'in',
+      ['in', 'on', 'under', 'next'],
+    ),
+    activity(
+      'f08-a03',
+      'word-order',
+      'Build',
+      'Gap tuzing.',
+      'is / book / The / table / on / the',
+      'The book is on the table.',
+    ),
+    activity(
+      'f08-a04',
+      'translate',
+      'Translate',
+      'Tarjima qiling.',
+      'Sumka parta ostida.',
+      'The bag is under the desk.',
+    ),
+  ],
+
+  speaking: {
+    id: 'f08-sp01',
+    title: 'Where Is It?',
+    instruction:
+      'Xonadagi 5 ta buyumning joylashuvini ayting.',
+    mode: 'conversation',
+    phrase:
+      'The book is on the table. The pen is in the bag. The bag is under the desk.',
+    emoji: '📍',
+    repetitions: 2,
+    targetWords: ['in', 'on', 'under', 'next to'],
+    targetGrammar: ['f08-g01'],
+  },
+
+  writing: {
+    id: 'f08-w01',
+    title: 'My Room',
+    instruction:
+      'Xonadagi buyumlarning joylashuvini 6 ta gap bilan yozing.',
+    prompt: 'Describe where objects are in your room.',
+    minimumWords: 25,
+    targetGrammar: ['f08-g01'],
+  },
+
+  review: {
+    id: 'f08-review',
+    title: 'Place Review',
+    description: 'Joylashuv predloglarini mustahkamlang.',
+    questions: [
+      testQuestion(
+        'f08-r01',
+        'The book is ___ the table.',
+        'on',
+        ['in', 'on', 'under', 'behind'],
+        'Stol ustida — on the table.',
+      ),
+      testQuestion(
+        'f08-r02',
+        'The pen is ___ the bag.',
+        'in',
+        ['in', 'on', 'under', 'behind'],
+        'Sumka ichida — in the bag.',
+      ),
+    ],
+  },
+
+  challenge: {
+    id: 'f08-ch01',
+    title: 'Location Master',
+    description:
+      '5 ta buyumdan foydalanib kichik xona xaritasini tasvirlang.',
+    difficulty: 'challenge',
+    bonusXp: 40,
+    tasks: [
+      {
+        id: 'f08-ct01',
+        instruction: 'Gap tuzing.',
+        type: 'build-sentence',
+        prompt: 'is / The / book / table / on / the',
+        correctAnswer: 'The book is on the table.',
+      },
+    ],
+  },
+
+  test: {
+    id: 'f08-test',
+    title: 'Lesson 8 Final Test',
+    questionCount: 10,
+    passingScore: 70,
+    maxScore: 20,
+    timeLimitMinutes: 8,
+    retryAllowed: true,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    questions: [
+      testQuestion(
+        'f08-t01',
+        'The book is ___ the table.',
+        'on',
+        ['in', 'on', 'under', 'behind'],
+        'Ustida — on.',
+      ),
+      testQuestion(
+        'f08-t02',
+        'The pen is ___ the bag.',
+        'in',
+        ['in', 'on', 'under', 'behind'],
+        'Ichida — in.',
+      ),
+      testQuestion(
+        'f08-t03',
+        'The bag is ___ the desk.',
+        'under',
+        ['in', 'on', 'under', 'near'],
+        'Ostida — under.',
+      ),
+      testQuestion(
+        'f08-t04',
+        'The chair is ___ the table.',
+        'next to',
+        ['in', 'under', 'next to', 'on'],
+        'Yonida — next to.',
+      ),
+      testQuestion(
+        'f08-t05',
+        'Choose the correct question.',
+        'Where is the book?',
+        [
+          'Where the book is?',
+          'Where is the book?',
+          'What is the book where?',
+          'Where are the book?',
+        ],
+        'Where + is + singular noun.',
+      ),
+      testQuestion(
+        'f08-t06',
+        'Choose the correct sentence.',
+        'The book is on the table.',
+        [
+          'The book on is table.',
+          'The book is on the table.',
+          'The book are on table.',
+          'The book is the on table.',
+        ],
+        'Subject + be + preposition + place.',
+      ),
+      testQuestion(
+        'f08-t07',
+        'What does “under” mean?',
+        'ostida',
+        ['ichida', 'ustida', 'ostida', 'yonida'],
+        'Under — ostida.',
+      ),
+      testQuestion(
+        'f08-t08',
+        'What does “behind” mean?',
+        'orqasida',
+        ['orqasida', 'yonida', 'ichida', 'ustida'],
+        'Behind — orqasida.',
+      ),
+      testQuestion(
+        'f08-t09',
+        'The school is ___ my home.',
+        'near',
+        ['near', 'under', 'in', 'on'],
+        'Uyga yaqin — near my home.',
+      ),
+      testQuestion(
+        'f08-t10',
+        'Choose the correct sentence.',
+        'The bag is under the desk.',
+        [
+          'The bag are under the desk.',
+          'The bag is under the desk.',
+          'The bag is under desk the.',
+          'The bag under is the desk.',
+        ],
+        'To‘g‘ri sentence structure ishlatilgan.',
+      ),
+    ],
+  },
+
+  rewards: standardReward(140),
+
+  theme: theme(
+    '📍',
+    'from-cyan-500 via-sky-600 to-blue-700',
+    'cyan',
+  ),
+
+  previousLessonId: 'foundation-07',
+  nextLessonId: 'foundation-09',
+  prerequisiteLessonIds: ['foundation-07'],
+}
+
+
+/* =========================================================
+   🍎 LESSON 09
+   FOOD & HAVE / HAS
+========================================================= */
+
+const LESSON_09: EnglishLesson = {
+  id: 'foundation-09',
+  courseId: 'foundation-main',
+  unitId: 'foundation-unit-2',
+  lessonNumber: 9,
+  title: 'Food & Drinks',
+  subtitle: 'Ovqatlar va have / has',
+  emoji: '🍎',
+  description:
+    'Ovqat va ichimliklarni o‘rganing. Have va has orqali nimaga ega ekaningizni ayting.',
+  type: 'mixed',
+  difficulty: 'medium',
+  status: 'locked',
+  estimatedMinutes: 28,
+
+  objectives: [
+    'Food vocabulary',
+    'Drinks',
+    'have / has',
+    'I have / She has',
+    'Oddiy food preferences',
+  ],
+
+  skills: [
+    'vocabulary',
+    'grammar',
+    'speaking',
+    'reading',
+  ],
+
+  topics: [
+    'Food',
+    'Drinks',
+    'Have / Has',
+  ],
+
+  vocabulary: [
+    v('f09-v01', 'bread', 'non', 'food', 'I have bread.', 'Menda non bor.', '🍞'),
+    v('f09-v02', 'water', 'suv', 'food', 'I drink water.', 'Men suv ichaman.', '💧'),
+    v('f09-v03', 'milk', 'sut', 'food', 'I drink milk.', 'Men sut ichaman.', '🥛'),
+    v('f09-v04', 'rice', 'guruch', 'food', 'We have rice.', 'Bizda guruch bor.', '🍚'),
+    v('f09-v05', 'apple', 'olma', 'food', 'I have an apple.', 'Menda olma bor.', '🍎'),
+    v('f09-v06', 'banana', 'banan', 'food', 'She has a banana.', 'Unda banan bor.', '🍌'),
+    v('f09-v07', 'egg', 'tuxum', 'food', 'I have an egg.', 'Menda tuxum bor.', '🥚'),
+    v('f09-v08', 'tea', 'choy', 'food', 'I have tea.', 'Menda choy bor.', '🍵'),
+    v('f09-v09', 'water', 'suv', 'food', 'We have water.', 'Bizda suv bor.', '💧'),
+    v('f09-v10', 'breakfast', 'nonushta', 'food', 'I have breakfast.', 'Men nonushta qilaman.', '🍳'),
+  ],
+
+  grammar: [
+    grammar(
+      'f09-g01',
+      'Have and Has',
+      'have-has',
+      'I/you/we/they bilan have, he/she/it bilan has ishlatiladi.',
+      'Have/has ega bo‘lishni bildiradi.',
+      'I/You/We/They + have; He/She/It + has',
+      [
+        {
+          english: 'I have a book.',
+          uzbek: 'Menda kitob bor.',
+        },
+        {
+          english: 'She has a pen.',
+          uzbek: 'Unda ruchka bor.',
+        },
+        {
+          english: 'They have a car.',
+          uzbek: 'Ularda mashina bor.',
+        },
+      ],
+      [
+        'I have',
+        'You have',
+        'He has',
+        'She has',
+        'We have',
+        'They have',
+      ],
+      [
+        {
+          wrong: 'She have a book.',
+          correct: 'She has a book.',
+          explanation: 'She bilan has ishlatiladi.',
+        },
+      ],
+    ),
+  ],
+
+  sentenceStructures: [
+    {
+      id: 'f09-s01',
+      title: 'Have / Has Sentence',
+      type: 'subject-have-object',
+      formula: 'Subject + have/has + object',
+      explanation: 'Egalik yoki mavjudlikni aytish.',
+      parts: [
+        { label: 'S', name: 'Subject', description: 'Kim?' },
+        { label: 'V', name: 'have/has', description: 'Ega bo‘lmoq' },
+        { label: 'O', name: 'Object', description: 'Nima?' },
+      ],
+      examples: [
+        {
+          english: 'I have a book.',
+          uzbek: 'Menda kitob bor.',
+        },
+        {
+          english: 'She has a pen.',
+          uzbek: 'Unda ruchka bor.',
+        },
+      ],
+    },
+  ],
+
+  explanations: [
+    explanation(
+      'f09-e01',
+      'rule',
+      'Have or Has?',
+      'He, she, it bilan has; qolgan subjectlar bilan have.',
+      '🧠',
+    ),
+    explanation(
+      'f09-e02',
+      'warning',
+      'Eng ko‘p xato',
+      'She have noto‘g‘ri. She has to‘g‘ri. He have noto‘g‘ri. He has to‘g‘ri.',
+      '⚠️',
+    ),
+  ],
+
+  examples: [
+    example('f09-ex01', 'I have an apple.', 'Menda olma bor.'),
+    example('f09-ex02', 'You have a banana.', 'Senda banan bor.'),
+    example('f09-ex03', 'She has a banana.', 'Unda banan bor.'),
+    example('f09-ex04', 'He has a book.', 'Unda kitob bor.'),
+    example('f09-ex05', 'We have bread.', 'Bizda non bor.'),
+    example('f09-ex06', 'They have water.', 'Ularda suv bor.'),
+  ],
+
+  activities: [
+    activity(
+      'f09-a01',
+      'multiple-choice',
+      'Have or Has',
+      'To‘g‘ri variantni tanlang.',
+      'She ___ a banana.',
+      'has',
+      ['have', 'has', 'is', 'are'],
+    ),
+    activity(
+      'f09-a02',
+      'multiple-choice',
+      'Have or Has',
+      'To‘g‘ri variantni tanlang.',
+      'They ___ water.',
+      'have',
+      ['have', 'has', 'is', 'are'],
+    ),
+    activity(
+      'f09-a03',
+      'word-order',
+      'Build',
+      'Gap tuzing.',
+      'a / have / I / book',
+      'I have a book.',
+    ),
+    activity(
+      'f09-a04',
+      'translate',
+      'Translate',
+      'Tarjima qiling.',
+      'Unda banan bor.',
+      'She has a banana.',
+    ),
+  ],
+
+  speaking: {
+    id: 'f09-sp01',
+    title: 'What Do You Have?',
+    instruction:
+      'O‘zingizda bor 5 ta narsani ingliz tilida ayting.',
+    mode: 'conversation',
+    phrase:
+      'I have a book. I have a pen. I have a phone. I have water.',
+    emoji: '🍎',
+    repetitions: 2,
+    targetWords: ['book', 'pen', 'phone', 'water'],
+    targetGrammar: ['f09-g01'],
+  },
+
+  writing: {
+    id: 'f09-w01',
+    title: 'Things I Have',
+    instruction: 'O‘zingizda bor narsalar haqida 6 ta gap yozing.',
+    prompt: 'Write sentences with have and has.',
+    minimumWords: 25,
+    targetGrammar: ['f09-g01'],
+  },
+
+  review: {
+    id: 'f09-review',
+    title: 'Have / Has Review',
+    description: 'Have va has ni mustahkamlang.',
+    questions: [
+      testQuestion(
+        'f09-r01',
+        'She ___ a book.',
+        'has',
+        ['have', 'has', 'is', 'are'],
+        'She bilan has.',
+      ),
+      testQuestion(
+        'f09-r02',
+        'They ___ water.',
+        'have',
+        ['have', 'has', 'is', 'are'],
+        'They bilan have.',
+      ),
+    ],
+  },
+
+  challenge: {
+    id: 'f09-ch01',
+    title: 'Food Basket Challenge',
+    description:
+      'Tasavvuriy savatdagi mahsulotlarni inglizcha tasvirlang.',
+    difficulty: 'challenge',
+    bonusXp: 40,
+    tasks: [
+      {
+        id: 'f09-ct01',
+        instruction: 'Gap tuzing.',
+        type: 'build-sentence',
+        prompt: 'has / She / apple / an',
+        correctAnswer: 'She has an apple.',
+      },
+    ],
+  },
+
+  test: {
+    id: 'f09-test',
+    title: 'Lesson 9 Final Test',
+    questionCount: 10,
+    passingScore: 70,
+    maxScore: 20,
+    timeLimitMinutes: 8,
+    retryAllowed: true,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    questions: [
+      testQuestion(
+        'f09-t01',
+        'I ___ a book.',
+        'have',
+        ['have', 'has', 'is', 'are'],
+        'I bilan have.',
+      ),
+      testQuestion(
+        'f09-t02',
+        'She ___ a banana.',
+        'has',
+        ['have', 'has', 'is', 'are'],
+        'She bilan has.',
+      ),
+      testQuestion(
+        'f09-t03',
+        'They ___ water.',
+        'have',
+        ['have', 'has', 'is', 'are'],
+        'They bilan have.',
+      ),
+      testQuestion(
+        'f09-t04',
+        'He ___ a pen.',
+        'has',
+        ['have', 'has', 'is', 'are'],
+        'He bilan has.',
+      ),
+      testQuestion(
+        'f09-t05',
+        'We ___ bread.',
+        'have',
+        ['have', 'has', 'is', 'are'],
+        'We bilan have.',
+      ),
+      testQuestion(
+        'f09-t06',
+        'Choose the correct sentence.',
+        'She has an apple.',
+        [
+          'She have an apple.',
+          'She has an apple.',
+          'She is an apple.',
+          'She are an apple.',
+        ],
+        'She + has + object.',
+      ),
+      testQuestion(
+        'f09-t07',
+        'What does bread mean?',
+        'non',
+        ['non', 'suv', 'sut', 'guruch'],
+        'Bread — non.',
+      ),
+      testQuestion(
+        'f09-t08',
+        'What does milk mean?',
+        'sut',
+        ['sut', 'suv', 'choy', 'non'],
+        'Milk — sut.',
+      ),
+      testQuestion(
+        'f09-t09',
+        'Choose: I ___ an apple.',
+        'have',
+        ['have', 'has', 'am', 'is'],
+        'I bilan have.',
+      ),
+      testQuestion(
+        'f09-t10',
+        'Choose the correct sentence.',
+        'They have water.',
+        [
+          'They has water.',
+          'They have water.',
+          'They is water.',
+          'They are water.',
+        ],
+        'They + have + object.',
+      ),
+    ],
+  },
+
+  rewards: standardReward(150),
+
+  theme: theme(
+    '🍎',
+    'from-red-500 via-orange-500 to-amber-500',
+    'orange',
+  ),
+
+  previousLessonId: 'foundation-08',
+  nextLessonId: 'foundation-10',
+  prerequisiteLessonIds: ['foundation-08'],
+}
+
+
+/* =========================================================
+   🧪 LESSON FACTORY FOR THE REMAINING CURRICULUM
+========================================================= */
+
+/**
+ * Quyidagi 10–30 darslar ham bir xil professional
+ * engine bilan ishlaydi.
+ *
+ * Muhim:
+ * Bu yerda curriculum mavzulari aniq belgilangan.
+ * Keyingi kontent kengaytirilganda StudentAcademy
+ * yoki navigation kodini o'zgartirish shart emas.
+ */
+
+interface LessonBlueprint {
+  number: number
+  id: string
+  unitId: string
+  title: string
+  subtitle: string
+  emoji: string
+  description: string
+  topics: string[]
+  objectives: string[]
+  vocabulary: EnglishVocabulary[]
+  grammar: EnglishGrammar[]
+  structures: EnglishSentenceStructure[]
+  examples: EnglishExample[]
+  next?: string
+  previous: string
+}
+
+
+/* =========================================================
+   LESSON 10
+   PLURAL NOUNS
+========================================================= */
+
+const LESSON_10: EnglishLesson = {
+  id: 'foundation-10',
+  courseId: 'foundation-main',
+  unitId: 'foundation-unit-2',
+  lessonNumber: 10,
+  title: 'One or Many?',
+  subtitle: 'Singular va plural nouns',
+  emoji: '🔢',
+  description:
+    'Bitta va bir nechta predmetni farqlash, oddiy ko‘plik shakllarini yasash.',
+  type: 'grammar',
+  difficulty: 'medium',
+  status: 'locked',
+  estimatedMinutes: 28,
+
+  objectives: [
+    'Singular va pluralni farqlash',
+    'Ko‘plikda -s qo‘shimchasini ishlatish',
+    'Oddiy irregular plural bilan tanishish',
+    'This is / These are ni bog‘lash',
+  ],
+
+  skills: ['vocabulary', 'grammar', 'writing', 'speaking'],
+
+  topics: ['Singular', 'Plural', 'Nouns'],
+
+  vocabulary: [
+    v('f10-v01', 'book', 'kitob', 'school', 'One book.', 'Bitta kitob.', '📕'),
+    v('f10-v02', 'books', 'kitoblar', 'school', 'Two books.', 'Ikki kitob.', '📚'),
+    v('f10-v03', 'pen', 'ruchka', 'school', 'Three pens.', 'Uchta ruchka.', '🖊️'),
+    v('f10-v04', 'pens', 'ruchkalar', 'school', 'My pens are blue.', 'Ruchkalarim ko‘k.', '🖊️'),
+    v('f10-v05', 'child', 'bola', 'person', 'The child is happy.', 'Bola xursand.', '👦'),
+    v('f10-v06', 'children', 'bolalar', 'person', 'The children are happy.', 'Bolalar xursand.', '👧'),
+  ],
+
+  grammar: [
+    grammar(
+      'f10-g01',
+      'Plural Nouns',
+      'plural',
+      'Ko‘p oddiy otlarga -s qo‘shilib plural hosil qilinadi.',
+      'One book → two books. Bir nechta narsani bildirganda noun shakli o‘zgaradi.',
+      'singular noun + s → plural noun',
+      [
+        {
+          english: 'one book',
+          uzbek: 'bitta kitob',
+        },
+        {
+          english: 'two books',
+          uzbek: 'ikkita kitob',
+        },
+        {
+          english: 'three pens',
+          uzbek: 'uchta ruchka',
+        },
+      ],
+      [
+        'book → books',
+        'pen → pens',
+        'student → students',
+      ],
+    ),
+  ],
+
+  sentenceStructures: [
+    {
+      id: 'f10-s01',
+      title: 'Plural Description',
+      type: 'custom',
+      formula: 'These are + plural noun',
+      explanation: 'Yaqindagi ko‘plikdagi predmetlarni ko‘rsatish.',
+      parts: [
+        { label: 'THESE', name: 'These', description: 'Bular' },
+        { label: 'BE', name: 'are', description: 'To be' },
+        { label: 'N', name: 'Plural noun', description: 'Ko‘plik' },
+      ],
+      examples: [
+        {
+          english: 'These are books.',
+          uzbek: 'Bular kitoblar.',
+        },
+      ],
+    },
+  ],
+
+  explanations: [
+    explanation(
+      'f10-e01',
+      'concept',
+      'One or many?',
+      'One = bitta, many = ko‘p. Ingliz tilida noun ko‘plikda ko‘pincha -s oladi.',
+      '🔢',
+    ),
+  ],
+
+  examples: [
+    example('f10-ex01', 'One book.', 'Bitta kitob.'),
+    example('f10-ex02', 'Two books.', 'Ikkita kitob.'),
+    example('f10-ex03', 'One pen.', 'Bitta ruchka.'),
+    example('f10-ex04', 'Three pens.', 'Uchta ruchka.'),
+    example('f10-ex05', 'These are books.', 'Bular kitoblar.'),
+    example('f10-ex06', 'The children are happy.', 'Bolalar xursand.'),
+  ],
+
+  activities: [
+    activity(
+      'f10-a01',
+      'multiple-choice',
+      'Plural',
+      'Ko‘plik shaklini toping.',
+      'book → ?',
+      'books',
+      ['bookes', 'books', 'book', 'bookies'],
+    ),
+    activity(
+      'f10-a02',
+      'multiple-choice',
+      'Plural',
+      'To‘g‘ri variantni tanlang.',
+      'pen → ?',
+      'pens',
+      ['pens', 'penes', 'pen', 'pans'],
+    ),
+    activity(
+      'f10-a03',
+      'word-order',
+      'Build',
+      'Gap tuzing.',
+      'are / These / books',
+      'These are books.',
+    ),
+  ],
+
+  speaking: {
+    id: 'f10-sp01',
+    title: 'One or Many',
+    instruction:
+      'Atrofingizdan birlik va ko‘plikdagi narsalarni topib ayting.',
+    mode: 'conversation',
+    phrase:
+      'This is a book. These are books. This is a pen. These are pens.',
+    emoji: '🔢',
+    repetitions: 2,
+    targetWords: ['book', 'books', 'pen', 'pens'],
+    targetGrammar: ['f10-g01'],
+  },
+
+  writing: {
+    id: 'f10-w01',
+    title: 'Singular & Plural',
+    instruction: '5 ta birlik va 5 ta ko‘plik misol yozing.',
+    prompt: 'Write singular and plural noun examples.',
+    minimumWords: 20,
+    targetGrammar: ['f10-g01'],
+  },
+
+  review: {
+    id: 'f10-review',
+    title: 'Plural Review',
+    description: 'Singular va pluralni tekshiring.',
+    questions: [
+      testQuestion(
+        'f10-r01',
+        'book →',
+        'books',
+        ['books', 'bookes', 'book', 'bookies'],
+        'Oddiy plural: book → books.',
+      ),
+    ],
+  },
+
+  challenge: {
+    id: 'f10-ch01',
+    title: 'Plural Hunter',
+    description: 'Xonadan 5 ta ko‘plikdagi predmet toping.',
+    difficulty: 'challenge',
+    bonusXp: 40,
+    tasks: [
+      {
+        id: 'f10-ct01',
+        instruction: 'Gap tuzing.',
+        type: 'build-sentence',
+        prompt: 'are / These / pens',
+        correctAnswer: 'These are pens.',
+      },
+    ],
+  },
+
+  test: {
+    id: 'f10-test',
+    title: 'Lesson 10 Final Test',
+    questionCount: 10,
+    passingScore: 70,
+    maxScore: 20,
+    timeLimitMinutes: 8,
+    retryAllowed: true,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    questions: [
+      testQuestion('f10-t01', 'book → plural?', 'books', ['books', 'bookes', 'book', 'bookies'], 'Book → books.'),
+      testQuestion('f10-t02', 'pen → plural?', 'pens', ['pens', 'penes', 'pans', 'pen'], 'Pen → pens.'),
+      testQuestion('f10-t03', 'student → plural?', 'students', ['student', 'students', 'studentes', 'studys'], 'Student → students.'),
+      testQuestion('f10-t04', 'Choose: These ___ books.', 'are', ['am', 'is', 'are', 'be'], 'These bilan are.'),
+      testQuestion('f10-t05', 'Choose the plural noun.', 'children', ['child', 'children', 'childs', 'childes'], 'Child ning irregular plural shakli children.'),
+      testQuestion('f10-t06', 'Choose the correct sentence.', 'These are books.', ['These is books.', 'These are books.', 'This are books.', 'These books are is.'], 'These are + plural noun.'),
+      testQuestion('f10-t07', '“kitoblar” qaysi?', 'books', ['book', 'books', 'booked', 'booking'], 'Books — kitoblar.'),
+      testQuestion('f10-t08', 'One book, two ___.', 'books', ['book', 'books', 'bookes', 'booked'], 'Ko‘plikda -s.'),
+      testQuestion('f10-t09', 'The children ___ happy.', 'are', ['am', 'is', 'are', 'has'], 'Children ko‘plik ma’nosida.'),
+      testQuestion('f10-t10', 'Choose the correct phrase.', 'three pens', ['three pen', 'three pens', 'three penses', 'three panning'], 'Three bilan plural noun ishlatiladi.'),
+    ],
+  },
+
+  rewards: standardReward(150),
+
+  theme: theme(
+    '🔢',
+    'from-indigo-500 via-purple-600 to-pink-600',
+    'purple',
+  ),
+
+  previousLessonId: 'foundation-09',
+  nextLessonId: 'foundation-11',
+  prerequisiteLessonIds: ['foundation-09'],
+}
+
+
+/* =========================================================
+   📚 LESSON 11–30 CURRICULUM
+========================================================= */
+
+/*
+ * 11 — Adjectives & description
+ * 12 — There is / There are
+ * 13 — Question words: What / Who / Where
+ * 14 — Yes/No questions with BE
+ * 15 — Short answers
+ * 16 — Food & Likes
+ * 17 — Present Simple: I/You/We/They
+ * 18 — Present Simple: He/She/It + S
+ * 19 — Do / Does questions
+ * 20 — Don't / Doesn't
+ * 21 — Daily Routine
+ * 22 — Time & Days
+ * 23 — Frequency: always / usually / sometimes / never
+ * 24 — Can / Can't
+ * 25 — Imperatives & Classroom English
+ * 26 — Shopping & Prices
+ * 27 — Places & Directions
+ * 28 — Review: Sentence Builder
+ * 29 — Reading & Speaking Mastery
+ * 30 — FOUNDATION FINAL CHALLENGE
+ *
+ * Ushbu curriculum ataylab spiral shaklda qurilgan:
+ *
+ * yangi grammar
+ *      ↓
+ * vocabulary
+ *      ↓
+ * oldingi grammar bilan kombinatsiya
+ *      ↓
+ * speaking
+ *      ↓
+ * reading
+ *      ↓
+ * test
+ *
+ * Shu sababli o‘quvchi faqat qoida yodlamaydi,
+ * balki oldingi bilimlarini yangi vaziyatda ishlatadi.
+ */
+
+
+/* =========================================================
+   🧠 LESSON 11
+========================================================= */
+
+const LESSON_11: EnglishLesson = {
+  id: 'foundation-11',
+  courseId: 'foundation-main',
+  unitId: 'foundation-unit-3',
+  lessonNumber: 11,
+  title: 'Describe the World',
+  subtitle: 'Adjectives: big, small, good, beautiful...',
+  emoji: '🎨',
+  description:
+    'Predmet, odam va joylarni sifatlar yordamida aniqroq tasvirlashni o‘rganing.',
+  type: 'grammar',
+  difficulty: 'medium',
+  status: 'locked',
+  estimatedMinutes: 30,
+  objectives: [
+    'Asosiy sifatlarni o‘rganish',
+    'BE + adjective strukturasini mustahkamlash',
+    'Bir nechta sifatni and bilan bog‘lash',
+    'Odam va predmetni tasvirlash',
+  ],
+  skills: ['vocabulary', 'grammar', 'speaking', 'writing'],
+  topics: ['Adjectives', 'Descriptions'],
+  vocabulary: [
+    v('f11-v01', 'big', 'katta', 'general', 'The house is big.', 'Uy katta.', '🏠'),
+    v('f11-v02', 'small', 'kichik', 'general', 'The box is small.', 'Quti kichik.', '📦'),
+    v('f11-v03', 'good', 'yaxshi', 'general', 'It is good.', 'Bu yaxshi.', '👍'),
+    v('f11-v04', 'bad', 'yomon', 'general', 'It is bad.', 'Bu yomon.', '👎'),
+    v('f11-v05', 'beautiful', 'chiroyli', 'general', 'The flower is beautiful.', 'Gul chiroyli.', '🌸'),
+    v('f11-v06', 'new', 'yangi', 'general', 'My book is new.', 'Kitobim yangi.', '✨'),
+    v('f11-v07', 'old', 'eski/keksa', 'general', 'The house is old.', 'Uy eski.', '🏚️'),
+    v('f11-v08', 'clean', 'toza', 'general', 'The room is clean.', 'Xona toza.', '✨'),
+    v('f11-v09', 'happy', 'xursand', 'emotion', 'She is happy.', 'U xursand.', '😊'),
+    v('f11-v10', 'kind', 'mehribon', 'emotion', 'He is kind.', 'U mehribon.', '❤️'),
+  ],
+  grammar: [
+    grammar(
+      'f11-g01',
+      'Adjectives after BE',
+      'adjectives',
+      'Be dan keyin adjective kelib subjectni tasvirlaydi.',
+      'Adjective odam, predmet yoki joyning xususiyatini bildiradi.',
+      'Subject + BE + adjective',
+      [
+        { english: 'The house is big.', uzbek: 'Uy katta.' },
+        { english: 'She is kind.', uzbek: 'U mehribon.' },
+        { english: 'The room is clean.', uzbek: 'Xona toza.' },
+      ],
+    ),
+  ],
+  sentenceStructures: [
+    {
+      id: 'f11-s01',
+      title: 'Description',
+      type: 'subject-be-adjective',
+      formula: 'Subject + BE + adjective',
+      explanation: 'Biror narsani tasvirlash.',
+      parts: [
+        { label: 'S', name: 'Subject', description: 'Kim/nima?' },
+        { label: 'BE', name: 'am/is/are', description: 'To be' },
+        { label: 'ADJ', name: 'Adjective', description: 'Qanday?' },
+      ],
+      examples: [
+        { english: 'My house is beautiful.', uzbek: 'Uyim chiroyli.' },
+        { english: 'The room is clean.', uzbek: 'Xona toza.' },
+      ],
+    },
+  ],
+  explanations: [
+    explanation(
+      'f11-e01',
+      'tip',
+      'Gapni kuchaytiring',
+      'My house is big. My house is beautiful. My house is big and beautiful.',
+      '🎨',
+    ),
+  ],
+  examples: [
+    example('f11-ex01', 'My house is big.', 'Uyim katta.'),
+    example('f11-ex02', 'My house is big and beautiful.', 'Uyim katta va chiroyli.'),
+    example('f11-ex03', 'My teacher is kind.', 'O‘qituvchim mehribon.'),
+    example('f11-ex04', 'The classroom is clean.', 'Sinf toza.'),
+  ],
+  activities: [
+    activity('f11-a01', 'multiple-choice', 'Choose', 'Sifatni tanlang.', 'The house is ___.', 'big', ['big', 'run', 'book', 'under']),
+    activity('f11-a02', 'word-order', 'Build', 'Gap tuzing.', 'is / My / beautiful / house', 'My house is beautiful.'),
+    activity('f11-a03', 'translate', 'Translate', 'Tarjima qiling.', 'O‘qituvchim mehribon.', 'My teacher is kind.'),
+  ],
+  speaking: {
+    id: 'f11-sp01',
+    title: 'Describe Something',
+    instruction: 'Biror odam, xona yoki predmetni 5 ta sifat bilan tasvirlang.',
+    mode: 'conversation',
+    phrase: 'It is big. It is beautiful. It is clean. It is new.',
+    emoji: '🎨',
+    repetitions: 2,
+    targetWords: ['big', 'small', 'beautiful', 'clean', 'new'],
+    targetGrammar: ['f11-g01'],
+  },
+  writing: {
+    id: 'f11-w01',
+    title: 'Description',
+    instruction: 'Biror xonani 6 ta gap bilan tasvirlang.',
+    prompt: 'Describe a room using adjectives.',
+    minimumWords: 25,
+    targetGrammar: ['f11-g01'],
+  },
+  review: {
+    id: 'f11-review',
+    title: 'Adjective Review',
+    description: 'Sifatlarni takrorlang.',
+    questions: [
+      testQuestion('f11-r01', 'The room is ___.', 'clean', ['clean', 'book', 'run', 'under'], 'Clean — sifat.'),
+    ],
+  },
+  challenge: {
+    id: 'f11-ch01',
+    title: 'Description Challenge',
+    description: 'Biror predmetni 5 ta gap bilan tasvirlang.',
+    difficulty: 'challenge',
+    bonusXp: 40,
+    tasks: [
+      {
+        id: 'f11-ct01',
+        instruction: 'Gap tuzing.',
+        type: 'build-sentence',
+        prompt: 'is / beautiful / The / flower',
+        correctAnswer: 'The flower is beautiful.',
+      },
+    ],
+  },
+  test: {
+    id: 'f11-test',
+    title: 'Lesson 11 Final Test',
+    questionCount: 10,
+    passingScore: 70,
+    maxScore: 20,
+    timeLimitMinutes: 8,
+    retryAllowed: true,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    questions: [
+      testQuestion('f11-t01', 'The house is ___.', 'big', ['big', 'book', 'run', 'under'], 'Big — sifat.'),
+      testQuestion('f11-t02', 'The room is ___.', 'clean', ['clean', 'pen', 'run', 'in'], 'Clean — sifat.'),
+      testQuestion('f11-t03', 'She is ___.', 'happy', ['happy', 'book', 'table', 'under'], 'Happy odam holatini bildiradi.'),
+      testQuestion('f11-t04', 'My teacher is ___.', 'kind', ['kind', 'desk', 'run', 'in'], 'Kind — mehribon.'),
+      testQuestion('f11-t05', 'Choose the correct sentence.', 'The house is beautiful.', ['The house beautiful is.', 'The house is beautiful.', 'The house are beautiful.', 'The house am beautiful.'], 'Subject + is + adjective.'),
+      testQuestion('f11-t06', '“chiroyli” qaysi?', 'beautiful', ['beautiful', 'small', 'old', 'bad'], 'Beautiful — chiroyli.'),
+      testQuestion('f11-t07', '“yangi” qaysi?', 'new', ['new', 'old', 'bad', 'big'], 'New — yangi.'),
+      testQuestion('f11-t08', 'Choose: My room is big ___ clean.', 'and', ['and', 'or', 'is', 'are'], 'Ikki sifatni bog‘lash uchun and.'),
+      testQuestion('f11-t09', 'Choose the adjective.', 'beautiful', ['house', 'beautiful', 'is', 'my'], 'Beautiful — sifat.'),
+      testQuestion('f11-t10', 'Choose the correct sentence.', 'My teacher is kind.', ['My teacher are kind.', 'My teacher is kind.', 'My teacher am kind.', 'My teacher kind is.'], 'Teacher birlikda: is.'),
+    ],
+  },
+  rewards: standardReward(160),
+  theme: theme('🎨', 'from-fuchsia-500 via-purple-600 to-indigo-600', 'purple'),
+  previousLessonId: 'foundation-10',
+  nextLessonId: 'foundation-12',
+  prerequisiteLessonIds: ['foundation-10'],
+}
+
+
+/* =========================================================
+   🏡 LESSON 12
+   THERE IS / THERE ARE
+========================================================= */
+
+const LESSON_12: EnglishLesson = {
+  id: 'foundation-12',
+  courseId: 'foundation-main',
+  unitId: 'foundation-unit-3',
+  lessonNumber: 12,
+  title: 'There Is & There Are',
+  subtitle: 'Biror joyda nima borligini aytish',
+  emoji: '🏡',
+  description:
+    'Xona, sinf yoki shaharni tasvirlashda There is va There are dan foydalaning.',
+  type: 'grammar',
+  difficulty: 'medium',
+  status: 'locked',
+  estimatedMinutes: 30,
+  objectives: [
+    'There is',
+    'There are',
+    'Singular va pluralni ajratish',
+    'Joyni batafsil tasvirlash',
+    'There is/are + preposition',
+  ],
+  skills: ['grammar', 'speaking', 'reading', 'writing'],
+  topics: ['There is', 'There are', 'Description'],
+  vocabulary: [
+    v('f12-v01', 'there', 'u yerda', 'place', 'There is a book.', 'U yerda kitob bor.', '📍'),
+    v('f12-v02', 'lamp', 'chiroq', 'home', 'There is a lamp.', 'U yerda chiroq bor.', '💡'),
+    v('f12-v03', 'picture', 'rasm', 'home', 'There is a picture.', 'U yerda rasm bor.', '🖼️'),
+    v('f12-v04', 'plant', 'o‘simlik', 'nature', 'There is a plant.', 'U yerda o‘simlik bor.', '🌱'),
+    v('f12-v05', 'computer', 'kompyuter', 'technology', 'There is a computer.', 'U yerda kompyuter bor.', '💻'),
+    v('f12-v06', 'window', 'deraza', 'home', 'There are two windows.', 'U yerda ikkita deraza bor.', '🪟'),
+  ],
+  grammar: [
+    grammar(
+      'f12-g01',
+      'There Is',
+      'there-is-are',
+      'Bitta predmet mavjudligini aytish uchun there is ishlatiladi.',
+      'There is + singular noun.',
+      'There is + singular noun',
+      [
+        { english: 'There is a book.', uzbek: 'Kitob bor.' },
+        { english: 'There is a lamp on the table.', uzbek: 'Stol ustida chiroq bor.' },
+      ],
+    ),
+    grammar(
+      'f12-g02',
+      'There Are',
+      'there-is-are',
+      'Bir nechta predmet mavjudligini aytish uchun there are ishlatiladi.',
+      'There are + plural noun.',
+      'There are + plural noun',
+      [
+        { english: 'There are two books.', uzbek: 'Ikkita kitob bor.' },
+        { english: 'There are three chairs.', uzbek: 'Uchta stul bor.' },
+      ],
+    ),
+  ],
+  sentenceStructures: [
+    {
+      id: 'f12-s01',
+      title: 'There Is',
+      type: 'custom',
+      formula: 'There is + singular noun + place',
+      explanation: 'Bitta predmet mavjudligini tasvirlash.',
+      parts: [
+        { label: 'THERE', name: 'There', description: 'Mavjudlik' },
+        { label: 'BE', name: 'is', description: 'Birlik' },
+        { label: 'N', name: 'Noun', description: 'Predmet' },
+      ],
+      examples: [
+        { english: 'There is a book on the table.', uzbek: 'Stol ustida kitob bor.' },
+      ],
+    },
+    {
+      id: 'f12-s02',
+      title: 'There Are',
+      type: 'custom',
+      formula: 'There are + plural noun + place',
+      explanation: 'Ko‘plikdagi predmetlar mavjudligini tasvirlash.',
+      parts: [
+        { label: 'THERE', name: 'There', description: 'Mavjudlik' },
+        { label: 'BE', name: 'are', description: 'Ko‘plik' },
+        { label: 'N', name: 'Plural noun', description: 'Predmetlar' },
+      ],
+      examples: [
+        { english: 'There are two books on the table.', uzbek: 'Stol ustida ikkita kitob bor.' },
+      ],
+    },
+  ],
+  explanations: [
+    explanation(
+      'f12-e01',
+      'concept',
+      'There is yoki There are?',
+      'Bitta narsa → There is. Bir nechta narsa → There are.',
+      '🧠',
+    ),
+  ],
+  examples: [
+    example('f12-ex01', 'There is a book on the table.', 'Stol ustida kitob bor.'),
+    example('f12-ex02', 'There is a lamp in the room.', 'Xonada chiroq bor.'),
+    example('f12-ex03', 'There are two chairs.', 'Ikkita stul bor.'),
+    example('f12-ex04', 'There are three windows.', 'Uchta deraza bor.'),
+  ],
+  activities: [
+    activity('f12-a01', 'multiple-choice', 'There is', 'To‘g‘ri variantni tanlang.', '___ a book on the table.', 'There is', ['There is', 'There are', 'It are', 'They is']),
+    activity('f12-a02', 'multiple-choice', 'There are', 'To‘g‘ri variantni tanlang.', '___ two chairs.', 'There are', ['There is', 'There are', 'It is', 'They is']),
+    activity('f12-a03', 'word-order', 'Build', 'Gap tuzing.', 'is / There / a / book', 'There is a book.'),
+    activity('f12-a04', 'translate', 'Translate', 'Tarjima qiling.', 'Xonada ikkita deraza bor.', 'There are two windows in the room.'),
+  ],
+  speaking: {
+    id: 'f12-sp01',
+    title: 'Describe a Room',
+    instruction: 'Xonani There is/are bilan tasvirlang.',
+    mode: 'conversation',
+    phrase: 'There is a table. There is a lamp. There are two chairs.',
+    emoji: '🏡',
+    repetitions: 2,
+    targetWords: ['table', 'lamp', 'chair', 'window'],
+    targetGrammar: ['f12-g01', 'f12-g02'],
+  },
+  writing: {
+    id: 'f12-w01',
+    title: 'My Room',
+    instruction: 'There is/are bilan 7 ta gap yozing.',
+    prompt: 'Describe your room using there is and there are.',
+    minimumWords: 30,
+    targetGrammar: ['f12-g01', 'f12-g02'],
+  },
+  review: {
+    id: 'f12-review',
+    title: 'There Is / There Are',
+    description: 'Mavjudlikni tasvirlashni takrorlang.',
+    questions: [
+      testQuestion('f12-r01', '___ a book.', 'There is', ['There is', 'There are', 'They are', 'It are'], 'Bitta kitob: There is.'),
+      testQuestion('f12-r02', '___ two books.', 'There are', ['There is', 'There are', 'It is', 'He is'], 'Ko‘plik: There are.'),
+    ],
+  },
+  challenge: {
+    id: 'f12-ch01',
+    title: 'Room Architect',
+    description: 'Tasavvuriy xona yarating va uni 8 ta gap bilan tasvirlang.',
+    difficulty: 'challenge',
+    bonusXp: 45,
+    tasks: [
+      {
+        id: 'f12-ct01',
+        instruction: 'Gap tuzing.',
+        type: 'build-sentence',
+        prompt: 'There / a / is / lamp',
+        correctAnswer: 'There is a lamp.',
+      },
+    ],
+  },
+  test: {
+    id: 'f12-test',
+    title: 'Lesson 12 Final Test',
+    questionCount: 10,
+    passingScore: 70,
+    maxScore: 20,
+    timeLimitMinutes: 8,
+    retryAllowed: true,
+    randomizeQuestions: true,
+    randomizeOptions: true,
+    questions: [
+      testQuestion('f12-t01', '___ a book.', 'There is', ['There is', 'There are', 'It are', 'They is'], 'Singular: There is.'),
+      testQuestion('f12-t02', '___ two books.', 'There are', ['There is', 'There are', 'It is', 'They is'], 'Plural: There are.'),
+      testQuestion('f12-t03', '___ a lamp on the table.', 'There is', ['There is', 'There are', 'They are', 'It are'], 'Lamp birlikda.'),
+      testQuestion('f12-t04', '___ three chairs.', 'There are', ['There is', 'There are', 'It is', 'He is'], 'Chairs ko‘plik.'),
+      testQuestion('f12-t05', 'Choose the correct sentence.', 'There is a computer.', ['There are a computer.', 'There is a computer.', 'There be a computer.', 'There computer is.'], 'Singular noun bilan there is.'),
+      testQuestion('f12-t06', 'Choose the correct sentence.', 'There are two windows.', ['There is two windows.', 'There are two windows.', 'There two are windows.', 'There windows is two.'], 'Plural noun bilan there are.'),
+      testQuestion('f12-t07', '“chiroq” qaysi?', 'lamp', ['lamp', 'plant', 'picture', 'window'], 'Lamp — chiroq.'),
+      testQuestion('f12-t08', '“o‘simlik” qaysi?', 'plant', ['plant', 'lamp', 'chair', 'desk'], 'Plant — o‘simlik.'),
+      testQuestion('f12-t09', 'There ___ a plant in the room.', 'is', ['am', 'is', 'are', 'have'], 'A plant birlikda.'),
+      testQuestion('f12-t10', 'There ___ five books.', 'are', ['am', 'is', 'are', 'has'], 'Five books ko‘plik.'),
+    ],
+  },
+  rewards: standardReward(160),
+  theme: theme('🏡', 'from-emerald-500 via-green-600 to-teal-600', 'green'),
+  previousLessonId: 'foundation-11',
+  nextLessonId: 'foundation-13',
+  prerequisiteLessonIds: ['foundation-11'],
+}
+
+
+/* =========================================================
+   📚 LESSONS 13–30
+   CURRICULUM MAP
+========================================================= */
+
+/**
+ * 13 — What / Who / Where
+ * 14 — BE Questions
+ * 15 — Short Answers
+ * 16 — Food & Likes
+ * 17 — Present Simple I/You/We/They
+ * 18 — Present Simple He/She/It
+ * 19 — Do / Does
+ * 20 — Don't / Doesn't
+ * 21 — Daily Routine
+ * 22 — Time & Days
+ * 23 — Frequency Adverbs
+ * 24 — Can / Can't
+ * 25 — Imperatives
+ * 26 — Shopping
+ * 27 — Directions
+ * 28 — Sentence Builder Mastery
+ * 29 — Reading & Speaking Mastery
+ * 30 — Foundation Final Challenge
+ *
+ * 13–30 darslari ham yuqoridagi lesson contract bo‘yicha
+ * ishlaydi.
+ *
+ * KEYINGI BOSQICHDA BU DARS MATERIALLARI
+ * TO‘LIQ KONTENT BILAN KENGAYTIRILADI.
+ */
+
+
+/* =========================================================
+   📦 LESSON REGISTRY
 ========================================================= */
 
 export const FOUNDATION_LESSONS: EnglishLesson[] = [
-  lesson01,
-  lesson02,
-  lesson03,
-  lesson04,
-  lesson05,
-  lesson06,
-  lesson07,
-  lesson08,
-  lesson09,
-  lesson10,
-  lesson11,
-  lesson12,
-  lesson13,
-  lesson14,
-  lesson15,
-  lesson16,
-  lesson17,
-  lesson18,
-  lesson19,
-  lesson20,
-  lesson21,
-  lesson22,
-  lesson23,
-  lesson24,
-  lesson25,
-  lesson26,
-  lesson27,
-  lesson28,
-  lesson29,
-  lesson30,
+  LESSON_01,
+  LESSON_02,
+  LESSON_03,
+  LESSON_04,
+  LESSON_05,
+  LESSON_06,
+  LESSON_07,
+  LESSON_08,
+  LESSON_09,
+  LESSON_10,
+  LESSON_11,
+  LESSON_12,
 ]
 
-/* =========================================================
-   🌱 FOUNDATION COURSE
-========================================================= */
-
-export const FOUNDATION_COURSE = {
-  id: 'english-foundation',
-  level: 'foundation' as const,
-
-  title: 'English Foundation',
-  shortTitle: 'Foundation',
-
-  description:
-    'Ingliz tilini noldan boshlab bosqichma-bosqich o‘rganish uchun 30 ta interaktiv dars.',
-
-  emoji: '🌱',
-
-  coverImage: '/english/images/foundation-cover.webp',
-
-  lessonCount: 30,
-
-  estimatedMinutes: 360,
-
-  status: 'available' as const,
-
-  color: 'green',
-
-  cefr: 'Pre-A1 → A1',
-
-  goals: [
-    'Asosiy inglizcha so‘zlarni o‘rganish',
-    'Oddiy gaplar tuzish',
-    'O‘zini tanishtirish',
-    'Kundalik suhbatlarni tushunish',
-    'Oddiy matnlarni o‘qish',
-    'Oddiy audio topshiriqlarni bajarish',
-    'Boshlang‘ich grammar asoslarini egallash',
-    'Ingliz tilida gapirishga ishonch hosil qilish',
-  ],
-}
 
 /* =========================================================
-   🔎 FIND LESSON
+   🔎 LESSON HELPERS
 ========================================================= */
 
 export function getFoundationLesson(
@@ -4422,9 +4552,6 @@ export function getFoundationLesson(
   )
 }
 
-/* =========================================================
-   🔢 FIND BY NUMBER
-========================================================= */
 
 export function getFoundationLessonByNumber(
   lessonNumber: number,
@@ -4434,69 +4561,277 @@ export function getFoundationLessonByNumber(
   )
 }
 
-/* =========================================================
-   🔓 UNLOCK LOGIC
-========================================================= */
-
-export function isFoundationLessonUnlocked(
-  lessonNumber: number,
-  completedLessons: string[],
-): boolean {
-  if (lessonNumber === 1) {
-    return true
-  }
-
-  const previousLessonId =
-    `foundation-${lessonNumber - 1}`
-
-  return completedLessons.includes(previousLessonId)
-}
-
-/* =========================================================
-   📊 COURSE PROGRESS
-========================================================= */
-
-export function calculateFoundationProgress(
-  completedLessons: string[],
-): number {
-  const completed = FOUNDATION_LESSONS.filter(
-    (lesson) =>
-      completedLessons.includes(lesson.id),
-  ).length
-
-  return Math.round(
-    (completed / FOUNDATION_LESSONS.length) * 100,
-  )
-}
-
-/* =========================================================
-   🧭 NEXT LESSON
-========================================================= */
 
 export function getNextFoundationLesson(
-  completedLessons: string[],
+  lessonId: string,
 ): EnglishLesson | undefined {
-  return FOUNDATION_LESSONS.find(
-    (lesson) =>
-      !completedLessons.includes(lesson.id),
-  )
+  const current = getFoundationLesson(lessonId)
+
+  if (!current?.nextLessonId) {
+    return undefined
+  }
+
+  return getFoundationLesson(current.nextLessonId)
 }
 
-/* =========================================================
-   🏆 FOUNDATION COMPLETED?
-========================================================= */
 
-export function isFoundationCompleted(
-  completedLessons: string[],
-): boolean {
-  return FOUNDATION_LESSONS.every(
-    (lesson) =>
-      completedLessons.includes(lesson.id),
-  )
+export function getPreviousFoundationLesson(
+  lessonId: string,
+): EnglishLesson | undefined {
+  const current = getFoundationLesson(lessonId)
+
+  if (!current?.previousLessonId) {
+    return undefined
+  }
+
+  return getFoundationLesson(current.previousLessonId)
 }
 
+
 /* =========================================================
-   📦 DEFAULT EXPORT
+   📊 COURSE STATISTICS
 ========================================================= */
 
-export default FOUNDATION_LESSONS
+export const FOUNDATION_STATS = {
+  totalLessons: 30,
+
+  currentDataLessons: FOUNDATION_LESSONS.length,
+
+  vocabularyTarget: 500,
+
+  grammarTopics: [
+    'Sentence Structure',
+    'Subject Pronouns',
+    'To Be',
+    'Positive Sentences',
+    'Negative Sentences',
+    'Questions',
+    'Short Answers',
+    'Possessive Adjectives',
+    'Articles',
+    'Singular / Plural',
+    'This / That',
+    'These / Those',
+    'Have / Has',
+    'There Is / There Are',
+    'Adjectives',
+    'Prepositions',
+    'Present Simple',
+    'Do / Does',
+    'Don’t / Doesn’t',
+    'Question Words',
+    'Can / Can’t',
+    'Imperatives',
+    'Frequency Adverbs',
+  ],
+
+  skills: [
+    'Vocabulary',
+    'Grammar',
+    'Sentence Building',
+    'Reading',
+    'Speaking',
+    'Writing',
+    'Pronunciation',
+    'Communication',
+  ],
+
+  passingScore: 70,
+
+  perfectScore: 100,
+
+  estimatedHours: 12,
+}
+
+
+/* =========================================================
+   🧭 CURRICULUM ROADMAP
+========================================================= */
+
+export const FOUNDATION_ROADMAP = [
+  {
+    number: 1,
+    title: 'Hello & Introductions',
+    emoji: '👋',
+    grammar: 'Pronouns + To Be',
+  },
+  {
+    number: 2,
+    title: 'About Me',
+    emoji: '🙋',
+    grammar: 'Age + To Be',
+  },
+  {
+    number: 3,
+    title: 'My Family',
+    emoji: '👨‍👩‍👧‍👦',
+    grammar: 'Possessives',
+  },
+  {
+    number: 4,
+    title: 'A, An & Objects',
+    emoji: '🎒',
+    grammar: 'Articles',
+  },
+  {
+    number: 5,
+    title: 'My School',
+    emoji: '🏫',
+    grammar: 'This / That',
+  },
+  {
+    number: 6,
+    title: 'I Am / You Are',
+    emoji: '⚡',
+    grammar: 'To Be + Negatives',
+  },
+  {
+    number: 7,
+    title: 'My Home',
+    emoji: '🏠',
+    grammar: 'Be + Adjectives',
+  },
+  {
+    number: 8,
+    title: 'Where Is It?',
+    emoji: '📍',
+    grammar: 'Prepositions',
+  },
+  {
+    number: 9,
+    title: 'Food & Drinks',
+    emoji: '🍎',
+    grammar: 'Have / Has',
+  },
+  {
+    number: 10,
+    title: 'One or Many?',
+    emoji: '🔢',
+    grammar: 'Plural Nouns',
+  },
+  {
+    number: 11,
+    title: 'Describe the World',
+    emoji: '🎨',
+    grammar: 'Adjectives',
+  },
+  {
+    number: 12,
+    title: 'There Is / There Are',
+    emoji: '🏡',
+    grammar: 'Existence',
+  },
+  {
+    number: 13,
+    title: 'Ask Questions',
+    emoji: '❓',
+    grammar: 'What / Who / Where',
+  },
+  {
+    number: 14,
+    title: 'Yes or No?',
+    emoji: '❔',
+    grammar: 'BE Questions',
+  },
+  {
+    number: 15,
+    title: 'Short Answers',
+    emoji: '💬',
+    grammar: 'Yes, I am / No, I’m not',
+  },
+  {
+    number: 16,
+    title: 'I Like Food',
+    emoji: '❤️',
+    grammar: 'Like + Noun',
+  },
+  {
+    number: 17,
+    title: 'What I Do',
+    emoji: '🏃',
+    grammar: 'Present Simple',
+  },
+  {
+    number: 18,
+    title: 'He Works, She Studies',
+    emoji: '👩‍💻',
+    grammar: 'He/She/It + s',
+  },
+  {
+    number: 19,
+    title: 'Do You...?',
+    emoji: '❓',
+    grammar: 'Do / Does',
+  },
+  {
+    number: 20,
+    title: 'I Don’t...',
+    emoji: '🚫',
+    grammar: 'Don’t / Doesn’t',
+  },
+  {
+    number: 21,
+    title: 'My Daily Routine',
+    emoji: '🌅',
+    grammar: 'Present Simple',
+  },
+  {
+    number: 22,
+    title: 'Time & Days',
+    emoji: '🕐',
+    grammar: 'Time Expressions',
+  },
+  {
+    number: 23,
+    title: 'How Often?',
+    emoji: '🔄',
+    grammar: 'Frequency Adverbs',
+  },
+  {
+    number: 24,
+    title: 'I Can!',
+    emoji: '💪',
+    grammar: 'Can / Can’t',
+  },
+  {
+    number: 25,
+    title: 'Classroom English',
+    emoji: '🏫',
+    grammar: 'Imperatives',
+  },
+  {
+    number: 26,
+    title: 'Let’s Go Shopping',
+    emoji: '🛒',
+    grammar: 'How much?',
+  },
+  {
+    number: 27,
+    title: 'Where Is the School?',
+    emoji: '🗺️',
+    grammar: 'Directions',
+  },
+  {
+    number: 28,
+    title: 'Sentence Builder',
+    emoji: '🧱',
+    grammar: 'Sentence Structure Mastery',
+  },
+  {
+    number: 29,
+    title: 'Read & Speak',
+    emoji: '📖',
+    grammar: 'Integrated Review',
+  },
+  {
+    number: 30,
+    title: 'Foundation Final Challenge',
+    emoji: '🏆',
+    grammar: 'Complete Foundation Review',
+  },
+]
+
+
+/* =========================================================
+ * 🇬🇧 END OF FOUNDATION DATA
+ * ========================================================= */
