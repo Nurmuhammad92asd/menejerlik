@@ -1619,11 +1619,11 @@ text: `Quyidagi bayonotlardan qaysilari samarali delegatsiya mantiqiga mos?
     points: 3
   },
 
-  {
-    id: "m3t3-hard-030",
-    moduleId: MODULE_ID,
-    topicId: TOPIC_ID,
-    difficulty: "hard",
+ {
+  id: "m3t3-hard-030",
+  moduleId: MODULE_ID,
+  topicId: TOPIC_ID,
+  difficulty: "hard",
   text: `Quyidagi bayonotlarni baholang.
 
 1. Muhim, lekin shoshilinch bo‘lmagan ishlar oldindan rejalashtirilishi kerak.
@@ -1633,12 +1633,15 @@ text: `Quyidagi bayonotlardan qaysilari samarali delegatsiya mantiqiga mos?
 5. Delegatsiya faqat rahbarning ishini kamaytirishdan iborat.
 
 To‘g‘ri bayonotlar qaysilar?`,
-    options: [
-      "1, 2, 4",
-      "1, 3, 5",
-      "2, 3, 4",
-      "1, 2, 3, 4"
-    ],
+  options: [
+    "1, 2, 4",
+    "1, 3, 5",
+    "2, 3, 4",
+    "1, 2, 3, 4"
+  ],
+  correctAnswer: 0,
+  explanation: "1, 2 va 4-bayonotlar samarali vaqt boshqaruvi tamoyillariga mos. Muhim, ammo shoshilinch bo‘lmagan ishlar rejalashtiriladi, ayrim III kvadrant ishlar delegatsiya qilinadi va chuqur ishlash uchun chalg‘ituvchilar kamaytiriladi."
+},
     correctAnswer: 0,
     explanation: "1, 2 va 4 strategik vaqt va delegatsiya mantig‘iga mos; 3 va 5 noto‘g‘ri.",
     points: 3
