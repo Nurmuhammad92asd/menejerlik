@@ -1445,7 +1445,6 @@ export function getDataHealth() {
 /* =========================================================
  * TOPIC MATERIALS
  * ========================================================= */
- */
 
 export type TopicMaterials = {
   text?: string
