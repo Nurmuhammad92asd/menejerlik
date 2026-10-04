@@ -12,7 +12,7 @@ import { HomeScreen } from '@/components/home-screen'
 import { QuizScreen } from '@/components/quiz-screen'
 import ResultScreen from '@/components/result-screen'
 import { RankingScreen } from '@/components/ranking-screen'
-import { StudentAcademy } from '@/components/student-academy'
+import StudentAcademy from '@/components/student-academy'
 
 import {
   createModuleSession,
