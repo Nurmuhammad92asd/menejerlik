@@ -1147,14 +1147,13 @@ export const HARD_QUESTIONS: Question[] = [
     id: "m3t3-hard-003",
     moduleId: MODULE_ID,
     topicId: TOPIC_ID,
-    difficulty: "hard",
-    text: "Quyidagi bayonotlardan qaysilari samarali delegatsiya mantiqiga mos?
-
+   difficulty: "hard",
+text: `Quyidagi bayonotlardan qaysilari samarali delegatsiya mantiqiga mos?
 1. Natija mezoni aniq bo‘lishi kerak.
 2. Ijrochi barcha qarorlarni rahbar bilan kelishishi kerak.
 3. Zarur vakolat va resurs berilishi kerak.
 4. Rahbar har bir bosqichni tekshirishi kerak.
-5. Yakuniy natija bo‘yicha qayta aloqa berilishi kerak.",
+5. Yakuniy natija bo‘yicha qayta aloqa berilishi kerak.`,
     options: [
       "1, 2, 3",
       "1, 3, 5",
