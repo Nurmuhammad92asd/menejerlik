@@ -721,11 +721,28 @@ Eng maqbul yechim qaysi?`,
    BARCHA SAVOLLAR
 ========================================================= */
 
+export const CASE_QUESTIONS: Question[] = [
+  // ... 10 ta case savol
+];
+
 export const M3T3_QUESTIONS: Question[] = [
   ...EASY_QUESTIONS,
   ...MEDIUM_QUESTIONS,
   ...HARD_QUESTIONS,
   ...CASE_QUESTIONS
+];
+
+export const M3T3_QUESTION_COUNT = M3T3_QUESTIONS.length;
+
+// ← SHU QATORNI QO‘SHING
+export const M3T3_LEVELS = {
+  easy: EASY_QUESTIONS,
+  medium: MEDIUM_QUESTIONS,
+  hard: HARD_QUESTIONS,
+  case: CASE_QUESTIONS,
+};
+
+export default M3T3_QUESTIONS;
 ];
 
 export const M3T3_QUESTION_COUNT = M3T3_QUESTIONS.length;
