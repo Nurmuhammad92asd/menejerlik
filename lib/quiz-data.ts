@@ -6,7 +6,7 @@ import { M1T5_LEVELS } from './data/m1t5'
 import { M1T6_LEVELS } from './data/m1t6'
 import { M2T1_LEVELS } from './data/m2t1'
 import { M2T2_LEVELS } from './data/m2t2'
-
+import { M2T3_LEVELS } from './data/m2t3'
 /*
  * =========================================================
  * TYPES
@@ -175,16 +175,13 @@ const MODULE_2: Category = {
   description: '...',
   levels: M2T2_LEVELS,
 },
-    {
-      id: 'm2t3',
-
-      title: 'O‘quvchilarni kasbga yo‘naltirish va kasb tanlash',
-
-      description:
-        'O‘quvchilarning qiziqish va qobiliyatlarini hisobga olgan holda kasbga yo‘naltirish.',
-
-      levels: EMPTY_LEVELS,
-    },
+   {
+  id: 'm2t3',
+  title: 'Yoshlarni kasb-hunarga yo‘naltirish',
+  description:
+    'O‘quvchilarning qiziqishi, qobiliyati va mehnat bozori talablari asosida kasbiy yo‘nalishini shakllantirish.',
+  levels: M2T3_LEVELS,
+},
 
     {
       id: 'm2t4',
