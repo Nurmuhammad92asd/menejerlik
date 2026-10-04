@@ -14,6 +14,10 @@ import ResultScreen from '@/components/result-screen'
 import { RankingScreen } from '@/components/ranking-screen'
 import StudentAcademy from '@/components/student-academy'
 
+// PISA komponenti mavjud bo‘lsa ishlaydi.
+// Hozircha faylni yaratganimizdan keyin to‘liq ulanadi.
+import PisaAcademy from '@/components/pisa/pisa-academy'
+
 import {
   createModuleSession,
   createTopicSession,
@@ -32,6 +36,7 @@ import {
 } from '@/lib/quiz-data'
 
 import { useHistory } from '@/hooks/use-history'
+
 import {
   useBackButton,
   useTelegram,
@@ -67,6 +72,7 @@ type RoleId =
 type Screen =
   | 'home'
   | 'student-academy'
+  | 'pisa'
   | 'education'
   | 'roles'
   | 'subjects'
@@ -134,7 +140,7 @@ type QuizAnswerData = {
 }
 
 /* =========================================================
-   SCHOOL SUBJECTS
+   SUBJECT TYPE
 ========================================================= */
 
 type Subject = {
@@ -144,6 +150,10 @@ type Subject = {
   description: string
 }
 
+/* =========================================================
+   SCHOOL SUBJECTS
+========================================================= */
+
 const SCHOOL_SUBJECTS: Subject[] = [
   {
     id: 'matematika',
@@ -152,6 +162,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Matematika fani o‘qituvchilari uchun attestatsiya testlari.',
   },
+
   {
     id: 'ona-tili-adabiyot',
     icon: '📖',
@@ -159,6 +170,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Ona tili va adabiyot fani bo‘yicha attestatsiyaga tayyorgarlik.',
   },
+
   {
     id: 'ingliz-tili',
     icon: '🇬🇧',
@@ -166,6 +178,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Ingliz tili o‘qituvchilari uchun professional testlar.',
   },
+
   {
     id: 'rus-tili',
     icon: '🇷🇺',
@@ -173,6 +186,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Rus tili fani bo‘yicha attestatsiya tayyorgarligi.',
   },
+
   {
     id: 'kimyo',
     icon: '🧪',
@@ -180,6 +194,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Kimyo fani o‘qituvchilari uchun testlar.',
   },
+
   {
     id: 'fizika',
     icon: '⚛️',
@@ -187,6 +202,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Fizika fani bo‘yicha attestatsiya testlari.',
   },
+
   {
     id: 'biologiya',
     icon: '🧬',
@@ -194,6 +210,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Biologiya fani o‘qituvchilari uchun testlar.',
   },
+
   {
     id: 'geografiya',
     icon: '🌍',
@@ -201,6 +218,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Geografiya fani bo‘yicha professional tayyorgarlik.',
   },
+
   {
     id: 'tarix',
     icon: '📜',
@@ -208,6 +226,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Tarix fani o‘qituvchilari uchun attestatsiya testlari.',
   },
+
   {
     id: 'informatika',
     icon: '💻',
@@ -215,6 +234,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Informatika va AKT bo‘yicha testlar.',
   },
+
   {
     id: 'musiqa',
     icon: '🎵',
@@ -222,6 +242,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Musiqa fani bo‘yicha attestatsiyaga tayyorgarlik.',
   },
+
   {
     id: 'tasviriy-sanat',
     icon: '🎨',
@@ -229,6 +250,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Tasviriy san’at bo‘yicha testlar.',
   },
+
   {
     id: 'texnologiya',
     icon: '🛠️',
@@ -236,6 +258,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Texnologiya fani o‘qituvchilari uchun testlar.',
   },
+
   {
     id: 'jismoniy-tarbiya',
     icon: '🏃',
@@ -290,7 +313,8 @@ export function MenejerlikApp() {
       webApp.ready()
 
       if (
-        typeof webApp.expand === 'function'
+        typeof webApp.expand ===
+        'function'
       ) {
         webApp.expand()
       }
@@ -311,7 +335,7 @@ export function MenejerlikApp() {
   }, [webApp])
 
   /* =========================================================
-     TELEGRAM FULLSCREEN EVENT
+     TELEGRAM FULLSCREEN
   ========================================================= */
 
   useEffect(() => {
@@ -347,7 +371,7 @@ export function MenejerlikApp() {
   }, [webApp])
 
   /* =========================================================
-     SCROLL TOP
+     SCROLL
   ========================================================= */
 
   const scrollToTop = () => {
@@ -382,12 +406,11 @@ export function MenejerlikApp() {
 
   /* =========================================================
      STUDENT ACADEMY
-     MUHIM: barcha eski quiz holatini tozalaymiz
   ========================================================= */
 
   const openStudentAcademy = () => {
     console.log(
-      '[MENEJERLIK] O‘quvchi Akademiyasi ochilmoqda...',
+      '[MENEJERLIK] Student Academy',
     )
 
     setQuizSession(null)
@@ -400,6 +423,27 @@ export function MenejerlikApp() {
     setScreen(
       'student-academy',
     )
+
+    scrollToTop()
+  }
+
+  /* =========================================================
+     PISA ACADEMY
+  ========================================================= */
+
+  const openPisaAcademy = () => {
+    console.log(
+      '[MENEJERLIK] PISA Academy',
+    )
+
+    setQuizSession(null)
+    setQuizResult(null)
+
+    setNavigation(
+      INITIAL_NAVIGATION,
+    )
+
+    setScreen('pisa')
 
     scrollToTop()
   }
@@ -423,7 +467,7 @@ export function MenejerlikApp() {
   }
 
   /* =========================================================
-     PROFESSIONAL EDUCATION
+     PROFESSIONAL ACADEMY
   ========================================================= */
 
   const openEducationSelection =
@@ -431,12 +475,17 @@ export function MenejerlikApp() {
       setQuizSession(null)
       setQuizResult(null)
 
+      setNavigation(
+        INITIAL_NAVIGATION,
+      )
+
       setScreen('education')
+
       scrollToTop()
     }
 
   /* =========================================================
-     SELECT EDUCATION
+     EDUCATION
   ========================================================= */
 
   const selectEducation = (
@@ -448,11 +497,12 @@ export function MenejerlikApp() {
     })
 
     setScreen('roles')
+
     scrollToTop()
   }
 
   /* =========================================================
-     SELECT ROLE
+     ROLE
   ========================================================= */
 
   const selectRole = (
@@ -464,7 +514,9 @@ export function MenejerlikApp() {
     setNavigation(
       (previous) => ({
         ...previous,
+
         role,
+
         moduleId: null,
         topicId: null,
         subjectId: null,
@@ -518,18 +570,22 @@ export function MenejerlikApp() {
     setNavigation(
       (previous) => ({
         ...previous,
+
         moduleId,
+
         topicId: null,
+
         quizSource: null,
       }),
     )
 
     setScreen('topics')
+
     scrollToTop()
   }
 
   /* =========================================================
-     MODULE MIXED TEST
+     MODULE MIXED
   ========================================================= */
 
   const startModuleMixed = (
@@ -545,7 +601,7 @@ export function MenejerlikApp() {
         !session?.questions?.length
       ) {
         console.error(
-          'Modul bo‘yicha savollar topilmadi:',
+          'Modul savollari topilmadi:',
           moduleId,
         )
 
@@ -555,20 +611,24 @@ export function MenejerlikApp() {
       setNavigation(
         (previous) => ({
           ...previous,
+
           moduleId,
+
           topicId: null,
+
           quizSource: 'module',
         }),
       )
 
       setQuizSession(session)
       setQuizResult(null)
+
       setScreen('quiz')
 
       scrollToTop()
     } catch (error) {
       console.error(
-        'Modul aralash testida xatolik:',
+        'Modul aralash testi xatosi:',
         error,
       )
     }
@@ -584,12 +644,15 @@ export function MenejerlikApp() {
     setNavigation(
       (previous) => ({
         ...previous,
+
         topicId,
+
         quizSource: null,
       }),
     )
 
     setScreen('levels')
+
     scrollToTop()
   }
 
@@ -611,7 +674,7 @@ export function MenejerlikApp() {
   }
 
   /* =========================================================
-     TOPIC QUIZ
+     START TOPIC QUIZ
   ========================================================= */
 
   const startTopicQuiz = (
@@ -642,26 +705,29 @@ export function MenejerlikApp() {
       setNavigation(
         (previous) => ({
           ...previous,
+
           topicId,
+
           quizSource: 'topic',
         }),
       )
 
       setQuizSession(session)
       setQuizResult(null)
+
       setScreen('quiz')
 
       scrollToTop()
     } catch (error) {
       console.error(
-        'Testni boshlashda xatolik:',
+        'Testni boshlash xatosi:',
         error,
       )
     }
   }
 
   /* =========================================================
-     SAVE RESULT TO DATABASE
+     SAVE RESULT
   ========================================================= */
 
   const saveResultToDatabase =
@@ -700,10 +766,13 @@ export function MenejerlikApp() {
               body: JSON.stringify({
                 telegramUser: {
                   id: telegramUser.id,
+
                   first_name:
                     telegramUser.first_name,
+
                   last_name:
                     telegramUser.last_name,
+
                   username:
                     telegramUser.username,
                 },
@@ -741,7 +810,7 @@ export function MenejerlikApp() {
         return await response.json()
       } catch (error) {
         console.error(
-          'D1 ga natija yuborishda xatolik:',
+          'Natijani D1 ga yuborish xatosi:',
           error,
         )
 
@@ -781,7 +850,7 @@ export function MenejerlikApp() {
         })
       } catch (error) {
         console.error(
-          'Lokal tarixni saqlashda xatolik:',
+          'Lokal tarixni saqlash xatosi:',
           error,
         )
       }
@@ -835,9 +904,13 @@ export function MenejerlikApp() {
 
             return {
               ...item,
+
               selected,
+
               isAnswered,
+
               isCorrect,
+
               isWrong:
                 isAnswered &&
                 !isCorrect,
@@ -887,19 +960,30 @@ export function MenejerlikApp() {
 
       const result = {
         ...quizSession,
+
         questions,
-        answers: checkedAnswers,
+
+        answers:
+          checkedAnswers,
+
         total,
+
         correct,
+
         wrong,
+
         percentage,
+
         score: correct,
+
         unanswered:
           finalUnanswered,
+
         durationSec: 0,
       } as unknown as QuizResult
 
       setQuizResult(result)
+
       setScreen('result')
 
       scrollToTop()
@@ -919,7 +1003,7 @@ export function MenejerlikApp() {
       ])
     } catch (error) {
       console.error(
-        'Test natijasini hisoblashda xatolik:',
+        'Natijani hisoblash xatosi:',
         error,
       )
 
@@ -938,10 +1022,15 @@ export function MenejerlikApp() {
         total,
 
         correct: 0,
+
         wrong: total,
+
         percentage: 0,
+
         score: 0,
+
         unanswered: 0,
+
         durationSec: 0,
       } as unknown as QuizResult
 
@@ -997,69 +1086,137 @@ export function MenejerlikApp() {
       return
     }
 
-    /* O‘QUVCHI AKADEMIYASI */
+    /* -----------------------------------------
+       PISA
+    ----------------------------------------- */
+
+    if (
+      screen === 'pisa'
+    ) {
+      setScreen(
+        'student-academy',
+      )
+
+      scrollToTop()
+
+      return
+    }
+
+    /* -----------------------------------------
+       STUDENT ACADEMY
+    ----------------------------------------- */
+
     if (
       screen ===
       'student-academy'
     ) {
       goHome()
+
       return
     }
 
-    /* RANKING / AI */
+    /* -----------------------------------------
+       RANKING / AI
+    ----------------------------------------- */
+
     if (
       screen === 'ranking' ||
       screen === 'ai'
     ) {
       goHome()
+
       return
     }
 
-    /* EDUCATION */
+    /* -----------------------------------------
+       EDUCATION
+    ----------------------------------------- */
+
     if (
       screen === 'education'
     ) {
       goHome()
+
       return
     }
 
-    /* ROLES */
-    if (screen === 'roles') {
+    /* -----------------------------------------
+       ROLES
+    ----------------------------------------- */
+
+    if (
+      screen === 'roles'
+    ) {
       setScreen('education')
+
       scrollToTop()
+
       return
     }
 
-    /* SUBJECTS */
-    if (screen === 'subjects') {
+    /* -----------------------------------------
+       SUBJECTS
+    ----------------------------------------- */
+
+    if (
+      screen === 'subjects'
+    ) {
       setScreen('roles')
+
       scrollToTop()
+
       return
     }
 
-    /* MODULES */
-    if (screen === 'modules') {
+    /* -----------------------------------------
+       MODULES
+    ----------------------------------------- */
+
+    if (
+      screen === 'modules'
+    ) {
       setScreen('roles')
+
       scrollToTop()
+
       return
     }
 
-    /* TOPICS */
-    if (screen === 'topics') {
+    /* -----------------------------------------
+       TOPICS
+    ----------------------------------------- */
+
+    if (
+      screen === 'topics'
+    ) {
       setScreen('modules')
+
       scrollToTop()
+
       return
     }
 
-    /* LEVELS */
-    if (screen === 'levels') {
+    /* -----------------------------------------
+       LEVELS
+    ----------------------------------------- */
+
+    if (
+      screen === 'levels'
+    ) {
       setScreen('topics')
+
       scrollToTop()
+
       return
     }
 
-    /* QUIZ */
-    if (screen === 'quiz') {
+    /* -----------------------------------------
+       QUIZ
+    ----------------------------------------- */
+
+    if (
+      screen === 'quiz'
+    ) {
       if (
         navigation.quizSource ===
         'module'
@@ -1070,11 +1227,17 @@ export function MenejerlikApp() {
       }
 
       scrollToTop()
+
       return
     }
 
-    /* RESULT */
-    if (screen === 'result') {
+    /* -----------------------------------------
+       RESULT
+    ----------------------------------------- */
+
+    if (
+      screen === 'result'
+    ) {
       if (
         navigation.quizSource ===
         'module'
@@ -1194,35 +1357,114 @@ export function MenejerlikApp() {
   ========================================================= */
 
   return (
-    <main className="min-h-screen bg-[#f6f8fc] text-slate-950 dark:bg-background dark:text-foreground">
-
+    <main
+      className="
+        min-h-screen
+        bg-[#f6f8fc]
+        text-slate-950
+        dark:bg-background
+        dark:text-foreground
+      "
+    >
       {/* =====================================================
-          PREMIUM HEADER
+          PREMIUM GLOBAL HEADER
       ===================================================== */}
 
-      <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl dark:border-white/10 dark:bg-background/90">
-
-        <div className="mx-auto flex min-h-[68px] max-w-3xl items-center justify-between px-4">
-
+      <header
+        className="
+          sticky
+          top-0
+          z-50
+          border-b
+          border-slate-200/80
+          bg-white/90
+          backdrop-blur-xl
+          dark:border-white/10
+          dark:bg-background/90
+        "
+      >
+        <div
+          className="
+            mx-auto
+            flex
+            min-h-[68px]
+            max-w-3xl
+            items-center
+            justify-between
+            px-4
+          "
+        >
           {/* BRAND */}
 
           <button
             type="button"
             onClick={goHome}
-            className="group flex items-center gap-3 text-left"
+            className="
+              group
+              flex
+              items-center
+              gap-3
+              text-left
+            "
           >
-            <div className="relative flex size-10 items-center justify-center rounded-[14px] bg-gradient-to-br from-blue-700 to-slate-950 text-sm font-black text-white shadow-lg shadow-blue-900/20 transition-transform group-hover:scale-105">
+            <div
+              className="
+                relative
+                flex
+                size-10
+                items-center
+                justify-center
+                rounded-[14px]
+                bg-gradient-to-br
+                from-blue-700
+                to-slate-950
+                text-sm
+                font-black
+                text-white
+                shadow-lg
+                shadow-blue-900/20
+                transition-transform
+                group-hover:scale-105
+              "
+            >
               M
 
-              <span className="absolute -right-1 -top-1 size-2.5 rounded-full border-2 border-white bg-amber-400 dark:border-background" />
+              <span
+                className="
+                  absolute
+                  -right-1
+                  -top-1
+                  size-2.5
+                  rounded-full
+                  border-2
+                  border-white
+                  bg-amber-400
+                  dark:border-background
+                "
+              />
             </div>
 
             <div className="leading-none">
-              <div className="text-[13px] font-black tracking-tight">
+              <div
+                className="
+                  text-[13px]
+                  font-black
+                  tracking-tight
+                "
+              >
                 MENEJERLIK
               </div>
 
-              <div className="mt-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-blue-700">
+              <div
+                className="
+                  mt-1
+                  text-[9px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.16em]
+                  text-blue-700
+                "
+              >
                 by Nurmuhammad
               </div>
             </div>
@@ -1231,30 +1473,79 @@ export function MenejerlikApp() {
           {/* STATUS */}
 
           <div className="flex items-center gap-1.5">
-
             {isTelegram && (
-              <span className="hidden items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1.5 text-[9px] font-bold text-emerald-700 sm:inline-flex dark:border-emerald-900/30 dark:bg-emerald-950/20 dark:text-emerald-400">
-                <span className="size-1.5 rounded-full bg-emerald-500" />
+              <span
+                className="
+                  hidden
+                  items-center
+                  gap-1.5
+                  rounded-full
+                  border
+                  border-emerald-100
+                  bg-emerald-50
+                  px-2.5
+                  py-1.5
+                  text-[9px]
+                  font-bold
+                  text-emerald-700
+                  sm:inline-flex
+                  dark:border-emerald-900/30
+                  dark:bg-emerald-950/20
+                  dark:text-emerald-400
+                "
+              >
+                <span
+                  className="
+                    size-1.5
+                    rounded-full
+                    bg-emerald-500
+                  "
+                />
+
                 Telegram
               </span>
             )}
 
             {isFullscreen && (
-              <span className="hidden items-center rounded-full border border-blue-100 bg-blue-50 px-2.5 py-1.5 text-[9px] font-bold text-blue-700 sm:inline-flex dark:border-blue-900/30 dark:bg-blue-950/20 dark:text-blue-400">
+              <span
+                className="
+                  hidden
+                  items-center
+                  rounded-full
+                  border
+                  border-blue-100
+                  bg-blue-50
+                  px-2.5
+                  py-1.5
+                  text-[9px]
+                  font-bold
+                  text-blue-700
+                  sm:inline-flex
+                  dark:border-blue-900/30
+                  dark:bg-blue-950/20
+                  dark:text-blue-400
+                "
+              >
                 Fullscreen
               </span>
             )}
-
           </div>
         </div>
       </header>
 
       {/* =====================================================
-          CONTENT
+          MAIN CONTENT
       ===================================================== */}
 
-      <div className="mx-auto max-w-3xl px-4 pb-10 pt-5">
-
+      <div
+        className="
+          mx-auto
+          max-w-3xl
+          px-4
+          pb-10
+          pt-5
+        "
+      >
         {/* ===================================================
             HOME
         =================================================== */}
@@ -1268,8 +1559,10 @@ export function MenejerlikApp() {
             stats={{
               count:
                 history.stats.count,
+
               average:
                 history.stats.average,
+
               best:
                 history.stats.best,
             }}
@@ -1290,12 +1583,22 @@ export function MenejerlikApp() {
         )}
 
         {/* ===================================================
-            O‘QUVCHI AKADEMIYASI
+            STUDENT ACADEMY
         =================================================== */}
 
         {screen ===
           'student-academy' && (
           <StudentAcademy
+            onBack={goBack}
+          />
+        )}
+
+        {/* ===================================================
+            PISA ACADEMY
+        =================================================== */}
+
+        {screen === 'pisa' && (
+          <PisaAcademy
             onBack={goBack}
           />
         )}
@@ -1321,7 +1624,7 @@ export function MenejerlikApp() {
         )}
 
         {/* ===================================================
-            EDUCATION
+            PROFESSIONAL EDUCATION
         =================================================== */}
 
         {screen === 'education' && (
@@ -1471,7 +1774,6 @@ export function MenejerlikApp() {
               }
             />
           )}
-
       </div>
 
       {/* =====================================================
@@ -1483,7 +1785,6 @@ export function MenejerlikApp() {
           Test jarayoni davom etmoqda.
         </div>
       )}
-
     </main>
   )
 }
@@ -1503,7 +1804,6 @@ function EducationScreen({
 }) {
   return (
     <section className="flex flex-col gap-6">
-
       <BackButton
         onClick={onBack}
         text="Bosh sahifa"
@@ -1515,24 +1815,22 @@ function EducationScreen({
         </Eyebrow>
 
         <h1 className="mt-2 text-[29px] font-black tracking-tight">
-          Qaysi yo‘nalishda
-          tayyorlanasiz?
+          Professional akademiya
         </h1>
 
         <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
-          Attestatsiya va professional
-          rivojlanish uchun o‘zingizga
-          mos yo‘nalishni tanlang.
+          Attestatsiya, menejerlik va
+          professional rivojlanish uchun
+          o‘zingizga mos yo‘nalishni tanlang.
         </p>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
-
         <EducationCardNew
           icon="🏫"
           title="MAKTAB"
-          subtitle="Umumiy o‘rta ta’lim"
-          description="Maktab direktori, direktor o‘rinbosari va fan o‘qituvchilari."
+          subtitle="UMUMIY O‘RTA TA’LIM"
+          description="Maktab direktori, direktor o‘rinbosari va fan o‘qituvchilari uchun professional tayyorgarlik."
           accent="blue"
           onClick={() =>
             onSelect('school')
@@ -1542,14 +1840,56 @@ function EducationScreen({
         <EducationCardNew
           icon="🧸"
           title="MAKTABGACHA TA’LIM"
-          subtitle="Maktabgacha ta’lim"
-          description="Maktabgacha ta’lim rahbarlari va pedagoglari."
+          subtitle="MAKTABGACHA TA’LIM"
+          description="Maktabgacha ta’lim rahbarlari va pedagoglari uchun professional tayyorgarlik."
           accent="gold"
           onClick={() =>
             onSelect('preschool')
           }
         />
+      </div>
 
+      <div
+        className="
+          rounded-[24px]
+          border
+          border-blue-100
+          bg-blue-50/60
+          p-5
+          dark:border-blue-900/20
+          dark:bg-blue-950/10
+        "
+      >
+        <div className="flex items-start gap-3">
+          <div
+            className="
+              flex
+              size-10
+              shrink-0
+              items-center
+              justify-center
+              rounded-xl
+              bg-white
+              text-lg
+              shadow-sm
+              dark:bg-card
+            "
+          >
+            🎯
+          </div>
+
+          <div>
+            <p className="text-sm font-black">
+              Professional yo‘l
+            </p>
+
+            <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
+              Yo‘nalish → Lavozim → Modul →
+              Mavzu → Daraja → Test →
+              Natija.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   )
@@ -1573,8 +1913,7 @@ function RoleScreen({
   ) => void
 }) {
   const isSchool =
-    educationType ===
-    'school'
+    educationType === 'school'
 
   const roles = isSchool
     ? [
@@ -1586,6 +1925,7 @@ function RoleScreen({
             'Maktab rahbari uchun menejerlik va attestatsiya tayyorgarligi.',
           badge: 'RAHBAR',
         },
+
         {
           id: 'deputy' as RoleId,
           icon: '👨‍💼',
@@ -1595,6 +1935,7 @@ function RoleScreen({
             'O‘quv, tarbiyaviy va boshqaruv faoliyati bo‘yicha tayyorgarlik.',
           badge: 'RAHBAR',
         },
+
         {
           id: 'teacher' as RoleId,
           icon: '👨‍🏫',
@@ -1615,6 +1956,7 @@ function RoleScreen({
             'Maktabgacha ta’lim tashkiloti rahbari uchun menejerlik tayyorgarligi.',
           badge: 'RAHBAR',
         },
+
         {
           id: 'deputy' as RoleId,
           icon: '👩‍💼',
@@ -1624,6 +1966,7 @@ function RoleScreen({
             'Boshqaruv va ta’lim jarayonini tashkil etish bo‘yicha tayyorgarlik.',
           badge: 'RAHBAR',
         },
+
         {
           id: 'pedagogue' as RoleId,
           icon: '👩‍🏫',
@@ -1636,7 +1979,6 @@ function RoleScreen({
 
   return (
     <section className="flex flex-col gap-6">
-
       <BackButton
         onClick={onBack}
         text="Yo‘nalishlar"
@@ -1654,13 +1996,12 @@ function RoleScreen({
         </h1>
 
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          Sizga tegishli attestatsiya
-          tayyorgarligi yo‘nalishini tanlang.
+          Sizga tegishli professional
+          tayyorgarlik yo‘nalishini tanlang.
         </p>
       </div>
 
       <div className="flex flex-col gap-3">
-
         {roles.map(
           (role) => (
             <button
@@ -1671,19 +2012,73 @@ function RoleScreen({
                   role.id,
                 )
               }
-              className="group relative overflow-hidden rounded-[25px] border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.99]"
+              className="
+                group
+                relative
+                overflow-hidden
+                rounded-[25px]
+                border
+                bg-card
+                p-5
+                text-left
+                shadow-sm
+                transition-all
+                hover:-translate-y-0.5
+                hover:shadow-lg
+                active:scale-[0.99]
+              "
             >
-              <div className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-blue-500/5 transition-transform group-hover:scale-125" />
+              <div
+                className="
+                  pointer-events-none
+                  absolute
+                  -right-10
+                  -top-10
+                  size-32
+                  rounded-full
+                  bg-blue-500/5
+                  transition-transform
+                  group-hover:scale-125
+                "
+              />
 
               <div className="relative flex items-center gap-4">
-
-                <div className="flex size-15 shrink-0 items-center justify-center rounded-[19px] bg-gradient-to-br from-blue-50 to-indigo-100 text-[27px] dark:from-blue-950/30 dark:to-indigo-950/20">
+                <div
+                  className="
+                    flex
+                    size-15
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-[19px]
+                    bg-gradient-to-br
+                    from-blue-50
+                    to-indigo-100
+                    text-[27px]
+                    dark:from-blue-950/30
+                    dark:to-indigo-950/20
+                  "
+                >
                   {role.icon}
                 </div>
 
                 <div className="min-w-0 flex-1">
-
-                  <span className="inline-flex rounded-full bg-blue-50 px-2 py-1 text-[8px] font-black uppercase tracking-[0.12em] text-blue-700 dark:bg-blue-950/30 dark:text-blue-400">
+                  <span
+                    className="
+                      inline-flex
+                      rounded-full
+                      bg-blue-50
+                      px-2
+                      py-1
+                      text-[8px]
+                      font-black
+                      uppercase
+                      tracking-[0.12em]
+                      text-blue-700
+                      dark:bg-blue-950/30
+                      dark:text-blue-400
+                    "
+                  >
                     {role.badge}
                   </span>
 
@@ -1694,25 +2089,60 @@ function RoleScreen({
                   <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
                     {role.description}
                   </p>
-
                 </div>
 
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:bg-blue-50 group-hover:text-blue-700 dark:group-hover:bg-blue-950/20">
+                <span
+                  className="
+                    flex
+                    size-9
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-xl
+                    bg-muted
+                    text-muted-foreground
+                    transition-all
+                    group-hover:translate-x-0.5
+                    group-hover:bg-blue-50
+                    group-hover:text-blue-700
+                  "
+                >
                   →
                 </span>
-
               </div>
             </button>
           ),
         )}
-
       </div>
 
-      <div className="relative overflow-hidden rounded-[24px] border border-blue-100 bg-blue-50/60 p-5 dark:border-blue-900/20 dark:bg-blue-950/10">
-
+      <div
+        className="
+          relative
+          overflow-hidden
+          rounded-[24px]
+          border
+          border-blue-100
+          bg-blue-50/60
+          p-5
+          dark:border-blue-900/20
+          dark:bg-blue-950/10
+        "
+      >
         <div className="flex items-start gap-3">
-
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-lg shadow-sm dark:bg-card">
+          <div
+            className="
+              flex
+              size-10
+              shrink-0
+              items-center
+              justify-center
+              rounded-xl
+              bg-white
+              text-lg
+              shadow-sm
+              dark:bg-card
+            "
+          >
             🎯
           </div>
 
@@ -1727,7 +2157,6 @@ function RoleScreen({
               asosida shakllantiriladi.
             </p>
           </div>
-
         </div>
       </div>
     </section>
@@ -1748,36 +2177,43 @@ function SubjectScreen({
   educationType:
     | EducationType
     | null
+
   subjects: Subject[]
+
   selectedSubjectId:
     | string
     | null
+
   onBack: () => void
+
   onSelect: (
     subjectId: string,
   ) => void
 }) {
   const isSchool =
-    educationType ===
-    'school'
+    educationType === 'school'
 
   const preschoolRoles = [
     {
       icon: '👩‍🏫',
       title: 'Tarbiyachi',
     },
+
     {
       icon: '🎵',
       title: 'Musiqa rahbari',
     },
+
     {
       icon: '🗣️',
       title: 'Logoped',
     },
+
     {
       icon: '🧠',
       title: 'Psixolog',
     },
+
     {
       icon: '🏃',
       title:
@@ -1787,7 +2223,6 @@ function SubjectScreen({
 
   return (
     <section className="flex flex-col gap-6">
-
       <BackButton
         onClick={onBack}
         text="Lavozimlar"
@@ -1815,7 +2250,6 @@ function SubjectScreen({
 
       {isSchool ? (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-
           {subjects.map(
             (subject) => {
               const active =
@@ -1833,23 +2267,47 @@ function SubjectScreen({
                       subject.id,
                     )
                   }
-                  className={`group rounded-[23px] border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg ${
-                    active
-                      ? 'border-blue-500 ring-2 ring-blue-500/10'
-                      : ''
-                  }`}
+                  className={`
+                    group
+                    rounded-[23px]
+                    border
+                    bg-card
+                    p-5
+                    text-left
+                    shadow-sm
+                    transition-all
+                    hover:-translate-y-0.5
+                    hover:shadow-lg
+                    ${
+                      active
+                        ? 'border-blue-500 ring-2 ring-blue-500/10'
+                        : ''
+                    }
+                  `}
                 >
-
                   <div className="flex items-center gap-4">
-
-                    <div className="flex size-14 shrink-0 items-center justify-center rounded-[18px] bg-gradient-to-br from-blue-50 to-indigo-100 text-2xl dark:from-blue-950/30 dark:to-indigo-950/20">
+                    <div
+                      className="
+                        flex
+                        size-14
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-[18px]
+                        bg-gradient-to-br
+                        from-blue-50
+                        to-indigo-100
+                        text-2xl
+                        dark:from-blue-950/30
+                        dark:to-indigo-950/20
+                      "
+                    >
                       {
                         subject.icon
                       }
                     </div>
 
                     <div className="min-w-0 flex-1">
-
                       <h2 className="text-sm font-black">
                         {
                           subject.title
@@ -1861,38 +2319,54 @@ function SubjectScreen({
                           subject.description
                         }
                       </p>
-
                     </div>
 
-                    <span className="flex size-8 items-center justify-center rounded-xl bg-muted text-muted-foreground transition-transform group-hover:translate-x-0.5">
+                    <span
+                      className="
+                        flex
+                        size-8
+                        items-center
+                        justify-center
+                        rounded-xl
+                        bg-muted
+                        text-muted-foreground
+                      "
+                    >
                       →
                     </span>
-
                   </div>
 
                   {active && (
-                    <div className="mt-4 rounded-2xl bg-blue-50/70 p-3 dark:bg-blue-950/20">
+                    <div
+                      className="
+                        mt-4
+                        rounded-2xl
+                        bg-blue-50/70
+                        p-3
+                        dark:bg-blue-950/20
+                      "
+                    >
                       <p className="text-[10px] font-black uppercase tracking-wider text-blue-700">
                         Test bazasi
                       </p>
 
                       <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
-                        Savollar bazasi ushbu fan
-                        uchun keyingi bosqichda
+                        Ushbu fan uchun
+                        savollar bazasi
+                        professional
+                        tayyorgarlikning
+                        keyingi bosqichida
                         ulanadi.
                       </p>
                     </div>
                   )}
-
                 </button>
               )
             },
           )}
-
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-
           {preschoolRoles.map(
             (item) => (
               <button
@@ -1900,17 +2374,44 @@ function SubjectScreen({
                   item.title
                 }
                 type="button"
-                className="group flex items-center gap-4 rounded-[23px] border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                className="
+                  group
+                  flex
+                  items-center
+                  gap-4
+                  rounded-[23px]
+                  border
+                  bg-card
+                  p-5
+                  text-left
+                  shadow-sm
+                  transition-all
+                  hover:-translate-y-0.5
+                  hover:shadow-lg
+                "
               >
-
-                <div className="flex size-14 shrink-0 items-center justify-center rounded-[18px] bg-gradient-to-br from-amber-50 to-yellow-100 text-2xl dark:from-amber-950/30 dark:to-yellow-950/20">
+                <div
+                  className="
+                    flex
+                    size-14
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-[18px]
+                    bg-gradient-to-br
+                    from-amber-50
+                    to-yellow-100
+                    text-2xl
+                    dark:from-amber-950/30
+                    dark:to-yellow-950/20
+                  "
+                >
                   {
                     item.icon
                   }
                 </div>
 
                 <div className="min-w-0 flex-1">
-
                   <h2 className="text-sm font-black">
                     {
                       item.title
@@ -1921,22 +2422,36 @@ function SubjectScreen({
                     Attestatsiyaga
                     tayyorgarlik
                   </p>
-
                 </div>
 
-                <span className="flex size-8 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+                <span
+                  className="
+                    flex
+                    size-8
+                    items-center
+                    justify-center
+                    rounded-xl
+                    bg-muted
+                    text-muted-foreground
+                  "
+                >
                   →
                 </span>
-
               </button>
             ),
           )}
-
         </div>
       )}
 
-      <div className="rounded-[23px] border border-dashed bg-muted/30 p-5">
-
+      <div
+        className="
+          rounded-[23px]
+          border
+          border-dashed
+          bg-muted/30
+          p-5
+        "
+      >
         <p className="text-sm font-black">
           🧠 Test tizimi
         </p>
@@ -1944,10 +2459,9 @@ function SubjectScreen({
         <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
           Fan va pedagogik yo‘nalishlar
           uchun alohida savollar bazasi:
-          Oson · O‘rta · Qiyin ·
-          Pedagogik mahorat · Aralash.
+          Oson · O‘rta · Qiyin · Keys ·
+          Aralash.
         </p>
-
       </div>
     </section>
   )
@@ -1966,30 +2480,38 @@ function ModuleScreen({
   onMixed,
 }: {
   categories: Category[]
+
   educationType:
     | EducationType
     | null
+
   role:
     | RoleId
     | null
+
   onBack: () => void
+
   onSelect: (
     moduleId: string,
   ) => void
+
   onMixed: (
     moduleId: string,
   ) => void
 }) {
   const roleTitle =
     role === 'director'
-      ? 'Rahbar'
+      ? 'Maktab rahbari'
       : role === 'deputy'
         ? 'Direktor o‘rinbosari'
-        : ''
+        : role === 'teacher'
+          ? 'Fan o‘qituvchisi'
+          : role === 'pedagogue'
+            ? 'Pedagog'
+            : ''
 
   return (
     <section className="flex flex-col gap-6">
-
       <BackButton
         onClick={onBack}
         text="Lavozimlar"
@@ -2000,58 +2522,87 @@ function ModuleScreen({
           {educationType ===
           'preschool'
             ? 'MAKTABGACHA TA’LIM'
-            : 'MAKTAB'}
+            : 'MENEJERLIK AKADEMIYASI'}
         </Eyebrow>
 
         <h1 className="mt-2 text-[29px] font-black tracking-tight">
-          Menejerlik modullari
+          Professional modullar
         </h1>
 
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
           {roleTitle
-            ? `${roleTitle} uchun attestatsiya va menejerlik tayyorgarligi.`
+            ? `${roleTitle} uchun kompetensiyalar va attestatsiya tayyorgarligi.`
             : 'Boshqaruv kompetensiyalari bo‘yicha tayyorgarlik.'}
         </p>
       </div>
 
-      <div className="relative overflow-hidden rounded-[25px] bg-gradient-to-br from-[#0b1f44] to-[#1769aa] p-5 text-white shadow-lg shadow-blue-900/15">
-
-        <div className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-white/5" />
+      <div
+        className="
+          relative
+          overflow-hidden
+          rounded-[25px]
+          bg-gradient-to-br
+          from-[#0b1f44]
+          to-[#1769aa]
+          p-5
+          text-white
+          shadow-lg
+          shadow-blue-900/15
+        "
+      >
+        <div
+          className="
+            pointer-events-none
+            absolute
+            -right-10
+            -top-10
+            size-32
+            rounded-full
+            bg-white/5
+          "
+        />
 
         <div className="relative flex items-center gap-4">
-
-          <div className="flex size-14 shrink-0 items-center justify-center rounded-[18px] bg-white/10 text-2xl">
-            🔀
+          <div
+            className="
+              flex
+              size-14
+              shrink-0
+              items-center
+              justify-center
+              rounded-[18px]
+              bg-white/10
+              text-2xl
+            "
+          >
+            🚀
           </div>
 
           <div className="min-w-0 flex-1">
-
             <p className="text-[9px] font-black uppercase tracking-[0.17em] text-white/60">
-              TEZKOR TAYYORLANISH
+              PROFESSIONAL PREP
             </p>
 
             <h2 className="mt-1 text-lg font-black">
-              Aralash test
+              Tezkor aralash test
             </h2>
 
             <p className="mt-1 text-[11px] leading-5 text-white/70">
               Modul ichidagi mavzulardan
-              tasodifiy 30 ta savol.
+              tasodifiy savollar bilan
+              bilimlaringizni sinang.
             </p>
-
           </div>
         </div>
 
         <p className="relative mt-4 text-[10px] text-white/60">
-          Istalgan modul ostidagi
-          “Aralash test” tugmasidan
-          foydalaning.
+          Har bir modul ostidagi
+          “Aralash test” orqali ishga
+          tushiriladi.
         </p>
-
       </div>
 
       <div className="flex flex-col gap-3">
-
         {categories.map(
           (
             category,
@@ -2061,9 +2612,14 @@ function ModuleScreen({
               key={
                 category.id
               }
-              className="overflow-hidden rounded-[24px] border bg-card shadow-sm"
+              className="
+                overflow-hidden
+                rounded-[24px]
+                border
+                bg-card
+                shadow-sm
+              "
             >
-
               <button
                 type="button"
                 onClick={() =>
@@ -2071,10 +2627,31 @@ function ModuleScreen({
                     category.id,
                   )
                 }
-                className="group flex w-full items-center gap-4 p-5 text-left transition hover:bg-muted/30"
+                className="
+                  group
+                  flex
+                  w-full
+                  items-center
+                  gap-4
+                  p-5
+                  text-left
+                  transition
+                  hover:bg-muted/30
+                "
               >
-
-                <div className="flex size-14 shrink-0 items-center justify-center rounded-[18px] bg-blue-50 text-2xl dark:bg-blue-950/20">
+                <div
+                  className="
+                    flex
+                    size-14
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-[18px]
+                    bg-blue-50
+                    text-2xl
+                    dark:bg-blue-950/20
+                  "
+                >
                   {getModuleIcon(
                     category,
                     index,
@@ -2082,7 +2659,6 @@ function ModuleScreen({
                 </div>
 
                 <div className="min-w-0 flex-1">
-
                   <h2 className="text-[15px] font-black">
                     {
                       category.title
@@ -2098,13 +2674,24 @@ function ModuleScreen({
                         }
                       </p>
                     )}
-
                 </div>
 
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground transition-transform group-hover:translate-x-0.5">
+                <span
+                  className="
+                    flex
+                    size-8
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-xl
+                    bg-muted
+                    text-muted-foreground
+                    transition-transform
+                    group-hover:translate-x-0.5
+                  "
+                >
                   →
                 </span>
-
               </button>
 
               <button
@@ -2114,9 +2701,21 @@ function ModuleScreen({
                     category.id,
                   )
                 }
-                className="flex w-full items-center justify-between border-t bg-muted/30 px-5 py-3 text-[10px] font-bold transition hover:bg-muted/50"
+                className="
+                  flex
+                  w-full
+                  items-center
+                  justify-between
+                  border-t
+                  bg-muted/30
+                  px-5
+                  py-3
+                  text-[10px]
+                  font-bold
+                  transition
+                  hover:bg-muted/50
+                "
               >
-
                 <span>
                   🔀 Shu modul bo‘yicha
                   aralash test
@@ -2125,13 +2724,10 @@ function ModuleScreen({
                 <span className="text-blue-700">
                   30 ta →
                 </span>
-
               </button>
-
             </div>
           ),
         )}
-
       </div>
 
       {categories.length ===
@@ -2142,7 +2738,6 @@ function ModuleScreen({
           text="Hozircha ushbu yo‘nalishda modullar kiritilmagan."
         />
       )}
-
     </section>
   )
 }
@@ -2161,7 +2756,9 @@ function TopicScreen({
         typeof getModuleById
       >
     | undefined
+
   onBack: () => void
+
   onSelect: (
     topicId: string,
   ) => void
@@ -2175,7 +2772,6 @@ function TopicScreen({
   if (!module) {
     return (
       <section className="flex flex-col gap-5">
-
         <BackButton
           onClick={onBack}
           text="Modullar"
@@ -2186,21 +2782,18 @@ function TopicScreen({
           title="Modul topilmadi"
           text="Tanlangan modul mavjud emas."
         />
-
       </section>
     )
   }
 
   return (
     <section className="flex flex-col gap-6">
-
       <BackButton
         onClick={onBack}
         text="Modullar"
       />
 
       <div>
-
         <Eyebrow>
           MAVZULAR
         </Eyebrow>
@@ -2218,11 +2811,9 @@ function TopicScreen({
               }
             </p>
           )}
-
       </div>
 
       <div className="flex flex-col gap-3">
-
         {topics.map(
           (
             topic,
@@ -2238,10 +2829,38 @@ function TopicScreen({
                   topic.id,
                 )
               }
-              className="group flex items-center gap-4 rounded-[24px] border bg-card p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+              className="
+                group
+                flex
+                items-center
+                gap-4
+                rounded-[24px]
+                border
+                bg-card
+                p-5
+                text-left
+                shadow-sm
+                transition
+                hover:-translate-y-0.5
+                hover:shadow-lg
+              "
             >
-
-              <div className="flex size-12 shrink-0 items-center justify-center rounded-[16px] bg-blue-50 text-xs font-black text-blue-700 dark:bg-blue-950/20 dark:text-blue-400">
+              <div
+                className="
+                  flex
+                  size-12
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-[16px]
+                  bg-blue-50
+                  text-xs
+                  font-black
+                  text-blue-700
+                  dark:bg-blue-950/20
+                  dark:text-blue-400
+                "
+              >
                 {String(
                   index + 1,
                 ).padStart(
@@ -2251,7 +2870,6 @@ function TopicScreen({
               </div>
 
               <div className="min-w-0 flex-1">
-
                 <h2 className="text-sm font-black">
                   {
                     topic.title
@@ -2267,7 +2885,6 @@ function TopicScreen({
                 )}
 
                 <div className="mt-2 flex flex-wrap gap-1.5">
-
                   <MiniBadge>
                     🟢 Oson
                   </MiniBadge>
@@ -2287,19 +2904,28 @@ function TopicScreen({
                   <MiniBadge>
                     🟣 Aralash
                   </MiniBadge>
-
                 </div>
-
               </div>
 
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground transition-transform group-hover:translate-x-0.5">
+              <span
+                className="
+                  flex
+                  size-8
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-xl
+                  bg-muted
+                  text-muted-foreground
+                  transition-transform
+                  group-hover:translate-x-0.5
+                "
+              >
                 →
               </span>
-
             </button>
           ),
         )}
-
       </div>
 
       {topics.length ===
@@ -2310,7 +2936,6 @@ function TopicScreen({
           text="Bu modulga hali mavzular qo‘shilmagan."
         />
       )}
-
     </section>
   )
 }
@@ -2329,7 +2954,9 @@ function LevelScreen({
         typeof getTopicById
       >
     | undefined
+
   onBack: () => void
+
   onSelect: (
     level: QuizLevel,
   ) => void
@@ -2337,7 +2964,6 @@ function LevelScreen({
   if (!topic) {
     return (
       <section className="flex flex-col gap-5">
-
         <BackButton
           onClick={onBack}
           text="Mavzular"
@@ -2348,7 +2974,6 @@ function LevelScreen({
           title="Mavzu topilmadi"
           text="Tanlangan mavzu mavjud emas."
         />
-
       </section>
     )
   }
@@ -2369,6 +2994,7 @@ function LevelScreen({
       questions:
         topic.levels.easy.length,
     },
+
     {
       id: 'medium',
       icon: '🟡',
@@ -2378,6 +3004,7 @@ function LevelScreen({
       questions:
         topic.levels.medium.length,
     },
+
     {
       id: 'hard',
       icon: '🔴',
@@ -2387,6 +3014,7 @@ function LevelScreen({
       questions:
         topic.levels.hard.length,
     },
+
     {
       id: 'case',
       icon: '🔵',
@@ -2396,26 +3024,25 @@ function LevelScreen({
       questions:
         topic.levels.case.length,
     },
+
     {
       id: 'mixed',
       icon: '🟣',
       title: 'Aralash test',
       description:
-        '100 ta savoldan tasodifiy 30 ta',
+        'Oson, o‘rta, qiyin va keys savollaridan',
       questions: 30,
     },
   ]
 
   return (
     <section className="flex flex-col gap-6">
-
       <BackButton
         onClick={onBack}
         text="Mavzular"
       />
 
       <div>
-
         <Eyebrow>
           TEST TURINI TANLANG
         </Eyebrow>
@@ -2428,15 +3055,11 @@ function LevelScreen({
           Attestatsiyaga tayyorgarlik
           darajasini tanlang.
         </p>
-
       </div>
 
       <div className="flex flex-col gap-3">
-
         {levels.map(
-          (
-            level,
-          ) => (
+          (level) => (
             <button
               key={
                 level.id
@@ -2453,31 +3076,64 @@ function LevelScreen({
                 level.id !==
                   'mixed'
               }
-              className="group flex items-center gap-4 rounded-[23px] border bg-card p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+              className="
+                group
+                flex
+                items-center
+                gap-4
+                rounded-[23px]
+                border
+                bg-card
+                p-5
+                text-left
+                shadow-sm
+                transition
+                hover:-translate-y-0.5
+                hover:shadow-lg
+                active:scale-[0.99]
+                disabled:cursor-not-allowed
+                disabled:opacity-50
+              "
             >
-
-              <div className="flex size-14 shrink-0 items-center justify-center rounded-[18px] bg-muted text-2xl">
+              <div
+                className="
+                  flex
+                  size-14
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-[18px]
+                  bg-muted
+                  text-2xl
+                "
+              >
                 {
                   level.icon
                 }
               </div>
 
               <div className="min-w-0 flex-1">
-
                 <div className="flex items-center gap-2">
-
                   <h2 className="text-sm font-black">
                     {
                       level.title
                     }
                   </h2>
 
-                  <span className="rounded-full bg-muted px-2 py-0.5 text-[9px] font-bold">
+                  <span
+                    className="
+                      rounded-full
+                      bg-muted
+                      px-2
+                      py-0.5
+                      text-[9px]
+                      font-bold
+                    "
+                  >
                     {
                       level.questions
                     }
                   </span>
-
                 </div>
 
                 <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
@@ -2485,52 +3141,75 @@ function LevelScreen({
                     level.description
                   }
                 </p>
-
               </div>
 
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground transition-transform group-hover:translate-x-0.5">
+              <span
+                className="
+                  flex
+                  size-8
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-xl
+                  bg-muted
+                  text-muted-foreground
+                "
+              >
                 →
               </span>
-
             </button>
           ),
         )}
-
       </div>
 
-      <div className="rounded-[23px] border border-purple-100 bg-purple-50/70 p-5 dark:border-purple-900/20 dark:bg-purple-950/10">
-
+      <div
+        className="
+          rounded-[23px]
+          border
+          border-purple-100
+          bg-purple-50/70
+          p-5
+          dark:border-purple-900/20
+          dark:bg-purple-950/10
+        "
+      >
         <div className="flex items-start gap-3">
-
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm dark:bg-card">
-            🟣
+          <div
+            className="
+              flex
+              size-10
+              shrink-0
+              items-center
+              justify-center
+              rounded-xl
+              bg-white
+              text-lg
+              shadow-sm
+              dark:bg-card
+            "
+          >
+            🧠
           </div>
 
           <div>
-
             <h3 className="text-sm font-black">
               Aralash test
             </h3>
 
             <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
-              Oson, o‘rta, qiyin va keys
-              savollaridan foydalanib,
-              har safar tasodifiy 30 ta
-              savol shakllantiriladi.
+              Turli darajadagi savollar
+              aralashtirilib, har safar
+              yangi test shakllantiriladi.
             </p>
-
           </div>
-
         </div>
-
       </div>
-
     </section>
   )
 }
 
 /* =========================================================
-   SMALL COMPONENTS
+   BACK BUTTON
 ========================================================= */
 
 function BackButton({
@@ -2544,9 +3223,25 @@ function BackButton({
     <button
       type="button"
       onClick={onClick}
-      className="group flex w-fit items-center gap-1.5 text-[12px] font-bold text-muted-foreground transition hover:text-blue-700"
+      className="
+        group
+        flex
+        w-fit
+        items-center
+        gap-1.5
+        text-[12px]
+        font-bold
+        text-muted-foreground
+        transition
+        hover:text-blue-700
+      "
     >
-      <span className="transition-transform group-hover:-translate-x-0.5">
+      <span
+        className="
+          transition-transform
+          group-hover:-translate-x-0.5
+        "
+      >
         ←
       </span>
 
@@ -2555,17 +3250,33 @@ function BackButton({
   )
 }
 
+/* =========================================================
+   EYEBROW
+========================================================= */
+
 function Eyebrow({
   children,
 }: {
   children: ReactNode
 }) {
   return (
-    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-blue-700">
+    <p
+      className="
+        text-[10px]
+        font-black
+        uppercase
+        tracking-[0.18em]
+        text-blue-700
+      "
+    >
       {children}
     </p>
   )
 }
+
+/* =========================================================
+   MINI BADGE
+========================================================= */
 
 function MiniBadge({
   children,
@@ -2573,7 +3284,18 @@ function MiniBadge({
   children: ReactNode
 }) {
   return (
-    <span className="rounded-full border bg-muted/70 px-2 py-0.5 text-[8px] font-bold text-muted-foreground">
+    <span
+      className="
+        rounded-full
+        border
+        bg-muted/70
+        px-2
+        py-0.5
+        text-[8px]
+        font-bold
+        text-muted-foreground
+      "
+    >
       {children}
     </span>
   )
@@ -2607,39 +3329,81 @@ function EducationCardNew({
     <button
       type="button"
       onClick={onClick}
-      className={`group relative overflow-hidden rounded-[26px] border bg-card p-6 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl active:scale-[0.99] ${
-        gold
-          ? 'border-amber-100 dark:border-amber-900/20'
-          : 'border-blue-100 dark:border-blue-900/20'
-      }`}
-    >
-
-      <div
-        className={`pointer-events-none absolute -right-10 -top-10 size-36 rounded-full ${
+      className={`
+        group
+        relative
+        overflow-hidden
+        rounded-[26px]
+        border
+        bg-card
+        p-6
+        text-left
+        shadow-sm
+        transition-all
+        hover:-translate-y-1
+        hover:shadow-xl
+        active:scale-[0.99]
+        ${
           gold
-            ? 'bg-amber-400/5'
-            : 'bg-blue-500/5'
-        } transition-transform group-hover:scale-125`}
+            ? 'border-amber-100 dark:border-amber-900/20'
+            : 'border-blue-100 dark:border-blue-900/20'
+        }
+      `}
+    >
+      <div
+        className={`
+          pointer-events-none
+          absolute
+          -right-10
+          -top-10
+          size-36
+          rounded-full
+          ${
+            gold
+              ? 'bg-amber-400/5'
+              : 'bg-blue-500/5'
+          }
+          transition-transform
+          group-hover:scale-125
+        `}
       />
 
       <div className="relative">
-
         <div
-          className={`flex size-16 items-center justify-center rounded-[20px] text-3xl ${
-            gold
-              ? 'bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-950/30 dark:to-yellow-950/20'
-              : 'bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950/30 dark:to-indigo-950/20'
-          }`}
+          className={`
+            flex
+            size-16
+            items-center
+            justify-center
+            rounded-[20px]
+            text-3xl
+            ${
+              gold
+                ? 'bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-950/30 dark:to-yellow-950/20'
+                : 'bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950/30 dark:to-indigo-950/20'
+            }
+          `}
         >
           {icon}
         </div>
 
         <span
-          className={`mt-5 inline-flex rounded-full px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.12em] ${
-            gold
-              ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400'
-              : 'bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400'
-          }`}
+          className={`
+            mt-5
+            inline-flex
+            rounded-full
+            px-2.5
+            py-1
+            text-[8px]
+            font-black
+            uppercase
+            tracking-[0.12em]
+            ${
+              gold
+                ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400'
+                : 'bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400'
+            }
+          `}
         >
           {subtitle}
         </span>
@@ -2653,21 +3417,33 @@ function EducationCardNew({
         </p>
 
         <div
-          className={`mt-5 flex items-center justify-between text-[11px] font-black ${
-            gold
-              ? 'text-amber-700'
-              : 'text-blue-700'
-          }`}
+          className={`
+            mt-5
+            flex
+            items-center
+            justify-between
+            text-[11px]
+            font-black
+            ${
+              gold
+                ? 'text-amber-700'
+                : 'text-blue-700'
+            }
+          `}
         >
           <span>
             Boshlash
           </span>
 
-          <span className="transition-transform group-hover:translate-x-1">
+          <span
+            className="
+              transition-transform
+              group-hover:translate-x-1
+            "
+          >
             →
           </span>
         </div>
-
       </div>
     </button>
   )
@@ -2721,9 +3497,32 @@ function EmptyState({
   text: string
 }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-[26px] border bg-card px-6 py-12 text-center shadow-sm">
-
-      <div className="flex size-16 items-center justify-center rounded-[20px] bg-muted text-3xl">
+    <div
+      className="
+        flex
+        flex-col
+        items-center
+        justify-center
+        rounded-[26px]
+        border
+        bg-card
+        px-6
+        py-12
+        text-center
+        shadow-sm
+      "
+    >
+      <div
+        className="
+          flex
+          size-16
+          items-center
+          justify-center
+          rounded-[20px]
+          bg-muted
+          text-3xl
+        "
+      >
         {icon}
       </div>
 
@@ -2734,7 +3533,6 @@ function EmptyState({
       <p className="mt-2 max-w-sm text-[11px] leading-5 text-muted-foreground">
         {text}
       </p>
-
     </div>
   )
 }
