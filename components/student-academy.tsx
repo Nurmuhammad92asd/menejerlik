@@ -7,27 +7,20 @@ import {
   ArrowRight,
   Award,
   BarChart3,
-  BookA,
   BookOpen,
   Brain,
-  BrainCircuit,
   CheckCircle2,
   ChevronRight,
   Clock3,
-  Flame,
   FlaskConical,
   Globe2,
   GraduationCap,
   Languages,
   Lightbulb,
-  Lock,
   Medal,
   Microscope,
   Pencil,
-  Play,
-  Puzzle,
   Rocket,
-  School,
   Sparkles,
   Star,
   Target,
@@ -36,564 +29,495 @@ import {
   Zap,
 } from 'lucide-react'
 
-type Props = {
-  onBack?: () => void
+type StudentAcademyProps = {
+  onBack: () => void
 }
 
-type GradeBand = {
-  id: string
-  title: string
-  subtitle: string
-  grades: string
-  icon: string
-}
+type TrackId =
+  | 'pisa'
+  | 'english'
+  | 'math'
+  | 'science'
+  | 'logic'
+  | 'president'
+  | 'olympiad'
 
-type AcademySection = {
-  id: string
+type Track = {
+  id: TrackId
   title: string
   subtitle: string
   description: string
   icon: string
-  accent: string
-  badge?: string
+  color: 'green' | 'blue' | 'purple' | 'amber' | 'cyan' | 'rose'
+  progress: number
+  lessons: number
+  tests: number
 }
 
-type EnglishLevel = {
+type Level = {
   id: string
-  level: string
   title: string
+  subtitle: string
   description: string
   progress: number
-  color: string
-  locked?: boolean
+  tests: number
+  color: 'green' | 'lime' | 'emerald' | 'teal' | 'blue' | 'indigo' | 'violet'
 }
 
-type PisaDomain = {
-  id: string
-  title: string
-  subtitle: string
-  icon: string
-  description: string
-  questions: number
-  level: string
-}
-
-const GRADE_BANDS: GradeBand[] = [
+const TRACKS: Track[] = [
   {
-    id: 'primary',
-    title: 'Boshlang‘ich',
-    subtitle: 'Foundation',
-    grades: '1–4-sinf',
-    icon: '🌱',
-  },
-  {
-    id: 'middle',
-    title: 'Rivojlantiruvchi',
-    subtitle: 'Development',
-    grades: '5–6-sinf',
-    icon: '🚀',
-  },
-  {
-    id: 'core',
-    title: 'Asosiy',
-    subtitle: 'Core',
-    grades: '7–9-sinf',
-    icon: '🎯',
-  },
-  {
-    id: 'advanced',
-    title: 'Yuqori',
-    subtitle: 'Advanced',
-    grades: '10–11-sinf',
-    icon: '🏆',
-  },
-]
-
-const SECTIONS: AcademySection[] = [
-  {
-    id: 'logic',
-    title: 'Mantiqiy fikrlash',
-    subtitle: 'IQ • Reasoning',
+    id: 'pisa',
+    title: 'PISA',
+    subtitle: 'Savodxonlik va real hayot',
     description:
-      'Ketma-ketlik, naqsh, mantiq, strategiya va tezkor fikrlash.',
-    icon: '🧠',
-    accent: 'indigo',
-    badge: 'TOP',
+      'Matematik, o‘qish va tabiiy-ilmiy savodxonlik. Grafik, jadval, dalil va real vaziyatlar bilan ishlash.',
+    icon: '🌍',
+    color: 'green',
+    progress: 18,
+    lessons: 42,
+    tests: 180,
+  },
+  {
+    id: 'english',
+    title: 'English',
+    subtitle: 'Foundation → C2',
+    description:
+      'Ingliz tilini noldan boshlab xalqaro darajagacha bosqichma-bosqich o‘rganish.',
+    icon: '🇬🇧',
+    color: 'blue',
+    progress: 31,
+    lessons: 64,
+    tests: 320,
   },
   {
     id: 'math',
     title: 'Matematika',
-    subtitle: 'Mathematics',
+    subtitle: 'Asosdan olimpiadagacha',
     description:
-      'Hisoblashdan murakkab masalalar va olimpiada darajasigacha.',
+      'Hisoblash, algebra, geometriya, mantiqiy masalalar va yuqori darajadagi muammolar.',
     icon: '📐',
-    accent: 'blue',
-  },
-  {
-    id: 'reading',
-    title: 'O‘qish savodxonligi',
-    subtitle: 'Reading Literacy',
-    description:
-      'Matnni tushunish, dalil topish, xulosa va tanqidiy tahlil.',
-    icon: '📖',
-    accent: 'violet',
+    color: 'purple',
+    progress: 24,
+    lessons: 58,
+    tests: 290,
   },
   {
     id: 'science',
-    title: 'Tabiiy fanlar',
-    subtitle: 'Science',
+    title: 'Fanlar',
+    subtitle: 'Tabiiy va aniq fanlar',
     description:
-      'Fizika, kimyo, biologiya va ilmiy fikrlash asoslari.',
+      'Fizika, kimyo, biologiya, informatika va tabiiy fanlar bo‘yicha tizimli tayyorgarlik.',
     icon: '🔬',
-    accent: 'emerald',
+    color: 'cyan',
+    progress: 12,
+    lessons: 51,
+    tests: 250,
   },
   {
-    id: 'pisa',
-    title: 'PISA',
-    subtitle: 'International Assessment',
+    id: 'logic',
+    title: 'Mantiq',
+    subtitle: 'IQ va critical thinking',
     description:
-      'Hayotiy vaziyatlar, ma’lumotlar, grafiklar va muammo yechish.',
-    icon: '🌍',
-    accent: 'cyan',
-    badge: 'NEW',
-  },
-  {
-    id: 'english',
-    title: 'Ingliz tili',
-    subtitle: 'English Academy',
-    description:
-      'Foundationdan Advanced darajagacha tizimli ingliz tili.',
-    icon: '🇬🇧',
-    accent: 'sky',
-    badge: '7 LEVEL',
+      'Ketma-ketlik, pattern, tahlil, strategiya va muammo yechish qobiliyatlarini rivojlantiring.',
+    icon: '🧠',
+    color: 'amber',
+    progress: 39,
+    lessons: 35,
+    tests: 210,
   },
   {
     id: 'president',
     title: 'Prezident maktabi',
-    subtitle: 'Selective Schools',
+    subtitle: 'Kirish imtihonlari',
     description:
-      'Kirish imtihonlari uchun mantiq, matematika va ingliz tili.',
-    icon: '🏛️',
-    accent: 'amber',
+      'Mantiq, matematika, ingliz tili va murakkab fikrlash bo‘yicha maxsus tayyorgarlik.',
+    icon: '🏫',
+    color: 'green',
+    progress: 9,
+    lessons: 48,
+    tests: 240,
   },
   {
     id: 'olympiad',
     title: 'Olimpiada',
-    subtitle: 'Olympiad',
+    subtitle: 'Yuqori darajadagi masalalar',
     description:
-      'Yuqori darajadagi masalalar va chuqur matematik fikrlash.',
-    icon: '🥇',
-    accent: 'rose',
-  },
-]
-
-const ENGLISH_LEVELS: EnglishLevel[] = [
-  {
-    id: 'foundation',
-    level: 'FOUNDATION',
-    title: 'Starter',
-    description:
-      'Alphabet, numbers, colours, family, classroom, basic words.',
-    progress: 100,
-    color: 'emerald',
-  },
-  {
-    id: 'beginner',
-    level: 'A1',
-    title: 'Beginner',
-    description:
-      'Basic sentences, everyday vocabulary and simple communication.',
-    progress: 68,
-    color: 'blue',
-  },
-  {
-    id: 'elementary',
-    level: 'A2',
-    title: 'Elementary',
-    description:
-      'Daily conversations, core grammar, reading and practical English.',
-    progress: 25,
-    color: 'cyan',
-  },
-  {
-    id: 'pre-intermediate',
-    level: 'A2+ / B1',
-    title: 'Pre-Intermediate',
-    description:
-      'Longer conversations, stories, functional grammar and writing.',
-    progress: 0,
-    color: 'violet',
-    locked: true,
-  },
-  {
-    id: 'intermediate',
-    level: 'B1',
-    title: 'Intermediate',
-    description:
-      'Confident communication, authentic texts and structured writing.',
-    progress: 0,
-    color: 'indigo',
-    locked: true,
-  },
-  {
-    id: 'upper-intermediate',
-    level: 'B2',
-    title: 'Upper-Intermediate',
-    description:
-      'Complex grammar, academic vocabulary and advanced comprehension.',
-    progress: 0,
-    color: 'amber',
-    locked: true,
-  },
-  {
-    id: 'advanced',
-    level: 'C1',
-    title: 'Advanced',
-    description:
-      'Academic English, critical thinking and high-level communication.',
-    progress: 0,
-    color: 'rose',
-    locked: true,
-  },
-]
-
-const ENGLISH_SKILLS = [
-  {
-    title: 'Vocabulary',
-    subtitle: 'So‘z boyligi',
-    icon: '📚',
-    progress: 72,
-  },
-  {
-    title: 'Grammar',
-    subtitle: 'Grammatika',
-    icon: '⚙️',
-    progress: 61,
-  },
-  {
-    title: 'Reading',
-    subtitle: 'O‘qish',
-    icon: '📖',
-    progress: 54,
-  },
-  {
-    title: 'Listening',
-    subtitle: 'Tinglash',
-    icon: '🎧',
-    progress: 48,
-  },
-  {
-    title: 'Speaking',
-    subtitle: 'Gapirish',
-    icon: '🗣️',
-    progress: 37,
-  },
-  {
-    title: 'Writing',
-    subtitle: 'Yozish',
-    icon: '✍️',
-    progress: 42,
-  },
-]
-
-const PISA_DOMAINS: PisaDomain[] = [
-  {
-    id: 'math',
-    title: 'Matematik savodxonlik',
-    subtitle: 'Mathematical Literacy',
-    icon: '📊',
-    description:
-      'Real hayotdagi miqdor, nisbat, foiz, o‘lchov va matematik modellashtirish.',
-    questions: 30,
-    level: 'Foundation → Advanced',
-  },
-  {
-    id: 'reading',
-    title: 'O‘qish savodxonligi',
-    subtitle: 'Reading Literacy',
-    icon: '📖',
-    description:
-      'Turli matnlarni tushunish, baholash, solishtirish va dalillar asosida xulosa qilish.',
-    questions: 30,
-    level: 'Foundation → Advanced',
-  },
-  {
-    id: 'science',
-    title: 'Tabiiy-ilmiy savodxonlik',
-    subtitle: 'Scientific Literacy',
-    icon: '🔬',
-    description:
-      'Ilmiy ma’lumotlarni talqin qilish, tajribalarni tahlil qilish va dalilga asoslangan xulosa.',
-    questions: 30,
-    level: 'Foundation → Advanced',
-  },
-  {
-    id: 'data',
-    title: 'Grafik va jadval tahlili',
-    subtitle: 'Data & Graphs',
-    icon: '📈',
-    description:
-      'Diagramma, jadval, grafik va statistik ma’lumotlardan kerakli xulosani chiqarish.',
-    questions: 30,
-    level: 'Foundation → Advanced',
-  },
-  {
-    id: 'problem',
-    title: 'Muammo yechish',
-    subtitle: 'Problem Solving',
-    icon: '🧩',
-    description:
-      'Noodatiy vaziyatlarni tahlil qilish, strategiya tanlash va yechimni asoslash.',
-    questions: 30,
-    level: 'Foundation → Advanced',
-  },
-  {
-    id: 'life',
-    title: 'Hayotiy vaziyatlar',
-    subtitle: 'Real-Life Context',
-    icon: '🌎',
-    description:
-      'Maktab, oila, transport, xarid, ekologiya va kundalik hayotdagi muammolar.',
-    questions: 30,
-    level: 'Foundation → Advanced',
-  },
-  {
-    id: 'reasoning',
-    title: 'Dalil bilan fikrlash',
-    subtitle: 'Evidence & Reasoning',
-    icon: '💡',
-    description:
-      'Da’vo, dalil, sabab va natijani ajratish hamda qarorni asoslash.',
-    questions: 30,
-    level: 'Intermediate → Advanced',
-  },
-  {
-    id: 'full',
-    title: 'PISA FULL TEST',
-    subtitle: 'Complete Assessment',
+      'Standartdan tashqari masalalar, kreativ yechimlar va chuqur fikrlash.',
     icon: '🏆',
-    description:
-      'Matematika, o‘qish va tabiiy fanlardan kompleks diagnostik test.',
-    questions: 60,
-    level: 'Mixed',
+    color: 'rose',
+    progress: 5,
+    lessons: 30,
+    tests: 150,
   },
 ]
 
-const PISA_LEVELS = [
+const ENGLISH_LEVELS: Level[] = [
   {
     id: 'foundation',
     title: 'Foundation',
-    subtitle: 'Boshlang‘ich savodxonlik',
+    subtitle: 'Noldan boshlash',
     description:
-      'Oddiy hayotiy vaziyatlar va asosiy ma’lumotlarni tushunish.',
-    unlocked: true,
+      'Alphabet, sounds, basic vocabulary, classroom English va eng zarur iboralar.',
+    progress: 72,
+    tests: 40,
+    color: 'green',
   },
   {
-    id: 'level1',
-    title: 'Level 1',
-    subtitle: 'Basic Application',
+    id: 'pre-a1',
+    title: 'Pre-A1',
+    subtitle: 'Starter',
     description:
-      'Berilgan ma’lumot asosida oddiy qaror va hisoblashlar.',
-    unlocked: true,
+      'Salomlashish, ranglar, sonlar, oila, maktab va oddiy kundalik so‘zlar.',
+    progress: 61,
+    tests: 45,
+    color: 'lime',
   },
   {
-    id: 'level2',
-    title: 'Level 2',
-    subtitle: 'Application',
+    id: 'a1',
+    title: 'A1',
+    subtitle: 'Beginner',
     description:
-      'Bir nechta ma’lumotni bog‘lash va amaliy vazifani bajarish.',
-    unlocked: true,
+      'Present Simple, be, have, basic questions, everyday communication.',
+    progress: 44,
+    tests: 55,
+    color: 'emerald',
   },
   {
-    id: 'level3',
-    title: 'Level 3',
-    subtitle: 'Reasoning',
+    id: 'a2',
+    title: 'A2',
+    subtitle: 'Elementary',
     description:
-      'Tahlil, taqqoslash va sabab-natija munosabatlarini aniqlash.',
-    unlocked: false,
+      'Kundalik mavzularda muloqot, asosiy zamonlar, vocabulary va reading.',
+    progress: 28,
+    tests: 60,
+    color: 'teal',
   },
   {
-    id: 'level4',
-    title: 'Level 4',
-    subtitle: 'Advanced Reasoning',
+    id: 'b1',
+    title: 'B1',
+    subtitle: 'Intermediate',
     description:
-      'Murakkab ma’lumotlar va bir nechta bosqichli muammolar.',
-    unlocked: false,
+      'Mustaqil muloqot, murakkabroq matnlar, grammar va writing.',
+    progress: 15,
+    tests: 65,
+    color: 'blue',
   },
   {
-    id: 'level5',
-    title: 'Level 5',
-    subtitle: 'High-Level Reasoning',
+    id: 'b2',
+    title: 'B2',
+    subtitle: 'Upper-Intermediate',
     description:
-      'Abstrakt fikrlash va murakkab vaziyatlarda strategiya.',
-    unlocked: false,
+      'Academic vocabulary, complex grammar, argumentation va advanced reading.',
+    progress: 8,
+    tests: 70,
+    color: 'indigo',
   },
   {
-    id: 'level6',
-    title: 'Level 6',
-    subtitle: 'Expert Challenge',
+    id: 'c1',
+    title: 'C1',
+    subtitle: 'Advanced',
     description:
-      'Eng yuqori murakkablikdagi yangi va kompleks vaziyatlar.',
-    unlocked: false,
+      'Murakkab akademik va professional matnlar, argument va precision.',
+    progress: 0,
+    tests: 75,
+    color: 'violet',
+  },
+  {
+    id: 'c2',
+    title: 'C2',
+    subtitle: 'Mastery',
+    description:
+      'Yuqori darajadagi til kompetensiyasi, nuance, academic writing va analysis.',
+    progress: 0,
+    tests: 80,
+    color: 'purple',
   },
 ]
 
-export function StudentAcademy({ onBack }: Props) {
-  const [selectedGrade, setSelectedGrade] = useState('core')
-  const [activeView, setActiveView] = useState<
-    'home' | 'english' | 'pisa' | 'subject'
-  >('home')
-  const [selectedSubject, setSelectedSubject] =
-    useState<AcademySection | null>(null)
+const PISA_DOMAINS = [
+  {
+    icon: '📐',
+    title: 'Matematik savodxonlik',
+    text: 'Real hayotdagi matematik muammolarni modellashtirish.',
+    progress: 21,
+  },
+  {
+    icon: '📖',
+    title: 'O‘qish savodxonligi',
+    text: 'Matnni tushunish, dalil topish va xulosa chiqarish.',
+    progress: 16,
+  },
+  {
+    icon: '🔬',
+    title: 'Tabiiy-ilmiy savodxonlik',
+    text: 'Ilmiy hodisalarni tushuntirish va dalillarni baholash.',
+    progress: 12,
+  },
+  {
+    icon: '📊',
+    title: 'Grafik va jadval',
+    text: 'Ma’lumotlarni o‘qish, taqqoslash va tahlil qilish.',
+    progress: 28,
+  },
+  {
+    icon: '🧩',
+    title: 'Muammo yechish',
+    text: 'Strategiya ishlab chiqish va eng samarali yechimni topish.',
+    progress: 19,
+  },
+  {
+    icon: '💡',
+    title: 'Critical Thinking',
+    text: 'Dalil, taxmin va xulosalarni tanqidiy baholash.',
+    progress: 14,
+  },
+]
 
-  const selectedGradeData = useMemo(
+const SUBJECTS = [
+  {
+    id: 'physics',
+    icon: '⚡',
+    title: 'Fizika',
+    text: 'Mexanika, energiya, elektr va tajribaviy masalalar.',
+    progress: 14,
+  },
+  {
+    id: 'chemistry',
+    icon: '🧪',
+    title: 'Kimyo',
+    text: 'Modda, reaksiya, elementlar va hisoblashlar.',
+    progress: 8,
+  },
+  {
+    id: 'biology',
+    icon: '🧬',
+    title: 'Biologiya',
+    text: 'Hujayra, genetika, ekologiya va inson organizmi.',
+    progress: 19,
+  },
+  {
+    id: 'informatics',
+    icon: '💻',
+    title: 'Informatika',
+    text: 'Algoritm, mantiq, kodlash va raqamli fikrlash.',
+    progress: 23,
+  },
+  {
+    id: 'natural',
+    icon: '🌱',
+    title: 'Tabiiy fanlar',
+    text: 'Tabiat hodisalari va fanlararo bog‘liqlik.',
+    progress: 17,
+  },
+  {
+    id: 'geography',
+    icon: '🌎',
+    title: 'Geografiya',
+    text: 'Xarita, tabiat, aholi va global jarayonlar.',
+    progress: 10,
+  },
+]
+
+const MATH_LEVELS = [
+  ['Foundation', 'Asosiy matematik tushunchalar', 34],
+  ['Basic', 'Hisoblash va standart masalalar', 27],
+  ['Intermediate', 'Algebra va geometriya', 18],
+  ['Advanced', 'Murakkab va ko‘p bosqichli masalalar', 8],
+  ['Olympiad', 'Kreativ va nostandart masalalar', 3],
+]
+
+const LOGIC_LEVELS = [
+  ['IQ Foundation', 'Oddiy mantiqiy bog‘lanishlar', 48],
+  ['Pattern', 'Ketma-ketlik va naqshlar', 34],
+  ['Analytical', 'Tahlil va deduksiya', 21],
+  ['Critical Thinking', 'Dalil va xulosalar', 13],
+  ['Advanced Logic', 'Murakkab strategik fikrlash', 5],
+]
+
+function colorClasses(color: string) {
+  const map: Record<string, string> = {
+    green:
+      'border-emerald-100 bg-emerald-50 text-emerald-700 dark:border-emerald-900/30 dark:bg-emerald-950/20 dark:text-emerald-300',
+    blue:
+      'border-blue-100 bg-blue-50 text-blue-700 dark:border-blue-900/30 dark:bg-blue-950/20 dark:text-blue-300',
+    purple:
+      'border-violet-100 bg-violet-50 text-violet-700 dark:border-violet-900/30 dark:bg-violet-950/20 dark:text-violet-300',
+    amber:
+      'border-amber-100 bg-amber-50 text-amber-700 dark:border-amber-900/30 dark:bg-amber-950/20 dark:text-amber-300',
+    cyan:
+      'border-cyan-100 bg-cyan-50 text-cyan-700 dark:border-cyan-900/30 dark:bg-cyan-950/20 dark:text-cyan-300',
+    rose:
+      'border-rose-100 bg-rose-50 text-rose-700 dark:border-rose-900/30 dark:bg-rose-950/20 dark:text-rose-300',
+    lime:
+      'border-lime-100 bg-lime-50 text-lime-700 dark:border-lime-900/30 dark:bg-lime-950/20 dark:text-lime-300',
+    emerald:
+      'border-emerald-100 bg-emerald-50 text-emerald-700 dark:border-emerald-900/30 dark:bg-emerald-950/20 dark:text-emerald-300',
+    teal:
+      'border-teal-100 bg-teal-50 text-teal-700 dark:border-teal-900/30 dark:bg-teal-950/20 dark:text-teal-300',
+    indigo:
+      'border-indigo-100 bg-indigo-50 text-indigo-700 dark:border-indigo-900/30 dark:bg-indigo-950/20 dark:text-indigo-300',
+    violet:
+      'border-violet-100 bg-violet-50 text-violet-700 dark:border-violet-900/30 dark:bg-violet-950/20 dark:text-violet-300',
+  }
+
+  return map[color] ?? map.green
+}
+
+export function StudentAcademy({
+  onBack,
+}: StudentAcademyProps) {
+  const [selectedTrack, setSelectedTrack] =
+    useState<TrackId | null>(null)
+
+  const [selectedEnglishLevel, setSelectedEnglishLevel] =
+    useState<string | null>(null)
+
+  const selectedTrackData = useMemo(
     () =>
-      GRADE_BANDS.find(
-        (item) => item.id === selectedGrade,
-      ) ?? GRADE_BANDS[2],
-    [selectedGrade],
+      TRACKS.find(
+        (track) => track.id === selectedTrack,
+      ),
+    [selectedTrack],
   )
 
-  const openSubject = (section: AcademySection) => {
-    setSelectedSubject(section)
+  const totalTests = TRACKS.reduce(
+    (sum, track) => sum + track.tests,
+    0,
+  )
 
-    if (section.id === 'english') {
-      setActiveView('english')
-      return
-    }
-
-    if (section.id === 'pisa') {
-      setActiveView('pisa')
-      return
-    }
-
-    setActiveView('subject')
-  }
-
-  const goHome = () => {
-    setActiveView('home')
-    setSelectedSubject(null)
-  }
-
-  if (activeView === 'english') {
+  if (selectedTrack === 'english') {
     return (
       <EnglishAcademy
-        onBack={goHome}
-        selectedGrade={selectedGradeData}
+        onBack={() => setSelectedTrack(null)}
+        selectedLevel={selectedEnglishLevel}
+        onSelectLevel={setSelectedEnglishLevel}
       />
     )
   }
 
-  if (activeView === 'pisa') {
+  if (selectedTrack === 'pisa') {
     return (
       <PisaAcademy
-        onBack={goHome}
-        selectedGrade={selectedGradeData}
+        onBack={() => setSelectedTrack(null)}
       />
     )
   }
 
-  if (activeView === 'subject' && selectedSubject) {
+  if (selectedTrack === 'math') {
     return (
-      <SubjectAcademy
-        section={selectedSubject}
-        grade={selectedGradeData}
-        onBack={goHome}
+      <MathAcademy
+        onBack={() => setSelectedTrack(null)}
+      />
+    )
+  }
+
+  if (selectedTrack === 'science') {
+    return (
+      <ScienceAcademy
+        onBack={() => setSelectedTrack(null)}
+      />
+    )
+  }
+
+  if (selectedTrack === 'logic') {
+    return (
+      <LogicAcademy
+        onBack={() => setSelectedTrack(null)}
+      />
+    )
+  }
+
+  if (selectedTrack === 'president') {
+    return (
+      <SpecialAcademy
+        onBack={() => setSelectedTrack(null)}
+        type="president"
+      />
+    )
+  }
+
+  if (selectedTrack === 'olympiad') {
+    return (
+      <SpecialAcademy
+        onBack={() => setSelectedTrack(null)}
+        type="olympiad"
       />
     )
   }
 
   return (
-    <div className="relative flex flex-col gap-5 overflow-hidden pb-10">
-
+    <div className="flex flex-col gap-5 pb-10">
       {/* HEADER */}
 
-      <header className="flex items-center justify-between pt-1">
-
+      <header className="flex items-center gap-3">
         <button
           type="button"
           onClick={onBack}
-          className="flex size-11 items-center justify-center rounded-2xl border bg-card shadow-sm transition-all hover:shadow-md active:scale-95"
+          className="flex size-11 shrink-0 items-center justify-center rounded-2xl border bg-card shadow-sm transition-all hover:shadow-md active:scale-95"
           aria-label="Orqaga"
         >
           <ArrowLeft className="size-5" />
         </button>
 
-        <div className="flex items-center gap-2">
+        <div className="min-w-0 flex-1">
+          <p className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-600">
+            Student Learning System
+          </p>
 
-          <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-600 text-white shadow-lg">
-            <GraduationCap className="size-5" />
-          </div>
-
-          <div>
-            <p className="text-[8px] font-black uppercase tracking-[0.18em] text-indigo-600">
-              Student Division
-            </p>
-
-            <p className="text-sm font-black">
-              O‘quvchi Akademiyasi
-            </p>
-          </div>
-
+          <h1 className="mt-0.5 text-[21px] font-black tracking-tight">
+            O‘quvchi Akademiyasi
+          </h1>
         </div>
 
-        <button
-          type="button"
-          className="flex size-11 items-center justify-center rounded-2xl border bg-card shadow-sm"
-        >
-          <Trophy className="size-5 text-amber-500" />
-        </button>
-
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-lg shadow-emerald-600/20">
+          <GraduationCap className="size-5" />
+        </div>
       </header>
 
       {/* HERO */}
 
-      <section className="relative overflow-hidden rounded-[30px] bg-gradient-to-br from-[#111b4b] via-[#263d91] to-[#0796b6] p-6 text-white shadow-xl shadow-indigo-900/20">
-
+      <section className="relative overflow-hidden rounded-[30px] bg-gradient-to-br from-emerald-950 via-emerald-800 to-teal-700 p-6 text-white shadow-2xl shadow-emerald-900/20">
         <div className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full border border-white/10 bg-white/[0.04]" />
 
-        <div className="pointer-events-none absolute -bottom-20 -left-16 size-64 rounded-full bg-cyan-300/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-20 size-64 rounded-full bg-lime-300/10 blur-3xl" />
+
+        <div className="pointer-events-none absolute right-12 top-12 size-2 rounded-full bg-lime-300 shadow-[0_0_22px_rgba(190,242,100,0.9)]" />
 
         <div className="relative">
-
-          <div className="flex items-start justify-between">
-
+          <div className="flex items-start justify-between gap-4">
             <div>
-
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1.5 backdrop-blur-md">
+                <Sparkles className="size-3.5 text-lime-300" />
 
-                <Sparkles className="size-3.5 text-amber-300" />
-
-                <span className="text-[9px] font-black uppercase tracking-[0.15em]">
-                  Future Learner
+                <span className="text-[9px] font-black uppercase tracking-[0.16em]">
+                  Future Ready
                 </span>
-
               </div>
 
-              <h1 className="mt-4 text-[27px] font-black leading-tight tracking-tight">
+              <h2 className="mt-4 text-[28px] font-black leading-tight tracking-tight">
                 Bilimdan
                 <br />
-                <span className="text-cyan-200">
-                  katta natijaga.
+                <span className="text-lime-300">
+                  kelajakka.
                 </span>
-              </h1>
+              </h2>
 
-              <p className="mt-2 max-w-[330px] text-[12px] leading-5 text-blue-50/75">
-                Fan, mantiq, til va xalqaro baholash
-                tizimlari orqali o‘z imkoniyatingizni
-                rivojlantiring.
+              <p className="mt-3 max-w-[330px] text-[12px] leading-5 text-emerald-50/80">
+                O‘quvchining bilimini tekshirish,
+                rivojlantirish va xalqaro darajaga
+                olib chiqish uchun yagona akademik
+                muhit.
               </p>
-
             </div>
 
-            <div className="flex size-14 items-center justify-center rounded-[19px] bg-white/10 text-3xl backdrop-blur-md">
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-[20px] bg-white/10 text-3xl backdrop-blur-md">
               🎓
             </div>
-
           </div>
 
-          <div className="mt-5 grid grid-cols-3 gap-2">
+          {/* XP */}
 
+          <div className="mt-6 grid grid-cols-3 gap-2">
             <HeroStat
               icon={<Zap className="size-3.5" />}
               value="1 240"
@@ -601,1263 +525,876 @@ export function StudentAcademy({ onBack }: Props) {
             />
 
             <HeroStat
-              icon={<Flame className="size-3.5" />}
-              value="12"
-              label="kun streak"
+              icon={<Trophy className="size-3.5" />}
+              value="18"
+              label="Yutuq"
             />
 
             <HeroStat
-              icon={<Trophy className="size-3.5" />}
-              value="A+"
-              label="daraja"
+              icon={<Star className="size-3.5" />}
+              value="7"
+              label="Streak"
             />
-
           </div>
-
         </div>
-
       </section>
 
       {/* DAILY CHALLENGE */}
 
-      <section className="rounded-[25px] border border-amber-100 bg-gradient-to-br from-amber-50 to-white p-5 shadow-sm dark:border-amber-900/20 dark:from-amber-950/20 dark:to-card">
+      <button
+        type="button"
+        onClick={() => setSelectedTrack('pisa')}
+        className="group relative overflow-hidden rounded-[26px] border border-emerald-100 bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg dark:border-emerald-900/20"
+      >
+        <div className="absolute -right-10 -top-10 size-32 rounded-full bg-emerald-500/5" />
 
-        <div className="flex items-center gap-3">
-
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-amber-400 text-slate-950 shadow-lg shadow-amber-400/20">
-            <Target className="size-6" />
+        <div className="relative flex items-center gap-4">
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30">
+            <Rocket className="size-7" />
           </div>
 
           <div className="min-w-0 flex-1">
-
-            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-amber-700">
+            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-emerald-600">
               Bugungi challenge
             </p>
 
-            <h2 className="mt-1 text-[16px] font-black">
-              10 savolni yeching
-            </h2>
+            <h3 className="mt-1 text-[17px] font-black">
+              10 daqiqalik PISA challenge
+            </h3>
 
-            <p className="mt-1 text-[10px] text-muted-foreground">
-              Mantiq + matematika + PISA
-            </p>
-
-          </div>
-
-          <div className="text-right">
-            <p className="text-lg font-black text-amber-600">
-              +100
-            </p>
-            <p className="text-[9px] text-muted-foreground">
-              XP
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              10 savol · Real hayot · +50 XP
             </p>
           </div>
 
-        </div>
-
-        <button
-          type="button"
-          className="mt-4 flex w-full items-center justify-between rounded-2xl bg-slate-950 px-4 py-3.5 text-sm font-black text-white transition-all hover:bg-slate-800 active:scale-[0.99]"
-        >
-          <span className="flex items-center gap-2">
-            <Play className="size-4 fill-current" />
-            Challenge'ni boshlash
-          </span>
-
-          <ArrowRight className="size-4" />
-        </button>
-
-      </section>
-
-      {/* GRADE */}
-
-      <section>
-
-        <div className="mb-3 flex items-end justify-between px-1">
-
-          <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.17em] text-indigo-600">
-              Shaxsiy yo‘nalish
-            </p>
-
-            <h2 className="mt-1 text-[19px] font-black">
-              Sinf darajangiz
-            </h2>
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 transition-transform group-hover:translate-x-1 dark:bg-emerald-950/20">
+            <ChevronRight className="size-4" />
           </div>
-
-          <span className="rounded-full bg-indigo-50 px-2.5 py-1 text-[9px] font-black text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-300">
-            {selectedGradeData.grades}
-          </span>
-
         </div>
-
-        <div className="grid grid-cols-2 gap-2.5">
-
-          {GRADE_BANDS.map((grade) => {
-            const active = selectedGrade === grade.id
-
-            return (
-              <button
-                key={grade.id}
-                type="button"
-                onClick={() => setSelectedGrade(grade.id)}
-                className={`relative overflow-hidden rounded-[22px] border p-4 text-left transition-all ${
-                  active
-                    ? 'border-indigo-300 bg-indigo-50 shadow-md shadow-indigo-500/10 dark:border-indigo-700 dark:bg-indigo-950/30'
-                    : 'bg-card hover:border-indigo-200 hover:shadow-sm'
-                }`}
-              >
-
-                <div className="flex items-start justify-between">
-
-                  <span className="text-2xl">
-                    {grade.icon}
-                  </span>
-
-                  {active && (
-                    <CheckCircle2 className="size-5 text-indigo-600" />
-                  )}
-
-                </div>
-
-                <p className="mt-3 text-[13px] font-black">
-                  {grade.title}
-                </p>
-
-                <p className="mt-0.5 text-[9px] font-bold text-indigo-600">
-                  {grade.subtitle}
-                </p>
-
-                <p className="mt-1 text-[10px] text-muted-foreground">
-                  {grade.grades}
-                </p>
-
-              </button>
-            )
-          })}
-
-        </div>
-
-      </section>
+      </button>
 
       {/* PROGRESS */}
 
-      <section className="rounded-[25px] border bg-card p-5 shadow-sm">
+      <section className="rounded-[26px] border bg-card p-5 shadow-sm">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-emerald-600">
+              Sizning rivojlanishingiz
+            </p>
 
-        <div className="flex items-center gap-3">
+            <h2 className="mt-1 text-[18px] font-black">
+              Academy Progress
+            </h2>
+          </div>
 
-          <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30">
+          <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30">
             <BarChart3 className="size-5" />
           </div>
-
-          <div className="flex-1">
-
-            <div className="flex items-center justify-between">
-
-              <p className="text-[12px] font-black">
-                Akademik progress
-              </p>
-
-              <p className="text-[12px] font-black text-emerald-600">
-                68%
-              </p>
-
-            </div>
-
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
-
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500"
-                style={{ width: '68%' }}
-              />
-
-            </div>
-
-            <p className="mt-2 text-[9px] text-muted-foreground">
-              Keyingi bosqichga 320 XP qoldi
-            </p>
-
-          </div>
-
         </div>
 
+        <div className="mt-5 flex items-end justify-between">
+          <div>
+            <span className="text-[32px] font-black">
+              24%
+            </span>
+
+            <span className="ml-2 text-[11px] text-muted-foreground">
+              umumiy progress
+            </span>
+          </div>
+
+          <span className="text-[10px] font-bold text-emerald-600">
+            +8% bu oy
+          </span>
+        </div>
+
+        <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted">
+          <div className="h-full w-[24%] rounded-full bg-gradient-to-r from-emerald-600 to-lime-400" />
+        </div>
+
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          <MiniProgress
+            label="Testlar"
+            value={totalTests}
+          />
+
+          <MiniProgress
+            label="Darslar"
+            value={328}
+          />
+
+          <MiniProgress
+            label="XP"
+            value={1240}
+          />
+        </div>
       </section>
 
-      {/* DIRECTIONS */}
+      {/* TRACKS */}
 
       <section>
+        <SectionHeading
+          eyebrow="Academy"
+          title="Yo‘nalishlar"
+          icon={<Target className="size-4.5" />}
+        />
 
-        <div className="mb-3 flex items-end justify-between px-1">
-
-          <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.17em] text-indigo-600">
-              Academy
-            </p>
-
-            <h2 className="mt-1 text-[20px] font-black">
-              Ta’lim yo‘nalishlari
-            </h2>
-          </div>
-
-          <Sparkles className="size-5 text-indigo-500" />
-
-        </div>
-
-        <div className="grid grid-cols-2 gap-2.5">
-
-          {SECTIONS.map((section) => (
-            <AcademySectionCard
-              key={section.id}
-              section={section}
-              onClick={() => openSubject(section)}
+        <div className="mt-3 flex flex-col gap-2.5">
+          {TRACKS.map((track) => (
+            <TrackCard
+              key={track.id}
+              track={track}
+              onClick={() =>
+                setSelectedTrack(track.id)
+              }
             />
           ))}
-
         </div>
-
-      </section>
-
-      {/* QUICK PATH */}
-
-      <section className="rounded-[26px] border bg-muted/30 p-5">
-
-        <div className="flex items-center gap-3">
-
-          <div className="flex size-11 items-center justify-center rounded-2xl bg-blue-700 text-white">
-            <Rocket className="size-5" />
-          </div>
-
-          <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.17em] text-blue-700">
-              Learning Path
-            </p>
-
-            <h2 className="text-[16px] font-black">
-              Siz uchun tavsiya
-            </h2>
-          </div>
-
-        </div>
-
-        <div className="mt-4 space-y-2">
-
-          <PathItem
-            number="01"
-            title="Mantiqiy fikrlash"
-            text="10 daqiqalik warm-up"
-            done
-          />
-
-          <PathItem
-            number="02"
-            title="Matematika"
-            text="Foiz va nisbatlar"
-          />
-
-          <PathItem
-            number="03"
-            title="PISA"
-            text="Real-life problem solving"
-          />
-
-          <PathItem
-            number="04"
-            title="English"
-            text="A1 — Everyday English"
-          />
-
-        </div>
-
       </section>
 
       {/* ACHIEVEMENTS */}
 
-      <section>
+      <section className="rounded-[26px] border bg-card p-5 shadow-sm">
+        <SectionHeading
+          eyebrow="Gamification"
+          title="Yutuqlar"
+          icon={<Award className="size-4.5" />}
+        />
 
-        <div className="mb-3 flex items-center gap-2 px-1">
-
-          <Medal className="size-5 text-amber-500" />
-
-          <h2 className="text-[18px] font-black">
-            Yutuqlar
-          </h2>
-
-        </div>
-
-        <div className="grid grid-cols-4 gap-2">
-
+        <div className="mt-4 grid grid-cols-4 gap-2">
           <Achievement icon="🔥" title="7 kun" />
-          <Achievement icon="🧠" title="Brain" />
-          <Achievement icon="🌍" title="PISA" />
-          <Achievement icon="🇬🇧" title="English" />
-
+          <Achievement icon="🎯" title="100 test" />
+          <Achievement icon="🧠" title="IQ" />
+          <Achievement icon="🏆" title="Top 10" />
         </div>
-
       </section>
 
+      {/* FOOTER */}
+
+      <section className="rounded-[27px] border bg-gradient-to-br from-emerald-50 to-white p-6 text-center dark:from-emerald-950/20 dark:to-card">
+        <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-lg shadow-emerald-600/20">
+          <GraduationCap className="size-5" />
+        </div>
+
+        <p className="mt-4 text-[9px] font-black uppercase tracking-[0.2em] text-emerald-600">
+          O‘QUVCHI AKADEMIYASI
+        </p>
+
+        <h3 className="mt-2 text-[18px] font-black">
+          Bilim · Fikr · Natija
+        </h3>
+
+        <p className="mx-auto mt-2 max-w-[300px] text-[10px] leading-4 text-muted-foreground">
+          Har bir test — yangi imkoniyat.
+          Har bir xato — yangi bilim.
+        </p>
+      </section>
     </div>
   )
 }
 
-
 /* =========================================================
-   ENGLISH ACADEMY
+   ENGLISH
 ========================================================= */
 
 function EnglishAcademy({
   onBack,
-  selectedGrade,
+  selectedLevel,
+  onSelectLevel,
 }: {
   onBack: () => void
-  selectedGrade: GradeBand
+  selectedLevel: string | null
+  onSelectLevel: (id: string | null) => void
 }) {
-  const [activeLevel, setActiveLevel] = useState('beginner')
-
-  const level = ENGLISH_LEVELS.find(
-    (item) => item.id === activeLevel,
+  const activeLevel = ENGLISH_LEVELS.find(
+    (level) => level.id === selectedLevel,
   )
+
+  if (activeLevel) {
+    return (
+      <LevelDetail
+        level={activeLevel}
+        onBack={() => onSelectLevel(null)}
+        subject="English"
+      />
+    )
+  }
 
   return (
     <div className="flex flex-col gap-5 pb-10">
-
-      <SubHeader
+      <PageHeader
         onBack={onBack}
         eyebrow="English Academy"
-        title="Ingliz tili"
+        title="English"
         icon={<Languages className="size-5" />}
       />
 
-      {/* HERO */}
-
-      <section className="relative overflow-hidden rounded-[30px] bg-gradient-to-br from-[#071b3a] via-[#104c8c] to-[#0799b6] p-6 text-white shadow-xl">
-
-        <div className="pointer-events-none absolute -right-16 -top-20 size-60 rounded-full border border-white/10 bg-white/[0.04]" />
+      <section className="relative overflow-hidden rounded-[30px] bg-gradient-to-br from-blue-950 via-emerald-900 to-emerald-700 p-6 text-white shadow-2xl">
+        <div className="absolute -right-16 -top-16 size-56 rounded-full border border-white/10" />
 
         <div className="relative">
-
           <div className="flex items-center gap-3">
-
-            <div className="flex size-14 items-center justify-center rounded-[19px] bg-white/10 text-3xl backdrop-blur-md">
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-white/10 text-3xl backdrop-blur">
               🇬🇧
             </div>
 
             <div>
-
-              <p className="text-[9px] font-black uppercase tracking-[0.18em] text-cyan-200">
-                Complete English Path
+              <p className="text-[9px] font-black uppercase tracking-[0.18em] text-lime-300">
+                Complete pathway
               </p>
 
-              <h1 className="mt-1 text-[22px] font-black">
-                Foundation → C1
-              </h1>
-
-            </div>
-
-          </div>
-
-          <p className="mt-5 text-[12px] leading-5 text-blue-50/80">
-            Ingliz tilini noldan boshlab xalqaro
-            darajadagi mustaqil foydalanishgacha
-            bosqichma-bosqich o‘rganing.
-          </p>
-
-          <div className="mt-5 grid grid-cols-3 gap-2">
-
-            <HeroStat
-              icon={<BookOpen className="size-3.5" />}
-              value="7"
-              label="level"
-            />
-
-            <HeroStat
-              icon={<Languages className="size-3.5" />}
-              value="6"
-              label="skill"
-            />
-
-            <HeroStat
-              icon={<Target className="size-3.5" />}
-              value="C1"
-              label="target"
-            />
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* CURRENT LEVEL */}
-
-      <section className="rounded-[25px] border bg-card p-5 shadow-sm">
-
-        <div className="flex items-center gap-3">
-
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700 dark:bg-blue-950/30">
-            <Globe2 className="size-6" />
-          </div>
-
-          <div className="flex-1">
-
-            <p className="text-[9px] font-black uppercase tracking-[0.15em] text-blue-700">
-              Current level
-            </p>
-
-            <h2 className="mt-1 text-[18px] font-black">
-              A1 — Beginner
-            </h2>
-
-            <p className="mt-1 text-[10px] text-muted-foreground">
-              {selectedGrade.grades} uchun moslashtirilgan
-            </p>
-
-          </div>
-
-          <div className="text-right">
-            <p className="text-lg font-black text-blue-700">
-              68%
-            </p>
-            <p className="text-[9px] text-muted-foreground">
-              progress
-            </p>
-          </div>
-
-        </div>
-
-        <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
-
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-500"
-            style={{ width: '68%' }}
-          />
-
-        </div>
-
-      </section>
-
-      {/* LEVELS */}
-
-      <section>
-
-        <div className="mb-3 px-1">
-
-          <p className="text-[9px] font-black uppercase tracking-[0.17em] text-indigo-600">
-            Level System
-          </p>
-
-          <h2 className="mt-1 text-[20px] font-black">
-            Ingliz tili bosqichlari
-          </h2>
-
-        </div>
-
-        <div className="space-y-2.5">
-
-          {ENGLISH_LEVELS.map((item, index) => {
-
-            const active = activeLevel === item.id
-
-            return (
-              <button
-                key={item.id}
-                type="button"
-                disabled={item.locked}
-                onClick={() => setActiveLevel(item.id)}
-                className={`group relative w-full overflow-hidden rounded-[22px] border p-4 text-left transition-all ${
-                  active
-                    ? 'border-blue-300 bg-blue-50 shadow-md dark:border-blue-700 dark:bg-blue-950/30'
-                    : item.locked
-                      ? 'bg-muted/30 opacity-70'
-                      : 'bg-card hover:border-blue-200 hover:shadow-sm'
-                }`}
-              >
-
-                <div className="flex items-center gap-3">
-
-                  <div className="relative flex size-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-md">
-
-                    <span className="text-sm font-black">
-                      {index + 1}
-                    </span>
-
-                    {item.locked && (
-                      <span className="absolute -bottom-1 -right-1 flex size-5 items-center justify-center rounded-full border-2 border-background bg-slate-700">
-                        <Lock className="size-2.5" />
-                      </span>
-                    )}
-
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-
-                    <div className="flex items-center gap-2">
-
-                      <p className="text-[10px] font-black uppercase tracking-wide text-blue-700">
-                        {item.level}
-                      </p>
-
-                      {index === 1 && (
-                        <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[7px] font-black text-emerald-700">
-                          CURRENT
-                        </span>
-                      )}
-
-                    </div>
-
-                    <h3 className="mt-0.5 text-[14px] font-black">
-                      {item.title}
-                    </h3>
-
-                    <p className="mt-1 text-[9px] leading-4 text-muted-foreground">
-                      {item.description}
-                    </p>
-
-                  </div>
-
-                  <ChevronRight
-                    className={`size-4 shrink-0 ${
-                      item.locked
-                        ? 'text-muted-foreground'
-                        : 'text-blue-600'
-                    }`}
-                  />
-
-                </div>
-
-                {item.progress > 0 && (
-                  <div className="mt-3">
-
-                    <div className="mb-1 flex justify-between">
-
-                      <span className="text-[8px] font-bold text-muted-foreground">
-                        Progress
-                      </span>
-
-                      <span className="text-[8px] font-black text-blue-700">
-                        {item.progress}%
-                      </span>
-
-                    </div>
-
-                    <div className="h-1.5 overflow-hidden rounded-full bg-muted">
-
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-500"
-                        style={{
-                          width: `${item.progress}%`,
-                        }}
-                      />
-
-                    </div>
-
-                  </div>
-                )}
-
-              </button>
-            )
-          })}
-
-        </div>
-
-      </section>
-
-      {/* SELECTED LEVEL */}
-
-      {level && (
-        <section className="rounded-[25px] border border-indigo-100 bg-indigo-50/60 p-5 dark:border-indigo-900/30 dark:bg-indigo-950/20">
-
-          <div className="flex items-center gap-3">
-
-            <div className="flex size-11 items-center justify-center rounded-xl bg-indigo-600 text-white">
-              <Star className="size-5" />
-            </div>
-
-            <div>
-              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-indigo-600">
-                Selected Level
-              </p>
-
-              <h2 className="text-[17px] font-black">
-                {level.level} · {level.title}
+              <h2 className="text-[24px] font-black">
+                Foundation → C2
               </h2>
             </div>
-
           </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-2">
+          <p className="mt-5 text-[12px] leading-5 text-white/75">
+            Ingliz tilini mutlaqo boshlang‘ich
+            darajadan yuqori akademik darajagacha
+            bosqichma-bosqich egallang.
+          </p>
 
-            {ENGLISH_SKILLS.map((skill) => (
-              <SkillCard
-                key={skill.title}
-                icon={skill.icon}
-                title={skill.title}
-                subtitle={skill.subtitle}
-                progress={skill.progress}
-              />
+          <div className="mt-5 flex items-center gap-2 overflow-x-auto pb-1">
+            {ENGLISH_LEVELS.map((level) => (
+              <div
+                key={level.id}
+                className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-[10px] font-black backdrop-blur"
+              >
+                {level.title}
+              </div>
             ))}
-
           </div>
-
-          <button
-            type="button"
-            className="mt-4 flex w-full items-center justify-between rounded-2xl bg-indigo-600 px-4 py-3.5 text-sm font-black text-white shadow-lg shadow-indigo-600/20"
-          >
-            <span className="flex items-center gap-2">
-              <Play className="size-4 fill-current" />
-              Levelni boshlash
-            </span>
-
-            <ArrowRight className="size-4" />
-          </button>
-
-        </section>
-      )}
-
-      {/* ENGLISH ROADMAP */}
-
-      <section className="rounded-[25px] border bg-card p-5">
-
-        <div className="flex items-center gap-3">
-
-          <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30">
-            <Rocket className="size-5" />
-          </div>
-
-          <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.15em] text-emerald-600">
-              Roadmap
-            </p>
-
-            <h2 className="text-[17px] font-black">
-              English Mastery Path
-            </h2>
-          </div>
-
         </div>
-
-        <div className="mt-4 space-y-2">
-
-          <RoadmapItem
-            number="01"
-            title="Foundation"
-            text="Alphabet · Numbers · Basic Words"
-            done
-          />
-
-          <RoadmapItem
-            number="02"
-            title="A1 Beginner"
-            text="Everyday English · Basic Grammar"
-            done
-          />
-
-          <RoadmapItem
-            number="03"
-            title="A2 Elementary"
-            text="Communication · Reading · Writing"
-          />
-
-          <RoadmapItem
-            number="04"
-            title="B1 Intermediate"
-            text="Fluency · Authentic Content"
-          />
-
-          <RoadmapItem
-            number="05"
-            title="B2 Upper-Intermediate"
-            text="Academic · Critical Thinking"
-          />
-
-          <RoadmapItem
-            number="06"
-            title="C1 Advanced"
-            text="Advanced Academic English"
-          />
-
-        </div>
-
       </section>
 
+      <section>
+        <SectionHeading
+          eyebrow="CEFR"
+          title="Bosqichma-bosqich o‘rganish"
+          icon={<Globe2 className="size-4.5" />}
+        />
+
+        <div className="mt-3 flex flex-col gap-2.5">
+          {ENGLISH_LEVELS.map((level, index) => (
+            <LevelCard
+              key={level.id}
+              level={level}
+              number={index + 1}
+              onClick={() =>
+                onSelectLevel(level.id)
+              }
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="grid grid-cols-2 gap-2.5">
+        <SkillCard
+          icon={<BookOpen className="size-5" />}
+          title="Reading"
+          text="Matnni tushunish"
+        />
+
+        <SkillCard
+          icon={<Languages className="size-5" />}
+          title="Speaking"
+          text="Muloqot qilish"
+        />
+
+        <SkillCard
+          icon={<Pencil className="size-5" />}
+          title="Writing"
+          text="Yozma nutq"
+        />
+
+        <SkillCard
+          icon={<Users className="size-5" />}
+          title="Listening"
+          text="Eshitib tushunish"
+        />
+      </section>
     </div>
   )
 }
 
-
 /* =========================================================
-   PISA ACADEMY
+   PISA
 ========================================================= */
 
 function PisaAcademy({
   onBack,
-  selectedGrade,
 }: {
   onBack: () => void
-  selectedGrade: GradeBand
 }) {
-  const [activeLevel, setActiveLevel] = useState('foundation')
-
   return (
     <div className="flex flex-col gap-5 pb-10">
-
-      <SubHeader
+      <PageHeader
         onBack={onBack}
         eyebrow="International Assessment"
         title="PISA Academy"
         icon={<Globe2 className="size-5" />}
       />
 
-      {/* PISA HERO */}
-
-      <section className="relative overflow-hidden rounded-[30px] bg-gradient-to-br from-[#052b35] via-[#076b78] to-[#12a8a5] p-6 text-white shadow-xl shadow-teal-900/20">
-
-        <div className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full border border-white/10 bg-white/[0.04]" />
+      <section className="relative overflow-hidden rounded-[30px] bg-gradient-to-br from-emerald-950 via-teal-900 to-cyan-800 p-6 text-white shadow-2xl">
+        <div className="absolute -right-16 -top-16 size-60 rounded-full border border-white/10" />
 
         <div className="relative">
-
-          <div className="flex items-center gap-3">
-
-            <div className="flex size-14 items-center justify-center rounded-[19px] bg-white/10 text-3xl backdrop-blur-md">
+          <div className="flex items-center justify-between">
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-white/10 text-3xl">
               🌍
             </div>
 
-            <div>
-
-              <p className="text-[9px] font-black uppercase tracking-[0.18em] text-cyan-100">
-                International Learning
-              </p>
-
-              <h1 className="mt-1 text-[23px] font-black">
-                PISA Academy
-              </h1>
-
+            <div className="rounded-full bg-lime-300 px-3 py-1 text-[9px] font-black text-emerald-950">
+              PISA STYLE
             </div>
-
           </div>
 
-          <p className="mt-5 text-[12px] leading-5 text-cyan-50/80">
-            Bilimni yodlash emas — bilimni real
-            hayotdagi vaziyatlarda qo‘llash, tahlil
-            qilish va asoslangan qaror qabul qilish.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            <Pill text="Real-Life" />
-            <Pill text="Data" />
-            <Pill text="Reasoning" />
-            <Pill text="Problem Solving" />
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* PISA LEVELS */}
-
-      <section>
-
-        <div className="mb-3 px-1">
-
-          <p className="text-[9px] font-black uppercase tracking-[0.17em] text-teal-600">
-            PISA Progression
-          </p>
-
-          <h2 className="mt-1 text-[20px] font-black">
-            Bosqichni tanlang
+          <h2 className="mt-5 text-[26px] font-black">
+            Bilimni hayotda qo‘llash.
           </h2>
 
-        </div>
-
-        <div className="grid grid-cols-2 gap-2.5">
-
-          {PISA_LEVELS.map((item, index) => {
-
-            const active = activeLevel === item.id
-
-            return (
-              <button
-                key={item.id}
-                type="button"
-                disabled={!item.unlocked}
-                onClick={() => setActiveLevel(item.id)}
-                className={`relative rounded-[22px] border p-4 text-left transition-all ${
-                  active
-                    ? 'border-teal-300 bg-teal-50 shadow-md dark:border-teal-700 dark:bg-teal-950/30'
-                    : !item.unlocked
-                      ? 'bg-muted/30 opacity-60'
-                      : 'bg-card hover:border-teal-200'
-                }`}
-              >
-
-                <div className="flex items-center justify-between">
-
-                  <div className="flex size-9 items-center justify-center rounded-xl bg-teal-600 text-white">
-                    <span className="text-[11px] font-black">
-                      {index === 0 ? 'F' : index}
-                    </span>
-                  </div>
-
-                  {!item.unlocked ? (
-                    <Lock className="size-4 text-muted-foreground" />
-                  ) : active ? (
-                    <CheckCircle2 className="size-4 text-teal-600" />
-                  ) : null}
-
-                </div>
-
-                <p className="mt-3 text-[12px] font-black">
-                  {item.title}
-                </p>
-
-                <p className="mt-1 text-[9px] font-bold text-teal-700">
-                  {item.subtitle}
-                </p>
-
-                <p className="mt-1.5 text-[9px] leading-4 text-muted-foreground">
-                  {item.description}
-                </p>
-
-              </button>
-            )
-          })}
-
-        </div>
-
-      </section>
-
-      {/* DOMAINS */}
-
-      <section>
-
-        <div className="mb-3 flex items-end justify-between px-1">
-
-          <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.17em] text-teal-600">
-              PISA Domains
-            </p>
-
-            <h2 className="mt-1 text-[20px] font-black">
-              Savodxonlik yo‘nalishlari
-            </h2>
-          </div>
-
-          <span className="rounded-full bg-teal-50 px-2.5 py-1 text-[9px] font-black text-teal-700 dark:bg-teal-950/30 dark:text-teal-300">
-            {selectedGrade.grades}
-          </span>
-
-        </div>
-
-        <div className="space-y-2.5">
-
-          {PISA_DOMAINS.map((domain, index) => (
-            <PisaDomainCard
-              key={domain.id}
-              domain={domain}
-              index={index}
-            />
-          ))}
-
-        </div>
-
-      </section>
-
-      {/* PISA SKILLS */}
-
-      <section className="rounded-[26px] border bg-card p-5">
-
-        <div className="flex items-center gap-3">
-
-          <div className="flex size-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/30">
-            <BrainCircuit className="size-5" />
-          </div>
-
-          <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-indigo-600">
-              Core Competencies
-            </p>
-
-            <h2 className="text-[17px] font-black">
-              PISA fikrlash ko‘nikmalari
-            </h2>
-          </div>
-
-        </div>
-
-        <div className="mt-4 grid grid-cols-2 gap-2">
-
-          <Competency
-            icon="🔎"
-            title="Identify"
-            text="Ma’lumotni aniqlash"
-          />
-
-          <Competency
-            icon="🧮"
-            title="Apply"
-            text="Bilimni qo‘llash"
-          />
-
-          <Competency
-            icon="📊"
-            title="Analyse"
-            text="Ma’lumotni tahlil"
-          />
-
-          <Competency
-            icon="💡"
-            title="Reason"
-            text="Asoslangan fikr"
-          />
-
-        </div>
-
-      </section>
-
-      {/* FULL TEST */}
-
-      <section className="relative overflow-hidden rounded-[27px] bg-gradient-to-br from-indigo-950 via-indigo-900 to-slate-950 p-5 text-white shadow-xl">
-
-        <div className="pointer-events-none absolute -right-10 -top-10 size-36 rounded-full bg-cyan-400/10 blur-2xl" />
-
-        <div className="relative">
-
-          <div className="flex items-center gap-3">
-
-            <div className="flex size-12 items-center justify-center rounded-2xl bg-amber-400 text-slate-950">
-              <Trophy className="size-6" />
-            </div>
-
-            <div>
-
-              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-cyan-200">
-                Final Assessment
-              </p>
-
-              <h2 className="text-[18px] font-black">
-                PISA FULL TEST
-              </h2>
-
-            </div>
-
-          </div>
-
-          <p className="mt-4 text-[11px] leading-5 text-white/60">
-            Kompleks diagnostika: matematika,
-            o‘qish va tabiiy-ilmiy savodxonlik.
-            Yakunda kuchli va rivojlantirilishi kerak
-            bo‘lgan ko‘nikmalar aniqlanadi.
-          </p>
-
-          <div className="mt-4 grid grid-cols-3 gap-2">
-
-            <MiniDarkStat
-              value="60"
-              label="savol"
-            />
-
-            <MiniDarkStat
-              value="60"
-              label="daqiqa"
-            />
-
-            <MiniDarkStat
-              value="3"
-              label="domain"
-            />
-
-          </div>
-
-          <button
-            type="button"
-            className="mt-4 flex w-full items-center justify-between rounded-2xl bg-white px-4 py-3.5 text-sm font-black text-slate-950"
-          >
-            <span className="flex items-center gap-2">
-              <Play className="size-4 fill-current" />
-              Full Testni boshlash
-            </span>
-
-            <ArrowRight className="size-4" />
-          </button>
-
-        </div>
-
-      </section>
-
-    </div>
-  )
-}
-
-
-/* =========================================================
-   SUBJECT ACADEMY
-========================================================= */
-
-function SubjectAcademy({
-  section,
-  grade,
-  onBack,
-}: {
-  section: AcademySection
-  grade: GradeBand
-  onBack: () => void
-}) {
-  const isMath = section.id === 'math'
-  const isLogic = section.id === 'logic'
-  const isReading = section.id === 'reading'
-  const isScience = section.id === 'science'
-  const isPresident = section.id === 'president'
-  const isOlympiad = section.id === 'olympiad'
-
-  const modules = isMath
-    ? [
-        ['01', 'Sonlar va amallar', 'Foundation'],
-        ['02', 'Algebra', 'Core'],
-        ['03', 'Geometriya', 'Core'],
-        ['04', 'Funksiyalar', 'Advanced'],
-        ['05', 'Statistika va ehtimollar', 'Advanced'],
-        ['06', 'Muammoli masalalar', 'Challenge'],
-      ]
-    : isLogic
-      ? [
-          ['01', 'Ketma-ketliklar', 'Foundation'],
-          ['02', 'Pattern & Logic', 'Core'],
-          ['03', 'Deduksiya', 'Core'],
-          ['04', 'Strategik fikrlash', 'Advanced'],
-          ['05', 'Murakkab mantiq', 'Challenge'],
-          ['06', 'IQ Challenge', 'Elite'],
-        ]
-      : isReading
-        ? [
-            ['01', 'Matnni tushunish', 'Foundation'],
-            ['02', 'Asosiy g‘oya', 'Core'],
-            ['03', 'Dalil va xulosa', 'Core'],
-            ['04', 'Muallif pozitsiyasi', 'Advanced'],
-            ['05', 'Tanqidiy o‘qish', 'Challenge'],
-            ['06', 'Complex Text', 'Elite'],
-          ]
-        : isScience
-          ? [
-              ['01', 'Ilmiy kuzatuv', 'Foundation'],
-              ['02', 'Biologiya', 'Core'],
-              ['03', 'Fizika', 'Core'],
-              ['04', 'Kimyo', 'Advanced'],
-              ['05', 'Eksperiment tahlili', 'Challenge'],
-              ['06', 'Scientific Reasoning', 'Elite'],
-            ]
-          : isPresident
-            ? [
-                ['01', 'Mathematics', 'Foundation'],
-                ['02', 'Logic', 'Core'],
-                ['03', 'English', 'Core'],
-                ['04', 'Problem Solving', 'Advanced'],
-                ['05', 'Mock Exam', 'Challenge'],
-              ]
-            : isOlympiad
-              ? [
-                  ['01', 'Olympiad Foundation', 'Foundation'],
-                  ['02', 'Number Theory', 'Core'],
-                  ['03', 'Combinatorics', 'Advanced'],
-                  ['04', 'Geometry Challenge', 'Advanced'],
-                  ['05', 'Problem Solving', 'Elite'],
-                ]
-              : []
-
-  return (
-    <div className="flex flex-col gap-5 pb-10">
-
-      <SubHeader
-        onBack={onBack}
-        eyebrow={section.subtitle}
-        title={section.title}
-        icon={<span className="text-xl">{section.icon}</span>}
-      />
-
-      <section className="relative overflow-hidden rounded-[29px] bg-gradient-to-br from-indigo-950 via-blue-900 to-cyan-800 p-6 text-white shadow-xl">
-
-        <div className="pointer-events-none absolute -right-20 -top-20 size-60 rounded-full border border-white/10" />
-
-        <div className="relative">
-
-          <div className="flex items-center gap-3">
-
-            <div className="flex size-14 items-center justify-center rounded-[19px] bg-white/10 text-3xl">
-              {section.icon}
-            </div>
-
-            <div>
-
-              <p className="text-[9px] font-black uppercase tracking-[0.18em] text-cyan-200">
-                {grade.grades}
-              </p>
-
-              <h1 className="text-[23px] font-black">
-                {section.title}
-              </h1>
-
-            </div>
-
-          </div>
-
-          <p className="mt-4 text-[12px] leading-5 text-blue-50/75">
-            {section.description}
+          <p className="mt-2 text-[12px] leading-5 text-white/75">
+            PISA yodlashni emas, bilimdan
+            foydalanish, tahlil qilish, dalil bilan
+            fikrlash va muammo yechishni baholaydi.
           </p>
 
           <div className="mt-5 grid grid-cols-3 gap-2">
-
-            <HeroStat
-              icon={<BookOpen className="size-3.5" />}
-              value={String(modules.length)}
-              label="modul"
+            <PisaStat
+              value="3"
+              label="asosiy domen"
             />
 
-            <HeroStat
-              icon={<Target className="size-3.5" />}
-              value="68%"
-              label="progress"
+            <PisaStat
+              value="6"
+              label="kompetensiya"
             />
 
-            <HeroStat
-              icon={<Zap className="size-3.5" />}
-              value="+250"
-              label="XP"
+            <PisaStat
+              value="180+"
+              label="test"
             />
-
           </div>
-
         </div>
-
       </section>
 
       <section>
+        <SectionHeading
+          eyebrow="PISA Domains"
+          title="Savodxonlik yo‘nalishlari"
+          icon={<Brain className="size-4.5" />}
+        />
 
-        <div className="mb-3 px-1">
-
-          <p className="text-[9px] font-black uppercase tracking-[0.17em] text-indigo-600">
-            Learning Path
-          </p>
-
-          <h2 className="mt-1 text-[20px] font-black">
-            Bosqichma-bosqich o‘rganish
-          </h2>
-
+        <div className="mt-3 grid grid-cols-2 gap-2.5">
+          {PISA_DOMAINS.map((domain) => (
+            <PisaDomainCard
+              key={domain.title}
+              {...domain}
+            />
+          ))}
         </div>
-
-        <div className="space-y-2.5">
-
-          {modules.map(
-            ([number, title, level], index) => (
-              <button
-                key={number}
-                type="button"
-                className="group w-full rounded-[22px] border bg-card p-4 text-left transition-all hover:border-indigo-200 hover:shadow-md"
-              >
-
-                <div className="flex items-center gap-3">
-
-                  <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-[11px] font-black text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-300">
-                    {number}
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-
-                    <div className="flex items-center gap-2">
-
-                      <h3 className="text-[13px] font-black">
-                        {title}
-                      </h3>
-
-                      <span className="rounded-full bg-muted px-2 py-0.5 text-[7px] font-black uppercase">
-                        {level}
-                      </span>
-
-                    </div>
-
-                    <p className="mt-1 text-[9px] text-muted-foreground">
-                      30 ta savol · 15 daqiqa · +60 XP
-                    </p>
-
-                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
-
-                      <div
-                        className="h-full rounded-full bg-indigo-600"
-                        style={{
-                          width:
-                            index === 0
-                              ? '100%'
-                              : index === 1
-                                ? '68%'
-                                : '0%',
-                        }}
-                      />
-
-                    </div>
-
-                  </div>
-
-                  <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
-
-                </div>
-
-              </button>
-            ),
-          )}
-
-        </div>
-
       </section>
 
-      <section className="rounded-[25px] border bg-muted/30 p-5">
+      <section className="rounded-[26px] border bg-card p-5">
+        <SectionHeading
+          eyebrow="Assessment"
+          title="PISA Full Test"
+          icon={<Trophy className="size-4.5" />}
+        />
 
-        <div className="flex items-center gap-3">
-
-          <div className="flex size-11 items-center justify-center rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-950/30">
-            <Lightbulb className="size-5" />
-          </div>
-
-          <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.15em] text-amber-600">
-              Smart Learning
-            </p>
-
-            <h2 className="text-[16px] font-black">
-              Sizning keyingi qadamingiz
-            </h2>
-          </div>
-
-        </div>
-
-        <p className="mt-3 text-[11px] leading-5 text-muted-foreground">
-          Avval Foundation bosqichidagi asosiy
-          ko‘nikmalarni mustahkamlang, keyin Core
-          va Advanced masalalarga o‘ting.
+        <p className="mt-2 text-[11px] leading-5 text-muted-foreground">
+          To‘liq sinov rejimi. Bir nechta domen,
+          real hayot konteksti, grafiklar va
+          ko‘p bosqichli fikrlash.
         </p>
 
         <button
           type="button"
-          className="mt-4 flex w-full items-center justify-between rounded-2xl bg-indigo-600 px-4 py-3.5 text-sm font-black text-white"
+          className="mt-4 flex w-full items-center justify-between rounded-2xl bg-emerald-600 px-4 py-3.5 text-sm font-black text-white shadow-lg shadow-emerald-600/20"
         >
           <span className="flex items-center gap-2">
-            <Play className="size-4 fill-current" />
-            Tavsiya etilgan test
+            <Rocket className="size-4" />
+            Full PISA testni boshlash
           </span>
 
           <ArrowRight className="size-4" />
         </button>
-
       </section>
-
     </div>
   )
 }
 
-
 /* =========================================================
-   SMALL COMPONENTS
+   MATH
 ========================================================= */
 
-function SubHeader({
+function MathAcademy({
+  onBack,
+}: {
+  onBack: () => void
+}) {
+  return (
+    <div className="flex flex-col gap-5 pb-10">
+      <PageHeader
+        onBack={onBack}
+        eyebrow="Mathematics Academy"
+        title="Matematika"
+        icon={<Lightbulb className="size-5" />}
+      />
+
+      <section className="rounded-[30px] bg-gradient-to-br from-violet-950 via-indigo-900 to-blue-800 p-6 text-white shadow-2xl">
+        <div className="flex items-center gap-3">
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-white/10 text-3xl">
+            📐
+          </div>
+
+          <div>
+            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-violet-200">
+              Mathematics pathway
+            </p>
+
+            <h2 className="text-[23px] font-black">
+              Asosdan Olimpiadagacha
+            </h2>
+          </div>
+        </div>
+
+        <p className="mt-4 text-[12px] leading-5 text-white/70">
+          Hisoblashdan boshlab algebra,
+          geometriya, funksiyalar, kombinatorika
+          va olimpiada masalalarigacha.
+        </p>
+      </section>
+
+      <section>
+        <SectionHeading
+          eyebrow="Levels"
+          title="Matematika darajalari"
+          icon={<BarChart3 className="size-4.5" />}
+        />
+
+        <div className="mt-3 flex flex-col gap-2.5">
+          {MATH_LEVELS.map(
+            ([title, subtitle, progress], index) => (
+              <SimpleLevel
+                key={title}
+                title={title}
+                subtitle={subtitle}
+                progress={Number(progress)}
+                number={index + 1}
+              />
+            ),
+          )}
+        </div>
+      </section>
+
+      <section className="grid grid-cols-2 gap-2.5">
+        <SkillCard
+          icon={<Target className="size-5" />}
+          title="Algebra"
+          text="Ifodalar va tenglamalar"
+        />
+
+        <SkillCard
+          icon={<Globe2 className="size-5" />}
+          title="Geometriya"
+          text="Shakl va fazo"
+        />
+
+        <SkillCard
+          icon={<Brain className="size-5" />}
+          title="Kombinatorika"
+          text="Sanash va strategiya"
+        />
+
+        <SkillCard
+          icon={<Trophy className="size-5" />}
+          title="Olimpiada"
+          text="Nostandart masalalar"
+        />
+      </section>
+    </div>
+  )
+}
+
+/* =========================================================
+   SCIENCE
+========================================================= */
+
+function ScienceAcademy({
+  onBack,
+}: {
+  onBack: () => void
+}) {
+  return (
+    <div className="flex flex-col gap-5 pb-10">
+      <PageHeader
+        onBack={onBack}
+        eyebrow="Science Academy"
+        title="Fanlar"
+        icon={<FlaskConical className="size-5" />}
+      />
+
+      <section className="rounded-[30px] bg-gradient-to-br from-cyan-950 via-teal-900 to-emerald-800 p-6 text-white shadow-2xl">
+        <div className="flex items-center gap-3">
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-white/10 text-3xl">
+            🔬
+          </div>
+
+          <div>
+            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-cyan-200">
+              Science pathway
+            </p>
+
+            <h2 className="text-[23px] font-black">
+              Fanlar laboratoriyasi
+            </h2>
+          </div>
+        </div>
+
+        <p className="mt-4 text-[12px] leading-5 text-white/70">
+          Fanni faqat yodlash emas — tajriba,
+          kuzatish, sabab-oqibat va ilmiy fikrlash
+          orqali o‘rganish.
+        </p>
+      </section>
+
+      <section>
+        <SectionHeading
+          eyebrow="Subjects"
+          title="Fanlar olami"
+          icon={<Microscope className="size-4.5" />}
+        />
+
+        <div className="mt-3 grid grid-cols-2 gap-2.5">
+          {SUBJECTS.map((subject) => (
+            <SubjectCard
+              key={subject.id}
+              {...subject}
+            />
+          ))}
+        </div>
+      </section>
+    </div>
+  )
+}
+
+/* =========================================================
+   LOGIC
+========================================================= */
+
+function LogicAcademy({
+  onBack,
+}: {
+  onBack: () => void
+}) {
+  return (
+    <div className="flex flex-col gap-5 pb-10">
+      <PageHeader
+        onBack={onBack}
+        eyebrow="Thinking Academy"
+        title="Mantiq"
+        icon={<Brain className="size-5" />}
+      />
+
+      <section className="rounded-[30px] bg-gradient-to-br from-amber-950 via-orange-900 to-emerald-800 p-6 text-white shadow-2xl">
+        <div className="flex items-center gap-3">
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-white/10 text-3xl">
+            🧠
+          </div>
+
+          <div>
+            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-amber-200">
+              Thinking system
+            </p>
+
+            <h2 className="text-[23px] font-black">
+              Fikrni kuchaytiring
+            </h2>
+          </div>
+        </div>
+
+        <p className="mt-4 text-[12px] leading-5 text-white/70">
+          Pattern, IQ, deduksiya, critical thinking
+          va murakkab muammolarni yechish.
+        </p>
+      </section>
+
+      <section>
+        <SectionHeading
+          eyebrow="Thinking levels"
+          title="Mantiq darajalari"
+          icon={<Brain className="size-4.5" />}
+        />
+
+        <div className="mt-3 flex flex-col gap-2.5">
+          {LOGIC_LEVELS.map(
+            ([title, subtitle, progress], index) => (
+              <SimpleLevel
+                key={title}
+                title={title}
+                subtitle={subtitle}
+                progress={Number(progress)}
+                number={index + 1}
+              />
+            ),
+          )}
+        </div>
+      </section>
+    </div>
+  )
+}
+
+/* =========================================================
+   PRESIDENT / OLYMPIAD
+========================================================= */
+
+function SpecialAcademy({
+  onBack,
+  type,
+}: {
+  onBack: () => void
+  type: 'president' | 'olympiad'
+}) {
+  const president = type === 'president'
+
+  return (
+    <div className="flex flex-col gap-5 pb-10">
+      <PageHeader
+        onBack={onBack}
+        eyebrow={
+          president
+            ? 'Elite School Preparation'
+            : 'Competition Academy'
+        }
+        title={
+          president
+            ? 'Prezident maktabi'
+            : 'Olimpiada'
+        }
+        icon={
+          president ? (
+            <GraduationCap className="size-5" />
+          ) : (
+            <Medal className="size-5" />
+          )
+        }
+      />
+
+      <section
+        className={
+          president
+            ? 'rounded-[30px] bg-gradient-to-br from-emerald-950 via-green-900 to-teal-800 p-6 text-white shadow-2xl'
+            : 'rounded-[30px] bg-gradient-to-br from-rose-950 via-red-900 to-amber-800 p-6 text-white shadow-2xl'
+        }
+      >
+        <div className="flex size-14 items-center justify-center rounded-2xl bg-white/10 text-3xl">
+          {president ? '🏫' : '🏆'}
+        </div>
+
+        <h2 className="mt-5 text-[25px] font-black">
+          {president
+            ? 'Elite school preparation'
+            : 'Champion mindset'}
+        </h2>
+
+        <p className="mt-3 text-[12px] leading-5 text-white/70">
+          {president
+            ? 'Mantiq, matematika, ingliz tili va murakkab fikrlash bo‘yicha kompleks tayyorgarlik.'
+            : 'Yuqori darajadagi masalalar, kreativ yondashuv va musobaqa strategiyasi.'}
+        </p>
+      </section>
+
+      <div className="grid grid-cols-2 gap-2.5">
+        <SpecialCard
+          icon="🧠"
+          title="Mantiq"
+          text="Murakkab fikrlash"
+        />
+
+        <SpecialCard
+          icon="📐"
+          title="Matematika"
+          text="Advanced problems"
+        />
+
+        <SpecialCard
+          icon="🇬🇧"
+          title="English"
+          text="Language skills"
+        />
+
+        <SpecialCard
+          icon="🎯"
+          title="Challenge"
+          text="Real exam mode"
+        />
+      </div>
+
+      <button
+        type="button"
+        className="flex items-center justify-between rounded-2xl bg-emerald-600 px-4 py-4 text-sm font-black text-white shadow-lg"
+      >
+        <span className="flex items-center gap-2">
+          <Rocket className="size-4" />
+          Tayyorlanishni boshlash
+        </span>
+
+        <ArrowRight className="size-4" />
+      </button>
+    </div>
+  )
+}
+
+/* =========================================================
+   LEVEL DETAIL
+========================================================= */
+
+function LevelDetail({
+  level,
+  onBack,
+  subject,
+}: {
+  level: Level
+  onBack: () => void
+  subject: string
+}) {
+  return (
+    <div className="flex flex-col gap-5 pb-10">
+      <PageHeader
+        onBack={onBack}
+        eyebrow={`${subject} · Level`}
+        title={level.title}
+        icon={<Languages className="size-5" />}
+      />
+
+      <section
+        className={`rounded-[30px] border p-6 ${colorClasses(
+          level.color,
+        )}`}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-[9px] font-black uppercase tracking-[0.17em] opacity-70">
+              CEFR pathway
+            </p>
+
+            <h2 className="mt-1 text-[28px] font-black">
+              {level.title}
+            </h2>
+
+            <p className="mt-1 text-[12px] font-bold opacity-75">
+              {level.subtitle}
+            </p>
+          </div>
+
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-white/70 text-2xl shadow-sm">
+            🇬🇧
+          </div>
+        </div>
+
+        <p className="mt-5 text-[12px] leading-5 opacity-80">
+          {level.description}
+        </p>
+
+        <div className="mt-5 h-2 overflow-hidden rounded-full bg-black/10">
+          <div
+            className="h-full rounded-full bg-current"
+            style={{
+              width: `${level.progress}%`,
+            }}
+          />
+        </div>
+
+        <div className="mt-2 flex justify-between text-[10px] font-bold opacity-70">
+          <span>{level.progress}% bajarildi</span>
+          <span>{level.tests} test</span>
+        </div>
+      </section>
+
+      <section>
+        <SectionHeading
+          eyebrow="Skills"
+          title="Asosiy kompetensiyalar"
+          icon={<Target className="size-4.5" />}
+        />
+
+        <div className="mt-3 grid grid-cols-2 gap-2.5">
+          <SkillCard
+            icon={<BookOpen className="size-5" />}
+            title="Reading"
+            text="Comprehension"
+          />
+
+          <SkillCard
+            icon={<Users className="size-5" />}
+            title="Listening"
+            text="Understanding"
+          />
+
+          <SkillCard
+            icon={<Languages className="size-5" />}
+            title="Speaking"
+            text="Communication"
+          />
+
+          <SkillCard
+            icon={<Pencil className="size-5" />}
+            title="Writing"
+            text="Production"
+          />
+        </div>
+      </section>
+
+      <section className="rounded-[26px] border bg-card p-5">
+        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-emerald-600">
+          Recommended
+        </p>
+
+        <h3 className="mt-1 text-[18px] font-black">
+          Bugungi mashg‘ulot
+        </h3>
+
+        <div className="mt-4 flex items-center gap-3">
+          <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30">
+            <BookOpen className="size-5" />
+          </div>
+
+          <div className="flex-1">
+            <p className="text-sm font-bold">
+              Vocabulary Challenge
+            </p>
+
+            <p className="text-[10px] text-muted-foreground">
+              15 savol · 10 daqiqa · +30 XP
+            </p>
+          </div>
+
+          <ChevronRight className="size-4 text-muted-foreground" />
+        </div>
+      </section>
+
+      <button
+        type="button"
+        className="flex w-full items-center justify-between rounded-2xl bg-emerald-600 px-4 py-4 text-sm font-black text-white shadow-lg shadow-emerald-600/20"
+      >
+        <span className="flex items-center gap-2">
+          <Rocket className="size-4" />
+          Levelni boshlash
+        </span>
+
+        <ArrowRight className="size-4" />
+      </button>
+    </div>
+  )
+}
+
+/* =========================================================
+   SHARED COMPONENTS
+========================================================= */
+
+function PageHeader({
   onBack,
   eyebrow,
   title,
@@ -1869,8 +1406,7 @@ function SubHeader({
   icon: React.ReactNode
 }) {
   return (
-    <header className="flex items-center gap-3 pt-1">
-
+    <header className="flex items-center gap-3">
       <button
         type="button"
         onClick={onBack}
@@ -1879,26 +1415,50 @@ function SubHeader({
         <ArrowLeft className="size-5" />
       </button>
 
-      <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30">
-        {icon}
-      </div>
-
-      <div className="min-w-0">
-
-        <p className="truncate text-[8px] font-black uppercase tracking-[0.17em] text-indigo-600">
+      <div className="min-w-0 flex-1">
+        <p className="text-[9px] font-black uppercase tracking-[0.18em] text-emerald-600">
           {eyebrow}
         </p>
 
-        <h1 className="truncate text-[19px] font-black">
+        <h1 className="mt-0.5 truncate text-[21px] font-black">
           {title}
         </h1>
-
       </div>
 
+      <div className="flex size-11 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-lg shadow-emerald-600/20">
+        {icon}
+      </div>
     </header>
   )
 }
 
+function SectionHeading({
+  eyebrow,
+  title,
+  icon,
+}: {
+  eyebrow: string
+  title: string
+  icon: React.ReactNode
+}) {
+  return (
+    <div className="flex items-end justify-between px-1">
+      <div>
+        <p className="text-[9px] font-black uppercase tracking-[0.18em] text-emerald-600">
+          {eyebrow}
+        </p>
+
+        <h2 className="mt-1 text-[19px] font-black tracking-tight">
+          {title}
+        </h2>
+      </div>
+
+      <div className="flex size-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30">
+        {icon}
+      </div>
+    </div>
+  )
+}
 
 function HeroStat({
   icon,
@@ -1910,177 +1470,340 @@ function HeroStat({
   label: string
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.08] p-3 backdrop-blur-md">
-
-      <div className="flex items-center gap-1.5 text-cyan-200">
+    <div className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur">
+      <div className="flex items-center gap-1.5 text-lime-300">
         {icon}
-        <span className="text-[8px] font-bold uppercase">
+
+        <span className="text-[9px] font-bold uppercase tracking-wide text-white/60">
           {label}
         </span>
       </div>
 
-      <p className="mt-1 text-[15px] font-black">
+      <p className="mt-1 text-[17px] font-black">
         {value}
       </p>
-
     </div>
   )
 }
 
+function MiniProgress({
+  label,
+  value,
+}: {
+  label: string
+  value: number
+}) {
+  return (
+    <div className="rounded-xl bg-muted/50 p-3">
+      <p className="text-[9px] font-bold text-muted-foreground">
+        {label}
+      </p>
 
-function AcademySectionCard({
-  section,
+      <p className="mt-1 text-[15px] font-black tabular-nums">
+        {value}
+      </p>
+    </div>
+  )
+}
+
+function TrackCard({
+  track,
   onClick,
 }: {
-  section: AcademySection
+  track: Track
   onClick: () => void
 }) {
-  const colors: Record<
-    string,
-    {
-      border: string
-      bg: string
-      text: string
-    }
-  > = {
-    indigo: {
-      border: 'border-indigo-100 dark:border-indigo-900/30',
-      bg: 'bg-indigo-50 dark:bg-indigo-950/30',
-      text: 'text-indigo-700 dark:text-indigo-300',
-    },
-    blue: {
-      border: 'border-blue-100 dark:border-blue-900/30',
-      bg: 'bg-blue-50 dark:bg-blue-950/30',
-      text: 'text-blue-700 dark:text-blue-300',
-    },
-    violet: {
-      border: 'border-violet-100 dark:border-violet-900/30',
-      bg: 'bg-violet-50 dark:bg-violet-950/30',
-      text: 'text-violet-700 dark:text-violet-300',
-    },
-    emerald: {
-      border: 'border-emerald-100 dark:border-emerald-900/30',
-      bg: 'bg-emerald-50 dark:bg-emerald-950/30',
-      text: 'text-emerald-700 dark:text-emerald-300',
-    },
-    cyan: {
-      border: 'border-cyan-100 dark:border-cyan-900/30',
-      bg: 'bg-cyan-50 dark:bg-cyan-950/30',
-      text: 'text-cyan-700 dark:text-cyan-300',
-    },
-    sky: {
-      border: 'border-sky-100 dark:border-sky-900/30',
-      bg: 'bg-sky-50 dark:bg-sky-950/30',
-      text: 'text-sky-700 dark:text-sky-300',
-    },
-    amber: {
-      border: 'border-amber-100 dark:border-amber-900/30',
-      bg: 'bg-amber-50 dark:bg-amber-950/30',
-      text: 'text-amber-700 dark:text-amber-300',
-    },
-    rose: {
-      border: 'border-rose-100 dark:border-rose-900/30',
-      bg: 'bg-rose-50 dark:bg-rose-950/30',
-      text: 'text-rose-700 dark:text-rose-300',
-    },
-  }
-
-  const color = colors[section.accent] ?? colors.blue
-
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`group relative overflow-hidden rounded-[23px] border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md active:scale-[0.99] ${color.border}`}
+      className="group relative overflow-hidden rounded-[23px] border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.99]"
     >
+      <div className="flex items-center gap-3.5">
+        <div
+          className={`flex size-13 shrink-0 items-center justify-center rounded-2xl border text-2xl ${colorClasses(
+            track.color,
+          )}`}
+        >
+          {track.icon}
+        </div>
 
-      {section.badge && (
-        <span className="absolute right-3 top-3 rounded-full bg-amber-400 px-2 py-1 text-[7px] font-black text-slate-950">
-          {section.badge}
-        </span>
-      )}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <h3 className="text-[15px] font-black">
+              {track.title}
+            </h3>
 
-      <div
-        className={`flex size-11 items-center justify-center rounded-2xl text-2xl ${color.bg}`}
-      >
-        {section.icon}
+            {track.progress > 0 && (
+              <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[8px] font-black text-emerald-600 dark:bg-emerald-950/30">
+                {track.progress}%
+              </span>
+            )}
+          </div>
+
+          <p className="mt-0.5 text-[10px] font-bold text-muted-foreground">
+            {track.subtitle}
+          </p>
+
+          <p className="mt-1.5 line-clamp-2 text-[10px] leading-4 text-muted-foreground">
+            {track.description}
+          </p>
+
+          <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-emerald-500"
+              style={{
+                width: `${track.progress}%`,
+              }}
+            />
+          </div>
+
+          <div className="mt-1.5 flex gap-3 text-[8px] font-bold text-muted-foreground">
+            <span>{track.lessons} dars</span>
+            <span>{track.tests} test</span>
+          </div>
+        </div>
+
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-muted transition-transform group-hover:translate-x-0.5">
+          <ChevronRight className="size-4" />
+        </div>
       </div>
-
-      <p className={`mt-3 text-[12px] font-black ${color.text}`}>
-        {section.title}
-      </p>
-
-      <p className="mt-0.5 text-[8px] font-bold text-muted-foreground">
-        {section.subtitle}
-      </p>
-
-      <p className="mt-2 text-[9px] leading-4 text-muted-foreground">
-        {section.description}
-      </p>
-
-      <div className="mt-3 flex items-center justify-between">
-
-        <span className="text-[8px] font-black text-muted-foreground">
-          Boshlash
-        </span>
-
-        <span className="flex size-7 items-center justify-center rounded-lg bg-muted transition-transform group-hover:translate-x-1">
-          <ChevronRight className="size-3.5" />
-        </span>
-
-      </div>
-
     </button>
   )
 }
 
-
-function PathItem({
+function LevelCard({
+  level,
   number,
-  title,
-  text,
-  done = false,
+  onClick,
 }: {
-  number: string
-  title: string
-  text: string
-  done?: boolean
+  level: Level
+  number: number
+  onClick: () => void
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border bg-card p-3">
-
+    <button
+      type="button"
+      onClick={onClick}
+      className="group flex w-full items-center gap-3 rounded-[22px] border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+    >
       <div
-        className={`flex size-9 shrink-0 items-center justify-center rounded-xl text-[9px] font-black ${
-          done
-            ? 'bg-emerald-100 text-emerald-700'
-            : 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30'
-        }`}
+        className={`flex size-11 shrink-0 items-center justify-center rounded-xl border text-[11px] font-black ${colorClasses(
+          level.color,
+        )}`}
       >
-        {done ? (
-          <CheckCircle2 className="size-4" />
-        ) : (
-          number
-        )}
+        {number}
       </div>
 
       <div className="min-w-0 flex-1">
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <h3 className="text-[14px] font-black">
+              {level.title}
+            </h3>
 
-        <p className="text-[11px] font-black">
-          {title}
-        </p>
+            <p className="text-[9px] font-bold text-muted-foreground">
+              {level.subtitle}
+            </p>
+          </div>
 
-        <p className="mt-0.5 text-[9px] text-muted-foreground">
-          {text}
-        </p>
+          <span className="text-[10px] font-black text-emerald-600">
+            {level.progress}%
+          </span>
+        </div>
 
+        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
+          <div
+            className="h-full rounded-full bg-emerald-500"
+            style={{
+              width: `${level.progress}%`,
+            }}
+          />
+        </div>
       </div>
 
-      <ChevronRight className="size-4 text-muted-foreground" />
+      <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+    </button>
+  )
+}
 
+function PisaStat({
+  value,
+  label,
+}: {
+  value: string
+  label: string
+}) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/10 p-3">
+      <p className="text-[18px] font-black">
+        {value}
+      </p>
+
+      <p className="mt-0.5 text-[8px] text-white/50">
+        {label}
+      </p>
     </div>
   )
 }
 
+function PisaDomainCard({
+  icon,
+  title,
+  text,
+  progress,
+}: {
+  icon: string
+  title: string
+  text: string
+  progress: number
+}) {
+  return (
+    <div className="rounded-[21px] border bg-card p-4 shadow-sm">
+      <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-xl dark:bg-emerald-950/30">
+        {icon}
+      </div>
+
+      <h3 className="mt-3 text-[11px] font-black">
+        {title}
+      </h3>
+
+      <p className="mt-1 text-[9px] leading-4 text-muted-foreground">
+        {text}
+      </p>
+
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted">
+        <div
+          className="h-full rounded-full bg-emerald-500"
+          style={{
+            width: `${progress}%`,
+          }}
+        />
+      </div>
+
+      <p className="mt-1 text-right text-[8px] font-bold text-emerald-600">
+        {progress}%
+      </p>
+    </div>
+  )
+}
+
+function SimpleLevel({
+  title,
+  subtitle,
+  progress,
+  number,
+}: {
+  title: string
+  subtitle: string
+  progress: number
+  number: number
+}) {
+  return (
+    <div className="rounded-[22px] border bg-card p-4 shadow-sm">
+      <div className="flex items-center gap-3">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-700 dark:bg-violet-950/30">
+          <span className="text-[11px] font-black">
+            {number}
+          </span>
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <div className="flex justify-between gap-2">
+            <div>
+              <h3 className="text-[13px] font-black">
+                {title}
+              </h3>
+
+              <p className="text-[9px] text-muted-foreground">
+                {subtitle}
+              </p>
+            </div>
+
+            <span className="text-[10px] font-black text-violet-600">
+              {progress}%
+            </span>
+          </div>
+
+          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-violet-500"
+              style={{
+                width: `${progress}%`,
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function SkillCard({
+  icon,
+  title,
+  text,
+}: {
+  icon: React.ReactNode
+  title: string
+  text: string
+}) {
+  return (
+    <div className="rounded-[21px] border bg-card p-4 shadow-sm">
+      <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30">
+        {icon}
+      </div>
+
+      <h3 className="mt-3 text-[12px] font-black">
+        {title}
+      </h3>
+
+      <p className="mt-1 text-[9px] text-muted-foreground">
+        {text}
+      </p>
+    </div>
+  )
+}
+
+function SubjectCard({
+  icon,
+  title,
+  text,
+  progress,
+}: {
+  icon: string
+  title: string
+  text: string
+  progress: number
+}) {
+  return (
+    <button
+      type="button"
+      className="rounded-[22px] border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+    >
+      <div className="flex size-11 items-center justify-center rounded-xl bg-cyan-50 text-xl dark:bg-cyan-950/30">
+        {icon}
+      </div>
+
+      <h3 className="mt-3 text-[13px] font-black">
+        {title}
+      </h3>
+
+      <p className="mt-1 text-[9px] leading-4 text-muted-foreground">
+        {text}
+      </p>
+
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted">
+        <div
+          className="h-full rounded-full bg-cyan-500"
+          style={{
+            width: `${progress}%`,
+          }}
+        />
+      </div>
+    </button>
+  )
+}
 
 function Achievement({
   icon,
@@ -2090,192 +1813,17 @@ function Achievement({
   title: string
 }) {
   return (
-    <div className="rounded-[18px] border bg-card p-3 text-center">
+    <div className="flex flex-col items-center rounded-2xl bg-muted/50 p-3">
+      <span className="text-xl">{icon}</span>
 
-      <div className="text-xl">
-        {icon}
-      </div>
-
-      <p className="mt-1.5 text-[8px] font-black">
+      <span className="mt-1.5 text-[8px] font-black text-muted-foreground">
         {title}
-      </p>
-
+      </span>
     </div>
   )
 }
 
-
-function SkillCard({
-  icon,
-  title,
-  subtitle,
-  progress,
-}: {
-  icon: string
-  title: string
-  subtitle: string
-  progress: number
-}) {
-  return (
-    <div className="rounded-[18px] border bg-card p-3">
-
-      <div className="flex items-center gap-2">
-
-        <span className="text-lg">
-          {icon}
-        </span>
-
-        <div className="min-w-0">
-
-          <p className="truncate text-[10px] font-black">
-            {title}
-          </p>
-
-          <p className="truncate text-[8px] text-muted-foreground">
-            {subtitle}
-          </p>
-
-        </div>
-
-      </div>
-
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
-
-        <div
-          className="h-full rounded-full bg-indigo-600"
-          style={{ width: `${progress}%` }}
-        />
-
-      </div>
-
-      <p className="mt-1 text-right text-[8px] font-black text-indigo-600">
-        {progress}%
-      </p>
-
-    </div>
-  )
-}
-
-
-function RoadmapItem({
-  number,
-  title,
-  text,
-  done = false,
-}: {
-  number: string
-  title: string
-  text: string
-  done?: boolean
-}) {
-  return (
-    <div className="flex items-center gap-3">
-
-      <div
-        className={`flex size-9 shrink-0 items-center justify-center rounded-xl text-[9px] font-black ${
-          done
-            ? 'bg-emerald-100 text-emerald-700'
-            : 'bg-muted text-muted-foreground'
-        }`}
-      >
-        {done ? (
-          <CheckCircle2 className="size-4" />
-        ) : (
-          number
-        )}
-      </div>
-
-      <div className="min-w-0 flex-1">
-
-        <p className="text-[11px] font-black">
-          {title}
-        </p>
-
-        <p className="text-[8px] text-muted-foreground">
-          {text}
-        </p>
-
-      </div>
-
-    </div>
-  )
-}
-
-
-function Pill({ text }: { text: string }) {
-  return (
-    <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-[8px] font-black backdrop-blur-md">
-      {text}
-    </span>
-  )
-}
-
-
-function PisaDomainCard({
-  domain,
-  index,
-}: {
-  domain: PisaDomain
-  index: number
-}) {
-  return (
-    <button
-      type="button"
-      className="group w-full rounded-[23px] border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-teal-200 hover:shadow-md"
-    >
-
-      <div className="flex items-center gap-3">
-
-        <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-teal-50 text-2xl dark:bg-teal-950/30">
-          {domain.icon}
-        </div>
-
-        <div className="min-w-0 flex-1">
-
-          <div className="flex items-center gap-2">
-
-            <span className="text-[8px] font-black text-teal-600">
-              0{index + 1}
-            </span>
-
-            <h3 className="truncate text-[12px] font-black">
-              {domain.title}
-            </h3>
-
-          </div>
-
-          <p className="mt-0.5 truncate text-[8px] font-bold text-muted-foreground">
-            {domain.subtitle}
-          </p>
-
-          <p className="mt-1 text-[9px] leading-4 text-muted-foreground">
-            {domain.description}
-          </p>
-
-        </div>
-
-        <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1" />
-
-      </div>
-
-      <div className="mt-3 flex items-center justify-between">
-
-        <span className="rounded-full bg-teal-50 px-2 py-1 text-[7px] font-black text-teal-700 dark:bg-teal-950/30 dark:text-teal-300">
-          {domain.level}
-        </span>
-
-        <span className="text-[8px] font-bold text-muted-foreground">
-          {domain.questions} savol
-        </span>
-
-      </div>
-
-    </button>
-  )
-}
-
-
-function Competency({
+function SpecialCard({
   icon,
   title,
   text,
@@ -2285,49 +1833,16 @@ function Competency({
   text: string
 }) {
   return (
-    <div className="rounded-[18px] border bg-muted/30 p-3">
+    <div className="rounded-[22px] border bg-card p-4 shadow-sm">
+      <div className="text-2xl">{icon}</div>
 
-      <div className="flex items-center gap-2">
+      <h3 className="mt-3 text-[13px] font-black">
+        {title}
+      </h3>
 
-        <span className="text-lg">
-          {icon}
-        </span>
-
-        <div>
-          <p className="text-[10px] font-black">
-            {title}
-          </p>
-
-          <p className="text-[8px] text-muted-foreground">
-            {text}
-          </p>
-        </div>
-
-      </div>
-
-    </div>
-  )
-}
-
-
-function MiniDarkStat({
-  value,
-  label,
-}: {
-  value: string
-  label: string
-}) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-3 text-center">
-
-      <p className="text-[16px] font-black">
-        {value}
+      <p className="mt-1 text-[9px] text-muted-foreground">
+        {text}
       </p>
-
-      <p className="mt-0.5 text-[8px] text-white/45">
-        {label}
-      </p>
-
     </div>
   )
 }
