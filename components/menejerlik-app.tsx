@@ -1367,9 +1367,10 @@ export function MenejerlikApp() {
 
         {screen ===
           'student-academy' && (
-          <StudentAcademy
-            onBack={goBack}
-          />
+         <StudentAcademy
+  onBack={goBack}
+  onPisa={openPisaAcademy}
+/>
         )}
 
         {/* =================================================
