@@ -23,12 +23,16 @@ type Stats = {
   best: number
 }
 
+type EducationType = 'school' | 'preschool'
+
 type Props = {
   user?: TelegramUser | null
   history?: Attempt[] | null
   stats?: Stats | null
   bestByCategory?: Record<string, number> | null
-  onStart: () => void
+  onSelectEducation: (
+    educationType: EducationType,
+  ) => void
   onAI?: () => void
   onRanking: () => void
 }
@@ -38,15 +42,13 @@ export function HomeScreen({
   history,
   stats,
   bestByCategory,
-  onStart,
+  onSelectEducation,
   onAI,
   onRanking,
 }: Props) {
-  // =========================================================
-  // XAVFSIZ DEFAULT QIYMATLAR
-  // =========================================================
-
-  const safeHistory = Array.isArray(history) ? history : []
+  const safeHistory = Array.isArray(history)
+    ? history
+    : []
 
   const safeStats: Stats = {
     count: Number(stats?.count ?? 0),
@@ -56,19 +58,13 @@ export function HomeScreen({
 
   const safeBestByCategory = bestByCategory ?? {}
 
-  // Hozircha kategoriya statistikasi keyingi bosqich uchun saqlanadi.
   void safeBestByCategory
 
   return (
     <div className="flex flex-col gap-5 pb-6">
-
-      {/* =====================================================
-          HEADER
-      ====================================================== */}
-
+      {/* HEADER */}
       <header className="flex items-center justify-between pt-2">
         <div className="flex items-center gap-3">
-
           <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
             <GraduationCap
               className="size-6"
@@ -87,7 +83,6 @@ export function HomeScreen({
           </div>
         </div>
 
-        {/* AI tugmasi */}
         {onAI ? (
           <button
             type="button"
@@ -95,38 +90,26 @@ export function HomeScreen({
             aria-label="AI yordamchi"
             className="flex size-10 items-center justify-center rounded-xl border bg-card transition-all hover:bg-secondary active:scale-95"
           >
-            <Sparkles
-              className="size-5 text-primary"
-              aria-hidden="true"
-            />
+            <Sparkles className="size-5 text-primary" />
           </button>
         ) : (
           <div className="flex size-10 items-center justify-center rounded-xl border bg-card">
-            <Sparkles
-              className="size-5 text-primary"
-              aria-hidden="true"
-            />
+            <Sparkles className="size-5 text-primary" />
           </div>
         )}
       </header>
 
-      {/* =====================================================
-          HERO
-      ====================================================== */}
-
+      {/* HERO */}
       <section className="relative overflow-hidden rounded-[2rem] bg-primary p-6 text-primary-foreground shadow-lg">
-
         <div className="pointer-events-none absolute -right-12 -top-12 size-36 rounded-full bg-white/10" />
-
         <div className="pointer-events-none absolute -bottom-16 -left-10 size-40 rounded-full bg-white/5" />
 
         <div className="relative">
-
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-3 py-1.5 text-xs font-medium backdrop-blur-sm">
             <Sparkles className="size-3.5" />
 
             <span>
-              Ta'lim menejmenti platformasi
+              Attestatsiyaga tayyorgarlik
             </span>
           </div>
 
@@ -137,43 +120,37 @@ export function HomeScreen({
           </h2>
 
           <p className="mt-3 max-w-[330px] text-sm leading-6 text-primary-foreground/80">
-            Rahbarlik bilimlarini mustahkamlang,
-            boshqaruv kompetensiyalaringizni rivojlantiring
-            va real vaziyatlarda qaror qabul qilish
-            ko‘nikmalaringizni sinang.
+            Lavozimingiz va faoliyatingizga mos
+            testlarni tanlang. Bilimni sinang,
+            natijani tahlil qiling va professional
+            rivojlanishni davom ettiring.
           </p>
 
           <button
             type="button"
-            onClick={onStart}
+            onClick={() =>
+              onSelectEducation('school')
+            }
             className="mt-6 flex w-full items-center justify-between rounded-2xl bg-primary-foreground px-4 py-3.5 text-left text-sm font-semibold text-primary shadow-sm transition-transform hover:-translate-y-0.5 active:translate-y-0"
           >
             <span className="flex items-center gap-2">
               <BookOpen className="size-5" />
-
-              O‘rganishni boshlash
+              Testlarni boshlash
             </span>
 
             <ArrowRight className="size-5" />
           </button>
-
         </div>
       </section>
 
-      {/* =====================================================
-          CONCEPT
-      ====================================================== */}
-
+      {/* CONCEPT */}
       <section className="rounded-3xl border bg-card p-5 shadow-sm">
-
         <div className="flex items-start gap-4">
-
           <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-secondary text-secondary-foreground">
             <Brain className="size-5" />
           </div>
 
           <div className="min-w-0">
-
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
               Menejerlik konsepsiyasi
             </p>
@@ -183,139 +160,55 @@ export function HomeScreen({
             </p>
 
             <p className="mt-1 text-sm leading-5 text-muted-foreground">
-              Nazariy bilimlarni amaliy boshqaruv
-              vaziyatlari bilan bog‘lab o‘rganing.
+              Nazariy bilimlarni amaliy vaziyatlar,
+              tahlil va qaror qabul qilish bilan
+              bog‘lab o‘rganing.
             </p>
-
           </div>
-
         </div>
       </section>
 
-      {/* =====================================================
-          EDUCATION DIRECTIONS
-      ====================================================== */}
-
+      {/* EDUCATION DIRECTIONS */}
       <section className="flex flex-col gap-3">
-
         <div className="flex items-end justify-between px-1">
-
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
-              Yo‘nalishlar
+              Ta’lim yo‘nalishi
             </p>
 
             <h2 className="mt-1 text-xl font-bold">
-              Ta’lim tizimini tanlang
+              Qaysi yo‘nalishda tayyorlanasiz?
             </h2>
           </div>
 
           <Target className="size-5 text-primary" />
-
         </div>
 
-        {/* =====================================================
-            BOG‘CHA
-        ====================================================== */}
+        {/* MAKTAB */}
+        <EducationCard
+          icon="🏫"
+          title="MAKTAB"
+          badge="Umumiy o‘rta ta’lim"
+          description="Maktab direktori, direktor o‘rinbosari va fan o‘qituvchilari uchun attestatsiyaga tayyorgarlik."
+          onClick={() =>
+            onSelectEducation('school')
+          }
+        />
 
-        <button
-          type="button"
-          onClick={onStart}
-          className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
-        >
-
-          <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-primary/5" />
-
-          <div className="relative flex items-center gap-4">
-
-            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary text-2xl shadow-sm">
-              🧸
-            </div>
-
-            <div className="min-w-0 flex-1">
-
-              <div className="flex items-center gap-2">
-
-                <h3 className="font-bold">
-                  BOG‘CHA
-                </h3>
-
-                <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold uppercase">
-                  Maktabgacha
-                </span>
-
-              </div>
-
-              <p className="mt-1 text-sm leading-5 text-muted-foreground">
-                Maktabgacha ta’lim tashkilotlarini
-                boshqarish va rivojlantirish.
-              </p>
-
-            </div>
-
-            <ChevronRight
-              className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1"
-              aria-hidden="true"
-            />
-
-          </div>
-        </button>
-
-        {/* =====================================================
-            MAKTAB
-        ====================================================== */}
-
-        <button
-          type="button"
-          onClick={onStart}
-          className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
-        >
-
-          <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-primary/5" />
-
-          <div className="relative flex items-center gap-4">
-
-            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary text-2xl shadow-sm">
-              🏫
-            </div>
-
-            <div className="min-w-0 flex-1">
-
-              <div className="flex items-center gap-2">
-
-                <h3 className="font-bold">
-                  MAKTAB
-                </h3>
-
-                <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold uppercase">
-                  Umumiy ta’lim
-                </span>
-
-              </div>
-
-              <p className="mt-1 text-sm leading-5 text-muted-foreground">
-                Umumiy o‘rta ta’lim maktablarini
-                boshqarish va rivojlantirish.
-              </p>
-
-            </div>
-
-            <ChevronRight
-              className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1"
-              aria-hidden="true"
-            />
-
-          </div>
-        </button>
-
+        {/* MAKTABGACHA */}
+        <EducationCard
+          icon="🧸"
+          title="MAKTABGACHA TA’LIM"
+          badge="Maktabgacha ta’lim"
+          description="Maktabgacha ta’lim rahbarlari va pedagoglari uchun professional tayyorgarlik."
+          onClick={() =>
+            onSelectEducation('preschool')
+          }
+        />
       </section>
 
-      {/* =====================================================
-          STATISTICS
-      ====================================================== */}
-
+      {/* STATISTICS */}
       <section className="grid grid-cols-3 gap-2">
-
         <StatCard
           icon={<BookOpen className="size-4" />}
           label="Testlar"
@@ -333,29 +226,22 @@ export function HomeScreen({
           label="Rekord"
           value={`${safeStats.best}%`}
         />
-
       </section>
 
-      {/* =====================================================
-          RANKING
-      ====================================================== */}
-
+      {/* RANKING */}
       <button
         type="button"
         onClick={onRanking}
         className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg active:scale-[0.99]"
       >
-
         <div className="absolute -right-6 -top-6 size-24 rounded-full bg-primary/5" />
 
         <div className="relative flex items-center gap-4">
-
           <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary">
             <Trophy className="size-7 text-primary" />
           </div>
 
           <div className="min-w-0 flex-1">
-
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
               Reyting
             </p>
@@ -368,38 +254,27 @@ export function HomeScreen({
               Qatnashchilar orasidagi o‘rningizni
               va eng yuqori natijalarni ko‘ring.
             </p>
-
           </div>
 
-          <ChevronRight
-            className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1"
-            aria-hidden="true"
-          />
-
+          <ChevronRight className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1" />
         </div>
       </button>
 
-      {/* =====================================================
-          AI YORDAMCHI
-      ====================================================== */}
-
+      {/* AI */}
       {onAI && (
         <button
           type="button"
           onClick={onAI}
           className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg active:scale-[0.99]"
         >
-
           <div className="absolute -right-8 -top-8 size-28 rounded-full bg-primary/5" />
 
           <div className="relative flex items-center gap-4">
-
             <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary">
               <Sparkles className="size-7 text-primary" />
             </div>
 
             <div className="min-w-0 flex-1">
-
               <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
                 Sun’iy intellekt
               </p>
@@ -410,28 +285,19 @@ export function HomeScreen({
 
               <p className="mt-1 text-sm leading-5 text-muted-foreground">
                 Menejment bo‘yicha savollar bering,
-                tahlil qiling va yangi bilimlarni o‘rganing.
+                tahlil qiling va yangi bilimlarni
+                o‘rganing.
               </p>
-
             </div>
 
-            <ChevronRight
-              className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1"
-              aria-hidden="true"
-            />
-
+            <ChevronRight className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1" />
           </div>
         </button>
       )}
 
-      {/* =====================================================
-          LEARNING PRINCIPLES
-      ====================================================== */}
-
+      {/* FEATURES */}
       <section className="rounded-3xl border bg-muted/40 p-5">
-
         <div className="mb-4">
-
           <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
             Platforma imkoniyatlari
           </p>
@@ -439,11 +305,9 @@ export function HomeScreen({
           <h2 className="mt-1 text-lg font-bold">
             Bilimingizni tizimli rivojlantiring
           </h2>
-
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-
           <Feature
             icon="📚"
             title="Modullar"
@@ -467,101 +331,81 @@ export function HomeScreen({
             title="Natijalar"
             text="O‘zgarishni kuzatish"
           />
-
         </div>
-
       </section>
 
-      {/* =====================================================
-          RECENT RESULTS
-      ====================================================== */}
-
+      {/* RECENT RESULTS */}
       {safeHistory.length > 0 && (
         <section className="flex flex-col gap-3">
-
           <div className="flex items-center gap-2 px-1">
-
-            <History
-              className="size-4 text-primary"
-              aria-hidden="true"
-            />
+            <History className="size-4 text-primary" />
 
             <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               So‘nggi natijalar
             </h2>
-
           </div>
 
           <div className="overflow-hidden rounded-3xl border bg-card">
+            {safeHistory.slice(0, 5).map(
+              (attempt) => {
+                const percentage =
+                  attempt.total > 0
+                    ? Math.round(
+                        (attempt.correct /
+                          attempt.total) *
+                          100,
+                      )
+                    : 0
 
-            {safeHistory.slice(0, 5).map((attempt) => {
+                return (
+                  <div
+                    key={attempt.id}
+                    className="flex items-center gap-3 border-b p-4 last:border-b-0"
+                  >
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-secondary">
+                      <Brain className="size-4" />
+                    </div>
 
-              const percentage =
-                attempt.total > 0
-                  ? Math.round(
-                      (attempt.correct / attempt.total) * 100,
-                    )
-                  : 0
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold">
+                        Test natijasi
+                      </p>
 
-              return (
-                <div
-                  key={attempt.id}
-                  className="flex items-center gap-3 border-b p-4 last:border-b-0"
-                >
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {new Date(
+                          attempt.at,
+                        ).toLocaleDateString(
+                          'uz-UZ',
+                          {
+                            day: 'numeric',
+                            month: 'short',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          },
+                        )}
+                      </p>
+                    </div>
 
-                  <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-secondary">
-                    <Brain className="size-4" />
+                    <div className="text-right">
+                      <p className="text-sm font-bold tabular-nums">
+                        {percentage}%
+                      </p>
+
+                      <p className="text-xs text-muted-foreground">
+                        {attempt.correct}/
+                        {attempt.total}
+                      </p>
+                    </div>
                   </div>
-
-                  <div className="min-w-0 flex-1">
-
-                    <p className="truncate text-sm font-semibold">
-                      Test natijasi
-                    </p>
-
-                    <p className="mt-0.5 text-xs text-muted-foreground">
-                      {new Date(
-                        attempt.at,
-                      ).toLocaleDateString(
-                        'uz-UZ',
-                        {
-                          day: 'numeric',
-                          month: 'short',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        },
-                      )}
-                    </p>
-
-                  </div>
-
-                  <div className="text-right">
-
-                    <p className="text-sm font-bold tabular-nums">
-                      {percentage}%
-                    </p>
-
-                    <p className="text-xs text-muted-foreground">
-                      {attempt.correct}/{attempt.total}
-                    </p>
-
-                  </div>
-
-                </div>
-              )
-            })}
-
+                )
+              },
+            )}
           </div>
-
         </section>
       )}
 
-      {/* =====================================================
-          AUTHOR / FOOTER
-      ====================================================== */}
-
+      {/* FOOTER */}
       <footer className="mt-2 rounded-3xl border bg-card px-5 py-6 text-center">
-
         <div className="mx-auto flex size-10 items-center justify-center rounded-2xl bg-secondary">
           <GraduationCap className="size-5 text-primary" />
         </div>
@@ -593,10 +437,60 @@ export function HomeScreen({
         <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground/70">
           Bilim · Tahlil · Qaror · Natija
         </p>
-
       </footer>
-
     </div>
+  )
+}
+
+/* =========================================================
+   EDUCATION CARD
+========================================================= */
+
+function EducationCard({
+  icon,
+  title,
+  badge,
+  description,
+  onClick,
+}: {
+  icon: string
+  title: string
+  badge: string
+  description: string
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="group relative overflow-hidden rounded-3xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg active:scale-[0.99]"
+    >
+      <div className="absolute right-0 top-0 size-28 translate-x-8 -translate-y-8 rounded-full bg-primary/5" />
+
+      <div className="relative flex items-center gap-4">
+        <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-secondary text-2xl shadow-sm">
+          {icon}
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-bold">
+              {title}
+            </h3>
+
+            <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold uppercase">
+              {badge}
+            </span>
+          </div>
+
+          <p className="mt-1 text-sm leading-5 text-muted-foreground">
+            {description}
+          </p>
+        </div>
+
+        <ChevronRight className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1" />
+      </div>
+    </button>
   )
 }
 
@@ -615,27 +509,23 @@ function StatCard({
 }) {
   return (
     <div className="rounded-2xl border bg-card p-3 shadow-sm">
-
       <div className="flex items-center gap-1.5 text-muted-foreground">
-
         {icon}
 
         <span className="text-[11px] font-medium">
           {label}
         </span>
-
       </div>
 
       <p className="mt-2 text-lg font-bold tabular-nums">
         {value}
       </p>
-
     </div>
   )
 }
 
 /* =========================================================
-   FEATURE CARD
+   FEATURE
 ========================================================= */
 
 function Feature({
@@ -649,19 +539,17 @@ function Feature({
 }) {
   return (
     <div className="rounded-2xl border bg-card p-3">
-
       <div className="text-xl">
         {icon}
       </div>
 
       <p className="mt-2 text-sm font-semibold">
         {title}
-      </p> 
+      </p>
 
       <p className="mt-0.5 text-xs text-muted-foreground">
         {text}
       </p>
-
     </div>
   )
-} // Home screen updated
+}
