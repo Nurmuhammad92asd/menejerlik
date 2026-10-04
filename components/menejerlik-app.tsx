@@ -158,6 +158,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Matematika fani o‘qituvchilari uchun professional testlar.',
   },
+
   {
     id: 'ona-tili-adabiyot',
     icon: '📖',
@@ -165,6 +166,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Ona tili va adabiyot bo‘yicha attestatsiyaga tayyorgarlik.',
   },
+
   {
     id: 'ingliz-tili',
     icon: '🇬🇧',
@@ -172,6 +174,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Ingliz tili o‘qituvchilari uchun professional testlar.',
   },
+
   {
     id: 'rus-tili',
     icon: '🇷🇺',
@@ -179,6 +182,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Rus tili bo‘yicha attestatsiyaga tayyorgarlik.',
   },
+
   {
     id: 'kimyo',
     icon: '🧪',
@@ -186,6 +190,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Kimyo fani o‘qituvchilari uchun testlar.',
   },
+
   {
     id: 'fizika',
     icon: '⚛️',
@@ -193,6 +198,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Fizika bo‘yicha professional tayyorgarlik.',
   },
+
   {
     id: 'biologiya',
     icon: '🧬',
@@ -200,6 +206,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Biologiya fani o‘qituvchilari uchun testlar.',
   },
+
   {
     id: 'geografiya',
     icon: '🌍',
@@ -207,6 +214,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Geografiya bo‘yicha professional tayyorgarlik.',
   },
+
   {
     id: 'tarix',
     icon: '📜',
@@ -214,6 +222,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Tarix fani bo‘yicha attestatsiya testlari.',
   },
+
   {
     id: 'informatika',
     icon: '💻',
@@ -221,6 +230,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Informatika va AKT bo‘yicha testlar.',
   },
+
   {
     id: 'musiqa',
     icon: '🎵',
@@ -228,6 +238,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Musiqa fani bo‘yicha professional tayyorgarlik.',
   },
+
   {
     id: 'tasviriy-sanat',
     icon: '🎨',
@@ -235,6 +246,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Tasviriy san’at bo‘yicha testlar.',
   },
+
   {
     id: 'texnologiya',
     icon: '🛠️',
@@ -242,6 +254,7 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Texnologiya fani o‘qituvchilari uchun testlar.',
   },
+
   {
     id: 'jismoniy-tarbiya',
     icon: '🏃',
@@ -375,9 +388,11 @@ export function MenejerlikApp() {
 
   const goHome = () => {
     setScreen('home')
+
     setNavigation(
       INITIAL_NAVIGATION,
     )
+
     setQuizSession(null)
     setQuizResult(null)
 
@@ -468,6 +483,7 @@ export function MenejerlikApp() {
     })
 
     setScreen('roles')
+
     scrollToTop()
   }
 
@@ -513,6 +529,9 @@ export function MenejerlikApp() {
 
   /* =======================================================
      SUBJECT
+     
+     MUHIM:
+     FANLAR → MATEMATIKA → MAVZULAR
   ======================================================= */
 
   const selectSubject = (
@@ -521,9 +540,36 @@ export function MenejerlikApp() {
     setNavigation(
       previous => ({
         ...previous,
+
         subjectId,
+
+        /*
+         * Matematika fani quiz-data.ts
+         * ichidagi "matematika" category
+         * bilan bog‘lanadi.
+         */
+        moduleId:
+          subjectId === 'matematika'
+            ? 'matematika'
+            : null,
+
+        topicId: null,
+        quizSource: null,
       }),
     )
+
+    /*
+     * Hozircha real test bazasi mavjud
+     * bo‘lgan fan — MATEMATIKA.
+     *
+     * Boshqa fanlar keyinchalik
+     * shu tizimga ulanadi.
+     */
+    if (
+      subjectId === 'matematika'
+    ) {
+      setScreen('topics')
+    }
 
     scrollToTop()
   }
@@ -545,6 +591,7 @@ export function MenejerlikApp() {
     )
 
     setScreen('topics')
+
     scrollToTop()
   }
 
@@ -568,6 +615,7 @@ export function MenejerlikApp() {
           '[Quiz] Module questions not found:',
           moduleId,
         )
+
         return
       }
 
@@ -609,6 +657,7 @@ export function MenejerlikApp() {
     )
 
     setScreen('levels')
+
     scrollToTop()
   }
 
@@ -654,6 +703,7 @@ export function MenejerlikApp() {
             level,
           },
         )
+
         return
       }
 
@@ -705,10 +755,12 @@ export function MenejerlikApp() {
             '/api/results',
             {
               method: 'POST',
+
               headers: {
                 'Content-Type':
                   'application/json',
               },
+
               body: JSON.stringify({
                 telegramUser: {
                   id: telegramUser.id,
@@ -842,9 +894,13 @@ export function MenejerlikApp() {
 
             return {
               ...item,
+
               selected,
+
               isAnswered,
+
               isCorrect,
+
               isWrong:
                 isAnswered &&
                 !isCorrect,
@@ -973,6 +1029,7 @@ export function MenejerlikApp() {
       )
 
       setScreen('result')
+
       scrollToTop()
     }
   }
@@ -1023,42 +1080,70 @@ export function MenejerlikApp() {
         setScreen(
           'student-academy',
         )
+
         scrollToTop()
+
         return
 
       case 'student-academy':
         goHome()
+
         return
 
       case 'ranking':
       case 'ai':
       case 'education':
         goHome()
+
         return
 
       case 'roles':
         setScreen('education')
+
         scrollToTop()
+
         return
 
       case 'subjects':
         setScreen('roles')
+
         scrollToTop()
+
         return
 
       case 'modules':
         setScreen('roles')
+
         scrollToTop()
+
         return
 
       case 'topics':
-        setScreen('modules')
+        /*
+         * FANLAR → MATEMATIKA → MAVZULAR
+         *
+         * Matematika orqali kirilgan bo‘lsa,
+         * orqaga qaytganda MODULLAR emas,
+         * FANLAR oynasiga qaytamiz.
+         */
+        if (
+          navigation.subjectId ===
+          'matematika'
+        ) {
+          setScreen('subjects')
+        } else {
+          setScreen('modules')
+        }
+
         scrollToTop()
+
         return
 
       case 'levels':
         setScreen('topics')
+
         scrollToTop()
+
         return
 
       case 'quiz':
@@ -1072,6 +1157,7 @@ export function MenejerlikApp() {
         }
 
         scrollToTop()
+
         return
 
       case 'result':
@@ -1085,7 +1171,9 @@ export function MenejerlikApp() {
         }
 
         setQuizResult(null)
+
         scrollToTop()
+
         return
     }
   }
@@ -1367,10 +1455,12 @@ export function MenejerlikApp() {
 
         {screen ===
           'student-academy' && (
-         <StudentAcademy
-  onBack={goBack}
-  onPisa={openPisaAcademy}
-/>
+          <StudentAcademy
+            onBack={goBack}
+            onPisa={
+              openPisaAcademy
+            }
+          />
         )}
 
         {/* =================================================
@@ -1431,7 +1521,7 @@ export function MenejerlikApp() {
         )}
 
         {/* =================================================
-            SUBJECTS
+            SUBJECTS / FANLAR
         ================================================= */}
 
         {screen === 'subjects' && (
@@ -1522,7 +1612,6 @@ export function MenejerlikApp() {
               session={
                 quizSession
               }
-              showCloseButton
               onFinish={
                 finish
               }
@@ -1665,7 +1754,7 @@ function EducationScreen({
       <InfoCard
         icon="🎯"
         title="Professional yo‘l"
-        text="Yo‘nalish → Lavozim → Modul → Mavzu → Daraja → Test → Natija."
+        text="Yo‘nalish → Lavozim → Fanlar → Fan → Mavzu → Daraja → Test → Natija."
       />
     </section>
   )
@@ -1703,6 +1792,7 @@ function RoleScreen({
             'Maktab rahbari uchun menejerlik va attestatsiya tayyorgarligi.',
           badge: 'RAHBAR',
         },
+
         {
           id: 'deputy' as RoleId,
           icon: '👨‍💼',
@@ -1712,6 +1802,7 @@ function RoleScreen({
             'O‘quv, tarbiyaviy va boshqaruv faoliyati bo‘yicha tayyorgarlik.',
           badge: 'RAHBAR',
         },
+
         {
           id: 'teacher' as RoleId,
           icon: '👨‍🏫',
@@ -1732,6 +1823,7 @@ function RoleScreen({
             'Maktabgacha ta’lim tashkiloti rahbari uchun menejerlik tayyorgarligi.',
           badge: 'RAHBAR',
         },
+
         {
           id: 'deputy' as RoleId,
           icon: '👩‍💼',
@@ -1741,6 +1833,7 @@ function RoleScreen({
             'Boshqaruv va ta’lim jarayonini tashkil etish bo‘yicha tayyorgarlik.',
           badge: 'RAHBAR',
         },
+
         {
           id: 'pedagogue' as RoleId,
           icon: '👩‍🏫',
@@ -1873,7 +1966,7 @@ function RoleScreen({
 }
 
 /* =========================================================
-   SUBJECT SCREEN
+   SUBJECT SCREEN — FANLAR
 ========================================================= */
 
 function SubjectScreen({
@@ -1907,18 +2000,22 @@ function SubjectScreen({
       icon: '👩‍🏫',
       title: 'Tarbiyachi',
     },
+
     {
       icon: '🎵',
       title: 'Musiqa rahbari',
     },
+
     {
       icon: '🗣️',
       title: 'Logoped',
     },
+
     {
       icon: '🧠',
       title: 'Psixolog',
     },
+
     {
       icon: '🏃',
       title:
@@ -1948,110 +2045,141 @@ function SubjectScreen({
       />
 
       {isSchool ? (
-        <div className="grid gap-3 sm:grid-cols-2">
-          {subjects.map(
-            subject => {
-              const active =
-                selectedSubjectId ===
-                subject.id
+        <>
+          <div className="rounded-[24px] border border-blue-100 bg-blue-50/60 p-4 dark:border-blue-900/20 dark:bg-blue-950/10">
+            <div className="flex items-center gap-3">
+              <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white text-xl shadow-sm dark:bg-card">
+                📚
+              </div>
 
-              return (
-                <button
-                  key={
-                    subject.id
-                  }
-                  type="button"
-                  onClick={() =>
-                    onSelect(
-                      subject.id,
-                    )
-                  }
-                  className={`
-                    group
-                    rounded-[23px]
-                    border
-                    bg-card
-                    p-5
-                    text-left
-                    shadow-sm
-                    transition-all
-                    hover:-translate-y-0.5
-                    hover:shadow-lg
-                    ${
-                      active
-                        ? 'border-blue-500 ring-2 ring-blue-500/10'
-                        : ''
+              <div>
+                <p className="text-sm font-black">
+                  FANLAR
+                </p>
+
+                <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
+                  O‘zingizga tegishli fanni tanlang va
+                  attestatsiya tayyorgarligini boshlang.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            {subjects.map(
+              subject => {
+                const active =
+                  selectedSubjectId ===
+                  subject.id
+
+                const isMath =
+                  subject.id ===
+                  'matematika'
+
+                return (
+                  <button
+                    key={
+                      subject.id
                     }
-                  `}
-                >
-                  <div className="flex items-center gap-4">
-                    <div
-                      className="
-                        flex
-                        size-14
-                        shrink-0
-                        items-center
-                        justify-center
-                        rounded-[18px]
-                        bg-gradient-to-br
-                        from-blue-50
-                        to-indigo-100
-                        text-2xl
-                        dark:from-blue-950/30
-                        dark:to-indigo-950/20
-                      "
-                    >
-                      {
-                        subject.icon
+                    type="button"
+                    onClick={() =>
+                      onSelect(
+                        subject.id,
+                      )
+                    }
+                    className={`
+                      group
+                      rounded-[23px]
+                      border
+                      bg-card
+                      p-5
+                      text-left
+                      shadow-sm
+                      transition-all
+                      hover:-translate-y-0.5
+                      hover:shadow-lg
+                      active:scale-[0.99]
+                      ${
+                        active
+                          ? 'border-blue-500 ring-2 ring-blue-500/10'
+                          : ''
                       }
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <h2 className="text-sm font-black">
+                    `}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div
+                        className="
+                          flex
+                          size-14
+                          shrink-0
+                          items-center
+                          justify-center
+                          rounded-[18px]
+                          bg-gradient-to-br
+                          from-blue-50
+                          to-indigo-100
+                          text-2xl
+                          dark:from-blue-950/30
+                          dark:to-indigo-950/20
+                        "
+                      >
                         {
-                          subject.title
+                          subject.icon
                         }
-                      </h2>
+                      </div>
 
-                      <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
-                        {
-                          subject.description
-                        }
-                      </p>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <h2 className="text-sm font-black">
+                            {
+                              subject.title
+                            }
+                          </h2>
+
+                          {isMath && (
+                            <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[8px] font-black text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400">
+                              TAYYOR
+                            </span>
+                          )}
+                        </div>
+
+                        <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
+                          {
+                            subject.description
+                          }
+                        </p>
+                      </div>
+
+                      <Arrow />
                     </div>
 
-                    <Arrow />
-                  </div>
+                    {active && (
+                      <div
+                        className="
+                          mt-4
+                          rounded-2xl
+                          bg-blue-50/70
+                          p-3
+                          dark:bg-blue-950/20
+                        "
+                      >
+                        <p className="text-[10px] font-black uppercase tracking-wider text-blue-700">
+                          FAN TANLANDI
+                        </p>
 
-                  {active && (
-                    <div
-                      className="
-                        mt-4
-                        rounded-2xl
-                        bg-blue-50/70
-                        p-3
-                        dark:bg-blue-950/20
-                      "
-                    >
-                      <p className="text-[10px] font-black uppercase tracking-wider text-blue-700">
-                        FAN TANLANDI
-                      </p>
-
-                      <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
-                        Ushbu fan uchun
-                        professional
-                        test bazasi
-                        keyingi
-                        bosqichlarda
-                        ishga tushiriladi.
-                      </p>
-                    </div>
-                  )}
-                </button>
-              )
-            },
-          )}
-        </div>
+                        <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
+                          {isMath
+                            ? 'Matematika fanining professional test bazasi ochiladi.'
+                            : 'Ushbu fan uchun professional test bazasi keyingi bosqichlarda ishga tushiriladi.'}
+                        </p>
+                      </div>
+                    )}
+                  </button>
+                )
+              },
+            )}
+          </div>
+        </>
       ) : (
         <div className="flex flex-col gap-3">
           {preschoolRoles.map(
@@ -2448,11 +2576,21 @@ function TopicScreen({
     <section className="flex flex-col gap-6">
       <BackButton
         onClick={onBack}
-        text="Modullar"
+        text={
+          module.id ===
+          'matematika'
+            ? 'Fanlar'
+            : 'Modullar'
+        }
       />
 
       <PageHeading
-        eyebrow="MAVZULAR"
+        eyebrow={
+          module.id ===
+          'matematika'
+            ? 'MATEMATIKA'
+            : 'MAVZULAR'
+        }
         title={module.title}
         description={
           'description' in
@@ -2493,6 +2631,7 @@ function TopicScreen({
                 transition
                 hover:-translate-y-0.5
                 hover:shadow-lg
+                active:scale-[0.99]
               "
             >
               <div
@@ -2629,6 +2768,7 @@ function LevelScreen({
       questions:
         topic.levels.easy.length,
     },
+
     {
       id: 'medium',
       icon: '🟡',
@@ -2638,6 +2778,7 @@ function LevelScreen({
       questions:
         topic.levels.medium.length,
     },
+
     {
       id: 'hard',
       icon: '🔴',
@@ -2647,6 +2788,7 @@ function LevelScreen({
       questions:
         topic.levels.hard.length,
     },
+
     {
       id: 'case',
       icon: '🔵',
@@ -2656,6 +2798,7 @@ function LevelScreen({
       questions:
         topic.levels.case.length,
     },
+
     {
       id: 'mixed',
       icon: '🟣',
