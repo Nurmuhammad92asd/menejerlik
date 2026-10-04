@@ -4,12 +4,15 @@ import { M1T3_LEVELS } from './data/m1t3'
 import { M1T4_LEVELS } from './data/m1t4'
 import { M1T5_LEVELS } from './data/m1t5'
 import { M1T6_LEVELS } from './data/m1t6'
+
 import { M2T1_LEVELS } from './data/m2t1'
 import { M2T2_LEVELS } from './data/m2t2'
 import { M2T3_LEVELS } from './data/m2t3'
+import { M2T4_LEVELS } from './data/m2t4'
+
 /*
  * =========================================================
- * TYPES
+ * QUESTION TYPES
  * =========================================================
  */
 
@@ -21,17 +24,30 @@ export type Question = {
   explanation: string
 }
 
+/*
+ * =========================================================
+ * TOPIC MATERIALS
+ * =========================================================
+ */
+
 export type TopicMaterials = {
   text?: string
   audioUrl?: string
   pdfUrl?: string
 }
 
+/*
+ * =========================================================
+ * TOPIC
+ * =========================================================
+ */
+
 export type Topic = {
   id: string
   title: string
   description: string
   materials?: TopicMaterials
+
   levels: {
     easy: Question[]
     medium: Question[]
@@ -39,6 +55,12 @@ export type Topic = {
     case: Question[]
   }
 }
+
+/*
+ * =========================================================
+ * MODULE / CATEGORY
+ * =========================================================
+ */
 
 export type Category = {
   id: string
@@ -51,9 +73,11 @@ export type Category = {
  * =========================================================
  * EMPTY LEVELS
  * =========================================================
+ *
+ * Test bazasi hali tayyor bo‘lmagan mavzular uchun.
  */
 
-const EMPTY_LEVELS: Topic['levels'] = {
+export const EMPTY_LEVELS: Topic['levels'] = {
   easy: [],
   medium: [],
   hard: [],
@@ -62,14 +86,34 @@ const EMPTY_LEVELS: Topic['levels'] = {
 
 /*
  * =========================================================
- * 1-MODUL
+ * LEVEL TYPES
+ * =========================================================
+ */
+
+export type LevelKey =
+  | 'easy'
+  | 'medium'
+  | 'hard'
+  | 'case'
+
+export const LEVEL_KEYS: readonly LevelKey[] = [
+  'easy',
+  'medium',
+  'hard',
+  'case',
+]
+
+/*
+ * =========================================================
+ * MODULE 1
  * =========================================================
  */
 
 const MODULE_1: Category = {
   id: 'm1',
 
-  title: '1-MODUL. Umumiy ta’lim muassasasini boshqarish',
+  title:
+    '1-MODUL. Umumiy ta’lim muassasasini boshqarish',
 
   description:
     'Ta’lim muassasasini samarali boshqarish, strategik menejment, boshqaruv psixologiyasi, korrupsiyaviy xavflar, boshqaruv qarorlari va maktab imijini boshqarish.',
@@ -78,7 +122,8 @@ const MODULE_1: Category = {
     {
       id: 'm1t1',
 
-      title: 'Umumiy ta’lim muassasasini boshqarish',
+      title:
+        'Umumiy ta’lim muassasasini boshqarish',
 
       description:
         'Umumiy o‘rta ta’lim muassasasini boshqarish, boshqaruv tamoyillari, attestatsiya, akkreditatsiya va TALIS.',
@@ -89,7 +134,8 @@ const MODULE_1: Category = {
     {
       id: 'm1t2',
 
-      title: '🔥 TEST — STRATEGIK MENEJMENT 🔥',
+      title:
+        'Strategik menejment',
 
       description:
         'Strategik menejment, strategik rejalashtirish, maqsadlar va ta’lim muassasasini rivojlantirish.',
@@ -100,7 +146,8 @@ const MODULE_1: Category = {
     {
       id: 'm1t3',
 
-      title: 'Boshqaruv psixologiyasi',
+      title:
+        'Boshqaruv psixologiyasi',
 
       description:
         'Rahbarning emotsional intellekti, muloqot madaniyati, temperament, stressni boshqarish, nizolarni hal qilish va jamoani samarali boshqarish psixologiyasi.',
@@ -111,7 +158,8 @@ const MODULE_1: Category = {
     {
       id: 'm1t4',
 
-      title: 'Korrupsiyaviy xavf-xatarlarni oldini olish',
+      title:
+        'Korrupsiyaviy xavf-xatarlarni oldini olish',
 
       description:
         'Ta’lim muassasasida korrupsiyaviy xavflarni aniqlash va oldini olish mexanizmlari.',
@@ -122,7 +170,8 @@ const MODULE_1: Category = {
     {
       id: 'm1t5',
 
-      title: 'Boshqaruv qarorlari',
+      title:
+        'Boshqaruv qarorlari',
 
       description:
         'Boshqaruv qarorlarini qabul qilish, amalga oshirish, nazorat qilish, baholash va tuzatishlar kiritish.',
@@ -133,7 +182,8 @@ const MODULE_1: Category = {
     {
       id: 'm1t6',
 
-      title: 'Maktab imijini shakllantirish',
+      title:
+        'Maktab imijini shakllantirish',
 
       description:
         'Maktab imiji, ichki va tashqi imij, PR faoliyati, raqamli imij, axborot siyosati va jamoatchilik bilan aloqalarni samarali boshqarish.',
@@ -145,62 +195,76 @@ const MODULE_1: Category = {
 
 /*
  * =========================================================
- * 2-MODUL
+ * MODULE 2
  * =========================================================
  */
 
 const MODULE_2: Category = {
   id: 'm2',
 
-  title: '2-MODUL. Ta’lim muassasasini rivojlantirish',
+  title:
+    '2-MODUL. Ta’lim muassasasini rivojlantirish',
 
   description:
-    'Ta’lim sifati, o‘quvchi natijalari, kasbga yo‘naltirish va bola farovonligini boshqarish.',
+    'Ta’lim sifatini boshqarish, o‘quvchi natijalarini rivojlantirish, kasbga yo‘naltirish, ta’lim sifatini baholash va bola farovonligini ta’minlash.',
 
   topics: [
-   {
-  id: 'm2t1',
+    {
+      id: 'm2t1',
 
-  title: 'Ta’lim sifatini boshqarish',
+      title:
+        'Ta’lim sifatini boshqarish',
 
-  description:
-    'Ta’lim sifatini tizimli boshqarish, DTS va DTT, ichki monitoring, baholash va ta’lim sifatini uzluksiz takomillashtirish.',
+      description:
+        'Ta’lim sifatini tizimli boshqarish, DTS va DTT, ichki monitoring, baholash va ta’lim sifatini uzluksiz takomillashtirish.',
 
-  levels: M2T1_LEVELS,
-},
+      levels: M2T1_LEVELS,
+    },
 
-  {
-  id: 'm2t2',
-  title: '...',
-  description: '...',
-  levels: M2T2_LEVELS,
-},
-   {
-  id: 'm2t3',
-  title: 'Yoshlarni kasb-hunarga yo‘naltirish',
-  description:
-    'O‘quvchilarning qiziqishi, qobiliyati va mehnat bozori talablari asosida kasbiy yo‘nalishini shakllantirish.',
-  levels: M2T3_LEVELS,
-},
+    {
+      id: 'm2t2',
+
+      title:
+        'O‘quvchi natijalarini rivojlantirish',
+
+      description:
+        'O‘quvchilarning ta’limiy natijalarini tahlil qilish, individual yondashuv, rivojlanish dinamikasi va natijalarni yaxshilash.',
+
+      levels: M2T2_LEVELS,
+    },
+
+    {
+      id: 'm2t3',
+
+      title:
+        'Yoshlarni kasb-hunarga yo‘naltirish',
+
+      description:
+        'O‘quvchilarning qiziqishi, qobiliyati va mehnat bozori talablari asosida ongli kasbiy tanlovini shakllantirish.',
+
+      levels: M2T3_LEVELS,
+    },
 
     {
       id: 'm2t4',
 
-      title: 'Ta’lim sifatini baholash',
+      title:
+        'Ta’lim sifatini baholash va monitoring',
 
       description:
-        'Ta’lim natijalarini baholash va baholash ma’lumotlaridan boshqaruvda foydalanish.',
+        'Ta’lim natijalarini baholash, monitoring qilish va baholash ma’lumotlaridan boshqaruv qarorlarida foydalanish.',
 
-      levels: EMPTY_LEVELS,
+      levels: M2T4_LEVELS,
     },
 
     {
       id: 'm2t5',
 
-      title: 'Bola xavfsizligi va farovonligini ta’minlash',
+      title:
+        'Bola xavfsizligi va farovonligini ta’minlash',
 
       description:
-        'Maktab muhitida o‘quvchilarning xavfsizligi, himoyasi va farovonligini ta’minlash.',
+        'Maktab muhitida o‘quvchilarning xavfsizligi, himoyasi, psixologik farovonligi va rivojlanishi uchun qulay sharoit yaratish.',
 
       levels: EMPTY_LEVELS,
     },
@@ -209,7 +273,7 @@ const MODULE_2: Category = {
 
 /*
  * =========================================================
- * 3-MODUL
+ * MODULE 3
  * =========================================================
  */
 
@@ -263,14 +327,15 @@ const MODULE_3: Category = {
 
 /*
  * =========================================================
- * 4-MODUL
+ * MODULE 4
  * =========================================================
  */
 
 const MODULE_4: Category = {
   id: 'm4',
 
-  title: '4-MODUL. Inson resurslarini boshqarish',
+  title:
+    '4-MODUL. Inson resurslarini boshqarish',
 
   description:
     'Maktabda inson resurslarini samarali boshqarish va mehnat munosabatlarini tashkil etish.',
@@ -279,7 +344,8 @@ const MODULE_4: Category = {
     {
       id: 'm4t1',
 
-      title: 'Inson resurslarini boshqarish strategiyasi',
+      title:
+        'Inson resurslarini boshqarish strategiyasi',
 
       description:
         'Kadrlarni rejalashtirish, rivojlantirish va samarali boshqarish.',
@@ -314,7 +380,8 @@ const MODULE_4: Category = {
     {
       id: 'm4t4',
 
-      title: 'Inson resurslari faoliyatini baholash',
+      title:
+        'Inson resurslari faoliyatini baholash',
 
       description:
         'Xodimlar faoliyatini mezonlar asosida baholash va rivojlantirish.',
@@ -326,14 +393,15 @@ const MODULE_4: Category = {
 
 /*
  * =========================================================
- * 5-MODUL
+ * MODULE 5
  * =========================================================
  */
 
 const MODULE_5: Category = {
   id: 'm5',
 
-  title: '5-MODUL. Ish yuritish va hisobot',
+  title:
+    '5-MODUL. Ish yuritish va hisobot',
 
   description:
     'Boshqaruv hujjatlari, normativ-huquqiy hujjatlar va hisobdorlik tizimi.',
@@ -367,7 +435,7 @@ const MODULE_5: Category = {
 
 /*
  * =========================================================
- * 6-MODUL
+ * MODULE 6
  * =========================================================
  */
 
@@ -408,7 +476,8 @@ const MODULE_6: Category = {
     {
       id: 'm6t3',
 
-      title: 'Boshqaruv va media savodxonlik',
+      title:
+        'Boshqaruv va media savodxonlik',
 
       description:
         'Axborot bilan ishlash, media muhit va kommunikatsiya kompetensiyalarini rivojlantirish.',
@@ -420,14 +489,15 @@ const MODULE_6: Category = {
 
 /*
  * =========================================================
- * 7-MODUL
+ * MODULE 7
  * =========================================================
  */
 
 const MODULE_7: Category = {
   id: 'm7',
 
-  title: '7-MODUL. Boshqaruvda raqamli kompetentlik',
+  title:
+    '7-MODUL. Boshqaruvda raqamli kompetentlik',
 
   description:
     'Raqamli vositalar va sun’iy intellektdan boshqaruvda samarali foydalanish.',
@@ -436,7 +506,8 @@ const MODULE_7: Category = {
     {
       id: 'm7t1',
 
-      title: 'Boshqaruvda raqamli kompetentlik',
+      title:
+        'Boshqaruvda raqamli kompetentlik',
 
       description:
         'Raqamli texnologiyalar yordamida boshqaruv jarayonlarini takomillashtirish.',
@@ -460,7 +531,7 @@ const MODULE_7: Category = {
 
 /*
  * =========================================================
- * 8-MODUL
+ * MODULE 8
  * =========================================================
  */
 
@@ -514,14 +585,15 @@ const MODULE_8: Category = {
 
 /*
  * =========================================================
- * 9-MODUL
+ * MODULE 9
  * =========================================================
  */
 
 const MODULE_9: Category = {
   id: 'm9',
 
-  title: '9-MODUL. Inklyuziv ta’limni tashkil etish',
+  title:
+    '9-MODUL. Inklyuziv ta’limni tashkil etish',
 
   description:
     'Inklyuziv ta’limning mazmuni, mexanizmlari va gospital ta’lim.',
@@ -554,7 +626,8 @@ const MODULE_9: Category = {
     {
       id: 'm9t3',
 
-      title: 'Gospital ta’lim',
+      title:
+        'Gospital ta’lim',
 
       description:
         'Davolanish jarayonidagi bolalar uchun ta’limni tashkil etish.',
@@ -566,14 +639,15 @@ const MODULE_9: Category = {
 
 /*
  * =========================================================
- * 10-MODUL
+ * MODULE 10
  * =========================================================
  */
 
 const MODULE_10: Category = {
   id: 'm10',
 
-  title: '10-MODUL. Moliyaviy munosabatlar',
+  title:
+    '10-MODUL. Moliyaviy munosabatlar',
 
   description:
     'Ta’lim muassasasining moliyaviy faoliyati, ish haqi va budjetdan tashqari mablag‘lar.',
@@ -631,7 +705,7 @@ const MODULE_10: Category = {
 
 /*
  * =========================================================
- * BARCHA MODULLAR
+ * ALL MODULES
  * =========================================================
  */
 
@@ -650,7 +724,7 @@ export const CATEGORIES: Category[] = [
 
 /*
  * =========================================================
- * BOG‘CHA
+ * PRESCHOOL
  * =========================================================
  */
 
@@ -658,22 +732,8 @@ export const PRESCHOOL_CATEGORIES: Category[] = []
 
 /*
  * =========================================================
- * HELPERS
- * =========================================================
- */
-
-type LevelKey =
-  | 'easy'
-  | 'medium'
-  | 'hard'
-  | 'case'
-
-const LEVEL_KEYS: LevelKey[] = [
-  'easy',
-  'medium',
-  'hard',
-  'case',
-]
+ * INTERNAL HELPERS
+ * ========================================================= */
 
 function allTopicQuestions(
   topic: Topic,
@@ -730,9 +790,11 @@ export function getTopicQuestions(
 ): Question[] {
   const topic = getTopicById(topicId)
 
-  return topic
-    ? allTopicQuestions(topic)
-    : []
+  if (!topic) {
+    return []
+  }
+
+  return allTopicQuestions(topic)
 }
 
 /*
@@ -747,9 +809,11 @@ export function getLevelQuestions(
 ): Question[] {
   const topic = getTopicById(topicId)
 
-  return topic
-    ? topic.levels[level]
-    : []
+  if (!topic) {
+    return []
+  }
+
+  return topic.levels[level]
 }
 
 /*
@@ -763,12 +827,165 @@ export function getModuleQuestions(
 ): Question[] {
   const module = getModuleById(moduleId)
 
-  return module
-    ? module.topics.flatMap(
-        allTopicQuestions,
-      )
-    : []
+  if (!module) {
+    return []
+  }
+
+  return module.topics.flatMap(
+    (topic) => allTopicQuestions(topic),
+  )
 }
+
+/*
+ * =========================================================
+ * GET QUESTION BY ID
+ * =========================================================
+ */
+
+export function getQuestionById(
+  questionId: string,
+): Question | undefined {
+  for (const module of CATEGORIES) {
+    for (const topic of module.topics) {
+      const question = allTopicQuestions(
+        topic,
+      ).find(
+        (item) => item.id === questionId,
+      )
+
+      if (question) {
+        return question
+      }
+    }
+  }
+
+  return undefined
+}
+
+/*
+ * =========================================================
+ * TOPIC LEVEL COUNTS
+ * =========================================================
+ */
+
+export function getTopicLevelCounts(
+  topicId: string,
+): Record<LevelKey, number> {
+  const topic = getTopicById(topicId)
+
+  if (!topic) {
+    return {
+      easy: 0,
+      medium: 0,
+      hard: 0,
+      case: 0,
+    }
+  }
+
+  return {
+    easy: topic.levels.easy.length,
+    medium: topic.levels.medium.length,
+    hard: topic.levels.hard.length,
+    case: topic.levels.case.length,
+  }
+}
+
+/*
+ * =========================================================
+ * TOPIC QUESTION COUNT
+ * =========================================================
+ */
+
+export function getTopicQuestionCount(
+  topicId: string,
+): number {
+  return getTopicQuestions(topicId).length
+}
+
+/*
+ * =========================================================
+ * MODULE TOPIC COUNT
+ * =========================================================
+ */
+
+export function getModuleTopicCount(
+  moduleId: string,
+): number {
+  const module = getModuleById(moduleId)
+
+  if (!module) {
+    return 0
+  }
+
+  return module.topics.length
+}
+
+/*
+ * =========================================================
+ * MODULE QUESTION COUNT
+ * =========================================================
+ */
+
+export function getModuleQuestionCount(
+  moduleId: string,
+): number {
+  return getModuleQuestions(moduleId).length
+}
+
+/*
+ * =========================================================
+ * CHECK TOPIC QUESTIONS
+ * =========================================================
+ */
+
+export function hasTopicQuestions(
+  topicId: string,
+): boolean {
+  return getTopicQuestionCount(topicId) > 0
+}
+
+/*
+ * =========================================================
+ * CHECK LEVEL QUESTIONS
+ * =========================================================
+ */
+
+export function hasLevelQuestions(
+  topicId: string,
+  level: LevelKey,
+): boolean {
+  return (
+    getLevelQuestions(
+      topicId,
+      level,
+    ).length > 0
+  )
+}
+
+/*
+ * =========================================================
+ * MODULE IDS
+ * =========================================================
+ */
+
+export const MODULE_IDS: string[] =
+  CATEGORIES.map(
+    (module) => module.id,
+  )
+
+/*
+ * =========================================================
+ * TOPIC IDS
+ * =========================================================
+ */
+
+export const TOPIC_IDS: string[] =
+  CATEGORIES.flatMap(
+    (module) =>
+      module.topics.map(
+        (topic) => topic.id,
+      ),
+  )
 
 /*
  * =========================================================
@@ -799,6 +1016,58 @@ export const TOTAL_QUESTIONS =
     0,
   )
 
+export const TOTAL_EASY_QUESTIONS =
+  CATEGORIES.reduce(
+    (total, module) =>
+      total +
+      module.topics.reduce(
+        (topicTotal, topic) =>
+          topicTotal +
+          topic.levels.easy.length,
+        0,
+      ),
+    0,
+  )
+
+export const TOTAL_MEDIUM_QUESTIONS =
+  CATEGORIES.reduce(
+    (total, module) =>
+      total +
+      module.topics.reduce(
+        (topicTotal, topic) =>
+          topicTotal +
+          topic.levels.medium.length,
+        0,
+      ),
+    0,
+  )
+
+export const TOTAL_HARD_QUESTIONS =
+  CATEGORIES.reduce(
+    (total, module) =>
+      total +
+      module.topics.reduce(
+        (topicTotal, topic) =>
+          topicTotal +
+          topic.levels.hard.length,
+        0,
+      ),
+    0,
+  )
+
+export const TOTAL_CASE_QUESTIONS =
+  CATEGORIES.reduce(
+    (total, module) =>
+      total +
+      module.topics.reduce(
+        (topicTotal, topic) =>
+          topicTotal +
+          topic.levels.case.length,
+        0,
+      ),
+    0,
+  )
+
 /*
  * =========================================================
  * MIXED TEST
@@ -810,8 +1079,54 @@ export const MIXED_ID = 'aralash'
 export const MIXED_COUNT = 30
 
 export const MIXED_QUESTIONS: Question[] =
-  CATEGORIES.flatMap((module) =>
-    module.topics.flatMap(
-      allTopicQuestions,
-    ),
+  CATEGORIES.flatMap(
+    (module) =>
+      module.topics.flatMap(
+        (topic) =>
+          allTopicQuestions(topic),
+      ),
   )
+
+/*
+ * =========================================================
+ * DATA HEALTH CHECK
+ * =========================================================
+ *
+ * Development/debug uchun foydali.
+ */
+
+export function getDataHealth() {
+  const modules = CATEGORIES.map(
+    (module) => ({
+      id: module.id,
+      title: module.title,
+      topics: module.topics.map(
+        (topic) => ({
+          id: topic.id,
+          title: topic.title,
+          easy: topic.levels.easy.length,
+          medium:
+            topic.levels.medium.length,
+          hard:
+            topic.levels.hard.length,
+          case:
+            topic.levels.case.length,
+          total:
+            allTopicQuestions(topic)
+              .length,
+        }),
+      ),
+    }),
+  )
+
+  return {
+    modules,
+    totalModules: TOTAL_MODULES,
+    totalTopics: TOTAL_TOPICS,
+    totalQuestions: TOTAL_QUESTIONS,
+    easy: TOTAL_EASY_QUESTIONS,
+    medium: TOTAL_MEDIUM_QUESTIONS,
+    hard: TOTAL_HARD_QUESTIONS,
+    case: TOTAL_CASE_QUESTIONS,
+  }
+}
