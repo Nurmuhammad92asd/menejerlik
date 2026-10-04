@@ -13,9 +13,6 @@ import { QuizScreen } from '@/components/quiz-screen'
 import ResultScreen from '@/components/result-screen'
 import { RankingScreen } from '@/components/ranking-screen'
 import StudentAcademy from '@/components/student-academy'
-
-// PISA komponenti mavjud bo‘lsa ishlaydi.
-// Hozircha faylni yaratganimizdan keyin to‘liq ulanadi.
 import PisaAcademy from '@/components/pisa/pisa-academy'
 
 import {
@@ -36,7 +33,6 @@ import {
 } from '@/lib/quiz-data'
 
 import { useHistory } from '@/hooks/use-history'
-
 import {
   useBackButton,
   useTelegram,
@@ -124,7 +120,7 @@ const INITIAL_NAVIGATION: NavigationState = {
 }
 
 /* =========================================================
-   ANSWER TYPE
+   QUIZ ANSWER TYPE
 ========================================================= */
 
 type QuizAnswerData = {
@@ -160,17 +156,15 @@ const SCHOOL_SUBJECTS: Subject[] = [
     icon: '📐',
     title: 'Matematika',
     description:
-      'Matematika fani o‘qituvchilari uchun attestatsiya testlari.',
+      'Matematika fani o‘qituvchilari uchun professional testlar.',
   },
-
   {
     id: 'ona-tili-adabiyot',
     icon: '📖',
     title: 'Ona tili va adabiyot',
     description:
-      'Ona tili va adabiyot fani bo‘yicha attestatsiyaga tayyorgarlik.',
+      'Ona tili va adabiyot bo‘yicha attestatsiyaga tayyorgarlik.',
   },
-
   {
     id: 'ingliz-tili',
     icon: '🇬🇧',
@@ -178,15 +172,13 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Ingliz tili o‘qituvchilari uchun professional testlar.',
   },
-
   {
     id: 'rus-tili',
     icon: '🇷🇺',
     title: 'Rus tili',
     description:
-      'Rus tili fani bo‘yicha attestatsiya tayyorgarligi.',
+      'Rus tili bo‘yicha attestatsiyaga tayyorgarlik.',
   },
-
   {
     id: 'kimyo',
     icon: '🧪',
@@ -194,15 +186,13 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Kimyo fani o‘qituvchilari uchun testlar.',
   },
-
   {
     id: 'fizika',
     icon: '⚛️',
     title: 'Fizika',
     description:
-      'Fizika fani bo‘yicha attestatsiya testlari.',
+      'Fizika bo‘yicha professional tayyorgarlik.',
   },
-
   {
     id: 'biologiya',
     icon: '🧬',
@@ -210,23 +200,20 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Biologiya fani o‘qituvchilari uchun testlar.',
   },
-
   {
     id: 'geografiya',
     icon: '🌍',
     title: 'Geografiya',
     description:
-      'Geografiya fani bo‘yicha professional tayyorgarlik.',
+      'Geografiya bo‘yicha professional tayyorgarlik.',
   },
-
   {
     id: 'tarix',
     icon: '📜',
     title: 'Tarix',
     description:
-      'Tarix fani o‘qituvchilari uchun attestatsiya testlari.',
+      'Tarix fani bo‘yicha attestatsiya testlari.',
   },
-
   {
     id: 'informatika',
     icon: '💻',
@@ -234,15 +221,13 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Informatika va AKT bo‘yicha testlar.',
   },
-
   {
     id: 'musiqa',
     icon: '🎵',
     title: 'Musiqa',
     description:
-      'Musiqa fani bo‘yicha attestatsiyaga tayyorgarlik.',
+      'Musiqa fani bo‘yicha professional tayyorgarlik.',
   },
-
   {
     id: 'tasviriy-sanat',
     icon: '🎨',
@@ -250,7 +235,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Tasviriy san’at bo‘yicha testlar.',
   },
-
   {
     id: 'texnologiya',
     icon: '🛠️',
@@ -258,13 +242,12 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Texnologiya fani o‘qituvchilari uchun testlar.',
   },
-
   {
     id: 'jismoniy-tarbiya',
     icon: '🏃',
     title: 'Jismoniy tarbiya',
     description:
-      'Jismoniy tarbiya fani bo‘yicha testlar.',
+      'Jismoniy tarbiya bo‘yicha testlar.',
   },
 ]
 
@@ -302,9 +285,9 @@ export function MenejerlikApp() {
 
   const history = useHistory()
 
-  /* =========================================================
+  /* =======================================================
      TELEGRAM INITIALIZATION
-  ========================================================= */
+  ======================================================= */
 
   useEffect(() => {
     if (!webApp) return
@@ -328,51 +311,50 @@ export function MenejerlikApp() {
       }
     } catch (error) {
       console.error(
-        'Telegram initialization error:',
+        '[Telegram] initialization error:',
         error,
       )
     }
   }, [webApp])
 
-  /* =========================================================
-     TELEGRAM FULLSCREEN
-  ========================================================= */
+  /* =======================================================
+     FULLSCREEN STATE
+  ======================================================= */
 
   useEffect(() => {
     if (!webApp) return
 
-    const handleFullscreenChanged =
-      () => {
-        try {
-          if (
-            typeof webApp.isFullscreen ===
-            'boolean'
-          ) {
-            setIsFullscreen(
-              webApp.isFullscreen,
-            )
-          }
-        } catch {
-          // ignore
+    const handleFullscreen = () => {
+      try {
+        if (
+          typeof webApp.isFullscreen ===
+          'boolean'
+        ) {
+          setIsFullscreen(
+            webApp.isFullscreen,
+          )
         }
+      } catch {
+        // Telegram API may not support it
       }
+    }
 
     window.addEventListener(
       'fullscreenchange',
-      handleFullscreenChanged,
+      handleFullscreen,
     )
 
     return () => {
       window.removeEventListener(
         'fullscreenchange',
-        handleFullscreenChanged,
+        handleFullscreen,
       )
     }
   }, [webApp])
 
-  /* =========================================================
+  /* =======================================================
      SCROLL
-  ========================================================= */
+  ======================================================= */
 
   const scrollToTop = () => {
     if (
@@ -387,32 +369,26 @@ export function MenejerlikApp() {
     })
   }
 
-  /* =========================================================
+  /* =======================================================
      HOME
-  ========================================================= */
+  ======================================================= */
 
   const goHome = () => {
     setScreen('home')
-
     setNavigation(
       INITIAL_NAVIGATION,
     )
-
     setQuizSession(null)
     setQuizResult(null)
 
     scrollToTop()
   }
 
-  /* =========================================================
+  /* =======================================================
      STUDENT ACADEMY
-  ========================================================= */
+  ======================================================= */
 
   const openStudentAcademy = () => {
-    console.log(
-      '[MENEJERLIK] Student Academy',
-    )
-
     setQuizSession(null)
     setQuizResult(null)
 
@@ -427,15 +403,11 @@ export function MenejerlikApp() {
     scrollToTop()
   }
 
-  /* =========================================================
-     PISA ACADEMY
-  ========================================================= */
+  /* =======================================================
+     PISA
+  ======================================================= */
 
   const openPisaAcademy = () => {
-    console.log(
-      '[MENEJERLIK] PISA Academy',
-    )
-
     setQuizSession(null)
     setQuizResult(null)
 
@@ -448,45 +420,44 @@ export function MenejerlikApp() {
     scrollToTop()
   }
 
-  /* =========================================================
+  /* =======================================================
      RANKING
-  ========================================================= */
+  ======================================================= */
 
   const openRanking = () => {
     setScreen('ranking')
     scrollToTop()
   }
 
-  /* =========================================================
+  /* =======================================================
      AI
-  ========================================================= */
+  ======================================================= */
 
   const openAI = () => {
     setScreen('ai')
     scrollToTop()
   }
 
-  /* =========================================================
+  /* =======================================================
      PROFESSIONAL ACADEMY
-  ========================================================= */
+  ======================================================= */
 
-  const openEducationSelection =
-    () => {
-      setQuizSession(null)
-      setQuizResult(null)
+  const openEducationSelection = () => {
+    setQuizSession(null)
+    setQuizResult(null)
 
-      setNavigation(
-        INITIAL_NAVIGATION,
-      )
+    setNavigation(
+      INITIAL_NAVIGATION,
+    )
 
-      setScreen('education')
+    setScreen('education')
 
-      scrollToTop()
-    }
+    scrollToTop()
+  }
 
-  /* =========================================================
+  /* =======================================================
      EDUCATION
-  ========================================================= */
+  ======================================================= */
 
   const selectEducation = (
     educationType: EducationType,
@@ -497,13 +468,12 @@ export function MenejerlikApp() {
     })
 
     setScreen('roles')
-
     scrollToTop()
   }
 
-  /* =========================================================
+  /* =======================================================
      ROLE
-  ========================================================= */
+  ======================================================= */
 
   const selectRole = (
     role: RoleId,
@@ -512,11 +482,9 @@ export function MenejerlikApp() {
       navigation.educationType
 
     setNavigation(
-      (previous) => ({
+      previous => ({
         ...previous,
-
         role,
-
         moduleId: null,
         topicId: null,
         subjectId: null,
@@ -543,15 +511,15 @@ export function MenejerlikApp() {
     scrollToTop()
   }
 
-  /* =========================================================
+  /* =======================================================
      SUBJECT
-  ========================================================= */
+  ======================================================= */
 
   const selectSubject = (
     subjectId: string,
   ) => {
     setNavigation(
-      (previous) => ({
+      previous => ({
         ...previous,
         subjectId,
       }),
@@ -560,33 +528,29 @@ export function MenejerlikApp() {
     scrollToTop()
   }
 
-  /* =========================================================
+  /* =======================================================
      MODULE
-  ========================================================= */
+  ======================================================= */
 
   const selectModule = (
     moduleId: string,
   ) => {
     setNavigation(
-      (previous) => ({
+      previous => ({
         ...previous,
-
         moduleId,
-
         topicId: null,
-
         quizSource: null,
       }),
     )
 
     setScreen('topics')
-
     scrollToTop()
   }
 
-  /* =========================================================
-     MODULE MIXED
-  ========================================================= */
+  /* =======================================================
+     MODULE MIXED TEST
+  ======================================================= */
 
   const startModuleMixed = (
     moduleId: string,
@@ -601,64 +565,56 @@ export function MenejerlikApp() {
         !session?.questions?.length
       ) {
         console.error(
-          'Modul savollari topilmadi:',
+          '[Quiz] Module questions not found:',
           moduleId,
         )
-
         return
       }
 
       setNavigation(
-        (previous) => ({
+        previous => ({
           ...previous,
-
           moduleId,
-
           topicId: null,
-
           quizSource: 'module',
         }),
       )
 
       setQuizSession(session)
       setQuizResult(null)
-
       setScreen('quiz')
 
       scrollToTop()
     } catch (error) {
       console.error(
-        'Modul aralash testi xatosi:',
+        '[Quiz] Module mixed error:',
         error,
       )
     }
   }
 
-  /* =========================================================
+  /* =======================================================
      TOPIC
-  ========================================================= */
+  ======================================================= */
 
   const selectTopic = (
     topicId: string,
   ) => {
     setNavigation(
-      (previous) => ({
+      previous => ({
         ...previous,
-
         topicId,
-
         quizSource: null,
       }),
     )
 
     setScreen('levels')
-
     scrollToTop()
   }
 
-  /* =========================================================
+  /* =======================================================
      LEVEL
-  ========================================================= */
+  ======================================================= */
 
   const selectLevel = (
     level: QuizLevel,
@@ -673,9 +629,9 @@ export function MenejerlikApp() {
     )
   }
 
-  /* =========================================================
+  /* =======================================================
      START TOPIC QUIZ
-  ========================================================= */
+  ======================================================= */
 
   const startTopicQuiz = (
     topicId: string,
@@ -692,43 +648,39 @@ export function MenejerlikApp() {
         !session?.questions?.length
       ) {
         console.error(
-          'Test savollari topilmadi:',
+          '[Quiz] Questions not found:',
           {
             topicId,
             level,
           },
         )
-
         return
       }
 
       setNavigation(
-        (previous) => ({
+        previous => ({
           ...previous,
-
           topicId,
-
           quizSource: 'topic',
         }),
       )
 
       setQuizSession(session)
       setQuizResult(null)
-
       setScreen('quiz')
 
       scrollToTop()
     } catch (error) {
       console.error(
-        'Testni boshlash xatosi:',
+        '[Quiz] Start error:',
         error,
       )
     }
   }
 
-  /* =========================================================
-     SAVE RESULT
-  ========================================================= */
+  /* =======================================================
+     SAVE RESULT TO D1
+  ======================================================= */
 
   const saveResultToDatabase =
     async ({
@@ -745,10 +697,6 @@ export function MenejerlikApp() {
           getTelegramUser()
 
         if (!telegramUser) {
-          console.warn(
-            'Telegram user topilmadi.',
-          )
-
           return null
         }
 
@@ -757,22 +705,17 @@ export function MenejerlikApp() {
             '/api/results',
             {
               method: 'POST',
-
               headers: {
                 'Content-Type':
                   'application/json',
               },
-
               body: JSON.stringify({
                 telegramUser: {
                   id: telegramUser.id,
-
                   first_name:
                     telegramUser.first_name,
-
                   last_name:
                     telegramUser.last_name,
-
                   username:
                     telegramUser.username,
                 },
@@ -795,13 +738,9 @@ export function MenejerlikApp() {
           )
 
         if (!response.ok) {
-          const errorText =
-            await response.text()
-
           console.error(
-            'D1 API xatosi:',
+            '[D1] Result save failed:',
             response.status,
-            errorText,
           )
 
           return null
@@ -810,7 +749,7 @@ export function MenejerlikApp() {
         return await response.json()
       } catch (error) {
         console.error(
-          'Natijani D1 ga yuborish xatosi:',
+          '[D1] Save result error:',
           error,
         )
 
@@ -818,9 +757,9 @@ export function MenejerlikApp() {
       }
     }
 
-  /* =========================================================
-     LOCAL HISTORY
-  ========================================================= */
+  /* =======================================================
+     SAVE LOCAL HISTORY
+  ======================================================= */
 
   const saveLocalHistory =
     async ({
@@ -845,20 +784,19 @@ export function MenejerlikApp() {
           correct,
           total,
           durationSec,
-
           at: Date.now(),
         })
       } catch (error) {
         console.error(
-          'Lokal tarixni saqlash xatosi:',
+          '[History] Save error:',
           error,
         )
       }
     }
 
-  /* =========================================================
+  /* =======================================================
      FINISH QUIZ
-  ========================================================= */
+  ======================================================= */
 
   const finish = async (
     answers: AnswerRecord[],
@@ -883,7 +821,7 @@ export function MenejerlikApp() {
 
       const checkedAnswers =
         rawAnswers.map(
-          (item) => {
+          item => {
             const selected =
               Number.isInteger(
                 item?.selected,
@@ -904,13 +842,9 @@ export function MenejerlikApp() {
 
             return {
               ...item,
-
               selected,
-
               isAnswered,
-
               isCorrect,
-
               isWrong:
                 isAnswered &&
                 !isCorrect,
@@ -920,19 +854,19 @@ export function MenejerlikApp() {
 
       const correct =
         checkedAnswers.filter(
-          (item) =>
+          item =>
             item.isCorrect,
         ).length
 
       const unanswered =
         checkedAnswers.filter(
-          (item) =>
+          item =>
             !item.isAnswered,
         ).length
 
       const wrong =
         checkedAnswers.filter(
-          (item) =>
+          item =>
             item.isWrong,
         ).length
 
@@ -953,7 +887,8 @@ export function MenejerlikApp() {
       const percentage =
         total > 0
           ? Math.round(
-              (correct / total) *
+              (correct /
+                total) *
                 100,
             )
           : 0
@@ -983,7 +918,6 @@ export function MenejerlikApp() {
       } as unknown as QuizResult
 
       setQuizResult(result)
-
       setScreen('result')
 
       scrollToTop()
@@ -1003,7 +937,7 @@ export function MenejerlikApp() {
       ])
     } catch (error) {
       console.error(
-        'Natijani hisoblash xatosi:',
+        '[Quiz] Result calculation error:',
         error,
       )
 
@@ -1039,14 +973,13 @@ export function MenejerlikApp() {
       )
 
       setScreen('result')
-
       scrollToTop()
     }
   }
 
-  /* =========================================================
+  /* =======================================================
      RETRY
-  ========================================================= */
+  ======================================================= */
 
   const retryQuiz = () => {
     if (!quizSession) {
@@ -1077,194 +1010,98 @@ export function MenejerlikApp() {
     }
   }
 
-  /* =========================================================
+  /* =======================================================
      BACK NAVIGATION
-  ========================================================= */
+  ======================================================= */
 
   const goBack = () => {
-    if (screen === 'home') {
-      return
-    }
+    switch (screen) {
+      case 'home':
+        return
 
-    /* -----------------------------------------
-       PISA
-    ----------------------------------------- */
+      case 'pisa':
+        setScreen(
+          'student-academy',
+        )
+        scrollToTop()
+        return
 
-    if (
-      screen === 'pisa'
-    ) {
-      setScreen(
-        'student-academy',
-      )
+      case 'student-academy':
+        goHome()
+        return
 
-      scrollToTop()
+      case 'ranking':
+      case 'ai':
+      case 'education':
+        goHome()
+        return
 
-      return
-    }
+      case 'roles':
+        setScreen('education')
+        scrollToTop()
+        return
 
-    /* -----------------------------------------
-       STUDENT ACADEMY
-    ----------------------------------------- */
+      case 'subjects':
+        setScreen('roles')
+        scrollToTop()
+        return
 
-    if (
-      screen ===
-      'student-academy'
-    ) {
-      goHome()
+      case 'modules':
+        setScreen('roles')
+        scrollToTop()
+        return
 
-      return
-    }
+      case 'topics':
+        setScreen('modules')
+        scrollToTop()
+        return
 
-    /* -----------------------------------------
-       RANKING / AI
-    ----------------------------------------- */
-
-    if (
-      screen === 'ranking' ||
-      screen === 'ai'
-    ) {
-      goHome()
-
-      return
-    }
-
-    /* -----------------------------------------
-       EDUCATION
-    ----------------------------------------- */
-
-    if (
-      screen === 'education'
-    ) {
-      goHome()
-
-      return
-    }
-
-    /* -----------------------------------------
-       ROLES
-    ----------------------------------------- */
-
-    if (
-      screen === 'roles'
-    ) {
-      setScreen('education')
-
-      scrollToTop()
-
-      return
-    }
-
-    /* -----------------------------------------
-       SUBJECTS
-    ----------------------------------------- */
-
-    if (
-      screen === 'subjects'
-    ) {
-      setScreen('roles')
-
-      scrollToTop()
-
-      return
-    }
-
-    /* -----------------------------------------
-       MODULES
-    ----------------------------------------- */
-
-    if (
-      screen === 'modules'
-    ) {
-      setScreen('roles')
-
-      scrollToTop()
-
-      return
-    }
-
-    /* -----------------------------------------
-       TOPICS
-    ----------------------------------------- */
-
-    if (
-      screen === 'topics'
-    ) {
-      setScreen('modules')
-
-      scrollToTop()
-
-      return
-    }
-
-    /* -----------------------------------------
-       LEVELS
-    ----------------------------------------- */
-
-    if (
-      screen === 'levels'
-    ) {
-      setScreen('topics')
-
-      scrollToTop()
-
-      return
-    }
-
-    /* -----------------------------------------
-       QUIZ
-    ----------------------------------------- */
-
-    if (
-      screen === 'quiz'
-    ) {
-      if (
-        navigation.quizSource ===
-        'module'
-      ) {
+      case 'levels':
         setScreen('topics')
-      } else {
-        setScreen('levels')
-      }
+        scrollToTop()
+        return
 
-      scrollToTop()
+      case 'quiz':
+        if (
+          navigation.quizSource ===
+          'module'
+        ) {
+          setScreen('topics')
+        } else {
+          setScreen('levels')
+        }
 
-      return
-    }
+        scrollToTop()
+        return
 
-    /* -----------------------------------------
-       RESULT
-    ----------------------------------------- */
+      case 'result':
+        if (
+          navigation.quizSource ===
+          'module'
+        ) {
+          setScreen('topics')
+        } else {
+          setScreen('levels')
+        }
 
-    if (
-      screen === 'result'
-    ) {
-      if (
-        navigation.quizSource ===
-        'module'
-      ) {
-        setScreen('topics')
-      } else {
-        setScreen('levels')
-      }
-
-      setQuizResult(null)
-
-      scrollToTop()
+        setQuizResult(null)
+        scrollToTop()
+        return
     }
   }
 
-  /* =========================================================
+  /* =======================================================
      TELEGRAM BACK BUTTON
-  ========================================================= */
+  ======================================================= */
 
   useBackButton(
     screen !== 'home',
     goBack,
   )
 
-  /* =========================================================
+  /* =======================================================
      CLOSE CONFIRMATION
-  ========================================================= */
+  ======================================================= */
 
   useEffect(() => {
     const shouldConfirm =
@@ -1280,7 +1117,7 @@ export function MenejerlikApp() {
       )
     } catch (error) {
       console.error(
-        'Closing confirmation error:',
+        '[Telegram] Closing confirmation:',
         error,
       )
     }
@@ -1296,27 +1133,23 @@ export function MenejerlikApp() {
     }
   }, [screen])
 
-  /* =========================================================
+  /* =======================================================
      ACTIVE CATEGORIES
-  ========================================================= */
+  ======================================================= */
 
   const activeCategories =
     useMemo(() => {
-      if (
-        navigation.educationType ===
+      return navigation.educationType ===
         'preschool'
-      ) {
-        return PRESCHOOL_CATEGORIES
-      }
-
-      return CATEGORIES
+        ? PRESCHOOL_CATEGORIES
+        : CATEGORIES
     }, [
       navigation.educationType,
     ])
 
-  /* =========================================================
+  /* =======================================================
      ACTIVE MODULE
-  ========================================================= */
+  ======================================================= */
 
   const activeModule =
     useMemo(() => {
@@ -1333,9 +1166,9 @@ export function MenejerlikApp() {
       navigation.moduleId,
     ])
 
-  /* =========================================================
+  /* =======================================================
      ACTIVE TOPIC
-  ========================================================= */
+  ======================================================= */
 
   const activeTopic =
     useMemo(() => {
@@ -1352,9 +1185,9 @@ export function MenejerlikApp() {
       navigation.topicId,
     ])
 
-  /* =========================================================
-     RENDER
-  ========================================================= */
+  /* =======================================================
+     GLOBAL HEADER
+  ======================================================= */
 
   return (
     <main
@@ -1366,10 +1199,6 @@ export function MenejerlikApp() {
         dark:text-foreground
       "
     >
-      {/* =====================================================
-          PREMIUM GLOBAL HEADER
-      ===================================================== */}
-
       <header
         className="
           sticky
@@ -1394,8 +1223,6 @@ export function MenejerlikApp() {
             px-4
           "
         >
-          {/* BRAND */}
-
           <button
             type="button"
             onClick={goHome}
@@ -1417,13 +1244,14 @@ export function MenejerlikApp() {
                 rounded-[14px]
                 bg-gradient-to-br
                 from-blue-700
+                via-blue-800
                 to-slate-950
                 text-sm
                 font-black
                 text-white
                 shadow-lg
                 shadow-blue-900/20
-                transition-transform
+                transition
                 group-hover:scale-105
               "
             >
@@ -1470,85 +1298,36 @@ export function MenejerlikApp() {
             </div>
           </button>
 
-          {/* STATUS */}
-
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             {isTelegram && (
-              <span
-                className="
-                  hidden
-                  items-center
-                  gap-1.5
-                  rounded-full
-                  border
-                  border-emerald-100
-                  bg-emerald-50
-                  px-2.5
-                  py-1.5
-                  text-[9px]
-                  font-bold
-                  text-emerald-700
-                  sm:inline-flex
-                  dark:border-emerald-900/30
-                  dark:bg-emerald-950/20
-                  dark:text-emerald-400
-                "
-              >
-                <span
-                  className="
-                    size-1.5
-                    rounded-full
-                    bg-emerald-500
-                  "
-                />
-
-                Telegram
-              </span>
+              <StatusBadge
+                dot="green"
+                text="Telegram"
+              />
             )}
 
             {isFullscreen && (
-              <span
-                className="
-                  hidden
-                  items-center
-                  rounded-full
-                  border
-                  border-blue-100
-                  bg-blue-50
-                  px-2.5
-                  py-1.5
-                  text-[9px]
-                  font-bold
-                  text-blue-700
-                  sm:inline-flex
-                  dark:border-blue-900/30
-                  dark:bg-blue-950/20
-                  dark:text-blue-400
-                "
-              >
-                Fullscreen
-              </span>
+              <StatusBadge
+                dot="blue"
+                text="Fullscreen"
+              />
             )}
           </div>
         </div>
       </header>
-
-      {/* =====================================================
-          MAIN CONTENT
-      ===================================================== */}
 
       <div
         className="
           mx-auto
           max-w-3xl
           px-4
-          pb-10
+          pb-12
           pt-5
         "
       >
-        {/* ===================================================
+        {/* =================================================
             HOME
-        =================================================== */}
+        ================================================= */}
 
         {screen === 'home' && (
           <HomeScreen
@@ -1582,9 +1361,9 @@ export function MenejerlikApp() {
           />
         )}
 
-        {/* ===================================================
+        {/* =================================================
             STUDENT ACADEMY
-        =================================================== */}
+        ================================================= */}
 
         {screen ===
           'student-academy' && (
@@ -1593,9 +1372,9 @@ export function MenejerlikApp() {
           />
         )}
 
-        {/* ===================================================
+        {/* =================================================
             PISA ACADEMY
-        =================================================== */}
+        ================================================= */}
 
         {screen === 'pisa' && (
           <PisaAcademy
@@ -1603,9 +1382,9 @@ export function MenejerlikApp() {
           />
         )}
 
-        {/* ===================================================
+        {/* =================================================
             RANKING
-        =================================================== */}
+        ================================================= */}
 
         {screen === 'ranking' && (
           <RankingScreen
@@ -1613,9 +1392,9 @@ export function MenejerlikApp() {
           />
         )}
 
-        {/* ===================================================
+        {/* =================================================
             AI
-        =================================================== */}
+        ================================================= */}
 
         {screen === 'ai' && (
           <AIAssistant
@@ -1623,9 +1402,9 @@ export function MenejerlikApp() {
           />
         )}
 
-        {/* ===================================================
+        {/* =================================================
             PROFESSIONAL EDUCATION
-        =================================================== */}
+        ================================================= */}
 
         {screen === 'education' && (
           <EducationScreen
@@ -1636,9 +1415,9 @@ export function MenejerlikApp() {
           />
         )}
 
-        {/* ===================================================
+        {/* =================================================
             ROLES
-        =================================================== */}
+        ================================================= */}
 
         {screen === 'roles' && (
           <RoleScreen
@@ -1646,15 +1425,13 @@ export function MenejerlikApp() {
               navigation.educationType
             }
             onBack={goBack}
-            onSelect={
-              selectRole
-            }
+            onSelect={selectRole}
           />
         )}
 
-        {/* ===================================================
+        {/* =================================================
             SUBJECTS
-        =================================================== */}
+        ================================================= */}
 
         {screen === 'subjects' && (
           <SubjectScreen
@@ -1677,9 +1454,9 @@ export function MenejerlikApp() {
           />
         )}
 
-        {/* ===================================================
+        {/* =================================================
             MODULES
-        =================================================== */}
+        ================================================= */}
 
         {screen === 'modules' && (
           <ModuleScreen
@@ -1702,9 +1479,9 @@ export function MenejerlikApp() {
           />
         )}
 
-        {/* ===================================================
+        {/* =================================================
             TOPICS
-        =================================================== */}
+        ================================================= */}
 
         {screen === 'topics' && (
           <TopicScreen
@@ -1718,9 +1495,9 @@ export function MenejerlikApp() {
           />
         )}
 
-        {/* ===================================================
+        {/* =================================================
             LEVELS
-        =================================================== */}
+        ================================================= */}
 
         {screen === 'levels' && (
           <LevelScreen
@@ -1734,9 +1511,9 @@ export function MenejerlikApp() {
           />
         )}
 
-        {/* ===================================================
+        {/* =================================================
             QUIZ
-        =================================================== */}
+        ================================================= */}
 
         {screen === 'quiz' &&
           quizSession && (
@@ -1744,9 +1521,7 @@ export function MenejerlikApp() {
               session={
                 quizSession
               }
-              showCloseButton={
-                true
-              }
+              showCloseButton
               onFinish={
                 finish
               }
@@ -1756,9 +1531,9 @@ export function MenejerlikApp() {
             />
           )}
 
-        {/* ===================================================
+        {/* =================================================
             RESULT
-        =================================================== */}
+        ================================================= */}
 
         {screen === 'result' &&
           quizResult && (
@@ -1776,16 +1551,63 @@ export function MenejerlikApp() {
           )}
       </div>
 
-      {/* =====================================================
-          ACCESSIBLE QUIZ STATE
-      ===================================================== */}
-
       {isClosingConfirmation && (
         <div className="sr-only">
-          Test jarayoni davom etmoqda.
+          Test jarayoni davom
+          etmoqda.
         </div>
       )}
     </main>
+  )
+}
+
+/* =========================================================
+   STATUS BADGE
+========================================================= */
+
+function StatusBadge({
+  dot,
+  text,
+}: {
+  dot: 'green' | 'blue'
+  text: string
+}) {
+  const dotClass =
+    dot === 'green'
+      ? 'bg-emerald-500'
+      : 'bg-blue-500'
+
+  const wrapperClass =
+    dot === 'green'
+      ? 'border-emerald-100 bg-emerald-50 text-emerald-700 dark:border-emerald-900/30 dark:bg-emerald-950/20 dark:text-emerald-400'
+      : 'border-blue-100 bg-blue-50 text-blue-700 dark:border-blue-900/30 dark:bg-blue-950/20 dark:text-blue-400'
+
+  return (
+    <span
+      className={`
+        hidden
+        items-center
+        gap-1.5
+        rounded-full
+        border
+        px-2.5
+        py-1.5
+        text-[9px]
+        font-bold
+        sm:inline-flex
+        ${wrapperClass}
+      `}
+    >
+      <span
+        className={`
+          size-1.5
+          rounded-full
+          ${dotClass}
+        `}
+      />
+
+      {text}
+    </span>
   )
 }
 
@@ -1809,21 +1631,11 @@ function EducationScreen({
         text="Bosh sahifa"
       />
 
-      <div>
-        <Eyebrow>
-          TA’LIM YO‘NALISHI
-        </Eyebrow>
-
-        <h1 className="mt-2 text-[29px] font-black tracking-tight">
-          Professional akademiya
-        </h1>
-
-        <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
-          Attestatsiya, menejerlik va
-          professional rivojlanish uchun
-          o‘zingizga mos yo‘nalishni tanlang.
-        </p>
-      </div>
+      <PageHeading
+        eyebrow="TA’LIM YO‘NALISHI"
+        title="Professional akademiya"
+        description="Attestatsiya, menejerlik va professional rivojlanish uchun o‘zingizga mos yo‘nalishni tanlang."
+      />
 
       <div className="grid gap-3 sm:grid-cols-2">
         <EducationCardNew
@@ -1840,7 +1652,7 @@ function EducationScreen({
         <EducationCardNew
           icon="🧸"
           title="MAKTABGACHA TA’LIM"
-          subtitle="MAKTABGACHA TA’LIM"
+          subtitle="MTT"
           description="Maktabgacha ta’lim rahbarlari va pedagoglari uchun professional tayyorgarlik."
           accent="gold"
           onClick={() =>
@@ -1849,48 +1661,11 @@ function EducationScreen({
         />
       </div>
 
-      <div
-        className="
-          rounded-[24px]
-          border
-          border-blue-100
-          bg-blue-50/60
-          p-5
-          dark:border-blue-900/20
-          dark:bg-blue-950/10
-        "
-      >
-        <div className="flex items-start gap-3">
-          <div
-            className="
-              flex
-              size-10
-              shrink-0
-              items-center
-              justify-center
-              rounded-xl
-              bg-white
-              text-lg
-              shadow-sm
-              dark:bg-card
-            "
-          >
-            🎯
-          </div>
-
-          <div>
-            <p className="text-sm font-black">
-              Professional yo‘l
-            </p>
-
-            <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
-              Yo‘nalish → Lavozim → Modul →
-              Mavzu → Daraja → Test →
-              Natija.
-            </p>
-          </div>
-        </div>
-      </div>
+      <InfoCard
+        icon="🎯"
+        title="Professional yo‘l"
+        text="Yo‘nalish → Lavozim → Modul → Mavzu → Daraja → Test → Natija."
+      />
     </section>
   )
 }
@@ -1907,7 +1682,9 @@ function RoleScreen({
   educationType:
     | EducationType
     | null
+
   onBack: () => void
+
   onSelect: (
     role: RoleId,
   ) => void
@@ -1925,7 +1702,6 @@ function RoleScreen({
             'Maktab rahbari uchun menejerlik va attestatsiya tayyorgarligi.',
           badge: 'RAHBAR',
         },
-
         {
           id: 'deputy' as RoleId,
           icon: '👨‍💼',
@@ -1935,7 +1711,6 @@ function RoleScreen({
             'O‘quv, tarbiyaviy va boshqaruv faoliyati bo‘yicha tayyorgarlik.',
           badge: 'RAHBAR',
         },
-
         {
           id: 'teacher' as RoleId,
           icon: '👨‍🏫',
@@ -1956,7 +1731,6 @@ function RoleScreen({
             'Maktabgacha ta’lim tashkiloti rahbari uchun menejerlik tayyorgarligi.',
           badge: 'RAHBAR',
         },
-
         {
           id: 'deputy' as RoleId,
           icon: '👩‍💼',
@@ -1966,7 +1740,6 @@ function RoleScreen({
             'Boshqaruv va ta’lim jarayonini tashkil etish bo‘yicha tayyorgarlik.',
           badge: 'RAHBAR',
         },
-
         {
           id: 'pedagogue' as RoleId,
           icon: '👩‍🏫',
@@ -1984,181 +1757,116 @@ function RoleScreen({
         text="Yo‘nalishlar"
       />
 
-      <div>
-        <Eyebrow>
-          {isSchool
+      <PageHeading
+        eyebrow={
+          isSchool
             ? 'MAKTAB'
-            : 'MAKTABGACHA TA’LIM'}
-        </Eyebrow>
-
-        <h1 className="mt-2 text-[29px] font-black tracking-tight">
-          Lavozimingizni tanlang
-        </h1>
-
-        <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          Sizga tegishli professional
-          tayyorgarlik yo‘nalishini tanlang.
-        </p>
-      </div>
+            : 'MAKTABGACHA TA’LIM'
+        }
+        title="Lavozimingizni tanlang"
+        description="Sizga tegishli professional tayyorgarlik yo‘nalishini tanlang."
+      />
 
       <div className="flex flex-col gap-3">
-        {roles.map(
-          (role) => (
-            <button
-              key={role.id}
-              type="button"
-              onClick={() =>
-                onSelect(
-                  role.id,
-                )
-              }
-              className="
-                group
-                relative
-                overflow-hidden
-                rounded-[25px]
-                border
-                bg-card
-                p-5
-                text-left
-                shadow-sm
-                transition-all
-                hover:-translate-y-0.5
-                hover:shadow-lg
-                active:scale-[0.99]
-              "
-            >
-              <div
-                className="
-                  pointer-events-none
-                  absolute
-                  -right-10
-                  -top-10
-                  size-32
-                  rounded-full
-                  bg-blue-500/5
-                  transition-transform
-                  group-hover:scale-125
-                "
-              />
-
-              <div className="relative flex items-center gap-4">
-                <div
-                  className="
-                    flex
-                    size-15
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-[19px]
-                    bg-gradient-to-br
-                    from-blue-50
-                    to-indigo-100
-                    text-[27px]
-                    dark:from-blue-950/30
-                    dark:to-indigo-950/20
-                  "
-                >
-                  {role.icon}
-                </div>
-
-                <div className="min-w-0 flex-1">
-                  <span
-                    className="
-                      inline-flex
-                      rounded-full
-                      bg-blue-50
-                      px-2
-                      py-1
-                      text-[8px]
-                      font-black
-                      uppercase
-                      tracking-[0.12em]
-                      text-blue-700
-                      dark:bg-blue-950/30
-                      dark:text-blue-400
-                    "
-                  >
-                    {role.badge}
-                  </span>
-
-                  <h2 className="mt-2 text-[16px] font-black">
-                    {role.title}
-                  </h2>
-
-                  <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
-                    {role.description}
-                  </p>
-                </div>
-
-                <span
-                  className="
-                    flex
-                    size-9
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-muted
-                    text-muted-foreground
-                    transition-all
-                    group-hover:translate-x-0.5
-                    group-hover:bg-blue-50
-                    group-hover:text-blue-700
-                  "
-                >
-                  →
-                </span>
-              </div>
-            </button>
-          ),
-        )}
-      </div>
-
-      <div
-        className="
-          relative
-          overflow-hidden
-          rounded-[24px]
-          border
-          border-blue-100
-          bg-blue-50/60
-          p-5
-          dark:border-blue-900/20
-          dark:bg-blue-950/10
-        "
-      >
-        <div className="flex items-start gap-3">
-          <div
+        {roles.map(role => (
+          <button
+            key={role.id}
+            type="button"
+            onClick={() =>
+              onSelect(
+                role.id,
+              )
+            }
             className="
-              flex
-              size-10
-              shrink-0
-              items-center
-              justify-center
-              rounded-xl
-              bg-white
-              text-lg
+              group
+              relative
+              overflow-hidden
+              rounded-[25px]
+              border
+              bg-card
+              p-5
+              text-left
               shadow-sm
-              dark:bg-card
+              transition-all
+              hover:-translate-y-0.5
+              hover:shadow-lg
+              active:scale-[0.99]
             "
           >
-            🎯
-          </div>
+            <div
+              className="
+                pointer-events-none
+                absolute
+                -right-10
+                -top-10
+                size-32
+                rounded-full
+                bg-blue-500/5
+                transition-transform
+                group-hover:scale-125
+              "
+            />
 
-          <div>
-            <p className="text-sm font-black">
-              Attestatsiyaga tayyorgarlik
-            </p>
+            <div className="relative flex items-center gap-4">
+              <div
+                className="
+                  flex
+                  size-15
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-[19px]
+                  bg-gradient-to-br
+                  from-blue-50
+                  to-indigo-100
+                  text-[27px]
+                  dark:from-blue-950/30
+                  dark:to-indigo-950/20
+                "
+              >
+                {role.icon}
+              </div>
 
-            <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
-              Har bir lavozim uchun testlar
-              tegishli kasbiy kompetensiyalar
-              asosida shakllantiriladi.
-            </p>
-          </div>
-        </div>
+              <div className="min-w-0 flex-1">
+                <span
+                  className="
+                    inline-flex
+                    rounded-full
+                    bg-blue-50
+                    px-2
+                    py-1
+                    text-[8px]
+                    font-black
+                    uppercase
+                    tracking-[0.12em]
+                    text-blue-700
+                    dark:bg-blue-950/30
+                    dark:text-blue-400
+                  "
+                >
+                  {role.badge}
+                </span>
+
+                <h2 className="mt-2 text-[16px] font-black">
+                  {role.title}
+                </h2>
+
+                <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
+                  {role.description}
+                </p>
+              </div>
+
+              <Arrow />
+            </div>
+          </button>
+        ))}
       </div>
+
+      <InfoCard
+        icon="🎯"
+        title="Attestatsiyaga tayyorgarlik"
+        text="Har bir lavozim uchun testlar tegishli kasbiy kompetensiyalar asosida shakllantiriladi."
+      />
     </section>
   )
 }
@@ -2198,22 +1906,18 @@ function SubjectScreen({
       icon: '👩‍🏫',
       title: 'Tarbiyachi',
     },
-
     {
       icon: '🎵',
       title: 'Musiqa rahbari',
     },
-
     {
       icon: '🗣️',
       title: 'Logoped',
     },
-
     {
       icon: '🧠',
       title: 'Psixolog',
     },
-
     {
       icon: '🏃',
       title:
@@ -2228,30 +1932,24 @@ function SubjectScreen({
         text="Lavozimlar"
       />
 
-      <div>
-        <Eyebrow>
-          {isSchool
+      <PageHeading
+        eyebrow={
+          isSchool
             ? 'FAN O‘QITUVCHILARI'
-            : 'PEDAGOGLAR'}
-        </Eyebrow>
-
-        <h1 className="mt-2 text-[29px] font-black tracking-tight">
-          {isSchool
+            : 'PEDAGOGLAR'
+        }
+        title={
+          isSchool
             ? 'Fanni tanlang'
-            : 'Pedagogik yo‘nalishni tanlang'}
-        </h1>
-
-        <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          Attestatsiya testlari fan yoki
-          pedagogik faoliyat yo‘nalishi
-          bo‘yicha tashkil etiladi.
-        </p>
-      </div>
+            : 'Pedagogik yo‘nalishni tanlang'
+        }
+        description="Attestatsiya testlari fan yoki pedagogik faoliyat yo‘nalishi bo‘yicha tashkil etiladi."
+      />
 
       {isSchool ? (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2">
           {subjects.map(
-            (subject) => {
+            subject => {
               const active =
                 selectedSubjectId ===
                 subject.id
@@ -2321,19 +2019,7 @@ function SubjectScreen({
                       </p>
                     </div>
 
-                    <span
-                      className="
-                        flex
-                        size-8
-                        items-center
-                        justify-center
-                        rounded-xl
-                        bg-muted
-                        text-muted-foreground
-                      "
-                    >
-                      →
-                    </span>
+                    <Arrow />
                   </div>
 
                   {active && (
@@ -2347,16 +2033,16 @@ function SubjectScreen({
                       "
                     >
                       <p className="text-[10px] font-black uppercase tracking-wider text-blue-700">
-                        Test bazasi
+                        FAN TANLANDI
                       </p>
 
                       <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
                         Ushbu fan uchun
-                        savollar bazasi
                         professional
-                        tayyorgarlikning
-                        keyingi bosqichida
-                        ulanadi.
+                        test bazasi
+                        keyingi
+                        bosqichlarda
+                        ishga tushiriladi.
                       </p>
                     </div>
                   )}
@@ -2368,7 +2054,7 @@ function SubjectScreen({
       ) : (
         <div className="flex flex-col gap-3">
           {preschoolRoles.map(
-            (item) => (
+            item => (
               <button
                 key={
                   item.title
@@ -2419,50 +2105,22 @@ function SubjectScreen({
                   </h2>
 
                   <p className="mt-1 text-[10px] text-muted-foreground">
-                    Attestatsiyaga
-                    tayyorgarlik
+                    Attestatsiyaga tayyorgarlik
                   </p>
                 </div>
 
-                <span
-                  className="
-                    flex
-                    size-8
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-muted
-                    text-muted-foreground
-                  "
-                >
-                  →
-                </span>
+                <Arrow />
               </button>
             ),
           )}
         </div>
       )}
 
-      <div
-        className="
-          rounded-[23px]
-          border
-          border-dashed
-          bg-muted/30
-          p-5
-        "
-      >
-        <p className="text-sm font-black">
-          🧠 Test tizimi
-        </p>
-
-        <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
-          Fan va pedagogik yo‘nalishlar
-          uchun alohida savollar bazasi:
-          Oson · O‘rta · Qiyin · Keys ·
-          Aralash.
-        </p>
-      </div>
+      <InfoCard
+        icon="🧠"
+        title="Test tizimi"
+        text="Fan va pedagogik yo‘nalishlar uchun alohida savollar bazasi: Oson · O‘rta · Qiyin · Keys · Aralash."
+      />
     </section>
   )
 }
@@ -2517,36 +2175,33 @@ function ModuleScreen({
         text="Lavozimlar"
       />
 
-      <div>
-        <Eyebrow>
-          {educationType ===
+      <PageHeading
+        eyebrow={
+          educationType ===
           'preschool'
             ? 'MAKTABGACHA TA’LIM'
-            : 'MENEJERLIK AKADEMIYASI'}
-        </Eyebrow>
-
-        <h1 className="mt-2 text-[29px] font-black tracking-tight">
-          Professional modullar
-        </h1>
-
-        <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          {roleTitle
+            : 'MENEJERLIK AKADEMIYASI'
+        }
+        title="Professional modullar"
+        description={
+          roleTitle
             ? `${roleTitle} uchun kompetensiyalar va attestatsiya tayyorgarligi.`
-            : 'Boshqaruv kompetensiyalari bo‘yicha tayyorgarlik.'}
-        </p>
-      </div>
+            : 'Boshqaruv kompetensiyalari bo‘yicha tayyorgarlik.'
+        }
+      />
 
       <div
         className="
           relative
           overflow-hidden
-          rounded-[25px]
+          rounded-[26px]
           bg-gradient-to-br
-          from-[#0b1f44]
-          to-[#1769aa]
-          p-5
+          from-[#081a3a]
+          via-[#0c3470]
+          to-[#1684c7]
+          p-6
           text-white
-          shadow-lg
+          shadow-xl
           shadow-blue-900/15
         "
       >
@@ -2554,52 +2209,68 @@ function ModuleScreen({
           className="
             pointer-events-none
             absolute
-            -right-10
-            -top-10
-            size-32
+            -right-12
+            -top-12
+            size-40
             rounded-full
             bg-white/5
           "
         />
 
-        <div className="relative flex items-center gap-4">
-          <div
-            className="
-              flex
-              size-14
-              shrink-0
-              items-center
-              justify-center
-              rounded-[18px]
-              bg-white/10
-              text-2xl
-            "
-          >
-            🚀
+        <div className="relative">
+          <div className="flex items-center gap-4">
+            <div
+              className="
+                flex
+                size-14
+                shrink-0
+                items-center
+                justify-center
+                rounded-[18px]
+                bg-white/10
+                text-2xl
+                ring-1
+                ring-white/10
+              "
+            >
+              🚀
+            </div>
+
+            <div>
+              <p className="text-[9px] font-black uppercase tracking-[0.18em] text-white/50">
+                PROFESSIONAL PREP
+              </p>
+
+              <h2 className="mt-1 text-lg font-black">
+                Tezkor aralash test
+              </h2>
+            </div>
           </div>
 
-          <div className="min-w-0 flex-1">
-            <p className="text-[9px] font-black uppercase tracking-[0.17em] text-white/60">
-              PROFESSIONAL PREP
-            </p>
+          <p className="mt-4 max-w-lg text-[11px] leading-5 text-white/70">
+            Modul ichidagi mavzulardan
+            tasodifiy savollar bilan
+            bilimlaringizni sinang.
+          </p>
 
-            <h2 className="mt-1 text-lg font-black">
-              Tezkor aralash test
-            </h2>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <DarkPill>
+              🟢 Oson
+            </DarkPill>
 
-            <p className="mt-1 text-[11px] leading-5 text-white/70">
-              Modul ichidagi mavzulardan
-              tasodifiy savollar bilan
-              bilimlaringizni sinang.
-            </p>
+            <DarkPill>
+              🟡 O‘rta
+            </DarkPill>
+
+            <DarkPill>
+              🔴 Qiyin
+            </DarkPill>
+
+            <DarkPill>
+              🔵 Keys
+            </DarkPill>
           </div>
         </div>
-
-        <p className="relative mt-4 text-[10px] text-white/60">
-          Har bir modul ostidagi
-          “Aralash test” orqali ishga
-          tushiriladi.
-        </p>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -2676,22 +2347,7 @@ function ModuleScreen({
                     )}
                 </div>
 
-                <span
-                  className="
-                    flex
-                    size-8
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-muted
-                    text-muted-foreground
-                    transition-transform
-                    group-hover:translate-x-0.5
-                  "
-                >
-                  →
-                </span>
+                <Arrow />
               </button>
 
               <button
@@ -2717,11 +2373,12 @@ function ModuleScreen({
                 "
               >
                 <span>
-                  🔀 Shu modul bo‘yicha
+                  🔀 Shu modul
+                  bo‘yicha
                   aralash test
                 </span>
 
-                <span className="text-blue-700">
+                <span className="font-black text-blue-700">
                   30 ta →
                 </span>
               </button>
@@ -2793,25 +2450,17 @@ function TopicScreen({
         text="Modullar"
       />
 
-      <div>
-        <Eyebrow>
-          MAVZULAR
-        </Eyebrow>
-
-        <h1 className="mt-2 text-[25px] font-black tracking-tight">
-          {module.title}
-        </h1>
-
-        {'description' in
-          module &&
-          module.description && (
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              {
-                module.description
-              }
-            </p>
-          )}
-      </div>
+      <PageHeading
+        eyebrow="MAVZULAR"
+        title={module.title}
+        description={
+          'description' in
+            module &&
+          module.description
+            ? module.description
+            : 'Ushbu modul bo‘yicha professional tayyorgarlik mavzulari.'
+        }
+      />
 
       <div className="flex flex-col gap-3">
         {topics.map(
@@ -2907,22 +2556,7 @@ function TopicScreen({
                 </div>
               </div>
 
-              <span
-                className="
-                  flex
-                  size-8
-                  shrink-0
-                  items-center
-                  justify-center
-                  rounded-xl
-                  bg-muted
-                  text-muted-foreground
-                  transition-transform
-                  group-hover:translate-x-0.5
-                "
-              >
-                →
-              </span>
+              <Arrow />
             </button>
           ),
         )}
@@ -2990,47 +2624,43 @@ function LevelScreen({
       icon: '🟢',
       title: 'Oson',
       description:
-        'Asosiy tushunchalar va bilimlar',
+        'Asosiy tushunchalar va bilimlar.',
       questions:
         topic.levels.easy.length,
     },
-
     {
       id: 'medium',
       icon: '🟡',
       title: 'O‘rta',
       description:
-        'Amaliy qo‘llash va vaziyatlar',
+        'Amaliy qo‘llash va vaziyatlar.',
       questions:
         topic.levels.medium.length,
     },
-
     {
       id: 'hard',
       icon: '🔴',
       title: 'Qiyin',
       description:
-        'Tahliliy va murakkab savollar',
+        'Tahliliy va murakkab savollar.',
       questions:
         topic.levels.hard.length,
     },
-
     {
       id: 'case',
       icon: '🔵',
       title: 'Keys',
       description:
-        'Real boshqaruv vaziyatlari',
+        'Real boshqaruv vaziyatlari.',
       questions:
         topic.levels.case.length,
     },
-
     {
       id: 'mixed',
       icon: '🟣',
       title: 'Aralash test',
       description:
-        'Oson, o‘rta, qiyin va keys savollaridan',
+        'Barcha darajadagi savollardan.',
       questions: 30,
     },
   ]
@@ -3042,24 +2672,15 @@ function LevelScreen({
         text="Mavzular"
       />
 
-      <div>
-        <Eyebrow>
-          TEST TURINI TANLANG
-        </Eyebrow>
-
-        <h1 className="mt-2 text-[25px] font-black tracking-tight">
-          {topic.title}
-        </h1>
-
-        <p className="mt-2 text-sm text-muted-foreground">
-          Attestatsiyaga tayyorgarlik
-          darajasini tanlang.
-        </p>
-      </div>
+      <PageHeading
+        eyebrow="TEST TURINI TANLANG"
+        title={topic.title}
+        description="Attestatsiyaga tayyorgarlik darajasini tanlang."
+      />
 
       <div className="flex flex-col gap-3">
         {levels.map(
-          (level) => (
+          level => (
             <button
               key={
                 level.id
@@ -3087,7 +2708,7 @@ function LevelScreen({
                 p-5
                 text-left
                 shadow-sm
-                transition
+                transition-all
                 hover:-translate-y-0.5
                 hover:shadow-lg
                 active:scale-[0.99]
@@ -3143,68 +2764,48 @@ function LevelScreen({
                 </p>
               </div>
 
-              <span
-                className="
-                  flex
-                  size-8
-                  shrink-0
-                  items-center
-                  justify-center
-                  rounded-xl
-                  bg-muted
-                  text-muted-foreground
-                "
-              >
-                →
-              </span>
+              <Arrow />
             </button>
           ),
         )}
       </div>
 
-      <div
-        className="
-          rounded-[23px]
-          border
-          border-purple-100
-          bg-purple-50/70
-          p-5
-          dark:border-purple-900/20
-          dark:bg-purple-950/10
-        "
-      >
-        <div className="flex items-start gap-3">
-          <div
-            className="
-              flex
-              size-10
-              shrink-0
-              items-center
-              justify-center
-              rounded-xl
-              bg-white
-              text-lg
-              shadow-sm
-              dark:bg-card
-            "
-          >
-            🧠
-          </div>
-
-          <div>
-            <h3 className="text-sm font-black">
-              Aralash test
-            </h3>
-
-            <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
-              Turli darajadagi savollar
-              aralashtirilib, har safar
-              yangi test shakllantiriladi.
-            </p>
-          </div>
-        </div>
-      </div>
+      <InfoCard
+        icon="🧠"
+        title="Aralash test"
+        text="Turli darajadagi savollar aralashtirilib, har safar yangi test shakllantiriladi."
+      />
     </section>
+  )
+}
+
+/* =========================================================
+   PAGE HEADING
+========================================================= */
+
+function PageHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string
+  title: string
+  description: string
+}) {
+  return (
+    <div>
+      <Eyebrow>
+        {eyebrow}
+      </Eyebrow>
+
+      <h1 className="mt-2 text-[29px] font-black tracking-tight">
+        {title}
+      </h1>
+
+      <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
+        {description}
+      </p>
+    </div>
   )
 }
 
@@ -3229,6 +2830,8 @@ function BackButton({
         w-fit
         items-center
         gap-1.5
+        rounded-lg
+        py-1
         text-[12px]
         font-bold
         text-muted-foreground
@@ -3238,6 +2841,7 @@ function BackButton({
     >
       <span
         className="
+          text-base
           transition-transform
           group-hover:-translate-x-0.5
         "
@@ -3275,6 +2879,33 @@ function Eyebrow({
 }
 
 /* =========================================================
+   ARROW
+========================================================= */
+
+function Arrow() {
+  return (
+    <span
+      className="
+        flex
+        size-9
+        shrink-0
+        items-center
+        justify-center
+        rounded-xl
+        bg-muted
+        text-muted-foreground
+        transition-all
+        group-hover:translate-x-0.5
+        group-hover:bg-blue-50
+        group-hover:text-blue-700
+      "
+    >
+      →
+    </span>
+  )
+}
+
+/* =========================================================
    MINI BADGE
 ========================================================= */
 
@@ -3298,6 +2929,91 @@ function MiniBadge({
     >
       {children}
     </span>
+  )
+}
+
+/* =========================================================
+   DARK PILL
+========================================================= */
+
+function DarkPill({
+  children,
+}: {
+  children: ReactNode
+}) {
+  return (
+    <span
+      className="
+        rounded-full
+        border
+        border-white/10
+        bg-white/10
+        px-3
+        py-1.5
+        text-[9px]
+        font-bold
+        text-white/80
+      "
+    >
+      {children}
+    </span>
+  )
+}
+
+/* =========================================================
+   INFO CARD
+========================================================= */
+
+function InfoCard({
+  icon,
+  title,
+  text,
+}: {
+  icon: string
+  title: string
+  text: string
+}) {
+  return (
+    <div
+      className="
+        rounded-[24px]
+        border
+        border-blue-100
+        bg-blue-50/60
+        p-5
+        dark:border-blue-900/20
+        dark:bg-blue-950/10
+      "
+    >
+      <div className="flex items-start gap-3">
+        <div
+          className="
+            flex
+            size-10
+            shrink-0
+            items-center
+            justify-center
+            rounded-xl
+            bg-white
+            text-lg
+            shadow-sm
+            dark:bg-card
+          "
+        >
+          {icon}
+        </div>
+
+        <div>
+          <p className="text-sm font-black">
+            {title}
+          </p>
+
+          <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
+            {text}
+          </p>
+        </div>
+      </div>
+    </div>
   )
 }
 
