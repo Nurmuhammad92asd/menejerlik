@@ -1408,13 +1408,13 @@ text: `Quyidagi bayonotlardan qaysilari samarali delegatsiya mantiqiga mos?
     moduleId: MODULE_ID,
     topicId: TOPIC_ID,
     difficulty: "hard",
-    text: "Quyidagi bayonotlardan qaysilari o‘sish tafakkuriga mos?
+ text: `Quyidagi bayonotlardan qaysilari o‘sish tafakkuriga mos?
 
 1. Xato — ma’lumot manbai.
 2. Muvaffaqiyatsizlik — o‘rganish imkoniyati.
 3. Qobiliyat o‘zgarmaydi.
 4. Muammo yangi strategiyani sinashga sabab bo‘lishi mumkin.
-5. Xatodan qochish eng xavfsiz rivojlanish yo‘lidir.",
+5. Xatodan qochish eng xavfsiz rivojlanish yo‘lidir.`,
     options: [
       "1, 2, 4",
       "1, 3, 5",
