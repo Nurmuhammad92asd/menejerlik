@@ -23,12 +23,18 @@
  *   ----------------
  *   100 ta savol
  *
+ * MAXSUS FANLAR:
+ *
+ *   📐 MATEMATIKA FANI
+ *        └── 🎓 Attestatsiya — Abdurahmonova ustoz uchun maxsus
+ *             └── 30 ta original attestatsiya-uslubidagi test
+ *
  * =========================================================
  * PROJECT:
  * Menejerlik by Nurmuhammad
  *
  * VERSION:
- * Quiz Data Core v4.0
+ * Quiz Data Core v5.0
  * ========================================================= */
 
 
@@ -71,6 +77,23 @@ import { M2T5_LEVELS } from './data/m2t5'
 import { M3T1_LEVELS } from './data/m3t1'
 import { M3T2_LEVELS } from './data/m3t2'
 import { M3T3_LEVELS } from './data/m3t3'
+
+
+/* =========================================================
+ * MATEMATIKA
+ *
+ * Maxsus fan testi.
+ *
+ * Matematika alohida module sifatida registryga ulanadi.
+ * Lekin testning o‘zi:
+ *
+ * 📐 MATEMATIKA FANI
+ *      └── 🎓 Attestatsiya — Abdurahmonova ustoz uchun maxsus
+ *
+ * ko‘rinishida chiqadi.
+ * ========================================================= */
+
+import { MATH_ATTESTATION_LEVELS } from './data/math-attestation'
 
 
 /* =========================================================
@@ -359,8 +382,6 @@ const MODULE_2: Category = {
 
 /* =========================================================
  * MODULE 3
- *
- * 3 TA TO‘LIQ MAVZU ULANGAN
  * ========================================================= */
 
 const MODULE_3: Category = {
@@ -375,10 +396,6 @@ const MODULE_3: Category = {
 
   topics: [
 
-    /* =====================================================
-     * M3T1
-     * ===================================================== */
-
     {
       id: 'm3t1',
 
@@ -391,11 +408,6 @@ const MODULE_3: Category = {
       levels: M3T1_LEVELS,
     },
 
-
-    /* =====================================================
-     * M3T2
-     * ===================================================== */
-
     {
       id: 'm3t2',
 
@@ -407,11 +419,6 @@ const MODULE_3: Category = {
 
       levels: M3T2_LEVELS,
     },
-
-
-    /* =====================================================
-     * M3T3
-     * ===================================================== */
 
     {
       id: 'm3t3',
@@ -822,20 +829,89 @@ const MODULE_10: Category = {
 
 
 /* =========================================================
- * ALL MODULES
+ * 📐 MATEMATIKA FANI
+ *
+ * MUHIM:
+ *
+ * Bu alohida "Abdurahmonova moduli" emas.
+ *
+ * Bu:
+ *
+ * 📐 MATEMATIKA FANI
+ *      ↓
+ * 🎓 Attestatsiya — Abdurahmonova ustoz uchun maxsus
+ *
+ * tarzida ishlaydi.
+ *
+ * Keyinchalik shu fan ichiga:
+ *
+ *   Algebra
+ *   Geometriya
+ *   Funksiyalar
+ *   Matematik mantiq
+ *   Attestatsiya
+ *   Olimpiada
+ *
+ * kabi boshqa mavzularni ham qo‘shish mumkin.
+ * ========================================================= */
+
+const MODULE_MATEMATIKA: Category = {
+
+  id: 'matematika',
+
+  title:
+    '📐 MATEMATIKA FANI',
+
+  description:
+    'Matematika fanidan algebra, geometriya, mantiq, matematik kompetensiyalar va attestatsiya-uslubidagi original testlar.',
+
+  topics: [
+
+    {
+      id: 'math-attestation',
+
+      title:
+        '🎓 Attestatsiya — Abdurahmonova ustoz uchun maxsus',
+
+      description:
+        '😂 Maxsus matematika challenge. Ustoz, 30/30 qilsangiz — attestatsiya sizdan qo‘rqsin! Original attestatsiya-uslubidagi 30 ta savol.',
+
+      levels:
+        MATH_ATTESTATION_LEVELS,
+    },
+
+  ],
+}
+
+
+/* =========================================================
+ * ALL MODULES / CATEGORIES
  * ========================================================= */
 
 export const CATEGORIES: Category[] = [
+
   MODULE_1,
+
   MODULE_2,
+
   MODULE_3,
+
   MODULE_4,
+
   MODULE_5,
+
   MODULE_6,
+
   MODULE_7,
+
   MODULE_8,
+
   MODULE_9,
+
   MODULE_10,
+
+  MODULE_MATEMATIKA,
+
 ]
 
 
@@ -861,7 +937,8 @@ function allTopicQuestions(
 ): Question[] {
 
   return LEVEL_KEYS.flatMap(
-    (level) => topic.levels[level] ?? [],
+    (level) =>
+      topic.levels[level] ?? [],
   )
 }
 
@@ -929,7 +1006,9 @@ export function getModuleTopics(
   moduleId: string,
 ): Topic[] {
 
-  return getModuleById(moduleId)?.topics ?? []
+  return getModuleById(
+    moduleId,
+  )?.topics ?? []
 }
 
 
@@ -1044,10 +1123,17 @@ export function getTopicLevelCounts(
   }
 
   return {
-    easy: topic.levels.easy.length,
-    medium: topic.levels.medium.length,
-    hard: topic.levels.hard.length,
-    case: topic.levels.case.length,
+    easy:
+      topic.levels.easy.length,
+
+    medium:
+      topic.levels.medium.length,
+
+    hard:
+      topic.levels.hard.length,
+
+    case:
+      topic.levels.case.length,
   }
 }
 
@@ -1060,7 +1146,9 @@ export function getTopicQuestionCount(
   topicId: string,
 ): number {
 
-  return getTopicQuestions(topicId).length
+  return getTopicQuestions(
+    topicId,
+  ).length
 }
 
 
@@ -1072,7 +1160,9 @@ export function getModuleTopicCount(
   moduleId: string,
 ): number {
 
-  return getModuleTopics(moduleId).length
+  return getModuleTopics(
+    moduleId,
+  ).length
 }
 
 
@@ -1084,7 +1174,9 @@ export function getModuleQuestionCount(
   moduleId: string,
 ): number {
 
-  return getModuleQuestions(moduleId).length
+  return getModuleQuestions(
+    moduleId,
+  ).length
 }
 
 
@@ -1096,7 +1188,11 @@ export function hasTopicQuestions(
   topicId: string,
 ): boolean {
 
-  return getTopicQuestionCount(topicId) > 0
+  return (
+    getTopicQuestionCount(
+      topicId,
+    ) > 0
+  )
 }
 
 
@@ -1109,10 +1205,12 @@ export function hasLevelQuestions(
   level: LevelKey,
 ): boolean {
 
-  return getLevelQuestions(
-    topicId,
-    level,
-  ).length > 0
+  return (
+    getLevelQuestions(
+      topicId,
+      level,
+    ).length > 0
+  )
 }
 
 
@@ -1125,13 +1223,22 @@ export function isTopicComplete(
 ): boolean {
 
   const counts =
-    getTopicLevelCounts(topicId)
+    getTopicLevelCounts(
+      topicId,
+    )
 
   return (
-    counts.easy >= REQUIRED_LEVEL_COUNTS.easy &&
-    counts.medium >= REQUIRED_LEVEL_COUNTS.medium &&
-    counts.hard >= REQUIRED_LEVEL_COUNTS.hard &&
-    counts.case >= REQUIRED_LEVEL_COUNTS.case
+    counts.easy >=
+      REQUIRED_LEVEL_COUNTS.easy &&
+
+    counts.medium >=
+      REQUIRED_LEVEL_COUNTS.medium &&
+
+    counts.hard >=
+      REQUIRED_LEVEL_COUNTS.hard &&
+
+    counts.case >=
+      REQUIRED_LEVEL_COUNTS.case
   )
 }
 
@@ -1145,7 +1252,9 @@ export function getTopicCompletionPercent(
 ): number {
 
   const counts =
-    getTopicLevelCounts(topicId)
+    getTopicLevelCounts(
+      topicId,
+    )
 
   const current =
     counts.easy +
@@ -1154,11 +1263,16 @@ export function getTopicCompletionPercent(
     counts.case
 
   const percentage =
-    (current / FULL_TOPIC_QUESTION_COUNT) * 100
+    (
+      current /
+      FULL_TOPIC_QUESTION_COUNT
+    ) * 100
 
   return Math.min(
     100,
-    Math.round(percentage),
+    Math.round(
+      percentage,
+    ),
   )
 }
 
@@ -1203,7 +1317,8 @@ export const TOTAL_MODULES =
 export const TOTAL_TOPICS =
   CATEGORIES.reduce(
     (total, module) =>
-      total + module.topics.length,
+      total +
+      module.topics.length,
     0,
   )
 
@@ -1219,7 +1334,9 @@ export const TOTAL_QUESTIONS =
       module.topics.reduce(
         (topicTotal, topic) =>
           topicTotal +
-          allTopicQuestions(topic).length,
+          allTopicQuestions(
+            topic,
+          ).length,
         0,
       ),
     0,
@@ -1308,16 +1425,12 @@ export const MIXED_ID =
 export const MIXED_COUNT =
   30
 
+
 /**
  * Barcha mavjud savollar.
  *
- * Bu pool.
- *
- * Testda 30 ta savol olish uchun:
- *
- * getRandomMixedQuestions()
- *
- * ishlatiladi.
+ * Matematika ham shu pool ichiga
+ * avtomatik qo‘shiladi.
  */
 export const MIXED_QUESTIONS: Question[] =
   allQuestions()
@@ -1342,7 +1455,8 @@ export function shuffleQuestions(
 
     const j =
       Math.floor(
-        Math.random() * (i + 1),
+        Math.random() *
+        (i + 1),
       )
 
     const temp =
@@ -1369,7 +1483,9 @@ export function getRandomQuestions(
 ): Question[] {
 
   if (
-    !Array.isArray(questions) ||
+    !Array.isArray(
+      questions,
+    ) ||
     questions.length === 0 ||
     count <= 0
   ) {
@@ -1418,7 +1534,9 @@ export function getRandomTopicQuestions(
 ): Question[] {
 
   return getRandomQuestions(
-    getTopicQuestions(topicId),
+    getTopicQuestions(
+      topicId,
+    ),
     count,
   )
 }
@@ -1442,10 +1560,7 @@ export function getRandomMixedQuestions(
 /* =========================================================
  * GET BALANCED MIXED QUESTIONS
  *
- * 30 savolni darajalar bo‘yicha imkon qadar
- * balansli tanlaydi.
- *
- * Default:
+ * 30 savol:
  *
  * easy   → 8
  * medium → 8
@@ -1539,7 +1654,6 @@ export type TopicHealth = {
   ready: boolean
 
   complete: boolean
-
 }
 
 
@@ -1564,7 +1678,6 @@ export type ModuleHealth = {
   complete: boolean
 
   topics: TopicHealth[]
-
 }
 
 
@@ -1615,10 +1728,17 @@ export function getDataHealth() {
                 total > 0
 
               const complete =
-                easy >= REQUIRED_LEVEL_COUNTS.easy &&
-                medium >= REQUIRED_LEVEL_COUNTS.medium &&
-                hard >= REQUIRED_LEVEL_COUNTS.hard &&
-                caseCount >= REQUIRED_LEVEL_COUNTS.case
+                easy >=
+                  REQUIRED_LEVEL_COUNTS.easy &&
+
+                medium >=
+                  REQUIRED_LEVEL_COUNTS.medium &&
+
+                hard >=
+                  REQUIRED_LEVEL_COUNTS.hard &&
+
+                caseCount >=
+                  REQUIRED_LEVEL_COUNTS.case
 
               return {
 
@@ -1651,7 +1771,8 @@ export function getDataHealth() {
         const questionCount =
           topics.reduce(
             (total, topic) =>
-              total + topic.total,
+              total +
+              topic.total,
             0,
           )
 
@@ -1666,7 +1787,8 @@ export function getDataHealth() {
 
         const complete =
           topics.length > 0 &&
-          completeTopics === topics.length
+          completeTopics ===
+            topics.length
 
         return {
 
@@ -1788,7 +1910,9 @@ export function getDuplicateQuestionIds(): string[] {
     counter.set(
       question.id,
       (
-        counter.get(question.id) ?? 0
+        counter.get(
+          question.id,
+        ) ?? 0
       ) + 1,
     )
   }
@@ -2003,19 +2127,49 @@ export function getQuizSystemStatus() {
     systemHealthy,
 
     module3Ready:
-      getModuleQuestionCount('m3') > 0,
+      getModuleQuestionCount(
+        'm3',
+      ) > 0,
 
     module3Complete:
-      getModuleHealth('m3')?.complete ?? false,
+      getModuleHealth(
+        'm3',
+      )?.complete ?? false,
 
     m3t1Complete:
-      isTopicComplete('m3t1'),
+      isTopicComplete(
+        'm3t1',
+      ),
 
     m3t2Complete:
-      isTopicComplete('m3t2'),
+      isTopicComplete(
+        'm3t2',
+      ),
 
     m3t3Complete:
-      isTopicComplete('m3t3'),
+      isTopicComplete(
+        'm3t3',
+      ),
+
+    /* =====================================================
+     * MATEMATIKA STATUS
+     * ===================================================== */
+
+    matematikaReady:
+      getModuleQuestionCount(
+        'matematika',
+      ) > 0,
+
+    matematikaQuestionCount:
+      getModuleQuestionCount(
+        'matematika',
+      ),
+
+    matematikaAttestationComplete:
+      isTopicComplete(
+        'math-attestation',
+      ),
+
   }
 }
 
@@ -2035,48 +2189,132 @@ export function getModule3Status() {
 
       m3t1: {
         questionCount:
-          getTopicQuestionCount('m3t1'),
+          getTopicQuestionCount(
+            'm3t1',
+          ),
 
         completion:
-          getTopicCompletionPercent('m3t1'),
+          getTopicCompletionPercent(
+            'm3t1',
+          ),
 
         complete:
-          isTopicComplete('m3t1'),
+          isTopicComplete(
+            'm3t1',
+          ),
       },
 
       m3t2: {
         questionCount:
-          getTopicQuestionCount('m3t2'),
+          getTopicQuestionCount(
+            'm3t2',
+          ),
 
         completion:
-          getTopicCompletionPercent('m3t2'),
+          getTopicCompletionPercent(
+            'm3t2',
+          ),
 
         complete:
-          isTopicComplete('m3t2'),
+          isTopicComplete(
+            'm3t2',
+          ),
       },
 
       m3t3: {
         questionCount:
-          getTopicQuestionCount('m3t3'),
+          getTopicQuestionCount(
+            'm3t3',
+          ),
 
         completion:
-          getTopicCompletionPercent('m3t3'),
+          getTopicCompletionPercent(
+            'm3t3',
+          ),
 
         complete:
-          isTopicComplete('m3t3'),
+          isTopicComplete(
+            'm3t3',
+          ),
       },
 
     },
 
     totalQuestions:
-      getModuleQuestionCount('m3'),
+      getModuleQuestionCount(
+        'm3',
+      ),
 
     complete:
       (
-        isTopicComplete('m3t1') &&
-        isTopicComplete('m3t2') &&
-        isTopicComplete('m3t3')
+        isTopicComplete(
+          'm3t1',
+        ) &&
+
+        isTopicComplete(
+          'm3t2',
+        ) &&
+
+        isTopicComplete(
+          'm3t3',
+        )
       ),
+  }
+}
+
+
+/* =========================================================
+ * GET MATEMATIKA STATUS
+ * ========================================================= */
+
+export function getMatematikaStatus() {
+
+  return {
+
+    moduleId:
+      'matematika',
+
+    title:
+      '📐 MATEMATIKA FANI',
+
+    topics: {
+
+      'math-attestation': {
+
+        questionCount:
+          getTopicQuestionCount(
+            'math-attestation',
+          ),
+
+        completion:
+          getTopicCompletionPercent(
+            'math-attestation',
+          ),
+
+        complete:
+          isTopicComplete(
+            'math-attestation',
+          ),
+
+      },
+
+    },
+
+    totalQuestions:
+      getModuleQuestionCount(
+        'matematika',
+      ),
+
+    ready:
+      getModuleQuestionCount(
+        'matematika',
+      ) > 0,
+
+    complete:
+      isTopicComplete(
+        'math-attestation',
+      ),
+
   }
 }
 
@@ -2111,6 +2349,7 @@ export function getQuizDataDiagnostics() {
           )
           .map(
             (topic) => ({
+
               moduleId:
                 module.id,
 
@@ -2137,6 +2376,7 @@ export function getQuizDataDiagnostics() {
 
               completion:
                 topic.completion,
+
             }),
           ),
     )
@@ -2166,7 +2406,6 @@ export function getQuizDataDiagnostics() {
       duplicateIds,
 
     invalidQuestions:
-
       invalidQuestions.map(
         (question) =>
           question.id,
