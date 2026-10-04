@@ -743,7 +743,6 @@ export const M3T3_LEVELS = {
 };
 
 export default M3T3_QUESTIONS;
-];
 
 export const M3T3_QUESTION_COUNT = M3T3_QUESTIONS.length;
 
