@@ -77,6 +77,7 @@ import { M2T5_LEVELS } from './data/m2t5'
 import { M3T1_LEVELS } from './data/m3t1'
 import { M3T2_LEVELS } from './data/m3t2'
 import { M3T3_LEVELS } from './data/m3t3'
+import { M4T1 } from './data/m4t1'
 
 
 /* =========================================================
@@ -461,7 +462,7 @@ const MODULE_4: Category = {
       description:
         'Kadrlarni rejalashtirish, rivojlantirish va samarali boshqarish.',
 
-      levels: EMPTY_LEVELS,
+      levels: M4T1,
     },
 
     {
