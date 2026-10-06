@@ -632,12 +632,11 @@ export const m4t3AnswerKey = [
   1, 0, 0, 3, 2,
 ] as const;
 
-
 /* =========================================================
  * MODULE OBJECT
  * ========================================================= */
 
-export const m4t3 = {
+export const M4T3 = {
   id: "m4t3",
   title: "Kadrlarga oid ish yuritish",
   description:
@@ -651,4 +650,4 @@ export const m4t3 = {
  * DEFAULT EXPORT
  * ========================================================= */
 
-export default m4t3;
+export default M4T3;
