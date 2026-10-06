@@ -14,19 +14,18 @@
  *         ├── hard
  *         └── case
  *
- * ASOSIY TOPIC:
+ * STANDARD TOPIC:
  *
  *   30 easy
  *   30 medium
  *   30 hard
  *   10 case
  *   ----------------
- *   100 ta savol
+ *   100 questions
  *
- * M4:
+ * LEGACY M4:
  *
  *   M4T1 / M4T2 / M4T3 / M4T4
- *   eski Module formatida bo‘lishi mumkin:
  *
  *   {
  *     id,
@@ -36,15 +35,8 @@
  *     answerKey
  *   }
  *
- *   Ushbu fayl ularni avtomatik ravishda
- *   TopicLevels formatiga moslashtiradi.
+ *   avtomatik TopicLevels formatiga o'tkaziladi.
  *
- * =========================================================
- * PROJECT:
- * Menejerlik by Nurmuhammad
- *
- * VERSION:
- * Quiz Data Core v6.0
  * ========================================================= */
 
 
@@ -83,14 +75,20 @@ import { M3T3_LEVELS } from './data/m3t3'
 /* =========================================================
  * MODULE 4
  *
- * M4T1 / M4T2 / M4T3 / M4T4
- * questions + answerKey formatida.
+ * MUHIM:
+ *
+ * M4 fayllari legacy formatda:
+ *
+ * export const m4t3 = {...}
+ * export default m4t3
+ *
+ * Shuning uchun DEFAULT IMPORT ishlatiladi.
  * ========================================================= */
 
-import { M4T1 } from './data/m4t1'
-import { M4T2 } from './data/m4t2'
-import { M4T3 } from './data/m4t3'
-import { M4T4 } from './data/m4t4'
+import m4t1 from './data/m4t1'
+import m4t2 from './data/m4t2'
+import m4t3 from './data/m4t3'
+import m4t4 from './data/m4t4'
 
 
 /* =========================================================
@@ -101,7 +99,7 @@ import { MATH_ATTESTATION_LEVELS } from './data/math-attestation'
 
 
 /* =========================================================
- * QUESTION TYPE
+ * QUESTION
  * ========================================================= */
 
 export type Question = {
@@ -114,7 +112,7 @@ export type Question = {
 
 
 /* =========================================================
- * TOPIC MATERIALS
+ * MATERIALS
  * ========================================================= */
 
 export type TopicMaterials = {
@@ -125,7 +123,7 @@ export type TopicMaterials = {
 
 
 /* =========================================================
- * LEVEL TYPE
+ * LEVEL
  * ========================================================= */
 
 export type LevelKey =
@@ -144,7 +142,7 @@ export const LEVEL_KEYS = [
 
 
 /* =========================================================
- * REQUIRED LEVEL COUNTS
+ * REQUIRED COUNTS
  * ========================================================= */
 
 export const REQUIRED_LEVEL_COUNTS: Record<
@@ -157,10 +155,6 @@ export const REQUIRED_LEVEL_COUNTS: Record<
   case: 10,
 }
 
-
-/* =========================================================
- * FULL TOPIC COUNT
- * ========================================================= */
 
 export const FULL_TOPIC_QUESTION_COUNT = 100
 
@@ -178,7 +172,7 @@ export type TopicLevels = {
 
 
 /* =========================================================
- * TOPIC TYPE
+ * TOPIC
  * ========================================================= */
 
 export type Topic = {
@@ -191,7 +185,7 @@ export type Topic = {
 
 
 /* =========================================================
- * CATEGORY / MODULE TYPE
+ * CATEGORY
  * ========================================================= */
 
 export type Category = {
@@ -215,18 +209,46 @@ export const EMPTY_LEVELS: TopicLevels = {
 
 
 /* =========================================================
- * LEVEL NORMALIZER
+ * SAFE LEVEL NORMALIZER
+ * ========================================================= */
+
+function normalizeLevels(
+  levels?: Partial<TopicLevels> | null,
+): TopicLevels {
+
+  return {
+    easy: Array.isArray(levels?.easy)
+      ? levels.easy
+      : [],
+
+    medium: Array.isArray(levels?.medium)
+      ? levels.medium
+      : [],
+
+    hard: Array.isArray(levels?.hard)
+      ? levels.hard
+      : [],
+
+    case: Array.isArray(levels?.case)
+      ? levels.case
+      : [],
+  }
+}
+
+
+/* =========================================================
+ * QUESTION NORMALIZER
  *
- * Har qanday savolni Question formatiga
- * xavfsiz tarzda o'tkazadi.
+ * Legacy va yangi savollarni yagona formatga keltiradi.
  * ========================================================= */
 
 function normalizeQuestion(
   raw: any,
   answerFromKey?: number,
+  index?: number,
 ): Question {
 
-  const answer =
+  const rawAnswer =
     typeof raw?.answer === 'number'
       ? raw.answer
       : typeof raw?.correctAnswer === 'number'
@@ -235,72 +257,75 @@ function normalizeQuestion(
           ? answerFromKey
           : 0
 
+  const id =
+    String(
+      raw?.id ??
+      `question-${(index ?? 0) + 1}`,
+    )
+
+  const text =
+    String(
+      raw?.text ??
+      raw?.question ??
+      raw?.title ??
+      '',
+    )
+
+  const options =
+    Array.isArray(raw?.options)
+      ? raw.options.map(
+          (item: unknown) =>
+            String(item),
+        )
+      : []
+
+  const explanation =
+    typeof raw?.explanation === 'string' &&
+    raw.explanation.trim().length > 0
+      ? raw.explanation
+      : 'Javob kalitiga muvofiq to‘g‘ri javob.'
+
   return {
-    id:
-      String(
-        raw?.id ??
-        '',
-      ),
-
-    text:
-      String(
-        raw?.text ??
-        raw?.question ??
-        '',
-      ),
-
-    options:
-      Array.isArray(
-        raw?.options,
-      )
-        ? raw.options.map(
-            (item: unknown) =>
-              String(item),
-          )
-        : [],
-
-    answer,
-
-    explanation:
-      String(
-        raw?.explanation ??
-        '',
-      ),
+    id,
+    text,
+    options,
+    answer: rawAnswer,
+    explanation,
   }
 }
 
 
 /* =========================================================
  * LEGACY MODULE TYPE
- *
- * M4T1-M4T4 kabi fayllar uchun.
  * ========================================================= */
 
 type LegacyModule = {
-
   id: string
-
   title: string
-
   description: string
-
   questions: readonly any[]
-
   answerKey: readonly number[]
 }
 
 
 /* =========================================================
- * LEGACY MODULE → TOPIC LEVELS
+ * LEGACY M4 → TOPIC LEVELS
  *
- * M4 savollari:
+ * 45 savollik M4 format:
  *
- * 1–30  → easy
- * 31–40 → case
- * 41–45 → hard
+ * 1–30   → easy
+ * 31–40  → case
+ * 41–45  → hard
  *
- * Keyinchalik 100 tagacha to‘ldirilsa,
- * shu adapter orqali ishlaydi.
+ * 100 savollik format:
+ *
+ * 1–30   → easy
+ * 31–60  → medium
+ * 61–90  → hard
+ * 91–100 → case
+ *
+ * Boshqa miqdorda bo‘lsa:
+ * barcha savollar easy sifatida saqlanadi.
  * ========================================================= */
 
 function legacyModuleToLevels(
@@ -308,53 +333,108 @@ function legacyModuleToLevels(
 ): TopicLevels {
 
   const questions =
-    Array.isArray(
-      module.questions,
-    )
+    Array.isArray(module?.questions)
       ? module.questions
       : []
 
   const answerKey =
-    Array.isArray(
-      module.answerKey,
-    )
+    Array.isArray(module?.answerKey)
       ? module.answerKey
       : []
 
-  const normalized =
+  const normalized: Question[] =
     questions.map(
-      (
-        question,
-        index,
-      ) =>
+      (question, index) =>
         normalizeQuestion(
           question,
           answerKey[index],
+          index,
         ),
     )
 
 
-  return {
+  /* -----------------------------------------
+   * 100 QUESTIONS
+   * ----------------------------------------- */
 
+  if (normalized.length >= 100) {
+
+    return {
+      easy:
+        normalized.slice(
+          0,
+          30,
+        ),
+
+      medium:
+        normalized.slice(
+          30,
+          60,
+        ),
+
+      hard:
+        normalized.slice(
+          60,
+          90,
+        ),
+
+      case:
+        normalized.slice(
+          90,
+          100,
+        ),
+    }
+  }
+
+
+  /* -----------------------------------------
+   * 45 QUESTIONS — CURRENT M4 FORMAT
+   * ----------------------------------------- */
+
+  if (normalized.length >= 45) {
+
+    return {
+      easy:
+        normalized.slice(
+          0,
+          30,
+        ),
+
+      medium:
+        [],
+
+      hard:
+        normalized.slice(
+          40,
+        ),
+
+      case:
+        normalized.slice(
+          30,
+          40,
+        ),
+    }
+  }
+
+
+  /* -----------------------------------------
+   * OTHER FORMAT
+   *
+   * Testlar yo‘qolib ketmasin.
+   * ----------------------------------------- */
+
+  return {
     easy:
-      normalized.slice(
-        0,
-        30,
-      ),
+      normalized,
 
     medium:
       [],
 
     hard:
-      normalized.slice(
-        40,
-      ),
+      [],
 
     case:
-      normalized.slice(
-        30,
-        40,
-      ),
+      [],
   }
 }
 
@@ -363,24 +443,27 @@ function legacyModuleToLevels(
  * MODULE 4 LEVELS
  * ========================================================= */
 
-const M4T1_LEVELS =
+const M4T1_LEVELS: TopicLevels =
   legacyModuleToLevels(
-    M4T1 as unknown as LegacyModule,
+    m4t1 as unknown as LegacyModule,
   )
 
-const M4T2_LEVELS =
+
+const M4T2_LEVELS: TopicLevels =
   legacyModuleToLevels(
-    M4T2 as unknown as LegacyModule,
+    m4t2 as unknown as LegacyModule,
   )
 
-const M4T3_LEVELS =
+
+const M4T3_LEVELS: TopicLevels =
   legacyModuleToLevels(
-    M4T3 as unknown as LegacyModule,
+    m4t3 as unknown as LegacyModule,
   )
 
-const M4T4_LEVELS =
+
+const M4T4_LEVELS: TopicLevels =
   legacyModuleToLevels(
-    M4T4 as unknown as LegacyModule,
+    m4t4 as unknown as LegacyModule,
   )
 
 
@@ -410,7 +493,7 @@ const MODULE_1: Category = {
         'Umumiy o‘rta ta’lim muassasasini boshqarish, boshqaruv tamoyillari, attestatsiya, akkreditatsiya va TALIS.',
 
       levels:
-        M1T1_LEVELS,
+        normalizeLevels(M1T1_LEVELS),
     },
 
     {
@@ -423,7 +506,7 @@ const MODULE_1: Category = {
         'Strategik menejment, strategik rejalashtirish, maqsadlar va ta’lim muassasasini rivojlantirish.',
 
       levels:
-        M1T2_LEVELS,
+        normalizeLevels(M1T2_LEVELS),
     },
 
     {
@@ -436,7 +519,7 @@ const MODULE_1: Category = {
         'Rahbarning emotsional intellekti, muloqot madaniyati, temperament, stressni boshqarish, nizolarni hal qilish va jamoani samarali boshqarish psixologiyasi.',
 
       levels:
-        M1T3_LEVELS,
+        normalizeLevels(M1T3_LEVELS),
     },
 
     {
@@ -449,7 +532,7 @@ const MODULE_1: Category = {
         'Ta’lim muassasasida korrupsiyaviy xavflarni aniqlash, baholash va oldini olish mexanizmlari.',
 
       levels:
-        M1T4_LEVELS,
+        normalizeLevels(M1T4_LEVELS),
     },
 
     {
@@ -462,7 +545,7 @@ const MODULE_1: Category = {
         'Boshqaruv qarorlarini qabul qilish, amalga oshirish, nazorat qilish, baholash va tuzatishlar kiritish.',
 
       levels:
-        M1T5_LEVELS,
+        normalizeLevels(M1T5_LEVELS),
     },
 
     {
@@ -475,7 +558,7 @@ const MODULE_1: Category = {
         'Maktab imiji, ichki va tashqi imij, PR faoliyati, raqamli imij, axborot siyosati va jamoatchilik bilan aloqalarni samarali boshqarish.',
 
       levels:
-        M1T6_LEVELS,
+        normalizeLevels(M1T6_LEVELS),
     },
 
   ],
@@ -508,7 +591,7 @@ const MODULE_2: Category = {
         'Ta’lim sifatini tizimli boshqarish, DTS va DTT, ichki monitoring, baholash va ta’lim sifatini uzluksiz takomillashtirish.',
 
       levels:
-        M2T1_LEVELS,
+        normalizeLevels(M2T1_LEVELS),
     },
 
     {
@@ -521,7 +604,7 @@ const MODULE_2: Category = {
         'O‘quvchilarning ta’limiy natijalarini tahlil qilish, individual yondashuv, rivojlanish dinamikasi va natijalarni yaxshilash.',
 
       levels:
-        M2T2_LEVELS,
+        normalizeLevels(M2T2_LEVELS),
     },
 
     {
@@ -534,7 +617,7 @@ const MODULE_2: Category = {
         'O‘quvchilarning qiziqishi, qobiliyati va mehnat bozori talablari asosida ongli kasbiy tanlovini shakllantirish.',
 
       levels:
-        M2T3_LEVELS,
+        normalizeLevels(M2T3_LEVELS),
     },
 
     {
@@ -547,7 +630,7 @@ const MODULE_2: Category = {
         'Ta’lim natijalarini baholash, monitoring qilish va baholash ma’lumotlaridan boshqaruv qarorlarida foydalanish.',
 
       levels:
-        M2T4_LEVELS,
+        normalizeLevels(M2T4_LEVELS),
     },
 
     {
@@ -560,7 +643,7 @@ const MODULE_2: Category = {
         'Maktab muhitida o‘quvchilarning xavfsizligi, himoyasi, psixologik farovonligi va rivojlanishi uchun qulay sharoit yaratish.',
 
       levels:
-        M2T5_LEVELS,
+        normalizeLevels(M2T5_LEVELS),
     },
 
   ],
@@ -593,7 +676,7 @@ const MODULE_3: Category = {
         'Zamonaviy rahbar uchun zarur bo‘lgan boshqaruv kompetensiyalari, liderlik, strategik fikrlash, kommunikatsiya, qaror qabul qilish va kasbiy rivojlanish.',
 
       levels:
-        M3T1_LEVELS,
+        normalizeLevels(M3T1_LEVELS),
     },
 
     {
@@ -606,7 +689,7 @@ const MODULE_3: Category = {
         'Rahbarning shaxsiy samaradorligi, ma’naviy qiyofasi, axloqiy yetakchiligi, foresight, refleksiya, empatiya, vaqt va ustuvorliklarni boshqarish hamda o‘zini uzluksiz rivojlantirish.',
 
       levels:
-        M3T2_LEVELS,
+        normalizeLevels(M3T2_LEVELS),
     },
 
     {
@@ -619,7 +702,7 @@ const MODULE_3: Category = {
         'Pedagoglarning kasbiy rivojlanishi, kompetensiyalarini oshirish, faoliyat samaradorligini baholash, individual rivojlanish, mentorlik, metodik hamkorlik va maktabning pedagogik salohiyatini kuchaytirish.',
 
       levels:
-        M3T3_LEVELS,
+        normalizeLevels(M3T3_LEVELS),
     },
 
   ],
@@ -1065,7 +1148,9 @@ const MODULE_MATEMATIKA: Category = {
         '😂 Maxsus matematika challenge. Ustoz, 30/30 qilsangiz — attestatsiya sizdan qo‘rqsin! Original attestatsiya-uslubidagi 30 ta savol.',
 
       levels:
-        MATH_ATTESTATION_LEVELS,
+        normalizeLevels(
+          MATH_ATTESTATION_LEVELS,
+        ),
     },
 
   ],
@@ -1073,7 +1158,7 @@ const MODULE_MATEMATIKA: Category = {
 
 
 /* =========================================================
- * ALL MODULES
+ * ALL CATEGORIES
  * ========================================================= */
 
 export const CATEGORIES: Category[] = [
@@ -1101,7 +1186,7 @@ export const PRESCHOOL_CATEGORIES: Category[] = []
 
 
 /* =========================================================
- * INTERNAL HELPERS
+ * INTERNAL
  * ========================================================= */
 
 function allTopicQuestions(
@@ -1110,7 +1195,9 @@ function allTopicQuestions(
 
   return LEVEL_KEYS.flatMap(
     (level) =>
-      topic.levels[level] ?? [],
+      Array.isArray(topic.levels[level])
+        ? topic.levels[level]
+        : [],
   )
 }
 
@@ -1128,7 +1215,7 @@ function allQuestions(): Question[] {
 
 
 /* =========================================================
- * GET MODULE BY ID
+ * GET MODULE
  * ========================================================= */
 
 export function getModuleById(
@@ -1143,14 +1230,17 @@ export function getModuleById(
 
 
 /* =========================================================
- * GET TOPIC BY ID
+ * GET TOPIC
  * ========================================================= */
 
 export function getTopicById(
   topicId: string,
 ): Topic | undefined {
 
-  for (const module of CATEGORIES) {
+  for (
+    const module
+    of CATEGORIES
+  ) {
 
     const topic =
       module.topics.find(
@@ -1175,9 +1265,10 @@ export function getModuleTopics(
   moduleId: string,
 ): Topic[] {
 
-  return getModuleById(
-    moduleId,
-  )?.topics ?? []
+  return (
+    getModuleById(moduleId)
+      ?.topics ?? []
+  )
 }
 
 
@@ -1216,7 +1307,11 @@ export function getLevelQuestions(
     return []
   }
 
-  return topic.levels[level] ?? []
+  return Array.isArray(
+    topic.levels[level],
+  )
+    ? topic.levels[level]
+    : []
 }
 
 
@@ -1243,16 +1338,22 @@ export function getModuleQuestions(
 
 
 /* =========================================================
- * GET QUESTION BY ID
+ * GET QUESTION
  * ========================================================= */
 
 export function getQuestionById(
   questionId: string,
 ): Question | undefined {
 
-  for (const module of CATEGORIES) {
+  for (
+    const module
+    of CATEGORIES
+  ) {
 
-    for (const topic of module.topics) {
+    for (
+      const topic
+      of module.topics
+    ) {
 
       const question =
         allTopicQuestions(topic).find(
@@ -1271,7 +1372,7 @@ export function getQuestionById(
 
 
 /* =========================================================
- * GET TOPIC LEVEL COUNTS
+ * TOPIC LEVEL COUNTS
  * ========================================================= */
 
 export function getTopicLevelCounts(
@@ -1308,7 +1409,7 @@ export function getTopicLevelCounts(
 
 
 /* =========================================================
- * GET TOPIC QUESTION COUNT
+ * TOPIC COUNT
  * ========================================================= */
 
 export function getTopicQuestionCount(
@@ -1322,7 +1423,7 @@ export function getTopicQuestionCount(
 
 
 /* =========================================================
- * GET MODULE TOPIC COUNT
+ * MODULE TOPIC COUNT
  * ========================================================= */
 
 export function getModuleTopicCount(
@@ -1336,7 +1437,7 @@ export function getModuleTopicCount(
 
 
 /* =========================================================
- * GET MODULE QUESTION COUNT
+ * MODULE QUESTION COUNT
  * ========================================================= */
 
 export function getModuleQuestionCount(
@@ -1350,7 +1451,7 @@ export function getModuleQuestionCount(
 
 
 /* =========================================================
- * CHECK TOPIC QUESTIONS
+ * HAS TOPIC
  * ========================================================= */
 
 export function hasTopicQuestions(
@@ -1366,7 +1467,7 @@ export function hasTopicQuestions(
 
 
 /* =========================================================
- * CHECK LEVEL QUESTIONS
+ * HAS LEVEL
  * ========================================================= */
 
 export function hasLevelQuestions(
@@ -1384,7 +1485,7 @@ export function hasLevelQuestions(
 
 
 /* =========================================================
- * CHECK TOPIC COMPLETENESS
+ * TOPIC COMPLETE
  * ========================================================= */
 
 export function isTopicComplete(
@@ -1397,23 +1498,16 @@ export function isTopicComplete(
     )
 
   return (
-    counts.easy >=
-      REQUIRED_LEVEL_COUNTS.easy &&
-
-    counts.medium >=
-      REQUIRED_LEVEL_COUNTS.medium &&
-
-    counts.hard >=
-      REQUIRED_LEVEL_COUNTS.hard &&
-
-    counts.case >=
-      REQUIRED_LEVEL_COUNTS.case
+    counts.easy >= 30 &&
+    counts.medium >= 30 &&
+    counts.hard >= 30 &&
+    counts.case >= 10
   )
 }
 
 
 /* =========================================================
- * GET TOPIC COMPLETION PERCENTAGE
+ * TOPIC COMPLETION
  * ========================================================= */
 
 export function getTopicCompletionPercent(
@@ -1431,23 +1525,24 @@ export function getTopicCompletionPercent(
     counts.hard +
     counts.case
 
-  const percentage =
-    (
-      current /
-      FULL_TOPIC_QUESTION_COUNT
-    ) * 100
+  if (current <= 0) {
+    return 0
+  }
 
   return Math.min(
     100,
     Math.round(
-      percentage,
+      (
+        current /
+        FULL_TOPIC_QUESTION_COUNT
+      ) * 100,
     ),
   )
 }
 
 
 /* =========================================================
- * MODULE IDS
+ * IDS
  * ========================================================= */
 
 export const MODULE_IDS: string[] =
@@ -1456,10 +1551,6 @@ export const MODULE_IDS: string[] =
       module.id,
   )
 
-
-/* =========================================================
- * TOPIC IDS
- * ========================================================= */
 
 export const TOPIC_IDS: string[] =
   CATEGORIES.flatMap(
@@ -1472,16 +1563,12 @@ export const TOPIC_IDS: string[] =
 
 
 /* =========================================================
- * TOTAL MODULES
+ * TOTALS
  * ========================================================= */
 
 export const TOTAL_MODULES =
   CATEGORIES.length
 
-
-/* =========================================================
- * TOTAL TOPICS
- * ========================================================= */
 
 export const TOTAL_TOPICS =
   CATEGORIES.reduce(
@@ -1492,29 +1579,9 @@ export const TOTAL_TOPICS =
   )
 
 
-/* =========================================================
- * TOTAL QUESTIONS
- * ========================================================= */
-
 export const TOTAL_QUESTIONS =
-  CATEGORIES.reduce(
-    (total, module) =>
-      total +
-      module.topics.reduce(
-        (topicTotal, topic) =>
-          topicTotal +
-          allTopicQuestions(
-            topic,
-          ).length,
-        0,
-      ),
-    0,
-  )
+  allQuestions().length
 
-
-/* =========================================================
- * TOTAL EASY QUESTIONS
- * ========================================================= */
 
 export const TOTAL_EASY_QUESTIONS =
   CATEGORIES.reduce(
@@ -1530,10 +1597,6 @@ export const TOTAL_EASY_QUESTIONS =
   )
 
 
-/* =========================================================
- * TOTAL MEDIUM QUESTIONS
- * ========================================================= */
-
 export const TOTAL_MEDIUM_QUESTIONS =
   CATEGORIES.reduce(
     (total, module) =>
@@ -1548,10 +1611,6 @@ export const TOTAL_MEDIUM_QUESTIONS =
   )
 
 
-/* =========================================================
- * TOTAL HARD QUESTIONS
- * ========================================================= */
-
 export const TOTAL_HARD_QUESTIONS =
   CATEGORIES.reduce(
     (total, module) =>
@@ -1565,10 +1624,6 @@ export const TOTAL_HARD_QUESTIONS =
     0,
   )
 
-
-/* =========================================================
- * TOTAL CASE QUESTIONS
- * ========================================================= */
 
 export const TOTAL_CASE_QUESTIONS =
   CATEGORIES.reduce(
@@ -1585,11 +1640,12 @@ export const TOTAL_CASE_QUESTIONS =
 
 
 /* =========================================================
- * MIXED TEST
+ * MIXED
  * ========================================================= */
 
 export const MIXED_ID =
   'aralash'
+
 
 export const MIXED_COUNT =
   30
@@ -1637,7 +1693,7 @@ export function shuffleQuestions(
 
 
 /* =========================================================
- * GET RANDOM QUESTIONS
+ * RANDOM
  * ========================================================= */
 
 export function getRandomQuestions(
@@ -1646,9 +1702,7 @@ export function getRandomQuestions(
 ): Question[] {
 
   if (
-    !Array.isArray(
-      questions,
-    ) ||
+    !Array.isArray(questions) ||
     questions.length === 0 ||
     count <= 0
   ) {
@@ -1668,7 +1722,7 @@ export function getRandomQuestions(
 
 
 /* =========================================================
- * GET RANDOM LEVEL QUESTIONS
+ * RANDOM LEVEL
  * ========================================================= */
 
 export function getRandomLevelQuestions(
@@ -1688,7 +1742,7 @@ export function getRandomLevelQuestions(
 
 
 /* =========================================================
- * GET RANDOM TOPIC QUESTIONS
+ * RANDOM TOPIC
  * ========================================================= */
 
 export function getRandomTopicQuestions(
@@ -1706,7 +1760,7 @@ export function getRandomTopicQuestions(
 
 
 /* =========================================================
- * GET RANDOM MIXED QUESTIONS
+ * RANDOM MIXED
  * ========================================================= */
 
 export function getRandomMixedQuestions(
@@ -1721,7 +1775,7 @@ export function getRandomMixedQuestions(
 
 
 /* =========================================================
- * GET BALANCED MIXED QUESTIONS
+ * BALANCED MIXED
  * ========================================================= */
 
 export function getBalancedMixedQuestions(): Question[] {
@@ -1738,6 +1792,7 @@ export function getBalancedMixedQuestions(): Question[] {
       8,
     )
 
+
   const medium =
     getRandomQuestions(
       CATEGORIES.flatMap(
@@ -1749,6 +1804,7 @@ export function getBalancedMixedQuestions(): Question[] {
       ),
       8,
     )
+
 
   const hard =
     getRandomQuestions(
@@ -1762,6 +1818,7 @@ export function getBalancedMixedQuestions(): Question[] {
       8,
     )
 
+
   const cases =
     getRandomQuestions(
       CATEGORIES.flatMap(
@@ -1773,6 +1830,7 @@ export function getBalancedMixedQuestions(): Question[] {
       ),
       6,
     )
+
 
   return shuffleQuestions([
     ...easy,
@@ -1836,7 +1894,7 @@ export type ModuleHealth = {
 
 
 /* =========================================================
- * GET DATA HEALTH
+ * DATA HEALTH
  * ========================================================= */
 
 export function getDataHealth() {
@@ -1882,17 +1940,10 @@ export function getDataHealth() {
                 total > 0
 
               const complete =
-                easy >=
-                  REQUIRED_LEVEL_COUNTS.easy &&
-
-                medium >=
-                  REQUIRED_LEVEL_COUNTS.medium &&
-
-                hard >=
-                  REQUIRED_LEVEL_COUNTS.hard &&
-
-                caseCount >=
-                  REQUIRED_LEVEL_COUNTS.case
+                easy >= 30 &&
+                medium >= 30 &&
+                hard >= 30 &&
+                caseCount >= 10
 
               return {
 
@@ -1922,6 +1973,7 @@ export function getDataHealth() {
             },
           )
 
+
         const questionCount =
           topics.reduce(
             (total, topic) =>
@@ -1930,19 +1982,13 @@ export function getDataHealth() {
             0,
           )
 
+
         const completeTopics =
           topics.filter(
             (topic) =>
               topic.complete,
           ).length
 
-        const ready =
-          questionCount > 0
-
-        const complete =
-          topics.length > 0 &&
-          completeTopics ===
-            topics.length
 
         return {
 
@@ -1959,14 +2005,19 @@ export function getDataHealth() {
 
           completeTopics,
 
-          ready,
+          ready:
+            questionCount > 0,
 
-          complete,
+          complete:
+            topics.length > 0 &&
+            completeTopics ===
+              topics.length,
 
           topics,
         }
       },
     )
+
 
   return {
 
@@ -1997,7 +2048,7 @@ export function getDataHealth() {
 
 
 /* =========================================================
- * GET MODULE HEALTH
+ * MODULE HEALTH
  * ========================================================= */
 
 export function getModuleHealth(
@@ -2014,7 +2065,7 @@ export function getModuleHealth(
 
 
 /* =========================================================
- * GET TOPIC HEALTH
+ * TOPIC HEALTH
  * ========================================================= */
 
 export function getTopicHealth(
@@ -2045,20 +2096,17 @@ export function getTopicHealth(
 
 
 /* =========================================================
- * DUPLICATE QUESTION ID CHECK
+ * DUPLICATE IDS
  * ========================================================= */
 
 export function getDuplicateQuestionIds(): string[] {
-
-  const questions =
-    allQuestions()
 
   const counter =
     new Map<string, number>()
 
   for (
     const question
-    of questions
+    of allQuestions()
   ) {
 
     counter.set(
@@ -2086,15 +2134,18 @@ export function getDuplicateQuestionIds(): string[] {
 
 
 /* =========================================================
- * QUESTION VALIDATION
+ * VALIDATE QUESTION
  * ========================================================= */
 
 export function validateQuestion(
   question: Question,
 ): boolean {
 
+  if (!question) {
+    return false
+  }
+
   if (
-    !question ||
     typeof question.id !== 'string' ||
     typeof question.text !== 'string' ||
     typeof question.explanation !== 'string'
@@ -2170,7 +2221,7 @@ export function getInvalidQuestions(): Question[] {
 
 
 /* =========================================================
- * GET TOPIC INVALID QUESTIONS
+ * TOPIC INVALID QUESTIONS
  * ========================================================= */
 
 export function getTopicInvalidQuestions(
@@ -2189,7 +2240,7 @@ export function getTopicInvalidQuestions(
 
 
 /* =========================================================
- * GET ALL QUESTION IDS
+ * ALL QUESTION IDS
  * ========================================================= */
 
 export function getAllQuestionIds(): string[] {
@@ -2202,7 +2253,7 @@ export function getAllQuestionIds(): string[] {
 
 
 /* =========================================================
- * GLOBAL DATA STATUS
+ * QUIZ SYSTEM STATUS
  * ========================================================= */
 
 export function getQuizSystemStatus() {
@@ -2224,6 +2275,7 @@ export function getQuizSystemStatus() {
       0,
     )
 
+
   const readyTopics =
     health.modules.reduce(
       (total, module) =>
@@ -2235,13 +2287,16 @@ export function getQuizSystemStatus() {
       0,
     )
 
+
   const totalExpectedForCompleteTopics =
     completeTopics *
     FULL_TOPIC_QUESTION_COUNT
 
+
   const systemHealthy =
     duplicateIds.length === 0 &&
     invalidQuestions.length === 0
+
 
   return {
 
@@ -2359,10 +2414,16 @@ export function getQuizSystemStatus() {
 
 
 /* =========================================================
- * GET MODULE 3 STATUS
+ * MODULE 3 STATUS
  * ========================================================= */
 
 export function getModule3Status() {
+
+  const topics = [
+    'm3t1',
+    'm3t2',
+    'm3t3',
+  ] as const
 
   return {
 
@@ -2373,82 +2434,52 @@ export function getModule3Status() {
 
       m3t1: {
         questionCount:
-          getTopicQuestionCount(
-            'm3t1',
-          ),
+          getTopicQuestionCount('m3t1'),
 
         completion:
-          getTopicCompletionPercent(
-            'm3t1',
-          ),
+          getTopicCompletionPercent('m3t1'),
 
         complete:
-          isTopicComplete(
-            'm3t1',
-          ),
+          isTopicComplete('m3t1'),
       },
 
       m3t2: {
         questionCount:
-          getTopicQuestionCount(
-            'm3t2',
-          ),
+          getTopicQuestionCount('m3t2'),
 
         completion:
-          getTopicCompletionPercent(
-            'm3t2',
-          ),
+          getTopicCompletionPercent('m3t2'),
 
         complete:
-          isTopicComplete(
-            'm3t2',
-          ),
+          isTopicComplete('m3t2'),
       },
 
       m3t3: {
         questionCount:
-          getTopicQuestionCount(
-            'm3t3',
-          ),
+          getTopicQuestionCount('m3t3'),
 
         completion:
-          getTopicCompletionPercent(
-            'm3t3',
-          ),
+          getTopicCompletionPercent('m3t3'),
 
         complete:
-          isTopicComplete(
-            'm3t3',
-          ),
+          isTopicComplete('m3t3'),
       },
-
     },
 
     totalQuestions:
-      getModuleQuestionCount(
-        'm3',
-      ),
+      getModuleQuestionCount('m3'),
 
     complete:
-      (
-        isTopicComplete(
-          'm3t1',
-        ) &&
-
-        isTopicComplete(
-          'm3t2',
-        ) &&
-
-        isTopicComplete(
-          'm3t3',
-        )
+      topics.every(
+        (topicId) =>
+          isTopicComplete(topicId),
       ),
   }
 }
 
 
 /* =========================================================
- * GET MODULE 4 STATUS
+ * MODULE 4 STATUS
  * ========================================================= */
 
 export function getModule4Status() {
@@ -2465,114 +2496,76 @@ export function getModule4Status() {
 
       m4t1: {
         questionCount:
-          getTopicQuestionCount(
-            'm4t1',
-          ),
+          getTopicQuestionCount('m4t1'),
 
         counts:
-          getTopicLevelCounts(
-            'm4t1',
-          ),
+          getTopicLevelCounts('m4t1'),
 
         completion:
-          getTopicCompletionPercent(
-            'm4t1',
-          ),
+          getTopicCompletionPercent('m4t1'),
 
         complete:
-          isTopicComplete(
-            'm4t1',
-          ),
+          isTopicComplete('m4t1'),
       },
 
       m4t2: {
         questionCount:
-          getTopicQuestionCount(
-            'm4t2',
-          ),
+          getTopicQuestionCount('m4t2'),
 
         counts:
-          getTopicLevelCounts(
-            'm4t2',
-          ),
+          getTopicLevelCounts('m4t2'),
 
         completion:
-          getTopicCompletionPercent(
-            'm4t2',
-          ),
+          getTopicCompletionPercent('m4t2'),
 
         complete:
-          isTopicComplete(
-            'm4t2',
-          ),
+          isTopicComplete('m4t2'),
       },
 
       m4t3: {
         questionCount:
-          getTopicQuestionCount(
-            'm4t3',
-          ),
+          getTopicQuestionCount('m4t3'),
 
         counts:
-          getTopicLevelCounts(
-            'm4t3',
-          ),
+          getTopicLevelCounts('m4t3'),
 
         completion:
-          getTopicCompletionPercent(
-            'm4t3',
-          ),
+          getTopicCompletionPercent('m4t3'),
 
         complete:
-          isTopicComplete(
-            'm4t3',
-          ),
+          isTopicComplete('m4t3'),
       },
 
       m4t4: {
         questionCount:
-          getTopicQuestionCount(
-            'm4t4',
-          ),
+          getTopicQuestionCount('m4t4'),
 
         counts:
-          getTopicLevelCounts(
-            'm4t4',
-          ),
+          getTopicLevelCounts('m4t4'),
 
         completion:
-          getTopicCompletionPercent(
-            'm4t4',
-          ),
+          getTopicCompletionPercent('m4t4'),
 
         complete:
-          isTopicComplete(
-            'm4t4',
-          ),
+          isTopicComplete('m4t4'),
       },
-
     },
 
     totalQuestions:
-      getModuleQuestionCount(
-        'm4',
-      ),
+      getModuleQuestionCount('m4'),
 
     ready:
-      getModuleQuestionCount(
-        'm4',
-      ) > 0,
+      getModuleQuestionCount('m4') > 0,
 
     complete:
-      getModuleHealth(
-        'm4',
-      )?.complete ?? false,
+      getModuleHealth('m4')
+        ?.complete ?? false,
   }
 }
 
 
 /* =========================================================
- * GET MATEMATIKA STATUS
+ * MATEMATIKA STATUS
  * ========================================================= */
 
 export function getMatematikaStatus() {
@@ -2604,7 +2597,6 @@ export function getMatematikaStatus() {
             'math-attestation',
           ),
       },
-
     },
 
     totalQuestions:
@@ -2626,7 +2618,7 @@ export function getMatematikaStatus() {
 
 
 /* =========================================================
- * DEVELOPMENT ASSERTIONS
+ * DIAGNOSTICS
  * ========================================================= */
 
 export function getQuizDataDiagnostics() {
@@ -2639,6 +2631,7 @@ export function getQuizDataDiagnostics() {
 
   const invalidQuestions =
     getInvalidQuestions()
+
 
   const incompleteTopics =
     health.modules.flatMap(
@@ -2680,6 +2673,7 @@ export function getQuizDataDiagnostics() {
             }),
           ),
     )
+
 
   return {
 
