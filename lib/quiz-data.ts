@@ -2636,17 +2636,16 @@ export function getQuizDataDiagnostics() {
  * ========================================================= */
 
 export function assertM4Data(): boolean {
+  const status = getModule4Status();
 
-  const statuses =
-    getModule4Status();
-
+  const topics = Object.values(status.topics);
 
   return (
-    statuses.length === 4 &&
-    statuses.every(
+    topics.length === 4 &&
+    topics.every(
       (topic) =>
-        topic.total > 0,
-      ),
+        topic.questionCount > 0,
+    )
   );
 }
 
