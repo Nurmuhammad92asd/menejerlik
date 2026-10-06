@@ -83,9 +83,9 @@ import { M4T3 } from './data/m4t3'
 import { M4T4 } from './data/m4t4'
 
 
-/* =========================================================
- * MATEMATIKA
- *
+/* =====================================================
+ * MATEMATIKA STATUS
+ * ===================================================== */
  * Maxsus fan testi.
  *
  * Matematika alohida module sifatida registryga ulanadi.
