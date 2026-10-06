@@ -603,4 +603,4 @@ D) Baholash xodim faoliyatini strategik maqsadlar bilan uyg‘un holda ko‘rish
   ],
 };
 
-export default m4t4;
+export { m4t4 as M4T4 };
