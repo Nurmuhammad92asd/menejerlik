@@ -1,25 +1,25 @@
 /* =========================================================
  * M4 / KADRLARGA OID ISH YURITISH
- * M4T4 — 45 TA TEST
+ * m4t3 — 45 TA TEST
  *
  * 30 ta asosiy test
  * 10 ta vaziyatli test
  * 5 ta kompleks vaziyatli test
  *
  * MARKAZIY EXPORT:
- *   M4T4
- *   m4t4Questions
- *   m4t4AnswerKey
+ *   m4t3
+ *   m4t3Questions
+ *   m4t3AnswerKey
  * ========================================================= */
 
-export const m4t4Questions = [
+export const m4t3Questions = [
 
   // =======================================================
   // 1–30. ASOSIY TESTLAR
   // =======================================================
 
   {
-    id: "m4t4q01",
+    id: "m4t3q01",
     question:
       "Reja kalendarini tuzish bosqichining strategik boshqaruvdagi asosiy ahamiyati nimada namoyon bo‘ladi?",
     options: [
@@ -32,7 +32,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q02",
+    id: "m4t3q02",
     question:
       "Quyidagi hujjatlardan qaysilari kadrlar hisobi va mehnat munosabatlarini monitoring qilish funksiyasini bevosita bajaradi?",
     options: [
@@ -45,7 +45,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q03",
+    id: "m4t3q03",
     question:
       "Buyruqdan ko‘chirma (nusxa) berish amaliyoti qaysi huquqiy ehtiyojlar bilan bog‘liq holda yuzaga keladi?",
     options: [
@@ -58,7 +58,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q04",
+    id: "m4t3q04",
     question:
       "Kadrlarning shaxsiy tarkibiga oid buyruqlarni qayd etish jurnali”ning mavjudligi qaysi tizimli boshqaruv funksiyasini kuchaytiradi?",
     options: [
@@ -71,7 +71,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q05",
+    id: "m4t3q05",
     question:
       "Quyidagi intizomiy ish yuritish bosqichlarini ularning asosiy mazmuni bilan moslashtiring.\n\n1-4 bosqichlar:\n1.Qoidabuzarlikni aniqlash\n2.Tushuntirish xati olish\n3.Holatni tahlil qilish\n4.Intizomiy jazo qo‘llash\n\nA-D mazmunlar:\nA) Qoidabuzarlik og‘irligi va oldingi intizomiy holatlarni baholash\nB) Dalolatnoma, guvohlar va xizmat tekshiruvini o‘tkazish\nC) Buyruq chiqarish va xodimni imzo orqali tanishtirish\nD) Xodimdan yozma tushuntirish talab qilish yoki rad etilganda dalolatnoma tuzish",
     options: [
@@ -84,7 +84,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q06",
+    id: "m4t3q06",
     question:
       "Asosiy faoliyatga oid buyruqlarning strategik farqi matnda qaysi jihat orqali ochib berilgan?",
     options: [
@@ -97,7 +97,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q07",
+    id: "m4t3q07",
     question:
       "Quyidagi vazifalardan qaysilari xodimlarning huquqiy maqomini hujjatlashtirish bilan bevosita bog‘liq hisoblanadi?",
     options: [
@@ -110,7 +110,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q08",
+    id: "m4t3q08",
     question:
       "Kadrlar masalasiga oid normativ-huquqiy hujjatlar tizimining murakkabligi matnda qaysi jihat orqali asoslanadi?",
     options: [
@@ -123,7 +123,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q09",
+    id: "m4t3q09",
     question:
       "Kadrlarga oid ish yuritish uchun mas’ul rasmiy shaxslarni belgilash qaysi tizimli muammoning oldini olishga xizmat qiladi?",
     options: [
@@ -136,7 +136,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q10",
+    id: "m4t3q10",
     question:
       "Turli davlat organlari hujjatlarini alohida qayd qilish daftarlari yuritilishi qaysi institutsional xavfni kamaytirishga qaratilgan?",
     options: [
@@ -149,7 +149,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q11",
+    id: "m4t3q11",
     question:
       "Quyidagi hujjatlarni ularning ASOSIY funksional yo‘nalishi bilan moslashtiring.\n\n1.Xizmat safariga oid buyruqlarni ro‘yxatga olish jurnali\n2.Xizmat safaridan qaytib kelgan xodimlarni hisobga olish jurnali\n3.Mehnat ta’tillar jadvali\n4.Mehnat daftarchalari hisobotini olib borish kitobi\n\nA-D funksiyalar:\nA) Mehnat faoliyati stajini hujjatlashtirish\nB) Xodimlarning vaqtinchalik mehnat rejimini nazorat qilish\nC) Dam olish huquqining tizimli rejalashtirilishini ta’minlash\nD) Buyruqlar asosida xizmat safarining huquqiy rasmiylashtirilishini ta’minlash",
     options: [
@@ -162,7 +162,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q12",
+    id: "m4t3q12",
     question:
       "Kadrlarga oid ish yuritish bosqichlarini ularning asosiy funksional maqsadi bilan moslashtiring.\n\n1.Majburiy kadrlar hujjatlari ro‘yxatini tuzish\n2.Hujjatlarni xavfsiz saqlash sharoitlarini yaratish\n3.Ro‘yxat kitoblari va jurnallarni to‘ldirish\n4.Reja kalendarini tuzish\n\nA-D funksiyalar:\nA) Shaxsiy ma’lumotlarni himoya qilish\nB) Hujjatlar aylanishining izchilligini ta’minlash\nC) Kadrlar jarayonlarini oldindan rejalashtirish\nD) Hisob va nazorat mexanizmini shakllantirish",
     options: [
@@ -175,7 +175,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q13",
+    id: "m4t3q13",
     question:
       "Buyruqlarning ikki turga ajratilishi matnda qaysi boshqaruv ehtiyojini qondirishga xizmat qilishi bilan asoslangan?",
     options: [
@@ -188,7 +188,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q14",
+    id: "m4t3q14",
     question:
       "Umumiy o‘rta ta’lim tizimida kadrlarga oid hujjatlarni yuritish mas’uliyatining kadrlar bo‘yicha menejerga yuklatilishi qaysi boshqaruv tamoyiliga mos keladi?",
     options: [
@@ -201,7 +201,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q15",
+    id: "m4t3q15",
     question:
       "Kadrga oid hujjatlarni yuritishda raqamli vositalarning joriy etilishi boshqaruv nuqtayi nazaridan qaysi integratsiyalashgan samarani ta’minlaydi?",
     options: [
@@ -214,7 +214,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q16",
+    id: "m4t3q16",
     question:
       "Quyidagilardan qaysilari asosiy faoliyatga oid buyruqlarga xos xususiyatlar hisoblanadi?",
     options: [
@@ -227,7 +227,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q17",
+    id: "m4t3q17",
     question:
       "Matnga ko‘ra, lokal normativ hujjatlarni ishlab chiqish va tasdiqlash bosqichi qaysi strategik vazifalarni bajaradi?",
     options: [
@@ -240,7 +240,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q18",
+    id: "m4t3q18",
     question:
       "Matnga ko‘ra, kadrlar bo‘yicha menejerning raqamli infratuzilmalar bilan ishlashdagi javobgarligi qaysi vazifalarda namoyon bo‘ladi?",
     options: [
@@ -253,7 +253,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q19",
+    id: "m4t3q19",
     question:
       "Intizomiy ish yuritish jarayonida qoidabuzarlikni aniqlash bosqichiga xos bo‘lgan harakatlarni aniqlang.",
     options: [
@@ -266,7 +266,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q20",
+    id: "m4t3q20",
     question:
       "Raqamli hujjatlarni yuritishda qonunchilikka muvofiqlik talabining joriy etilishi qaysi tizimli xavfni bartaraf etishga xizmat qiladi?",
     options: [
@@ -279,7 +279,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q21",
+    id: "m4t3q21",
     question:
       "Quyidagi buyruqdan ko‘chirma bilan bog‘liq jihatlarni ularning huquqiy tavsifi bilan moslashtiring.\n\n1.Buyruqdan ko‘chirma\n2.Maxsus blankada rasmiylashtirish\n3.Faqat zarur qismni yozib olish\n4.Punkt yoki paragrafni ko‘rsatish\n\nA-D tavsiflar:\nA) Buyruqning muayyan holatga tegishli qismini huquqiy jihatdan ajratish\nB) Hujjatning rasmiy kuchini va haqiqiyligini ta’minlash\nC) Buyruq mazmunining manbasini aniq identifikatsiya qilish\nD) Asl buyruq asosida tayyorlangan tasdiqlangan hujjat",
     options: [
@@ -292,7 +292,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q22",
+    id: "m4t3q22",
     question:
       "Matnga ko‘ra, xodimni ishga qabul qilish jarayonining huquqiy yakunlanganligini ta’minlovchi hal qiluvchi bosqich qaysi kombinatsiyada to‘liq aks etgan?",
     options: [
@@ -305,7 +305,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q23",
+    id: "m4t3q23",
     question:
       "Quyidagi hujjatlardan qaysilari mehnat intizomi va axloqiy muhitni tartibga solishga qaratilgan?",
     options: [
@@ -318,7 +318,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q24",
+    id: "m4t3q24",
     question:
       "Kadrlarga oid ish yuritish tizimini shakllantirishda normativ bazadan boshlash talabi qaysi boshqaruv mantiqiga asoslanadi?",
     options: [
@@ -331,7 +331,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q25",
+    id: "m4t3q25",
     question:
       "Kadrlar bo‘yicha menejer vazifalarini ularning strategik yo‘nalishlari bilan moslashtiring.\n\n1.Shaxsiy tarkib bo‘yicha buyruqlarni rasmiylashtirish\n2.Xodimlarning ta’til hisobini yuritish\n3.“Yagona milliy mehnat tizimi”ga ma’lumot kiritish\n4.Kadrlar hujjatlarini arxivga topshirishga tayyorlash\n\nA-D yo‘nalishlar:\nA) Mehnat munosabatlarini huquqiy rasmiylashtirish\nB) Ijtimoiy kafolatlar va mehnat huquqlari ta’minoti\nC) Raqamli axborotlarni boshqarish\nD) Hujjatlarni uzoq muddatli saqlash",
     options: [
@@ -344,7 +344,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q26",
+    id: "m4t3q26",
     question:
       "Intizomiy ish yuritish jarayonida hujjatlarni rasmiylashtirish va hisobga olish yakuniy bosqich sifatida belgilanishi qaysi boshqaruv tamoyilini ifodalaydi?",
     options: [
@@ -357,7 +357,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q27",
+    id: "m4t3q27",
     question:
       "Kadr menejerida mehnat shartnomalarini hisobga olish jurnali yuritilishi qaysi boshqaruv ehtiyojini qondirishga xizmat qiladi?",
     options: [
@@ -370,7 +370,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q28",
+    id: "m4t3q28",
     question:
       "Quyidagi hujjatlardan qaysilari xodimning huquq va majburiyatlari bilan bevosita tanishtirish funksiyasini bajaradi?",
     options: [
@@ -383,7 +383,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q29",
+    id: "m4t3q29",
     question:
       "Quyidagilardan qaysilari mehnat intizomini ta’minlovchi asosiy hujjatlar tarkibiga bevosita kiradi?",
     options: [
@@ -396,7 +396,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q30",
+    id: "m4t3q30",
     question:
       "Kadrlar bo‘yicha menejer tomonidan shaxsiy ma’lumotlarni himoyalash va axborot etikasiga rioya etilishi boshqaruv nuqtayi nazaridan qaysi tizimli xavfni kamaytirishga qaratilgan?",
     options: [
@@ -413,7 +413,7 @@ export const m4t4Questions = [
   // =======================================================
 
   {
-    id: "m4t4q31",
+    id: "m4t3q31",
     question:
       "Maktabda chiqarilgan buyruq asosiy faoliyatga oid bo‘lib, unda muassasa faoliyatini tartibga solish, mas’ullarni belgilash va bajarish muddati ko‘rsatilgan. Biroq bir xodimga ushbu buyruqdan faqat o‘ziga tegishli qismi kerak bo‘ldi.\n\nSavol:\nUshbu vaziyatda qanday hujjat rasmiylashtiriladi?",
     options: [
@@ -426,7 +426,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q32",
+    id: "m4t3q32",
     question:
       "Maktabda yangi xodim ishga qabul qilindi. Buyruq rasmiylashtirildi, lekin bir muddat o‘tib uning ma’lumotlari elektron bazaga kiritilmagani va shaxsiy ish jildida tegishli hujjatlar to‘liq shakllantirilmagani aniqlandi.\n\nSavol:\nUshbu holatda kadrlar bo‘yicha menejerning qaysi majburiyati eng aniq buzilgan?",
     options: [
@@ -439,7 +439,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q33",
+    id: "m4t3q33",
     question:
       "Maktabda kadrlar bilan ishlash tizimi yo‘lga qo‘yilmoqda. Rahbar avval hujjatlarni yig‘ishni boshlamoqchi bo‘ldi, biroq tekshiruvda unga ishni huquqiy asosdan boshlash zarurligi tushuntirildi.\n\nSavol:\nBu holatda birinchi navbatdagi to‘g‘ri qadam qaysi?",
     options: [
@@ -452,7 +452,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q34",
+    id: "m4t3q34",
     question:
       "Ta’lim muassasasida ayrim hujjatlar o‘z vaqtida yangilanmayapti. Rahbar bu muammoni tizimli hal qilishni rejalashtirdi.\n\nSavol:\nQaysi qadam eng mos keladi?",
     options: [
@@ -465,7 +465,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q35",
+    id: "m4t3q35",
     question:
       "Maktabda yangi ishga qabul qilingan xodim bilan barcha hujjatlar rasmiylashtirildi: mehnat shartnomasi imzolandi, buyruq chiqarildi. Biroq tekshiruvda ma’lum bo‘lishicha, xodimning ishga qabul qilinganligi haqida ma’lumot “Yagona milliy mehnat tizimi”ga kiritilmagan va mehnat daftarchasiga yozuv qilinmagan.\n\nSavol:\nUshbu vaziyatda qaysi jarayon to‘liq yakunlanmagan deb baholanadi?",
     options: [
@@ -478,7 +478,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q36",
+    id: "m4t3q36",
     question:
       "Maktabda yangi kadr menejer ish boshladi. U barcha hujjatlarni yuritishni yo‘lga qo‘ydi, lekin tekshiruvda aniqlanishicha, hujjatlar mavjud bo‘lsa-da, ayrimlari tartibli ro‘yxatga olinmagan va jurnal asosida nazorat qilinmayapti.\n\nSavol:\nUshbu holatda qaysi kamchilik eng aniq aks etgan?",
     options: [
@@ -491,7 +491,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q37",
+    id: "m4t3q37",
     question:
       "Maktabda kadrlar tizimini yo‘lga qo‘yish jarayoni boshlandi. Rahbar ishni to‘g‘ri ketma-ketlikda tashkil etmoqchi.\n\nSavol:\nDastlabki qadam qaysi?",
     options: [
@@ -504,7 +504,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q38",
+    id: "m4t3q38",
     question:
       "Maktabda bir xodim intizomiy qoidabuzarlik sodir etdi. Rahbar darhol buyruq chiqarib, unga jazo qo‘lladi. Biroq keyinchalik aniqlanishicha, xodimdan tushuntirish xati olinmagan va holat to‘liq tahlil qilinmagan.\n\nSavol:\nUshbu vaziyatda qaysi jarayon bosqichi buzilgan deb baholanadi?",
     options: [
@@ -517,7 +517,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q39",
+    id: "m4t3q39",
     question:
       "Maktabda bir xodim tomonidan ichki mehnat tartibi qoidalari buzildi. Dalolatnoma tuzildi, guvohlar ko‘rsatmasi olindi. Ammo xodimdan tushuntirish xati olinmasdan turib, darhol intizomiy jazo qo‘llandi.\n\nSavol:\nQuyidagi xulosalardan qaysi biri ushbu vaziyatga eng mos keladi?",
     options: [
@@ -530,7 +530,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q40",
+    id: "m4t3q40",
     question:
       "Maktabda vakant ish o‘rni yuzaga keldi. Rahbar og‘zaki topshiriq berdi, ammo kadrlar bo‘yicha menejer bu bo‘sh ish o‘rni haqida tegishli platformalarda e’lon joylashtirmadi. Keyinchalik bu holat hujjat yuritishdagi kamchilik sifatida qayd etildi.\n\nSavol:\nQuyidagi vazifalardan qaysi biri ushbu holat bilan bevosita bog‘liq?",
     options: [
@@ -547,7 +547,7 @@ export const m4t4Questions = [
   // =======================================================
 
   {
-    id: "m4t4q41",
+    id: "m4t3q41",
     question:
       "307-sonli umumiy o‘rta ta’lim maktabida kadrlar bo‘yicha ish yuritish holati direktor topshirig‘iga ko‘ra qayta ko‘rib chiqildi. O‘rganish davomida xodimlarning shaxsiy ish jildlari, mehnat shartnomalari va ayrim buyruqlar mavjudligi aniqlandi, biroq hujjatlar yuritilishida tizimlilik yetishmasligi sezildi. Xususan, ayrim xodimlar bilan bog‘liq o‘zgarishlar elektron bazalarda kechikib aks ettirilgan, ichki lokal hujjatlar bilan tanishtirish bo‘yicha qaydlar bir xil yuritilmagan, vakant ish o‘rinlari bo‘yicha e’lonlar esa turli manbalarda turli vaqtda berilgan. Kadrlar bo‘yicha menejer ish jarayonida eng ko‘p talab qilinadigan hujjatlar amalda mavjud bo‘lsa, qolgan qaydlarni ham amaliy ehtiyojga mos ravishda yuritish mumkinligini bildirdi. Direktor esa kadrlar bo‘yicha ish yuritish hujjatlarning alohida mavjudligi bilan emas, balki ularning tartibli hisobga olinishi, qayd etilishi va xodimlarni muassasa hujjatlari bilan belgilangan tartibda tanishtirish orqali boshqaruv barqarorligi ta’minlanishini ta’kidladi.\n\nSavol:\nUshbu vaziyatdan kelib chiqib, umumiy o‘rta ta’lim tizimida kadrlarga oid hujjatlarni yuritishda qaysi harakatlar eng to‘g‘ri hisoblanadi? (2 ta javob to‘g‘ri)\n\n1.Mehnat shartnomalarini hisobga olish jurnali, shaxsiy tarkib buyruqlarini qayd etish jurnali, shaxsiy varaqalarni hisobga olish jurnali kabi hujjatlarni kadrlar ish yuritish tizimining muhim tarkibiy qismi sifatida yuritish.\n2.Kadrlar hujjatlarini yuritishda asosiy urg‘uni shaxsiy ish jildlari va buyruqlarga qaratib, boshqa qayd daftarlari hamda elektron ma’lumotlarni umumiy ish jarayoni bilan uyg‘un holda davriy ravishda to‘ldirib borish.\n3.Xodimlarni ichki mehnat tartibi qoidalari, lavozim yo‘riqnomalari va boshqa lokal hujjatlar bilan tanishtirishni tegishli qayd va tasdiqlash tartibi bilan yuritish, chunki bu mehnat munosabatlarining huquqiy asoslanganligini mustahkamlaydi.\n4.Elektron bazalardagi ma’lumotlar bilan qog‘oz shaklidagi hujjatlar o‘rtasidagi muvofiqlikni saqlash muhim bo‘lsa-da, ularni yangilash sur’atini muassasaning ichki ish yuklamasiga qarab moslashtirish mumkin deb hisoblash.\n5.Ta’til grafigi, xizmat safari hujjatlari va chiqish-kirish hujjatlari bo‘yicha qaydlarni yuritishda ularning bir qismini amaliy zarurat kuchaygan yo‘nalishlarda batafsilroq tashkil etish boshqaruv uchun yetarli hisoblanadi.\n6.Vakant ish o‘rinlari bo‘yicha e’lon berish, elektron ma’lumotlarni yangilash va shaxsiy ma’lumotlarni saqlash ishlarini kadrlar bo‘yicha menejerning tashkiliy tajribasiga tayangan holda moslashuvchan yuritish maqsadga muvofiq sanaladi.",
     options: [
@@ -560,7 +560,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q42",
+    id: "m4t3q42",
     question:
       "326-sonli umumiy o‘rta ta’lim maktabida kadrlarga oid hujjatlarni yuritish bo‘yicha navbatdagi ichki o‘rganish o‘tkazildi. O‘rganish davomida xodimlarning shaxsiy ish jildlari, buyruqlar, ta’til grafigi, ayrim ro‘yxat jurnallari va elektron ma’lumotlar bazalari yuritilayotgani aniqlandi. Shu bilan birga, hujjatlarni yangilash muddatlari, qaydlar izchilligi, lokal hujjatlar bilan tanishtirish tartibi hamda hujjatlarni saqlash sharoitlari bo‘yicha turli yondashuvlar mavjudligi ma’lum bo‘ldi. Kadrlar bo‘yicha menejer ayrim hujjatlar amalda bor bo‘lsa, ularni ro‘yxatga olish va bir-biri bilan muvofiqlashtirish ikkinchi darajali ahamiyatga ega deb hisoblaydi. Direktor esa kadrlarga oid hujjatlarning mavjudligi emas, balki ularning normativ talablar asosida izchil, xavfsiz va rejalashtirilgan tartibda yuritilishi boshqaruv barqarorligi uchun muhim ekanini ta’kidlaydi.\n\nSavol: Quyidagi mulohazalarning to‘g‘ri yoki noto‘g‘ri ekanligini aniqlang.\n\n1. Kadrlarga oid hujjatlarni yuritishda asosiy e’tibor hujjatlarning alohida mavjudligiga qaratilsa yetarli bo‘ladi, ularni ro‘yxat jurnallari, elektron bazalar va saqlash rejimi bilan doimiy muvofiqlashtirib borish esa ko‘proq tashkiliy qulaylik masalasi hisoblanadi.\n\n2. Kadrlarga oid ish yuritishda normativ baza, majburiy hujjatlar ro‘yxati, lokal hujjatlar, qayd jurnallari, elektron ma’lumotlar bazasi va saqlash tartibi o‘zaro bog‘liq yagona tizim sifatida tashkil etilishi zarur.\n\n3. Xodimlarni ichki mehnat tartibi qoidalari va boshqa lokal hujjatlar bilan tanishtirish amalda o‘tkazilgan bo‘lsa, bu holatni yozma qayd etish va tasdiqlash shakllari ikkilamchi bo‘lib, huquqiy jihatdan hal qiluvchi ahamiyat kasb etmaydi.",
     options: [
@@ -573,7 +573,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q43",
+    id: "m4t3q43",
     question:
       "293-sonli umumiy o‘rta ta’lim maktabida kadrlar bo‘yicha ish yuritish holati ichki o‘rganishdan o‘tkazildi. O‘rganish jarayonida xodimlarning shaxsiy ish jildlari yuritilayotgani, ayrim buyruqlar va mehnat shartnomalari rasmiylashtirilgani aniqlandi. Biroq bir qator kamchiliklar ham kuzatildi: ayrim xodimlar ichki lokal hujjatlar bilan imzo qo‘yib tanishtirilmagan, vakant ish o‘rinlari bo‘yicha ma’lumotlar tegishli platformalarda muntazam e’lon qilinmagan, ba’zi ma’lumotlar “Yagona milliy mehnat tizimi”da o‘z vaqtida yangilanmagan. Kadrlar bo‘yicha menejer ayrim hujjatlar amaliy zarurat yuzaga kelganda rasmiylashtirilsa ham ish jarayoni davom etishini aytdi. Direktor esa kadrlarga oid ish yuritish mehnat munosabatlarining qonuniyligi, xodim huquqlarining himoyasi, shaxsiy ma’lumotlar xavfsizligi va boshqaruv barqarorligini ta’minlovchi tizim ekanini ta’kidladi.\n\nSavol:\nUshbu vaziyatdan kelib chiqib, umumiy o‘rta ta’lim tizimida kadrlarga oid hujjatlarni yuritishda qaysi harakatlar eng to‘g‘ri hisoblanadi?\n\n1.Kadrlarga oid hujjatlarni yuritishda buyruqlar, shaxsiy ish jildlari va eng ko‘p qo‘llanadigan hujjatlarni ustuvor olib borish, boshqa ro‘yxat jurnallari hamda ayrim elektron ma’lumotlarni ish jarayonidagi ehtiyojga qarab tizimlashtirib borish.\n2.Kadrlarga oid ish yuritishni normativ bazaga tayangan holda bosqichma-bosqich tashkil etish, majburiy hujjatlar ro‘yxatini shakllantirish va mas’ul shaxslar javobgarligini aniq belgilash.\n3.Xodimlarni ichki mehnat tartibi qoidalari, lavozim yo‘riqnomalari va boshqa lokal hujjatlar bilan tanishtirishda umumiy tanishtirish ishlari va joriy tushuntirishlarni asosiy tayanch sifatida ko‘rib, yozma qayd etishni amaliy jarayon bilan uyg‘un holda yuritish.\n4.Elektron tizimlarga ma’lumot kiritishda yangi qabul qilingan xodimlar bo‘yicha ma’lumotlarni tezkor yuritish, mavjud xodimlarga oid o‘zgarishlarni esa ichki hujjatlar bilan birgalikda davriy ravishda moslashtirib borish.\n5.Shaxsiy ma’lumotlar va kadrlar hujjatlarini xavfsiz saqlash, elektron bazalarni o‘z vaqtida yangilash va hujjatlar bilan ishlashni oldindan rejalashtirish.\n6.Vakant ish o‘rinlari bo‘yicha ma’lumotlarni muassasa ehtiyoji va kadrlar holatidan kelib chiqib turli platformalarda e’lon qilish ishini ichki ish yuritish jarayonlari bilan o‘zaro bog‘liq holda olib borish.",
     options: [
@@ -586,7 +586,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q44",
+    id: "m4t3q44",
     question:
       "318-sonli umumiy o‘rta ta’lim maktabida kadrlarga oid hujjatlarni yuritish holati bo‘yicha ichki monitoring o‘tkazildi. Monitoring davomida xodimlarning shaxsiy ish jildlari, mehnat shartnomalari va ayrim buyruqlar mavjudligi tasdiqlandi, biroq hujjatlarning o‘zaro bog‘liqligi, qayd etilishi va elektron bazalarda aks ettirilishi bo‘yicha ayrim tafovutlar aniqlandi. Xususan, ayrim xodimlar bilan tuzilgan mehnat shartnomalari qog‘oz ko‘rinishida to‘liq rasmiylashtirilgan bo‘lsa-da, tegishli ma’lumotlar “Yagona milliy mehnat tizimi”da kechikib aks ettirilgan; ayrim lokal hujjatlar bilan tanishtirish ishlari o‘tkazilgan bo‘lsa-da, qayd jurnallaridagi yozuvlar bir xil yuritilmagan. Kadrlar bo‘yicha menejer hujjatlar amalda mavjud bo‘lsa, ayrim qaydlarning keyinroq moslashtirilishi boshqaruv jarayoniga jiddiy ta’sir ko‘rsatmaydi deb hisoblaydi. Direktor esa kadrlar ish yuritishi hujjatlarning alohida mavjudligi bilan emas, balki ularning normativ talablarga mos, tizimli, izchil va nazorat qilinadigan tarzda yuritilishi bilan baholanishini ta’kidlamoqda.\n\nSavol: Quyidagi mulohazalarning to‘g‘ri yoki noto‘g‘ri ekanligini aniqlang.\n\n1. Kadrlarga oid ish yuritishda shaxsiy ish jildlari, buyruqlar, mehnat shartnomalari, qayd jurnallari va elektron ma’lumotlar bazasi bir-biridan mustaqil hujjatlar sifatida emas, o‘zaro bog‘liq yagona tizimning tarkibiy qismlari sifatida yuritilishi zarur.\n\n2. Xodimlarni ichki mehnat tartibi qoidalari va boshqa lokal hujjatlar bilan amalda tanishtirishning o‘zi huquqiy jihatdan yetarli deb qaraladi, shu sabab yozma qayd etish va tanishganlikni rasmiy tasdiqlash ikkilamchi tashkiliy masala hisoblanadi.\n\n3. Kadrlarga oid hujjatlarni yuritishda raqamli vositalardan foydalanish ish jarayonlarini tezlashtirish, axborot aniqligi va nazoratni kuchaytirish bilan birga, axborot xavfsizligi, zaxira nusxalar va yagona saqlash tizimini yo‘lga qo‘yishni ham talab qiladi.",
     options: [
@@ -599,7 +599,7 @@ export const m4t4Questions = [
   },
 
   {
-    id: "m4t4q45",
+    id: "m4t3q45",
     question:
       "281-sonli umumiy o‘rta ta’lim maktabida kadrlar bo‘yicha menejer faoliyati ichki audit asosida o‘rganildi. Tahlil jarayonida xodimlarning shaxsiy ish jildlari yuritilayotgani, ayrim buyruqlar rasmiylashtirilgani va vakant ish o‘rinlari bo‘yicha e’lonlar berilgani aniqlandi. Biroq bir qator muhim kamchiliklar ham kuzatildi: ayrim xodimlar ichki mehnat tartibi qoidalari bilan o‘z vaqtida tanishtirilmagan, “Yagona milliy mehnat tizimi”ga kiritilgan ma’lumotlar muntazam yangilanmagan, hujjatlarni saqlash tartibi esa yagona tizim asosida yo‘lga qo‘yilmagan. Menejer ayrim hollarda hujjatlarni shakllantirishni amaliy ehtiyojga qarab yuritish yetarli deb hisoblagan, hujjatlarning to‘liq va tizimli yuritilishi esa keyingi bosqichlarda tartibga keltirilishi mumkinligini aytgan. Direktor esa kadrlar hujjatlari faqat rasmiyatchilik emas, balki mehnat munosabatlari, huquqiy himoya, nazorat va shaxsiy ma’lumotlar xavfsizligini ta’minlovchi boshqaruv vositasi ekanini ta’kidladi. Endi u kadrlar hujjatlarini yuritishda qaysi yondashuv eng to‘g‘ri ekanini aniqlamoqchi.\n\nSavol:\nUshbu vaziyatdan kelib chiqib, umumiy o‘rta ta’lim tizimida kadrlarga oid hujjatlarni yuritishning eng to‘g‘ri yondashuvi qaysi variantda berilgan?",
     options: [
@@ -618,7 +618,7 @@ export const m4t4Questions = [
  * ANSWER KEY
  * ========================================================= */
 
-export const m4t4AnswerKey = [
+export const m4t3AnswerKey = [
   1, 1, 3, 1, 3,
   0, 1, 2, 3, 3,
   3, 0, 3, 1, 2,
@@ -637,13 +637,13 @@ export const m4t4AnswerKey = [
  * MODULE OBJECT
  * ========================================================= */
 
-export const M4T4 = {
-  id: "m4t4",
+export const m4t3 = {
+  id: "m4t3",
   title: "Kadrlarga oid ish yuritish",
   description:
     "Kadrlarga oid hujjatlarni yuritish, buyruqlar, mehnat munosabatlari, intizomiy ish yuritish, raqamli tizimlar va kadrlar menejeri faoliyati.",
-  questions: m4t4Questions,
-  answerKey: m4t4AnswerKey,
+  questions: m4t3Questions,
+  answerKey: m4t3AnswerKey,
 } as const;
 
 
@@ -651,4 +651,4 @@ export const M4T4 = {
  * DEFAULT EXPORT
  * ========================================================= */
 
-export default M4T4;
+export default m4t3;
