@@ -1,12 +1,15 @@
 /* =========================================================
  * M4 / KADRLARGA OID ISH YURITISH
- * 45 TA TEST
+ * M4T4 — 45 TA TEST
  *
  * 30 ta asosiy test
  * 10 ta vaziyatli test
  * 5 ta kompleks vaziyatli test
  *
- * SAVOL VA JAVOBLAR MATNI O'ZGARTIRILMAGAN
+ * MARKAZIY EXPORT:
+ *   M4T4
+ *   m4t4Questions
+ *   m4t4AnswerKey
  * ========================================================= */
 
 export const m4t4Questions = [
@@ -631,13 +634,21 @@ export const m4t4AnswerKey = [
 
 
 /* =========================================================
- * METADATA
+ * MODULE OBJECT
  * ========================================================= */
 
-export const m4t4 = {
+export const M4T4 = {
   id: "m4t4",
   title: "Kadrlarga oid ish yuritish",
   description:
     "Kadrlarga oid hujjatlarni yuritish, buyruqlar, mehnat munosabatlari, intizomiy ish yuritish, raqamli tizimlar va kadrlar menejeri faoliyati.",
   questions: m4t4Questions,
-};
+  answerKey: m4t4AnswerKey,
+} as const;
+
+
+/* =========================================================
+ * DEFAULT EXPORT
+ * ========================================================= */
+
+export default M4T4;
