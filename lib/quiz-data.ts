@@ -85,10 +85,10 @@ import { M3T3_LEVELS } from './data/m3t3'
  * Shuning uchun DEFAULT IMPORT ishlatiladi.
  * ========================================================= */
 
-import m4t1 from './data/m4t1'
-import m4t2 from './data/m4t2'
-import m4t3 from './data/m4t3'
-import m4t4 from './data/m4t4'
+import { m4t1 } from './data/m4t1'
+import { m4t2 } from './data/m4t2'
+import { m4t3 } from './data/m4t3'
+import { m4t4 } from './data/m4t4'
 
 
 /* =========================================================
