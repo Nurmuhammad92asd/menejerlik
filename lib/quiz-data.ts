@@ -14,7 +14,7 @@
  *         ├── hard
  *         └── case
  *
- * HAR BIR TO‘LIQ MAVZU:
+ * ASOSIY TOPIC:
  *
  *   30 easy
  *   30 medium
@@ -23,23 +23,28 @@
  *   ----------------
  *   100 ta savol
  *
- * MAXSUS FANLAR:
+ * M4:
  *
- *   📐 MATEMATIKA FANI
- *        └── 🎓 Attestatsiya — Abdurahmonova ustoz uchun maxsus
- *             └── 30 ta original attestatsiya-uslubidagi test
+ *   M4T1 / M4T2 / M4T3 / M4T4
+ *   eski Module formatida bo‘lishi mumkin:
+ *
+ *   {
+ *     id,
+ *     title,
+ *     description,
+ *     questions,
+ *     answerKey
+ *   }
+ *
+ *   Ushbu fayl ularni avtomatik ravishda
+ *   TopicLevels formatiga moslashtiradi.
  *
  * =========================================================
  * PROJECT:
  * Menejerlik by Nurmuhammad
  *
  * VERSION:
- * Quiz Data Core v5.0
- * ========================================================= */
-
-
-/* =========================================================
- * QUESTION DATA IMPORTS
+ * Quiz Data Core v6.0
  * ========================================================= */
 
 
@@ -68,15 +73,20 @@ import { M2T5_LEVELS } from './data/m2t5'
 
 /* =========================================================
  * MODULE 3
- *
- * M3T1 → Ulangan
- * M3T2 → Ulangan
- * M3T3 → Ulangan
  * ========================================================= */
 
 import { M3T1_LEVELS } from './data/m3t1'
 import { M3T2_LEVELS } from './data/m3t2'
 import { M3T3_LEVELS } from './data/m3t3'
+
+
+/* =========================================================
+ * MODULE 4
+ *
+ * M4T1 / M4T2 / M4T3 / M4T4
+ * questions + answerKey formatida.
+ * ========================================================= */
+
 import { M4T1 } from './data/m4t1'
 import { M4T2 } from './data/m4t2'
 import { M4T3 } from './data/m4t3'
@@ -205,10 +215,181 @@ export const EMPTY_LEVELS: TopicLevels = {
 
 
 /* =========================================================
+ * LEVEL NORMALIZER
+ *
+ * Har qanday savolni Question formatiga
+ * xavfsiz tarzda o'tkazadi.
+ * ========================================================= */
+
+function normalizeQuestion(
+  raw: any,
+  answerFromKey?: number,
+): Question {
+
+  const answer =
+    typeof raw?.answer === 'number'
+      ? raw.answer
+      : typeof raw?.correctAnswer === 'number'
+        ? raw.correctAnswer
+        : typeof answerFromKey === 'number'
+          ? answerFromKey
+          : 0
+
+  return {
+    id:
+      String(
+        raw?.id ??
+        '',
+      ),
+
+    text:
+      String(
+        raw?.text ??
+        raw?.question ??
+        '',
+      ),
+
+    options:
+      Array.isArray(
+        raw?.options,
+      )
+        ? raw.options.map(
+            (item: unknown) =>
+              String(item),
+          )
+        : [],
+
+    answer,
+
+    explanation:
+      String(
+        raw?.explanation ??
+        '',
+      ),
+  }
+}
+
+
+/* =========================================================
+ * LEGACY MODULE TYPE
+ *
+ * M4T1-M4T4 kabi fayllar uchun.
+ * ========================================================= */
+
+type LegacyModule = {
+
+  id: string
+
+  title: string
+
+  description: string
+
+  questions: readonly any[]
+
+  answerKey: readonly number[]
+}
+
+
+/* =========================================================
+ * LEGACY MODULE → TOPIC LEVELS
+ *
+ * M4 savollari:
+ *
+ * 1–30  → easy
+ * 31–40 → case
+ * 41–45 → hard
+ *
+ * Keyinchalik 100 tagacha to‘ldirilsa,
+ * shu adapter orqali ishlaydi.
+ * ========================================================= */
+
+function legacyModuleToLevels(
+  module: LegacyModule,
+): TopicLevels {
+
+  const questions =
+    Array.isArray(
+      module.questions,
+    )
+      ? module.questions
+      : []
+
+  const answerKey =
+    Array.isArray(
+      module.answerKey,
+    )
+      ? module.answerKey
+      : []
+
+  const normalized =
+    questions.map(
+      (
+        question,
+        index,
+      ) =>
+        normalizeQuestion(
+          question,
+          answerKey[index],
+        ),
+    )
+
+
+  return {
+
+    easy:
+      normalized.slice(
+        0,
+        30,
+      ),
+
+    medium:
+      [],
+
+    hard:
+      normalized.slice(
+        40,
+      ),
+
+    case:
+      normalized.slice(
+        30,
+        40,
+      ),
+  }
+}
+
+
+/* =========================================================
+ * MODULE 4 LEVELS
+ * ========================================================= */
+
+const M4T1_LEVELS =
+  legacyModuleToLevels(
+    M4T1 as unknown as LegacyModule,
+  )
+
+const M4T2_LEVELS =
+  legacyModuleToLevels(
+    M4T2 as unknown as LegacyModule,
+  )
+
+const M4T3_LEVELS =
+  legacyModuleToLevels(
+    M4T3 as unknown as LegacyModule,
+  )
+
+const M4T4_LEVELS =
+  legacyModuleToLevels(
+    M4T4 as unknown as LegacyModule,
+  )
+
+
+/* =========================================================
  * MODULE 1
  * ========================================================= */
 
 const MODULE_1: Category = {
+
   id: 'm1',
 
   title:
@@ -228,7 +409,8 @@ const MODULE_1: Category = {
       description:
         'Umumiy o‘rta ta’lim muassasasini boshqarish, boshqaruv tamoyillari, attestatsiya, akkreditatsiya va TALIS.',
 
-      levels: M1T1_LEVELS,
+      levels:
+        M1T1_LEVELS,
     },
 
     {
@@ -240,7 +422,8 @@ const MODULE_1: Category = {
       description:
         'Strategik menejment, strategik rejalashtirish, maqsadlar va ta’lim muassasasini rivojlantirish.',
 
-      levels: M1T2_LEVELS,
+      levels:
+        M1T2_LEVELS,
     },
 
     {
@@ -252,7 +435,8 @@ const MODULE_1: Category = {
       description:
         'Rahbarning emotsional intellekti, muloqot madaniyati, temperament, stressni boshqarish, nizolarni hal qilish va jamoani samarali boshqarish psixologiyasi.',
 
-      levels: M1T3_LEVELS,
+      levels:
+        M1T3_LEVELS,
     },
 
     {
@@ -264,7 +448,8 @@ const MODULE_1: Category = {
       description:
         'Ta’lim muassasasida korrupsiyaviy xavflarni aniqlash, baholash va oldini olish mexanizmlari.',
 
-      levels: M1T4_LEVELS,
+      levels:
+        M1T4_LEVELS,
     },
 
     {
@@ -276,7 +461,8 @@ const MODULE_1: Category = {
       description:
         'Boshqaruv qarorlarini qabul qilish, amalga oshirish, nazorat qilish, baholash va tuzatishlar kiritish.',
 
-      levels: M1T5_LEVELS,
+      levels:
+        M1T5_LEVELS,
     },
 
     {
@@ -288,7 +474,8 @@ const MODULE_1: Category = {
       description:
         'Maktab imiji, ichki va tashqi imij, PR faoliyati, raqamli imij, axborot siyosati va jamoatchilik bilan aloqalarni samarali boshqarish.',
 
-      levels: M1T6_LEVELS,
+      levels:
+        M1T6_LEVELS,
     },
 
   ],
@@ -300,6 +487,7 @@ const MODULE_1: Category = {
  * ========================================================= */
 
 const MODULE_2: Category = {
+
   id: 'm2',
 
   title:
@@ -319,7 +507,8 @@ const MODULE_2: Category = {
       description:
         'Ta’lim sifatini tizimli boshqarish, DTS va DTT, ichki monitoring, baholash va ta’lim sifatini uzluksiz takomillashtirish.',
 
-      levels: M2T1_LEVELS,
+      levels:
+        M2T1_LEVELS,
     },
 
     {
@@ -331,7 +520,8 @@ const MODULE_2: Category = {
       description:
         'O‘quvchilarning ta’limiy natijalarini tahlil qilish, individual yondashuv, rivojlanish dinamikasi va natijalarni yaxshilash.',
 
-      levels: M2T2_LEVELS,
+      levels:
+        M2T2_LEVELS,
     },
 
     {
@@ -343,7 +533,8 @@ const MODULE_2: Category = {
       description:
         'O‘quvchilarning qiziqishi, qobiliyati va mehnat bozori talablari asosida ongli kasbiy tanlovini shakllantirish.',
 
-      levels: M2T3_LEVELS,
+      levels:
+        M2T3_LEVELS,
     },
 
     {
@@ -355,7 +546,8 @@ const MODULE_2: Category = {
       description:
         'Ta’lim natijalarini baholash, monitoring qilish va baholash ma’lumotlaridan boshqaruv qarorlarida foydalanish.',
 
-      levels: M2T4_LEVELS,
+      levels:
+        M2T4_LEVELS,
     },
 
     {
@@ -367,7 +559,8 @@ const MODULE_2: Category = {
       description:
         'Maktab muhitida o‘quvchilarning xavfsizligi, himoyasi, psixologik farovonligi va rivojlanishi uchun qulay sharoit yaratish.',
 
-      levels: M2T5_LEVELS,
+      levels:
+        M2T5_LEVELS,
     },
 
   ],
@@ -399,7 +592,8 @@ const MODULE_3: Category = {
       description:
         'Zamonaviy rahbar uchun zarur bo‘lgan boshqaruv kompetensiyalari, liderlik, strategik fikrlash, kommunikatsiya, qaror qabul qilish va kasbiy rivojlanish.',
 
-      levels: M3T1_LEVELS,
+      levels:
+        M3T1_LEVELS,
     },
 
     {
@@ -411,7 +605,8 @@ const MODULE_3: Category = {
       description:
         'Rahbarning shaxsiy samaradorligi, ma’naviy qiyofasi, axloqiy yetakchiligi, foresight, refleksiya, empatiya, vaqt va ustuvorliklarni boshqarish hamda o‘zini uzluksiz rivojlantirish.',
 
-      levels: M3T2_LEVELS,
+      levels:
+        M3T2_LEVELS,
     },
 
     {
@@ -423,7 +618,8 @@ const MODULE_3: Category = {
       description:
         'Pedagoglarning kasbiy rivojlanishi, kompetensiyalarini oshirish, faoliyat samaradorligini baholash, individual rivojlanish, mentorlik, metodik hamkorlik va maktabning pedagogik salohiyatini kuchaytirish.',
 
-      levels: M3T3_LEVELS,
+      levels:
+        M3T3_LEVELS,
     },
 
   ],
@@ -455,7 +651,8 @@ const MODULE_4: Category = {
       description:
         'Kadrlarni rejalashtirish, rivojlantirish va samarali boshqarish.',
 
-      levels: M4T1,
+      levels:
+        M4T1_LEVELS,
     },
 
     {
@@ -467,7 +664,8 @@ const MODULE_4: Category = {
       description:
         'Mehnat munosabatlari va xodimlar bilan ishlashning huquqiy asoslari.',
 
-      levels: M4T2,
+      levels:
+        M4T2_LEVELS,
     },
 
     {
@@ -479,7 +677,8 @@ const MODULE_4: Category = {
       description:
         'Kadrlar bo‘yicha hujjatlarni to‘g‘ri yuritish va hisobini tashkil etish.',
 
-      levels: M4T3,
+      levels:
+        M4T3_LEVELS,
     },
 
     {
@@ -491,7 +690,8 @@ const MODULE_4: Category = {
       description:
         'Xodimlar faoliyatini mezonlar asosida baholash va rivojlantirish.',
 
-      levels: M4T4,
+      levels:
+        M4T4_LEVELS,
     },
 
   ],
@@ -523,7 +723,8 @@ const MODULE_5: Category = {
       description:
         'Normativ-huquqiy hujjatlarni o‘rganish, qo‘llash va boshqaruv qarorlarida foydalanish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
     {
@@ -535,7 +736,8 @@ const MODULE_5: Category = {
       description:
         'Maktab hujjatlarini yuritish, nazorat va hisobotlarni tashkil etish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
   ],
@@ -567,7 +769,8 @@ const MODULE_6: Category = {
       description:
         'Ota-onalar va jamoatchilikni ta’lim jarayoniga samarali jalb qilish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
     {
@@ -579,7 +782,8 @@ const MODULE_6: Category = {
       description:
         'Tashqi hamkorlar bilan tizimli va natijador hamkorlikni tashkil etish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
     {
@@ -591,7 +795,8 @@ const MODULE_6: Category = {
       description:
         'Axborot bilan ishlash, media muhit va kommunikatsiya kompetensiyalarini rivojlantirish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
   ],
@@ -623,7 +828,8 @@ const MODULE_7: Category = {
       description:
         'Raqamli texnologiyalar yordamida boshqaruv jarayonlarini takomillashtirish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
     {
@@ -635,7 +841,8 @@ const MODULE_7: Category = {
       description:
         'Sun’iy intellekt imkoniyatlaridan ta’lim va boshqaruv jarayonlarida foydalanish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
   ],
@@ -667,7 +874,8 @@ const MODULE_8: Category = {
       description:
         'Tashkilotdagi o‘zgarishlarga moslashish va qarshiliklarni boshqarish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
     {
@@ -679,7 +887,8 @@ const MODULE_8: Category = {
       description:
         'Sog‘lom psixologik muhit, jamoaviy hamkorlik va ishonchni rivojlantirish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
     {
@@ -691,7 +900,8 @@ const MODULE_8: Category = {
       description:
         'Risklarni aniqlash, baholash va ularning oldini olish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
   ],
@@ -723,7 +933,8 @@ const MODULE_9: Category = {
       description:
         'Inklyuziv ta’limning asosiy tamoyillari va ahamiyati.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
     {
@@ -735,7 +946,8 @@ const MODULE_9: Category = {
       description:
         'Inklyuziv ta’limni tashkil etish va boshqarish mexanizmlari.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
     {
@@ -747,7 +959,8 @@ const MODULE_9: Category = {
       description:
         'Davolanish jarayonidagi bolalar uchun ta’limni tashkil etish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
   ],
@@ -779,7 +992,8 @@ const MODULE_10: Category = {
       description:
         'Ta’lim muassasasida moliyaviy boshqaruv va mablag‘lardan foydalanish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
     {
@@ -791,7 +1005,8 @@ const MODULE_10: Category = {
       description:
         'Mehnatga haq to‘lash va tarifikatsiya jarayonlarini me’yor asosida tashkil etish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
     {
@@ -803,7 +1018,8 @@ const MODULE_10: Category = {
       description:
         'Qo‘shimcha mablag‘larni jalb qilish va ulardan maqsadli foydalanish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
     {
@@ -815,7 +1031,8 @@ const MODULE_10: Category = {
       description:
         'Ta’lim xizmatlarini tashkil etish va ularni boshqarish.',
 
-      levels: EMPTY_LEVELS,
+      levels:
+        EMPTY_LEVELS,
     },
 
   ],
@@ -823,30 +1040,7 @@ const MODULE_10: Category = {
 
 
 /* =========================================================
- * 📐 MATEMATIKA FANI
- *
- * MUHIM:
- *
- * Bu alohida "Abdurahmonova moduli" emas.
- *
- * Bu:
- *
- * 📐 MATEMATIKA FANI
- *      ↓
- * 🎓 Attestatsiya — Abdurahmonova ustoz uchun maxsus
- *
- * tarzida ishlaydi.
- *
- * Keyinchalik shu fan ichiga:
- *
- *   Algebra
- *   Geometriya
- *   Funksiyalar
- *   Matematik mantiq
- *   Attestatsiya
- *   Olimpiada
- *
- * kabi boshqa mavzularni ham qo‘shish mumkin.
+ * MATEMATIKA
  * ========================================================= */
 
 const MODULE_MATEMATIKA: Category = {
@@ -879,31 +1073,21 @@ const MODULE_MATEMATIKA: Category = {
 
 
 /* =========================================================
- * ALL MODULES / CATEGORIES
+ * ALL MODULES
  * ========================================================= */
 
 export const CATEGORIES: Category[] = [
 
   MODULE_1,
-
   MODULE_2,
-
   MODULE_3,
-
   MODULE_4,
-
   MODULE_5,
-
   MODULE_6,
-
   MODULE_7,
-
   MODULE_8,
-
   MODULE_9,
-
   MODULE_10,
-
   MODULE_MATEMATIKA,
 
 ]
@@ -920,12 +1104,6 @@ export const PRESCHOOL_CATEGORIES: Category[] = []
  * INTERNAL HELPERS
  * ========================================================= */
 
-/**
- * Topic ichidagi barcha savollarni
- * quyidagi tartibda qaytaradi:
- *
- * easy → medium → hard → case
- */
 function allTopicQuestions(
   topic: Topic,
 ): Question[] {
@@ -937,9 +1115,6 @@ function allTopicQuestions(
 }
 
 
-/**
- * Barcha modullardagi barcha savollar.
- */
 function allQuestions(): Question[] {
 
   return CATEGORIES.flatMap(
@@ -1420,12 +1595,6 @@ export const MIXED_COUNT =
   30
 
 
-/**
- * Barcha mavjud savollar.
- *
- * Matematika ham shu pool ichiga
- * avtomatik qo‘shiladi.
- */
 export const MIXED_QUESTIONS: Question[] =
   allQuestions()
 
@@ -1553,15 +1722,6 @@ export function getRandomMixedQuestions(
 
 /* =========================================================
  * GET BALANCED MIXED QUESTIONS
- *
- * 30 savol:
- *
- * easy   → 8
- * medium → 8
- * hard   → 8
- * case   → 6
- *
- * Jami → 30
  * ========================================================= */
 
 export function getBalancedMixedQuestions(): Question[] {
@@ -2145,10 +2305,6 @@ export function getQuizSystemStatus() {
         'm3t3',
       ),
 
-    /* =====================================================
-     * MODULE 4 STATUS
-     * ===================================================== */
-
     module4Ready:
       getModuleQuestionCount(
         'm4',
@@ -2184,10 +2340,6 @@ export function getQuizSystemStatus() {
         'm4',
       )?.complete ?? false,
 
-    /* =====================================================
-     * MATEMATIKA STATUS
-     * ===================================================== */
-
     matematikaReady:
       getModuleQuestionCount(
         'matematika',
@@ -2202,7 +2354,6 @@ export function getQuizSystemStatus() {
       isTopicComplete(
         'math-attestation',
       ),
-
   }
 }
 
@@ -2314,58 +2465,108 @@ export function getModule4Status() {
 
       m4t1: {
         questionCount:
-          getTopicQuestionCount('m4t1'),
+          getTopicQuestionCount(
+            'm4t1',
+          ),
+
         counts:
-          getTopicLevelCounts('m4t1'),
+          getTopicLevelCounts(
+            'm4t1',
+          ),
+
         completion:
-          getTopicCompletionPercent('m4t1'),
+          getTopicCompletionPercent(
+            'm4t1',
+          ),
+
         complete:
-          isTopicComplete('m4t1'),
+          isTopicComplete(
+            'm4t1',
+          ),
       },
 
       m4t2: {
         questionCount:
-          getTopicQuestionCount('m4t2'),
+          getTopicQuestionCount(
+            'm4t2',
+          ),
+
         counts:
-          getTopicLevelCounts('m4t2'),
+          getTopicLevelCounts(
+            'm4t2',
+          ),
+
         completion:
-          getTopicCompletionPercent('m4t2'),
+          getTopicCompletionPercent(
+            'm4t2',
+          ),
+
         complete:
-          isTopicComplete('m4t2'),
+          isTopicComplete(
+            'm4t2',
+          ),
       },
 
       m4t3: {
         questionCount:
-          getTopicQuestionCount('m4t3'),
+          getTopicQuestionCount(
+            'm4t3',
+          ),
+
         counts:
-          getTopicLevelCounts('m4t3'),
+          getTopicLevelCounts(
+            'm4t3',
+          ),
+
         completion:
-          getTopicCompletionPercent('m4t3'),
+          getTopicCompletionPercent(
+            'm4t3',
+          ),
+
         complete:
-          isTopicComplete('m4t3'),
+          isTopicComplete(
+            'm4t3',
+          ),
       },
 
       m4t4: {
         questionCount:
-          getTopicQuestionCount('m4t4'),
+          getTopicQuestionCount(
+            'm4t4',
+          ),
+
         counts:
-          getTopicLevelCounts('m4t4'),
+          getTopicLevelCounts(
+            'm4t4',
+          ),
+
         completion:
-          getTopicCompletionPercent('m4t4'),
+          getTopicCompletionPercent(
+            'm4t4',
+          ),
+
         complete:
-          isTopicComplete('m4t4'),
+          isTopicComplete(
+            'm4t4',
+          ),
       },
 
     },
 
     totalQuestions:
-      getModuleQuestionCount('m4'),
+      getModuleQuestionCount(
+        'm4',
+      ),
 
     ready:
-      getModuleQuestionCount('m4') > 0,
+      getModuleQuestionCount(
+        'm4',
+      ) > 0,
 
     complete:
-      getModuleHealth('m4')?.complete ?? false,
+      getModuleHealth(
+        'm4',
+      )?.complete ?? false,
   }
 }
 
@@ -2402,7 +2603,6 @@ export function getMatematikaStatus() {
           isTopicComplete(
             'math-attestation',
           ),
-
       },
 
     },
@@ -2421,18 +2621,12 @@ export function getMatematikaStatus() {
       isTopicComplete(
         'math-attestation',
       ),
-
   }
 }
 
 
 /* =========================================================
  * DEVELOPMENT ASSERTIONS
- * =========================================================
- *
- * Build vaqtida dasturni yiqitmaydi.
- *
- * Faqat ma’lumot holatini tekshirish uchun.
  * ========================================================= */
 
 export function getQuizDataDiagnostics() {
@@ -2483,7 +2677,6 @@ export function getQuizDataDiagnostics() {
 
               completion:
                 topic.completion,
-
             }),
           ),
     )
@@ -2527,10 +2720,6 @@ export function getQuizDataDiagnostics() {
 
 /* =========================================================
  * DEFAULT EXPORT
- * =========================================================
- *
- * Qo‘shimcha qulaylik uchun.
- * Named exportlar asosiy hisoblanadi.
  * ========================================================= */
 
 export default CATEGORIES
