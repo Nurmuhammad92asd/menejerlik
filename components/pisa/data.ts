@@ -107,4 +107,185 @@ export const QUESTIONS: Question[] = [
   { id: 'sci-d5-02', domain: 'science', difficulty: 5, category: 'Tajriba', context: 'Ilmiy', stimulus: "O'g'it ta'sirini o'rganish uchun 2 o'simlik.", question: 'Nima nazorat qilinadi?', options: ['Faqat o\'g\'it', 'Suv, yorug\'lik, tuproq bir xil', 'Faqat suv', 'Hech narsa'], correct: 1, explanation: "Boshqa omillar bir xil bo'lishi kerak.", hint: "Nazorat o'zgaruvchilari.", xp: 30 },
   { id: 'sci-d6-01', domain: 'science', difficulty: 6, category: 'Dizayn', context: 'Ilmiy', stimulus: "Ikki xil o'g'itni solishtirish. 2 o'simlik.", question: 'Nimani bir xil saqlash kerak?', options: ['Boshlang\'ich holat', 'Faqat o\'g\'it', 'Birini olib tashlash', 'Suvsiz'], correct: 0, explanation: "Adolatli tajriba uchun.", hint: "Boshlang'ich holat.", xp: 35 },
   { id: 'sci-d6-02', domain: 'science', difficulty: 6, category: 'Tahlil', context: 'Ilmiy', stimulus: 'Gipoteza: "Yorug\'lik o\'simlik o\'sishini tezlashtiradi".', question: 'Qanday tekshirish?', options: ['Ikki guruh, bir xil sharoit, biri yorug\'likda', 'Bitta o\'simlik', 'Faqat kuzatish', 'Tasodifiy'], correct: 0, explanation: "Nazorat guruhi kerak.", hint: "Nazorat guruhi tuzing.", xp: 35 },
-  { id: 'sci-d7-01', domain: 'science', difficulty: 7, category: 'Tahlil', context: 'Ilmiy', stimulus: 'Tajriba: yangi dori 100 k
+  { id: 'sci-d7-01', domain: 'science', difficulty: 7, category: 'Tahlil', context: 'Ilmiy', stimulus: 'Tajriba: yangi dori 100 kishida sinovdan o\'tdi. 60% yaxshilandi, 40% yo\'q.', question: 'Xulosa?', options: ['Dori samarali', "Ehtimol samarali, ko'proq sinov kerak", 'Samarasiz', 'Bilmadim'], correct: 1, explanation: "100 kishi kichik namuna.", hint: "Namuna hajmi.", xp: 40 },
+  { id: 'sci-d7-02', domain: 'science', difficulty: 7, category: 'Tahlil', context: 'Atrof-muhit', stimulus: "Ikki shahar: A da havo iflos, B da toza. A da astma ko'p.", question: 'Xulosa?', options: ['Iflos havo astmaga sabab', 'Boshqa omillar ham bor', 'Astma yuqumli', 'Bilmadim'], correct: 1, explanation: "Boshqa omillar ham bo'lishi mumkin.", hint: "Boshqa omillarni ko'ring.", xp: 40 },
+  { id: 'sci-d8-01', domain: 'science', difficulty: 8, category: 'Ilmiy dizayn', context: 'Ilmiy', stimulus: "Yangi dori: 200 kishi, platsebo nazorati, 3 oy. Natija: 5% yaxshilanish, statistik ahamiyatli emas.", question: 'Xulosa?', options: ['Dori samarali', 'Dori samarali emas (bu sinovda)', 'Dori zararli', 'Sinov noto\'g\'ri'], correct: 1, explanation: "Statistik ahamiyatsiz = samarasiz.", hint: "Statistik ahamiyat.", xp: 50 },
+  { id: 'sci-d8-02', domain: 'science', difficulty: 8, category: 'Ilmiy tahlil', context: 'Ilmiy', stimulus: "Tadqiqot: 'Shakar semizlikka sabab'. 10 yil, 5000 kishi, boshqa omillar nazorat qilingan.", question: 'Xulosa?', options: ['Shakar semizlikka sabab', 'Boshqa omillar', 'Shakar foydali', 'Bilmadim'], correct: 0, explanation: "Katta namuna, uzoq vaqt, nazorat.", hint: "Tadqiqot sifatini ko'ring.", xp: 50 },
+
+  // ─────── MUAMMO YECHISH (16 ta) ───────
+  { id: 'prob-d1-01', domain: 'problem-solving', difficulty: 1, category: 'Mantiq', context: 'Maktab', stimulus: 'Ali, Vali, Soli. Ali Validan baland, Vali Solidan baland.', question: 'Eng baland kim?', options: ['Ali', 'Vali', 'Soli', 'Teng'], correct: 0, explanation: "Ali > Vali > Soli.", hint: "Zanjirni tuzing.", xp: 10 },
+  { id: 'prob-d1-02', domain: 'problem-solving', difficulty: 1, category: 'Mantiq', context: 'Shaxsiy hayot', stimulus: 'Bugun dushanba.', question: 'Ertaga qaysi kun?', options: ['Yakshanba', 'Seshanba', 'Chorshanba', 'Payshanba'], correct: 1, explanation: "Dushanbadan keyin seshanba.", hint: "Kunlar tartibi.", xp: 10 },
+  { id: 'prob-d2-01', domain: 'problem-solving', difficulty: 2, category: 'Mantiq', context: 'Maktab', stimulus: "5 ta qalam, 2 tasi qizil, qolgani ko'k.", question: "Nechta ko'k?", options: ['2', '3', '4', '5'], correct: 1, explanation: '5 - 2 = 3.', hint: "Ayiring.", xp: 15 },
+  { id: 'prob-d2-02', domain: 'problem-solving', difficulty: 2, category: 'Mantiq', context: 'Shaxsiy hayot', stimulus: "Poyezd 10:00 da jo'nadi, 3 soat yo'l.", question: 'Soat nechada yetib boradi?', options: ['12:00', '13:00', '14:00', '15:00'], correct: 1, explanation: "10 + 3 = 13:00.", hint: "Vaqtni qo'shing.", xp: 15 },
+  { id: 'prob-d3-01', domain: 'problem-solving', difficulty: 3, category: 'Strategiya', context: 'Maktab', stimulus: "30 o'quvchi, har guruhda 5-10 kishi.", question: 'Qaysi variant mos?', options: ['2 guruh', '3 guruh', '4 guruh', '7 guruh'], correct: 1, explanation: '30 ÷ 3 = 10.', hint: "Bo'linishni tekshiring.", xp: 20 },
+  { id: 'prob-d3-02', domain: 'problem-solving', difficulty: 3, category: 'Strategiya', context: 'Shaxsiy hayot', stimulus: "100 000 so'm, kitob 30 000, daftar 15 000.", question: "Ikkitasini olsa qancha qoladi?", options: ['45 000', '50 000', '55 000', '60 000'], correct: 2, explanation: "100 - 45 = 55 000.", hint: "Ayiring.", xp: 20 },
+  { id: 'prob-d4-01', domain: 'problem-solving', difficulty: 4, category: 'Mantiq', context: 'Jamiyat', stimulus: "A → B, B → C.", question: 'A → C?', options: ['Ha', "Yo'q", 'Bilmadim', 'Ba'zan'], correct: 0, explanation: "Tranzitivlik.", hint: "Zanjirni davom ettiring.", xp: 25 },
+  { id: 'prob-d4-02', domain: 'problem-solving', difficulty: 4, category: 'Strategiya', context: 'Shaxsiy hayot', stimulus: "3 ta ish: A 1 soat, B 2 soat, C 3 soat. Jami vaqt?", question: 'Necha soat?', options: ['4', '5', '6', '7'], correct: 2, explanation: "1+2+3 = 6.", hint: "Qo'shing.", xp: 25 },
+  { id: 'prob-d5-01', domain: 'problem-solving', difficulty: 5, category: 'Strategiya', context: 'Shaxsiy hayot', stimulus: "120 000 so'm. Kitob 55 000, daftar 18 000, ruchka 7 000, sumka 65 000.", question: "Qaysi kombinatsiya 120 000 dan oshmaydi?", options: ["Kitob+daftar+ruchka", "Kitob+sumka+ruchka", "Sumka+daftar+ruchka", "Kitob+daftar+sumka"], correct: 0, explanation: "55+18+7 = 80 000.", hint: "Har birini qo'shing.", xp: 30 },
+  { id: 'prob-d5-02', domain: 'problem-solving', difficulty: 5, category: 'Mantiq', context: 'Maktab', stimulus: "Har 5 daqiqada 1 ta savol. 10 ta savol.", question: 'Necha daqiqa?', options: ['40', '45', '50', '55'], correct: 2, explanation: '5 × 10 = 50.', hint: "Ko'paytiring.", xp: 30 },
+  { id: 'prob-d6-01', domain: 'problem-solving', difficulty: 6, category: 'Strategiya', context: 'Jamiyat', stimulus: "3 ta ishchi 6 soatda bajaradi. 2 ta ishchi?", question: 'Necha soat?', options: ['6', '9', '12', '15'], correct: 1, explanation: "3×6 = 18 ish-soat; 18 ÷ 2 = 9.", hint: "Ish-soatni hisoblang.", xp: 35 },
+  { id: 'prob-d6-02', domain: 'problem-solving', difficulty: 6, category: 'Mantiq', context: 'Shaxsiy hayot', stimulus: "A: 'Men yolg'onchiman'.", question: 'A kim?', options: ['Rostgo\'y', 'Yolg\'onchi', 'Bilmadim', 'Ikkisi'], correct: 1, explanation: "Paradoks — yolg'onchi.", hint: "O'z-o'zini inkor.", xp: 35 },
+  { id: 'prob-d7-01', domain: 'problem-solving', difficulty: 7, category: 'Strategiya', context: 'Jamiyat', stimulus: "180 mehmon, 12 o'rindiq/qator, har 3 qatordan keyin 1m bo'sh joy.", question: "Birinchi navbatda nima kerak?", options: ['Rang', 'Xona o\'lchami', 'Yosh', 'Rang'], correct: 1, explanation: "Xona o'lchami kerak.", hint: "Fizik joy.", xp: 40 },
+  { id: 'prob-d7-02', domain: 'problem-solving', difficulty: 7, category: 'Mantiq', context: 'Ilmiy', stimulus: "A, B, C. A > B, B > C, C > A.", question: 'Nima?', options: ['To\'g\'ri', 'Ziddiyat', 'Bilmadim', 'Ba\'zan'], correct: 1, explanation: "Tranzitivlik buzilgan.", hint: "Zanjirni tekshiring.", xp: 40 },
+  { id: 'prob-d8-01', domain: 'problem-solving', difficulty: 8, category: 'Strategiya', context: 'Jamiyat', stimulus: "A: 60% foyda 80% ehtimol. B: 100% foyda 40% ehtimol.", question: "Kutilgan qiymat bo'yicha qaysi yaxshi?", options: ['A', 'B', 'Teng', 'Bilmadim'], correct: 0, explanation: "A: 0.48, B: 0.40 → A.", hint: "Kutilgan qiymat = ehtimol × foyda.", xp: 50 },
+  { id: 'prob-d8-02', domain: 'problem-solving', difficulty: 8, category: 'Strategiya', context: 'Ilmiy', stimulus: "3 ta quti: biri 2 qizil, biri 2 ko'k, biri 1 qizil 1 ko'k. Bittasi tanlandi, 1 qizil chiqdi.", question: "Qolgan shar qizil bo'lish ehtimoli?", options: ['1/3', '1/2', '2/3', '1'], correct: 2, explanation: "Bayes: 3 ta holat, 2 tasida qolgan qizil.", hint: "Bayes teoremasi.", xp: 50 },
+]
+
+// ═══════════════════════════════════════════════════════
+// LESSONS — har domainga 1 tadan
+// ═══════════════════════════════════════════════════════
+
+export const LESSONS: Lesson[] = [
+  {
+    id: 'lesson-math-percent',
+    domain: 'mathematics',
+    difficulty: 5,
+    title: 'Foizlarni hisoblash',
+    subtitle: "Real hayotda foiz qanday ishlaydi",
+    icon: '📐',
+    xp: 30,
+    steps: [
+      {
+        type: 'concept',
+        title: 'Foiz nima?',
+        body: "Foiz — 100 ga nisbatan olingan qism. 70% = har 100 tadan 70 tasi. Kasrga aylantirish: 70% = 0.70.",
+        emoji: '💡',
+      },
+      {
+        type: 'example',
+        problem: "200 ning 70% ini toping.",
+        steps: [
+          "1. Foizni kasrga aylantiramiz: 70% ÷ 100 = 0.70",
+          "2. Umumiy songa ko'paytiramiz: 200 × 0.70",
+          "3. Natija: 140",
+        ],
+        answer: '140',
+      },
+      {
+        type: 'example',
+        problem: "Telefon 2 000 000 so'm. 15% chegirma. Yangi narx?",
+        steps: [
+          "1. Chegirma: 2 000 000 × 0.15 = 300 000",
+          "2. Yangi narx: 2 000 000 - 300 000",
+          "3. Natija: 1 700 000 so'm",
+        ],
+        answer: "1 700 000 so'm",
+      },
+      {
+        type: 'check',
+        question: "500 ning 20% i nechaga teng?",
+        options: ['50', '100', '150', '200'],
+        correct: 1,
+        explanation: "500 × 0.20 = 100.",
+      },
+    ],
+  },
+  {
+    id: 'lesson-read-inference',
+    domain: 'reading',
+    difficulty: 4,
+    title: 'Xulosa chiqarish',
+    subtitle: "Matndan to'g'ri xulosa chiqarish",
+    icon: '📖',
+    xp: 30,
+    steps: [
+      {
+        type: 'concept',
+        title: 'Xulosa nima?',
+        body: "Xulosa — matnda to'g'ridan-to'g'ri aytilmagan, lekin dalillardan kelib chiqadigan fikr. Yaxshi xulosa matnga tayanadi va ortiqcha narsa qo'shmaydi.",
+        emoji: '🧩',
+      },
+      {
+        type: 'example',
+        problem: 'Matn: "Qayta ishlatiladigan idish ishlatilgach, plastik chiqindi kamaydi." Qaysi xulosa to\'g\'ri?',
+        steps: [
+          "A) O'quvchilar suv ichmay qo'ydi — ❌ matnda yo'q",
+          "B) Qayta ishlatish chiqindini kamaytirdi — ✅ matnga tayanadi",
+          "C) Barcha chiqindi yo'qoldi — ❌ haddan tashqari",
+        ],
+        answer: 'B varianti',
+      },
+      {
+        type: 'check',
+        question: "Matn: \"Yangi o'g'it ishlatilgach, hosil 20% oshdi.\" Xulosa?",
+        options: [
+          "O'g'it barcha kasalliklarni davolaydi",
+          "Yangi o'g'it hosilni oshirishga yordam berdi",
+          'Hosil hech qachon kamaymaydi',
+          'Eski o\'g\'it yaroqsiz',
+        ],
+        correct: 1,
+        explanation: 'Faqat dalilga tayanamiz: hosil oshdi → o\'g\'it yordam berdi.',
+      },
+    ],
+  },
+  {
+    id: 'lesson-sci-photosynthesis',
+    domain: 'science',
+    difficulty: 3,
+    title: 'Fotosintez',
+    subtitle: "O'simliklar qanday ovqat tayyorlaydi",
+    icon: '🔬',
+    xp: 30,
+    steps: [
+      {
+        type: 'concept',
+        title: 'Fotosintez nima?',
+        body: "Fotosintez — o'simliklar quyosh nuri, suv va karbonat angidriddan oziq (glyukoza) va kislorod hosil qiladigan jarayon.",
+        emoji: '🌱',
+      },
+      {
+        type: 'example',
+        problem: "Nega o'simlik quyosh nurida yaxshiroq o'sadi?",
+        steps: [
+          "1. Quyosh nuri — energiya manbai",
+          "2. Fotosintez yorug'likda tezroq bo'ladi",
+          "3. Natija: ko'proq oziq → tezroq o'sish",
+        ],
+        answer: "Yorug'lik fotosintezni tezlashtiradi",
+      },
+      {
+        type: 'check',
+        question: 'Fotosintez uchun nima kerak?',
+        options: ['Faqat suv', 'Yorug\'lik, suv, CO₂', 'Faqat tuproq', 'Faqat kislorod'],
+        correct: 1,
+        explanation: 'Uchala komponent kerak.',
+      },
+    ],
+  },
+  {
+    id: 'lesson-prob-logic',
+    domain: 'problem-solving',
+    difficulty: 4,
+    title: 'Mantiqiy zanjirlar',
+    subtitle: "Murakkab masalalarni qadam-baqadam yechish",
+    icon: '🧠',
+    xp: 30,
+    steps: [
+      {
+        type: 'concept',
+        title: 'Mantiqiy zanjir nima?',
+        body: "Agar A > B va B > C bo'lsa, unda A > C. Bu tranzitivlik deyiladi. Ko'p masalalar shu tamoyilga asoslanadi.",
+        emoji: '🔗',
+      },
+      {
+        type: 'example',
+        problem: "Ali Validan baland, Vali Solidan baland. Eng baland kim?",
+        steps: [
+          "1. Ali > Vali",
+          "2. Vali > Soli",
+          "3. Zanjir: Ali > Vali > Soli",
+          "4. Eng baland: Ali",
+        ],
+        answer: 'Ali',
+      },
+      {
+        type: 'check',
+        question: 'A > B, B > C, C > A. Bu nima?',
+        options: ["To'g'ri zanjir", 'Ziddiyat', 'Bilmadim', "Ba'zan"],
+        correct: 1,
+        explanation: 'Tranzitivlik buzilgan — ziddiyat.',
+      },
+    ],
+  },
+]
