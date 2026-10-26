@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       Foydalanuvchi quyidagi mavzuni kiritdi: "${topic}".
       
       Menga aynan 12 ta slayd uchun ma'lumotlarni FAQAT JSON formatida qaytaring.
-      Javobingizda "slides" degan massiv (array) bo'lishi shart.
+      Javobingizda "slides" degan massiv (array) bo'lishi shart va u 12 ta elementdan iborat bo'lsin.
       
       JSON formati:
       {
@@ -31,11 +31,11 @@ export async function POST(req: Request) {
           { "type": "literature", "title": "Adabiyotlar", "bullets": ["Kitob 1", "Maqola 2"] },
           { "type": "goal", "title": "Maqsad", "content": "Mavzuga mos bitta aniq maqsad yozing" },
           { "type": "tasks", "title": "Vazifalar", "bullets": ["Vazifa 1", "Vazifa 2", "Vazifa 3"] },
-          { "type": "foreign", "title": "Xorijiy tajribalar", "foreignData": [{"country": "Finlandiya", "flag": "🇫🇮", "text": "Ular buni qanday qiladi..."}, {"country": "Yaponiya", "flag": "🇯🇵", "text": "Ularning tajribasi..."}] },
+          { "type": "foreign", "title": "Xorijiy tajribalar", "foreignData": [{"country": "Finlandiya", "flag": "🇫🇮", "text": "Ular buni qanday qiladi..."}] },
           { "type": "comparison", "title": "Qiyosiy tahlil", "tableData": { "headers": ["O'zbekiston", "Xorij", "Taklif"], "rows": [["Bizda nima bor", "Ularda nima bor", "Nima qilish kerak"]] } },
           { "type": "conclusion", "title": "Xulosa", "content": "Umumiy xulosa matni..." },
           { "type": "proposal", "title": "Takliflar", "bullets": ["Taklif 1", "Taklif 2"] },
-          { "type": "action_plan", "title": "Chora-tadbirlar rejasi", "tableData": { "headers": ["№", "Muammo", "Mexanizm", "Mas'ullar", "Muddati", "Natija"], "rows": [["1", "Muammo 1", "Qanday hal qilinadi", "Mavzuga mos mas'ullarni o'zingiz yozing", "2026-yil", "Kutilayotgan natija"]] } },
+          { "type": "action_plan", "title": "Chora-tadbirlar rejasi", "tableData": { "headers": ["№", "Muammo", "Mexanizm", "Mas'ullar", "Muddati", "Natija"], "rows": [["1", "Muammo 1", "Qanday hal qilinadi", "Mas'ullar", "2026-yil", "Kutilayotgan natija"]] } },
           { "type": "final", "title": "E'tiboringiz uchun rahmat!", "content": "" }
         ]
       }
@@ -50,10 +50,10 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         model: "openai/gpt-oss-120b", 
         messages: [
-          { role: "system", content: "Siz faqat toza JSON qaytaradigan yordamchisiz. Javobingizda hech qanday qo'shimcha matn bo'lmasligi kerak." },
+          { role: "system", content: "Siz faqat toza JSON qaytaradigan yordamchisiz." },
           { role: "user", content: prompt }
         ],
-        temperature: 0.7,
+        temperature: 0.5,
         response_format: { type: "json_object" }
       })
     })
@@ -61,22 +61,28 @@ export async function POST(req: Request) {
     const data = await response.json()
     
     if (!response.ok) {
-      console.error("GROQ API XATOSI:", data)
+      console.error("GROQ XATOSI:", data)
       throw new Error(data.error?.message || "AI xatolik berdi")
     }
 
     const generatedText = data.choices[0].message.content
+    console.log("AI QAYTARGAN MATN:", generatedText) // Vercel logida ko'rish uchun
+    
     const cleanJson = generatedText.replace(/```json/g, '').replace(/```/g, '').trim()
     const parsedData = JSON.parse(cleanJson)
 
-    // 🚨 ENG MUHIM TUZATISH: AI noto'g'ri javob qaytarsa, o'zimiz to'ldiramiz
-    const slidesArray = parsedData.slides && Array.isArray(parsedData.slides) 
+    // Default dizayn (agar AI dizayn bermasa, sayt qulamasligi uchun)
+    const defaultDesign = {
+      primary: '#1e3a8a', 
+      secondary: '#eff6ff', 
+      accent: '#3b82f6', 
+      textColor: '#1e293b'
+    }
+
+    // Slaydlar massivini tekshirish
+    const slidesArray = (parsedData.slides && Array.isArray(parsedData.slides)) 
       ? parsedData.slides 
-      : [
-          { type: 'title', title: topic, content: '' },
-          { type: 'relevance', title: 'Dolzarblik', content: 'Mavzuning dolzarbligi...' },
-          { type: 'final', title: "E'tiboringiz uchun rahmat!", content: '' }
-        ]
+      : []
 
     const finalPresentation = {
       id: crypto.randomUUID(),
@@ -85,9 +91,7 @@ export async function POST(req: Request) {
       group,
       year: '2026',
       city: 'TOSHKENT',
-      design: parsedData.design || {
-        primary: '#1e3a8a', secondary: '#eff6ff', accent: '#3b82f6', textColor: '#1e293b'
-      },
+      design: parsedData.design || defaultDesign,
       slides: slidesArray.map((s: any, i: number) => ({
         id: String(i + 1),
         ...s,
@@ -100,7 +104,7 @@ export async function POST(req: Request) {
     return NextResponse.json(finalPresentation)
 
   } catch (error: any) {
-    console.error("AI Error:", error.message)
-    return NextResponse.json({ error: "AI tizimida xatolik yuz berdi. Qayta urinib ko'ring." }, { status: 500 })
+    console.error("UMUMIY XATO:", error.message)
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
