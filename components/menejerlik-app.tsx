@@ -438,7 +438,7 @@ export function MenejerlikApp() {
   }
 
   /* =======================================================
-     LOGIC ACADEMY — YANGI
+     LOGIC ACADEMY
   ======================================================= */
 
   const openLogicAcademy = () => {
@@ -1090,7 +1090,11 @@ export function MenejerlikApp() {
         return
 
       case 'logic':
-        goHome()
+        setScreen(
+          'student-academy',
+        )
+
+        scrollToTop()
 
         return
 
@@ -1444,9 +1448,6 @@ export function MenejerlikApp() {
             onStudentAcademy={
               openStudentAcademy
             }
-            onLogic={
-              openLogicAcademy
-            }
             onAI={openAI}
             onRanking={
               openRanking
@@ -1465,6 +1466,9 @@ export function MenejerlikApp() {
             onPisa={
               openPisaAcademy
             }
+            onLogic={
+              openLogicAcademy
+            }
           />
         )}
 
@@ -1479,7 +1483,7 @@ export function MenejerlikApp() {
         )}
 
         {/* =================================================
-            LOGIC ACADEMY — YANGI
+            LOGIC ACADEMY
         ================================================= */}
 
         {screen === 'logic' && (
