@@ -17,6 +17,11 @@ import PisaAcademy from '@/components/pisa/pisa-academy'
 import LogicAcademy from '@/components/logic/logic-academy'
 import PresidentAcademy from '@/components/president/president-academy'
 
+// 🎨 YANGI: Slayd Yaratuvchi komponentlari
+import SlideCreator from '@/components/slides/slide-creator'
+import SlideViewer from '@/components/slides/slide-viewer'
+import type { PresentationData } from '@/components/slides/slide-types'
+
 import {
   createModuleSession,
   createTopicSession,
@@ -73,6 +78,7 @@ type Screen =
   | 'pisa'
   | 'logic'
   | 'president'
+  | 'slides'      // 🎨 YANGI QO'SHILDI
   | 'education'
   | 'roles'
   | 'subjects'
@@ -162,7 +168,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Matematika fani o‘qituvchilari uchun professional testlar.',
   },
-
   {
     id: 'ona-tili-adabiyot',
     icon: '📖',
@@ -170,7 +175,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Ona tili va adabiyot bo‘yicha attestatsiyaga tayyorgarlik.',
   },
-
   {
     id: 'ingliz-tili',
     icon: '🇬🇧',
@@ -178,7 +182,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Ingliz tili o‘qituvchilari uchun professional testlar.',
   },
-
   {
     id: 'rus-tili',
     icon: '🇷🇺',
@@ -186,7 +189,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Rus tili bo‘yicha attestatsiyaga tayyorgarlik.',
   },
-
   {
     id: 'kimyo',
     icon: '🧪',
@@ -194,7 +196,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Kimyo fani o‘qituvchilari uchun testlar.',
   },
-
   {
     id: 'fizika',
     icon: '⚛️',
@@ -202,7 +203,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Fizika bo‘yicha professional tayyorgarlik.',
   },
-
   {
     id: 'biologiya',
     icon: '🧬',
@@ -210,7 +210,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Biologiya fani o‘qituvchilari uchun testlar.',
   },
-
   {
     id: 'geografiya',
     icon: '🌍',
@@ -218,7 +217,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Geografiya bo‘yicha professional tayyorgarlik.',
   },
-
   {
     id: 'tarix',
     icon: '📜',
@@ -226,7 +224,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Tarix fani bo‘yicha attestatsiya testlari.',
   },
-
   {
     id: 'informatika',
     icon: '💻',
@@ -234,7 +231,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Informatika va AKT bo‘yicha testlar.',
   },
-
   {
     id: 'musiqa',
     icon: '🎵',
@@ -242,7 +238,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Musiqa fani bo‘yicha professional tayyorgarlik.',
   },
-
   {
     id: 'tasviriy-sanat',
     icon: '🎨',
@@ -250,7 +245,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Tasviriy san’at bo‘yicha testlar.',
   },
-
   {
     id: 'texnologiya',
     icon: '🛠️',
@@ -258,7 +252,6 @@ const SCHOOL_SUBJECTS: Subject[] = [
     description:
       'Texnologiya fani o‘qituvchilari uchun testlar.',
   },
-
   {
     id: 'jismoniy-tarbiya',
     icon: '🏃',
@@ -291,6 +284,10 @@ export function MenejerlikApp() {
 
   const [quizResult, setQuizResult] =
     useState<QuizResult | null>(null)
+
+  // 🎨 YANGI: Slayd natijasini saqlash uchun
+  const [presentation, setPresentation] =
+    useState<PresentationData | null>(null)
 
   const [isFullscreen, setIsFullscreen] =
     useState(false)
@@ -392,14 +389,10 @@ export function MenejerlikApp() {
 
   const goHome = () => {
     setScreen('home')
-
-    setNavigation(
-      INITIAL_NAVIGATION,
-    )
-
+    setNavigation(INITIAL_NAVIGATION)
     setQuizSession(null)
     setQuizResult(null)
-
+    setPresentation(null) // Slaydni ham tozalash
     scrollToTop()
   }
 
@@ -410,15 +403,8 @@ export function MenejerlikApp() {
   const openStudentAcademy = () => {
     setQuizSession(null)
     setQuizResult(null)
-
-    setNavigation(
-      INITIAL_NAVIGATION,
-    )
-
-    setScreen(
-      'student-academy',
-    )
-
+    setNavigation(INITIAL_NAVIGATION)
+    setScreen('student-academy')
     scrollToTop()
   }
 
@@ -429,13 +415,8 @@ export function MenejerlikApp() {
   const openPisaAcademy = () => {
     setQuizSession(null)
     setQuizResult(null)
-
-    setNavigation(
-      INITIAL_NAVIGATION,
-    )
-
+    setNavigation(INITIAL_NAVIGATION)
     setScreen('pisa')
-
     scrollToTop()
   }
 
@@ -446,13 +427,8 @@ export function MenejerlikApp() {
   const openLogicAcademy = () => {
     setQuizSession(null)
     setQuizResult(null)
-
-    setNavigation(
-      INITIAL_NAVIGATION,
-    )
-
+    setNavigation(INITIAL_NAVIGATION)
     setScreen('logic')
-
     scrollToTop()
   }
 
@@ -463,13 +439,21 @@ export function MenejerlikApp() {
   const openPresidentAcademy = () => {
     setQuizSession(null)
     setQuizResult(null)
-
-    setNavigation(
-      INITIAL_NAVIGATION,
-    )
-
+    setNavigation(INITIAL_NAVIGATION)
     setScreen('president')
+    scrollToTop()
+  }
 
+  /* =======================================================
+     🎨 SLIDES (YANGI)
+  ======================================================= */
+
+  const openSlides = () => {
+    setQuizSession(null)
+    setQuizResult(null)
+    setPresentation(null) // Har safar yangi slayd yaratish uchun tozalash
+    setNavigation(INITIAL_NAVIGATION)
+    setScreen('slides')
     scrollToTop()
   }
 
@@ -498,13 +482,8 @@ export function MenejerlikApp() {
   const openEducationSelection = () => {
     setQuizSession(null)
     setQuizResult(null)
-
-    setNavigation(
-      INITIAL_NAVIGATION,
-    )
-
+    setNavigation(INITIAL_NAVIGATION)
     setScreen('education')
-
     scrollToTop()
   }
 
@@ -521,7 +500,6 @@ export function MenejerlikApp() {
     })
 
     setScreen('roles')
-
     scrollToTop()
   }
 
@@ -575,14 +553,11 @@ export function MenejerlikApp() {
     setNavigation(
       previous => ({
         ...previous,
-
         subjectId,
-
         moduleId:
           subjectId === 'matematika'
             ? 'matematika'
             : null,
-
         topicId: null,
         quizSource: null,
       }),
@@ -614,7 +589,6 @@ export function MenejerlikApp() {
     )
 
     setScreen('topics')
-
     scrollToTop()
   }
 
@@ -638,7 +612,6 @@ export function MenejerlikApp() {
           '[Quiz] Module questions not found:',
           moduleId,
         )
-
         return
       }
 
@@ -654,7 +627,6 @@ export function MenejerlikApp() {
       setQuizSession(session)
       setQuizResult(null)
       setScreen('quiz')
-
       scrollToTop()
     } catch (error) {
       console.error(
@@ -680,7 +652,6 @@ export function MenejerlikApp() {
     )
 
     setScreen('levels')
-
     scrollToTop()
   }
 
@@ -726,7 +697,6 @@ export function MenejerlikApp() {
             level,
           },
         )
-
         return
       }
 
@@ -741,7 +711,6 @@ export function MenejerlikApp() {
       setQuizSession(session)
       setQuizResult(null)
       setScreen('quiz')
-
       scrollToTop()
     } catch (error) {
       console.error(
@@ -778,12 +747,10 @@ export function MenejerlikApp() {
             '/api/results',
             {
               method: 'POST',
-
               headers: {
                 'Content-Type':
                   'application/json',
               },
-
               body: JSON.stringify({
                 telegramUser: {
                   id: telegramUser.id,
@@ -794,17 +761,13 @@ export function MenejerlikApp() {
                   username:
                     telegramUser.username,
                 },
-
                 categoryId:
                   navigation.moduleId,
-
                 topicId:
                   navigation.topicId,
-
                 level:
                   quizSession?.level ??
                   null,
-
                 correct,
                 total,
                 durationSec,
@@ -817,7 +780,6 @@ export function MenejerlikApp() {
             '[D1] Result save failed:',
             response.status,
           )
-
           return null
         }
 
@@ -827,7 +789,6 @@ export function MenejerlikApp() {
           '[D1] Save result error:',
           error,
         )
-
         return null
       }
     }
@@ -849,13 +810,11 @@ export function MenejerlikApp() {
       try {
         await history.addAttempt({
           id: crypto.randomUUID(),
-
           categoryId:
             navigation.topicId ??
             navigation.moduleId ??
             navigation.subjectId ??
             'unknown',
-
           correct,
           total,
           durationSec,
@@ -917,13 +876,9 @@ export function MenejerlikApp() {
 
             return {
               ...item,
-
               selected,
-
               isAnswered,
-
               isCorrect,
-
               isWrong:
                 isAnswered &&
                 !isCorrect,
@@ -933,32 +888,24 @@ export function MenejerlikApp() {
 
       const correct =
         checkedAnswers.filter(
-          item =>
-            item.isCorrect,
+          item => item.isCorrect,
         ).length
 
       const unanswered =
         checkedAnswers.filter(
-          item =>
-            !item.isAnswered,
+          item => !item.isAnswered,
         ).length
 
       const wrong =
         checkedAnswers.filter(
-          item =>
-            item.isWrong,
+          item => item.isWrong,
         ).length
 
       const counted =
-        correct +
-        wrong +
-        unanswered
+        correct + wrong + unanswered
 
       const missing =
-        Math.max(
-          0,
-          total - counted,
-        )
+        Math.max(0, total - counted)
 
       const finalUnanswered =
         unanswered + missing
@@ -966,39 +913,25 @@ export function MenejerlikApp() {
       const percentage =
         total > 0
           ? Math.round(
-              (correct /
-                total) *
-                100,
+              (correct / total) * 100,
             )
           : 0
 
       const result = {
         ...quizSession,
-
         questions,
-
-        answers:
-          checkedAnswers,
-
+        answers: checkedAnswers,
         total,
-
         correct,
-
         wrong,
-
         percentage,
-
         score: correct,
-
-        unanswered:
-          finalUnanswered,
-
+        unanswered: finalUnanswered,
         durationSec: 0,
       } as unknown as QuizResult
 
       setQuizResult(result)
       setScreen('result')
-
       scrollToTop()
 
       await Promise.allSettled([
@@ -1007,7 +940,6 @@ export function MenejerlikApp() {
           total,
           durationSec: 0,
         }),
-
         saveLocalHistory({
           correct,
           total,
@@ -1026,33 +958,19 @@ export function MenejerlikApp() {
 
       const fallbackResult = {
         ...quizSession,
-
-        questions:
-          quizSession.questions,
-
+        questions: quizSession.questions,
         answers,
-
         total,
-
         correct: 0,
-
         wrong: total,
-
         percentage: 0,
-
         score: 0,
-
         unanswered: 0,
-
         durationSec: 0,
       } as unknown as QuizResult
 
-      setQuizResult(
-        fallbackResult,
-      )
-
+      setQuizResult(fallbackResult)
       setScreen('result')
-
       scrollToTop()
     }
   }
@@ -1067,20 +985,15 @@ export function MenejerlikApp() {
     }
 
     if (
-      navigation.quizSource ===
-        'module' &&
+      navigation.quizSource === 'module' &&
       navigation.moduleId
     ) {
-      startModuleMixed(
-        navigation.moduleId,
-      )
-
+      startModuleMixed(navigation.moduleId)
       return
     }
 
     if (
-      navigation.quizSource ===
-        'topic' &&
+      navigation.quizSource === 'topic' &&
       navigation.topicId
     ) {
       startTopicQuiz(
@@ -1100,114 +1013,69 @@ export function MenejerlikApp() {
         return
 
       case 'pisa':
-        setScreen(
-          'student-academy',
-        )
-
-        scrollToTop()
-
-        return
-
       case 'logic':
-        setScreen(
-          'student-academy',
-        )
-
-        scrollToTop()
-
-        return
-
       case 'president':
-        setScreen(
-          'student-academy',
-        )
-
+      case 'slides': // 🎨 YANGI: Slayddan orqaga
+        setScreen('student-academy')
         scrollToTop()
-
         return
 
       case 'student-academy':
         goHome()
-
         return
 
       case 'ranking':
       case 'ai':
       case 'education':
         goHome()
-
         return
 
       case 'roles':
         setScreen('education')
-
         scrollToTop()
-
         return
 
       case 'subjects':
         setScreen('roles')
-
         scrollToTop()
-
         return
 
       case 'modules':
         setScreen('roles')
-
         scrollToTop()
-
         return
 
       case 'topics':
-        if (
-          navigation.subjectId ===
-          'matematika'
-        ) {
+        if (navigation.subjectId === 'matematika') {
           setScreen('subjects')
         } else {
           setScreen('modules')
         }
-
         scrollToTop()
-
         return
 
       case 'levels':
         setScreen('topics')
-
         scrollToTop()
-
         return
 
       case 'quiz':
-        if (
-          navigation.quizSource ===
-          'module'
-        ) {
+        if (navigation.quizSource === 'module') {
           setScreen('topics')
         } else {
           setScreen('levels')
         }
-
         scrollToTop()
-
         return
 
       case 'result':
-        if (
-          navigation.quizSource ===
-          'module'
-        ) {
+        if (navigation.quizSource === 'module') {
           setScreen('topics')
         } else {
           setScreen('levels')
         }
-
         setQuizResult(null)
-
         scrollToTop()
-
         return
     }
   }
@@ -1229,14 +1097,10 @@ export function MenejerlikApp() {
     const shouldConfirm =
       screen === 'quiz'
 
-    setIsClosingConfirmation(
-      shouldConfirm,
-    )
+    setIsClosingConfirmation(shouldConfirm)
 
     try {
-      setClosingConfirmation(
-        shouldConfirm,
-      )
+      setClosingConfirmation(shouldConfirm)
     } catch (error) {
       console.error(
         '[Telegram] Closing confirmation:',
@@ -1246,9 +1110,7 @@ export function MenejerlikApp() {
 
     return () => {
       try {
-        setClosingConfirmation(
-          false,
-        )
+        setClosingConfirmation(false)
       } catch {
         // ignore
       }
@@ -1261,13 +1123,10 @@ export function MenejerlikApp() {
 
   const activeCategories =
     useMemo(() => {
-      return navigation.educationType ===
-        'preschool'
+      return navigation.educationType === 'preschool'
         ? PRESCHOOL_CATEGORIES
         : CATEGORIES
-    }, [
-      navigation.educationType,
-    ])
+    }, [navigation.educationType])
 
   /* =======================================================
      ACTIVE MODULE
@@ -1275,18 +1134,11 @@ export function MenejerlikApp() {
 
   const activeModule =
     useMemo(() => {
-      if (
-        !navigation.moduleId
-      ) {
+      if (!navigation.moduleId) {
         return undefined
       }
-
-      return getModuleById(
-        navigation.moduleId,
-      )
-    }, [
-      navigation.moduleId,
-    ])
+      return getModuleById(navigation.moduleId)
+    }, [navigation.moduleId])
 
   /* =======================================================
      ACTIVE TOPIC
@@ -1294,18 +1146,11 @@ export function MenejerlikApp() {
 
   const activeTopic =
     useMemo(() => {
-      if (
-        !navigation.topicId
-      ) {
+      if (!navigation.topicId) {
         return undefined
       }
-
-      return getTopicById(
-        navigation.topicId,
-      )
-    }, [
-      navigation.topicId,
-    ])
+      return getTopicById(navigation.topicId)
+    }, [navigation.topicId])
 
   /* =======================================================
      GLOBAL HEADER
@@ -1378,7 +1223,6 @@ export function MenejerlikApp() {
               "
             >
               M
-
               <span
                 className="
                   absolute
@@ -1454,32 +1298,18 @@ export function MenejerlikApp() {
         {screen === 'home' && (
           <HomeScreen
             user={getTelegramUser()}
-            history={
-              history.attempts
-            }
+            history={history.attempts}
             stats={{
-              count:
-                history.stats.count,
-
-              average:
-                history.stats.average,
-
-              best:
-                history.stats.best,
+              count: history.stats.count,
+              average: history.stats.average,
+              best: history.stats.best,
             }}
-            bestByCategory={
-              history.bestByCategory
-            }
-            onSelectEducation={
-              openEducationSelection
-            }
-            onStudentAcademy={
-              openStudentAcademy
-            }
+            bestByCategory={history.bestByCategory}
+            onSelectEducation={openEducationSelection}
+            onStudentAcademy={openStudentAcademy}
             onAI={openAI}
-            onRanking={
-              openRanking
-            }
+            onRanking={openRanking}
+            onSlides={openSlides} // 🎨 YANGI: HomeScreen da tugma ochish uchun
           />
         )}
 
@@ -1487,19 +1317,12 @@ export function MenejerlikApp() {
             STUDENT ACADEMY
         ================================================= */}
 
-        {screen ===
-          'student-academy' && (
+        {screen === 'student-academy' && (
           <StudentAcademy
             onBack={goBack}
-            onPisa={
-              openPisaAcademy
-            }
-            onLogic={
-              openLogicAcademy
-            }
-            onPresident={
-              openPresidentAcademy
-            }
+            onPisa={openPisaAcademy}
+            onLogic={openLogicAcademy}
+            onPresident={openPresidentAcademy}
           />
         )}
 
@@ -1508,9 +1331,7 @@ export function MenejerlikApp() {
         ================================================= */}
 
         {screen === 'pisa' && (
-          <PisaAcademy
-            onBack={goBack}
-          />
+          <PisaAcademy onBack={goBack} />
         )}
 
         {/* =================================================
@@ -1518,9 +1339,7 @@ export function MenejerlikApp() {
         ================================================= */}
 
         {screen === 'logic' && (
-          <LogicAcademy
-            onBack={goBack}
-          />
+          <LogicAcademy onBack={goBack} />
         )}
 
         {/* =================================================
@@ -1528,8 +1347,24 @@ export function MenejerlikApp() {
         ================================================= */}
 
         {screen === 'president' && (
-          <PresidentAcademy
+          <PresidentAcademy onBack={goBack} />
+        )}
+
+        {/* =================================================
+            🎨 SLIDES (YANGI)
+        ================================================= */}
+
+        {screen === 'slides' && !presentation && (
+          <SlideCreator
+            onGenerate={(data) => setPresentation(data)}
             onBack={goBack}
+          />
+        )}
+
+        {screen === 'slides' && presentation && (
+          <SlideViewer
+            data={presentation}
+            onBack={() => setPresentation(null)}
           />
         )}
 
@@ -1538,9 +1373,7 @@ export function MenejerlikApp() {
         ================================================= */}
 
         {screen === 'ranking' && (
-          <RankingScreen
-            onBack={goBack}
-          />
+          <RankingScreen onBack={goBack} />
         )}
 
         {/* =================================================
@@ -1548,9 +1381,7 @@ export function MenejerlikApp() {
         ================================================= */}
 
         {screen === 'ai' && (
-          <AIAssistant
-            onBack={goBack}
-          />
+          <AIAssistant onBack={goBack} />
         )}
 
         {/* =================================================
@@ -1560,9 +1391,7 @@ export function MenejerlikApp() {
         {screen === 'education' && (
           <EducationScreen
             onBack={goBack}
-            onSelect={
-              selectEducation
-            }
+            onSelect={selectEducation}
           />
         )}
 
@@ -1572,9 +1401,7 @@ export function MenejerlikApp() {
 
         {screen === 'roles' && (
           <RoleScreen
-            educationType={
-              navigation.educationType
-            }
+            educationType={navigation.educationType}
             onBack={goBack}
             onSelect={selectRole}
           />
@@ -1586,22 +1413,15 @@ export function MenejerlikApp() {
 
         {screen === 'subjects' && (
           <SubjectScreen
-            educationType={
-              navigation.educationType
-            }
+            educationType={navigation.educationType}
             subjects={
-              navigation.educationType ===
-              'school'
+              navigation.educationType === 'school'
                 ? SCHOOL_SUBJECTS
                 : []
             }
-            selectedSubjectId={
-              navigation.subjectId
-            }
+            selectedSubjectId={navigation.subjectId}
             onBack={goBack}
-            onSelect={
-              selectSubject
-            }
+            onSelect={selectSubject}
           />
         )}
 
@@ -1611,22 +1431,12 @@ export function MenejerlikApp() {
 
         {screen === 'modules' && (
           <ModuleScreen
-            categories={
-              activeCategories
-            }
-            educationType={
-              navigation.educationType
-            }
-            role={
-              navigation.role
-            }
+            categories={activeCategories}
+            educationType={navigation.educationType}
+            role={navigation.role}
             onBack={goBack}
-            onSelect={
-              selectModule
-            }
-            onMixed={
-              startModuleMixed
-            }
+            onSelect={selectModule}
+            onMixed={startModuleMixed}
           />
         )}
 
@@ -1636,13 +1446,9 @@ export function MenejerlikApp() {
 
         {screen === 'topics' && (
           <TopicScreen
-            module={
-              activeModule
-            }
+            module={activeModule}
             onBack={goBack}
-            onSelect={
-              selectTopic
-            }
+            onSelect={selectTopic}
           />
         )}
 
@@ -1652,13 +1458,9 @@ export function MenejerlikApp() {
 
         {screen === 'levels' && (
           <LevelScreen
-            topic={
-              activeTopic
-            }
+            topic={activeTopic}
             onBack={goBack}
-            onSelect={
-              selectLevel
-            }
+            onSelect={selectLevel}
           />
         )}
 
@@ -1666,45 +1468,30 @@ export function MenejerlikApp() {
             QUIZ
         ================================================= */}
 
-        {screen === 'quiz' &&
-          quizSession && (
-            <QuizScreen
-              session={
-                quizSession
-              }
-              onFinish={
-                finish
-              }
-              onExit={
-                goBack
-              }
-            />
-          )}
+        {screen === 'quiz' && quizSession && (
+          <QuizScreen
+            session={quizSession}
+            onFinish={finish}
+            onExit={goBack}
+          />
+        )}
 
         {/* =================================================
             RESULT
         ================================================= */}
 
-        {screen === 'result' &&
-          quizResult && (
-            <ResultScreen
-              result={
-                quizResult
-              }
-              onRetry={
-                retryQuiz
-              }
-              onHome={
-                goHome
-              }
-            />
-          )}
+        {screen === 'result' && quizResult && (
+          <ResultScreen
+            result={quizResult}
+            onRetry={retryQuiz}
+            onHome={goHome}
+          />
+        )}
       </div>
 
       {isClosingConfirmation && (
         <div className="sr-only">
-          Test jarayoni davom
-          etmoqda.
+          Test jarayoni davom etmoqda.
         </div>
       )}
     </main>
@@ -1755,7 +1542,6 @@ function StatusBadge({
           ${dotClass}
         `}
       />
-
       {text}
     </span>
   )
@@ -1770,16 +1556,11 @@ function EducationScreen({
   onSelect,
 }: {
   onBack: () => void
-  onSelect: (
-    educationType: EducationType,
-  ) => void
+  onSelect: (educationType: EducationType) => void
 }) {
   return (
     <section className="flex flex-col gap-6">
-      <BackButton
-        onClick={onBack}
-        text="Bosh sahifa"
-      />
+      <BackButton onClick={onBack} text="Bosh sahifa" />
 
       <PageHeading
         eyebrow="TA’LIM YO‘NALISHI"
@@ -1794,9 +1575,7 @@ function EducationScreen({
           subtitle="UMUMIY O‘RTA TA’LIM"
           description="Maktab direktori, direktor o‘rinbosari va fan o‘qituvchilari uchun professional tayyorgarlik."
           accent="blue"
-          onClick={() =>
-            onSelect('school')
-          }
+          onClick={() => onSelect('school')}
         />
 
         <EducationCardNew
@@ -1805,9 +1584,7 @@ function EducationScreen({
           subtitle="MTT"
           description="Maktabgacha ta’lim rahbarlari va pedagoglari uchun professional tayyorgarlik."
           accent="gold"
-          onClick={() =>
-            onSelect('preschool')
-          }
+          onClick={() => onSelect('preschool')}
         />
       </div>
 
@@ -1829,18 +1606,11 @@ function RoleScreen({
   onBack,
   onSelect,
 }: {
-  educationType:
-    | EducationType
-    | null
-
+  educationType: EducationType | null
   onBack: () => void
-
-  onSelect: (
-    role: RoleId,
-  ) => void
+  onSelect: (role: RoleId) => void
 }) {
-  const isSchool =
-    educationType === 'school'
+  const isSchool = educationType === 'school'
 
   const roles = isSchool
     ? [
@@ -1848,28 +1618,21 @@ function RoleScreen({
           id: 'director' as RoleId,
           icon: '👨‍💼',
           title: 'Maktab direktori',
-          description:
-            'Maktab rahbari uchun menejerlik va attestatsiya tayyorgarligi.',
+          description: 'Maktab rahbari uchun menejerlik va attestatsiya tayyorgarligi.',
           badge: 'RAHBAR',
         },
-
         {
           id: 'deputy' as RoleId,
           icon: '👨‍💼',
-          title:
-            'Direktor o‘rinbosari',
-          description:
-            'O‘quv, tarbiyaviy va boshqaruv faoliyati bo‘yicha tayyorgarlik.',
+          title: 'Direktor o‘rinbosari',
+          description: 'O‘quv, tarbiyaviy va boshqaruv faoliyati bo‘yicha tayyorgarlik.',
           badge: 'RAHBAR',
         },
-
         {
           id: 'teacher' as RoleId,
           icon: '👨‍🏫',
-          title:
-            'Fan o‘qituvchilari',
-          description:
-            'Fanlar kesimida attestatsiya testlari va pedagogik mahorat.',
+          title: 'Fan o‘qituvchilari',
+          description: 'Fanlar kesimida attestatsiya testlari va pedagogik mahorat.',
           badge: 'PEDAGOG',
         },
       ]
@@ -1877,46 +1640,32 @@ function RoleScreen({
         {
           id: 'director' as RoleId,
           icon: '👩‍💼',
-          title:
-            'Direktor / mudir',
-          description:
-            'Maktabgacha ta’lim tashkiloti rahbari uchun menejerlik tayyorgarligi.',
+          title: 'Direktor / mudir',
+          description: 'Maktabgacha ta’lim tashkiloti rahbari uchun menejerlik tayyorgarligi.',
           badge: 'RAHBAR',
         },
-
         {
           id: 'deputy' as RoleId,
           icon: '👩‍💼',
-          title:
-            'Direktor o‘rinbosari',
-          description:
-            'Boshqaruv va ta’lim jarayonini tashkil etish bo‘yicha tayyorgarlik.',
+          title: 'Direktor o‘rinbosari',
+          description: 'Boshqaruv va ta’lim jarayonini tashkil etish bo‘yicha tayyorgarlik.',
           badge: 'RAHBAR',
         },
-
         {
           id: 'pedagogue' as RoleId,
           icon: '👩‍🏫',
           title: 'Pedagoglar',
-          description:
-            'Tarbiyachi va mutaxassis pedagoglar uchun attestatsiya tayyorgarligi.',
+          description: 'Tarbiyachi va mutaxassis pedagoglar uchun attestatsiya tayyorgarligi.',
           badge: 'PEDAGOG',
         },
       ]
 
   return (
     <section className="flex flex-col gap-6">
-      <BackButton
-        onClick={onBack}
-        text="Yo‘nalishlar"
-      />
+      <BackButton onClick={onBack} text="Yo‘nalishlar" />
 
       <PageHeading
-        eyebrow={
-          isSchool
-            ? 'MAKTAB'
-            : 'MAKTABGACHA TA’LIM'
-        }
+        eyebrow={isSchool ? 'MAKTAB' : 'MAKTABGACHA TA’LIM'}
         title="Lavozimingizni tanlang"
         description="Sizga tegishli professional tayyorgarlik yo‘nalishini tanlang."
       />
@@ -1926,11 +1675,7 @@ function RoleScreen({
           <button
             key={role.id}
             type="button"
-            onClick={() =>
-              onSelect(
-                role.id,
-              )
-            }
+            onClick={() => onSelect(role.id)}
             className="
               group
               relative
@@ -2036,71 +1781,29 @@ function SubjectScreen({
   onBack,
   onSelect,
 }: {
-  educationType:
-    | EducationType
-    | null
-
+  educationType: EducationType | null
   subjects: Subject[]
-
-  selectedSubjectId:
-    | string
-    | null
-
+  selectedSubjectId: string | null
   onBack: () => void
-
-  onSelect: (
-    subjectId: string,
-  ) => void
+  onSelect: (subjectId: string) => void
 }) {
-  const isSchool =
-    educationType === 'school'
+  const isSchool = educationType === 'school'
 
   const preschoolRoles = [
-    {
-      icon: '👩‍🏫',
-      title: 'Tarbiyachi',
-    },
-
-    {
-      icon: '🎵',
-      title: 'Musiqa rahbari',
-    },
-
-    {
-      icon: '🗣️',
-      title: 'Logoped',
-    },
-
-    {
-      icon: '🧠',
-      title: 'Psixolog',
-    },
-
-    {
-      icon: '🏃',
-      title:
-        'Jismoniy tarbiya yo‘riqchisi',
-    },
+    { icon: '👩‍🏫', title: 'Tarbiyachi' },
+    { icon: '🎵', title: 'Musiqa rahbari' },
+    { icon: '🗣️', title: 'Logoped' },
+    { icon: '🧠', title: 'Psixolog' },
+    { icon: '🏃', title: 'Jismoniy tarbiya yo‘riqchisi' },
   ]
 
   return (
     <section className="flex flex-col gap-6">
-      <BackButton
-        onClick={onBack}
-        text="Lavozimlar"
-      />
+      <BackButton onClick={onBack} text="Lavozimlar" />
 
       <PageHeading
-        eyebrow={
-          isSchool
-            ? 'FAN O‘QITUVCHILARI'
-            : 'PEDAGOGLAR'
-        }
-        title={
-          isSchool
-            ? 'Fanni tanlang'
-            : 'Pedagogik yo‘nalishni tanlang'
-        }
+        eyebrow={isSchool ? 'FAN O‘QITUVCHILARI' : 'PEDAGOGLAR'}
+        title={isSchool ? 'Fanni tanlang' : 'Pedagogik yo‘nalishni tanlang'}
         description="Attestatsiya testlari fan yoki pedagogik faoliyat yo‘nalishi bo‘yicha tashkil etiladi."
       />
 
@@ -2111,197 +1814,143 @@ function SubjectScreen({
               <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white text-xl shadow-sm dark:bg-card">
                 📚
               </div>
-
               <div>
-                <p className="text-sm font-black">
-                  FANLAR
-                </p>
-
+                <p className="text-sm font-black">FANLAR</p>
                 <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
-                  O‘zingizga tegishli fanni tanlang va
-                  attestatsiya tayyorgarligini boshlang.
+                  O‘zingizga tegishli fanni tanlang va attestatsiya tayyorgarligini boshlang.
                 </p>
               </div>
             </div>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            {subjects.map(
-              subject => {
-                const active =
-                  selectedSubjectId ===
-                  subject.id
+            {subjects.map(subject => {
+              const active = selectedSubjectId === subject.id
+              const isMath = subject.id === 'matematika'
 
-                const isMath =
-                  subject.id ===
-                  'matematika'
-
-                return (
-                  <button
-                    key={
-                      subject.id
-                    }
-                    type="button"
-                    onClick={() =>
-                      onSelect(
-                        subject.id,
-                      )
-                    }
-                    className={`
-                      group
-                      rounded-[23px]
-                      border
-                      bg-card
-                      p-5
-                      text-left
-                      shadow-sm
-                      transition-all
-                      hover:-translate-y-0.5
-                      hover:shadow-lg
-                      active:scale-[0.99]
-                      ${
-                        active
-                          ? 'border-blue-500 ring-2 ring-blue-500/10'
-                          : ''
-                      }
-                    `}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div
-                        className="
-                          flex
-                          size-14
-                          shrink-0
-                          items-center
-                          justify-center
-                          rounded-[18px]
-                          bg-gradient-to-br
-                          from-blue-50
-                          to-indigo-100
-                          text-2xl
-                          dark:from-blue-950/30
-                          dark:to-indigo-950/20
-                        "
-                      >
-                        {
-                          subject.icon
-                        }
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
-                          <h2 className="text-sm font-black">
-                            {
-                              subject.title
-                            }
-                          </h2>
-
-                          {isMath && (
-                            <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[8px] font-black text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400">
-                              TAYYOR
-                            </span>
-                          )}
-                        </div>
-
-                        <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
-                          {
-                            subject.description
-                          }
-                        </p>
-                      </div>
-
-                      <Arrow />
+              return (
+                <button
+                  key={subject.id}
+                  type="button"
+                  onClick={() => onSelect(subject.id)}
+                  className={`
+                    group
+                    rounded-[23px]
+                    border
+                    bg-card
+                    p-5
+                    text-left
+                    shadow-sm
+                    transition-all
+                    hover:-translate-y-0.5
+                    hover:shadow-lg
+                    active:scale-[0.99]
+                    ${active ? 'border-blue-500 ring-2 ring-blue-500/10' : ''}
+                  `}
+                >
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="
+                        flex
+                        size-14
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-[18px]
+                        bg-gradient-to-br
+                        from-blue-50
+                        to-indigo-100
+                        text-2xl
+                        dark:from-blue-950/30
+                        dark:to-indigo-950/20
+                      "
+                    >
+                      {subject.icon}
                     </div>
 
-                    {active && (
-                      <div
-                        className="
-                          mt-4
-                          rounded-2xl
-                          bg-blue-50/70
-                          p-3
-                          dark:bg-blue-950/20
-                        "
-                      >
-                        <p className="text-[10px] font-black uppercase tracking-wider text-blue-700">
-                          FAN TANLANDI
-                        </p>
-
-                        <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
-                          {isMath
-                            ? 'Matematika fanining professional test bazasi ochiladi.'
-                            : 'Ushbu fan uchun professional test bazasi keyingi bosqichlarda ishga tushiriladi.'}
-                        </p>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-sm font-black">{subject.title}</h2>
+                        {isMath && (
+                          <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[8px] font-black text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400">
+                            TAYYOR
+                          </span>
+                        )}
                       </div>
-                    )}
-                  </button>
-                )
-              },
-            )}
+                      <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
+                        {subject.description}
+                      </p>
+                    </div>
+
+                    <Arrow />
+                  </div>
+
+                  {active && (
+                    <div className="mt-4 rounded-2xl bg-blue-50/70 p-3 dark:bg-blue-950/20">
+                      <p className="text-[10px] font-black uppercase tracking-wider text-blue-700">
+                        FAN TANLANDI
+                      </p>
+                      <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
+                        {isMath
+                          ? 'Matematika fanining professional test bazasi ochiladi.'
+                          : 'Ushbu fan uchun professional test bazasi keyingi bosqichlarda ishga tushiriladi.'}
+                      </p>
+                    </div>
+                  )}
+                </button>
+              )
+            })}
           </div>
         </>
       ) : (
         <div className="flex flex-col gap-3">
-          {preschoolRoles.map(
-            item => (
-              <button
-                key={
-                  item.title
-                }
-                type="button"
+          {preschoolRoles.map(item => (
+            <button
+              key={item.title}
+              type="button"
+              className="
+                group
+                flex
+                items-center
+                gap-4
+                rounded-[23px]
+                border
+                bg-card
+                p-5
+                text-left
+                shadow-sm
+                transition-all
+                hover:-translate-y-0.5
+                hover:shadow-lg
+              "
+            >
+              <div
                 className="
-                  group
                   flex
+                  size-14
+                  shrink-0
                   items-center
-                  gap-4
-                  rounded-[23px]
-                  border
-                  bg-card
-                  p-5
-                  text-left
-                  shadow-sm
-                  transition-all
-                  hover:-translate-y-0.5
-                  hover:shadow-lg
+                  justify-center
+                  rounded-[18px]
+                  bg-gradient-to-br
+                  from-amber-50
+                  to-yellow-100
+                  text-2xl
+                  dark:from-amber-950/30
+                  dark:to-yellow-950/20
                 "
               >
-                <div
-                  className="
-                    flex
-                    size-14
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-[18px]
-                    bg-gradient-to-br
-                    from-amber-50
-                    to-yellow-100
-                    text-2xl
-                    dark:from-amber-950/30
-                    dark:to-yellow-950/20
-                  "
-                >
-                  {
-                    item.icon
-                  }
-                </div>
-
-                <div className="min-w-0 flex-1">
-                  <h2 className="text-sm font-black">
-                    {
-                      item.title
-                    }
-                  </h2>
-
-                  <p className="mt-1 text-[10px] text-muted-foreground">
-                    Attestatsiyaga tayyorgarlik
-                  </p>
-                </div>
-
-                <Arrow />
-              </button>
-            ),
-          )}
+                {item.icon}
+              </div>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-sm font-black">{item.title}</h2>
+                <p className="mt-1 text-[10px] text-muted-foreground">
+                  Attestatsiyaga tayyorgarlik
+                </p>
+              </div>
+              <Arrow />
+            </button>
+          ))}
         </div>
       )}
 
@@ -2327,24 +1976,11 @@ function ModuleScreen({
   onMixed,
 }: {
   categories: Category[]
-
-  educationType:
-    | EducationType
-    | null
-
-  role:
-    | RoleId
-    | null
-
+  educationType: EducationType | null
+  role: RoleId | null
   onBack: () => void
-
-  onSelect: (
-    moduleId: string,
-  ) => void
-
-  onMixed: (
-    moduleId: string,
-  ) => void
+  onSelect: (moduleId: string) => void
+  onMixed: (moduleId: string) => void
 }) {
   const roleTitle =
     role === 'director'
@@ -2359,18 +1995,10 @@ function ModuleScreen({
 
   return (
     <section className="flex flex-col gap-6">
-      <BackButton
-        onClick={onBack}
-        text="Lavozimlar"
-      />
+      <BackButton onClick={onBack} text="Lavozimlar" />
 
       <PageHeading
-        eyebrow={
-          educationType ===
-          'preschool'
-            ? 'MAKTABGACHA TA’LIM'
-            : 'MENEJERLIK AKADEMIYASI'
-        }
+        eyebrow={educationType === 'preschool' ? 'MAKTABGACHA TA’LIM' : 'MENEJERLIK AKADEMIYASI'}
         title="Professional modullar"
         description={
           roleTitle
@@ -2394,190 +2022,70 @@ function ModuleScreen({
           shadow-blue-900/15
         "
       >
-        <div
-          className="
-            pointer-events-none
-            absolute
-            -right-12
-            -top-12
-            size-40
-            rounded-full
-            bg-white/5
-          "
-        />
+        <div className="pointer-events-none absolute -right-12 -top-12 size-40 rounded-full bg-white/5" />
 
         <div className="relative">
           <div className="flex items-center gap-4">
-            <div
-              className="
-                flex
-                size-14
-                shrink-0
-                items-center
-                justify-center
-                rounded-[18px]
-                bg-white/10
-                text-2xl
-                ring-1
-                ring-white/10
-              "
-            >
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-[18px] bg-white/10 text-2xl ring-1 ring-white/10">
               🚀
             </div>
-
             <div>
               <p className="text-[9px] font-black uppercase tracking-[0.18em] text-white/50">
                 PROFESSIONAL PREP
               </p>
-
-              <h2 className="mt-1 text-lg font-black">
-                Tezkor aralash test
-              </h2>
+              <h2 className="mt-1 text-lg font-black">Tezkor aralash test</h2>
             </div>
           </div>
-
           <p className="mt-4 max-w-lg text-[11px] leading-5 text-white/70">
-            Modul ichidagi mavzulardan
-            tasodifiy savollar bilan
-            bilimlaringizni sinang.
+            Modul ichidagi mavzulardan tasodifiy savollar bilan bilimlaringizni sinang.
           </p>
-
           <div className="mt-5 flex flex-wrap gap-2">
-            <DarkPill>
-              🟢 Oson
-            </DarkPill>
-
-            <DarkPill>
-              🟡 O‘rta
-            </DarkPill>
-
-            <DarkPill>
-              🔴 Qiyin
-            </DarkPill>
-
-            <DarkPill>
-              🔵 Keys
-            </DarkPill>
+            <DarkPill>🟢 Oson</DarkPill>
+            <DarkPill>🟡 O‘rta</DarkPill>
+            <DarkPill>🔴 Qiyin</DarkPill>
+            <DarkPill>🔵 Keys</DarkPill>
           </div>
         </div>
       </div>
 
       <div className="flex flex-col gap-3">
-        {categories.map(
-          (
-            category,
-            index,
-          ) => (
-            <div
-              key={
-                category.id
-              }
-              className="
-                overflow-hidden
-                rounded-[24px]
-                border
-                bg-card
-                shadow-sm
-              "
+        {categories.map((category, index) => (
+          <div
+            key={category.id}
+            className="overflow-hidden rounded-[24px] border bg-card shadow-sm"
+          >
+            <button
+              type="button"
+              onClick={() => onSelect(category.id)}
+              className="group flex w-full items-center gap-4 p-5 text-left transition hover:bg-muted/30"
             >
-              <button
-                type="button"
-                onClick={() =>
-                  onSelect(
-                    category.id,
-                  )
-                }
-                className="
-                  group
-                  flex
-                  w-full
-                  items-center
-                  gap-4
-                  p-5
-                  text-left
-                  transition
-                  hover:bg-muted/30
-                "
-              >
-                <div
-                  className="
-                    flex
-                    size-14
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-[18px]
-                    bg-blue-50
-                    text-2xl
-                    dark:bg-blue-950/20
-                  "
-                >
-                  {getModuleIcon(
-                    category,
-                    index,
-                  )}
-                </div>
+              <div className="flex size-14 shrink-0 items-center justify-center rounded-[18px] bg-blue-50 text-2xl dark:bg-blue-950/20">
+                {getModuleIcon(category, index)}
+              </div>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-[15px] font-black">{category.title}</h2>
+                {'description' in category && category.description && (
+                  <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
+                    {category.description}
+                  </p>
+                )}
+              </div>
+              <Arrow />
+            </button>
 
-                <div className="min-w-0 flex-1">
-                  <h2 className="text-[15px] font-black">
-                    {
-                      category.title
-                    }
-                  </h2>
-
-                  {'description' in
-                    category &&
-                    category.description && (
-                      <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
-                        {
-                          category.description
-                        }
-                      </p>
-                    )}
-                </div>
-
-                <Arrow />
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  onMixed(
-                    category.id,
-                  )
-                }
-                className="
-                  flex
-                  w-full
-                  items-center
-                  justify-between
-                  border-t
-                  bg-muted/30
-                  px-5
-                  py-3
-                  text-[10px]
-                  font-bold
-                  transition
-                  hover:bg-muted/50
-                "
-              >
-                <span>
-                  🔀 Shu modul
-                  bo‘yicha
-                  aralash test
-                </span>
-
-                <span className="font-black text-blue-700">
-                  30 ta →
-                </span>
-              </button>
-            </div>
-          ),
-        )}
+            <button
+              type="button"
+              onClick={() => onMixed(category.id)}
+              className="flex w-full items-center justify-between border-t bg-muted/30 px-5 py-3 text-[10px] font-bold transition hover:bg-muted/50"
+            >
+              <span>🔀 Shu modul bo‘yicha aralash test</span>
+              <span className="font-black text-blue-700">30 ta →</span>
+            </button>
+          </div>
+        ))}
       </div>
 
-      {categories.length ===
-        0 && (
+      {categories.length === 0 && (
         <EmptyState
           icon="📚"
           title="Modullar mavjud emas"
@@ -2597,178 +2105,85 @@ function TopicScreen({
   onBack,
   onSelect,
 }: {
-  module:
-    | ReturnType<
-        typeof getModuleById
-      >
-    | undefined
-
+  module: ReturnType<typeof getModuleById> | undefined
   onBack: () => void
-
-  onSelect: (
-    topicId: string,
-  ) => void
+  onSelect: (topicId: string) => void
 }) {
-  const topics =
-    module &&
-    'topics' in module
-      ? module.topics
-      : []
+  const topics = module && 'topics' in module ? module.topics : []
 
   if (!module) {
     return (
       <section className="flex flex-col gap-5">
-        <BackButton
-          onClick={onBack}
-          text="Modullar"
-        />
-
-        <EmptyState
-          icon="⚠️"
-          title="Modul topilmadi"
-          text="Tanlangan modul mavjud emas."
-        />
+        <BackButton onClick={onBack} text="Modullar" />
+        <EmptyState icon="⚠️" title="Modul topilmadi" text="Tanlangan modul mavjud emas." />
       </section>
     )
   }
 
   return (
     <section className="flex flex-col gap-6">
-      <BackButton
-        onClick={onBack}
-        text={
-          module.id ===
-          'matematika'
-            ? 'Fanlar'
-            : 'Modullar'
-        }
-      />
+      <BackButton onClick={onBack} text={module.id === 'matematika' ? 'Fanlar' : 'Modullar'} />
 
       <PageHeading
-        eyebrow={
-          module.id ===
-          'matematika'
-            ? 'MATEMATIKA'
-            : 'MAVZULAR'
-        }
+        eyebrow={module.id === 'matematika' ? 'MATEMATIKA' : 'MAVZULAR'}
         title={module.title}
         description={
-          'description' in
-            module &&
-          module.description
+          'description' in module && module.description
             ? module.description
             : 'Ushbu modul bo‘yicha professional tayyorgarlik mavzulari.'
         }
       />
 
       <div className="flex flex-col gap-3">
-        {topics.map(
-          (
-            topic,
-            index,
-          ) => (
-            <button
-              key={
-                topic.id
-              }
-              type="button"
-              onClick={() =>
-                onSelect(
-                  topic.id,
-                )
-              }
-              className="
-                group
-                flex
-                items-center
-                gap-4
-                rounded-[24px]
-                border
-                bg-card
-                p-5
-                text-left
-                shadow-sm
-                transition
-                hover:-translate-y-0.5
-                hover:shadow-lg
-                active:scale-[0.99]
-              "
-            >
-              <div
-                className="
-                  flex
-                  size-12
-                  shrink-0
-                  items-center
-                  justify-center
-                  rounded-[16px]
-                  bg-blue-50
-                  text-xs
-                  font-black
-                  text-blue-700
-                  dark:bg-blue-950/20
-                  dark:text-blue-400
-                "
-              >
-                {String(
-                  index + 1,
-                ).padStart(
-                  2,
-                  '0',
-                )}
+        {topics.map((topic, index) => (
+          <button
+            key={topic.id}
+            type="button"
+            onClick={() => onSelect(topic.id)}
+            className="
+              group
+              flex
+              items-center
+              gap-4
+              rounded-[24px]
+              border
+              bg-card
+              p-5
+              text-left
+              shadow-sm
+              transition
+              hover:-translate-y-0.5
+              hover:shadow-lg
+              active:scale-[0.99]
+            "
+          >
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-[16px] bg-blue-50 text-xs font-black text-blue-700 dark:bg-blue-950/20 dark:text-blue-400">
+              {String(index + 1).padStart(2, '0')}
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <h2 className="text-sm font-black">{topic.title}</h2>
+              {topic.description && (
+                <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
+                  {topic.description}
+                </p>
+              )}
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                <MiniBadge>🟢 Oson</MiniBadge>
+                <MiniBadge>🟡 O‘rta</MiniBadge>
+                <MiniBadge>🔴 Qiyin</MiniBadge>
+                <MiniBadge>🔵 Keys</MiniBadge>
+                <MiniBadge>🟣 Aralash</MiniBadge>
               </div>
+            </div>
 
-              <div className="min-w-0 flex-1">
-                <h2 className="text-sm font-black">
-                  {
-                    topic.title
-                  }
-                </h2>
-
-                {topic.description && (
-                  <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
-                    {
-                      topic.description
-                    }
-                  </p>
-                )}
-
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  <MiniBadge>
-                    🟢 Oson
-                  </MiniBadge>
-
-                  <MiniBadge>
-                    🟡 O‘rta
-                  </MiniBadge>
-
-                  <MiniBadge>
-                    🔴 Qiyin
-                  </MiniBadge>
-
-                  <MiniBadge>
-                    🔵 Keys
-                  </MiniBadge>
-
-                  <MiniBadge>
-                    🟣 Aralash
-                  </MiniBadge>
-                </div>
-              </div>
-
-              <Arrow />
-            </button>
-          ),
-        )}
+            <Arrow />
+          </button>
+        ))}
       </div>
 
-      {topics.length ===
-        0 && (
-        <EmptyState
-          icon="📝"
-          title="Mavzular mavjud emas"
-          text="Bu modulga hali mavzular qo‘shilmagan."
-        />
+      {topics.length === 0 && (
+        <EmptyState icon="📝" title="Mavzular mavjud emas" text="Bu modulga hali mavzular qo‘shilmagan." />
       )}
     </section>
   )
@@ -2783,31 +2198,15 @@ function LevelScreen({
   onBack,
   onSelect,
 }: {
-  topic:
-    | ReturnType<
-        typeof getTopicById
-      >
-    | undefined
-
+  topic: ReturnType<typeof getTopicById> | undefined
   onBack: () => void
-
-  onSelect: (
-    level: QuizLevel,
-  ) => void
+  onSelect: (level: QuizLevel) => void
 }) {
   if (!topic) {
     return (
       <section className="flex flex-col gap-5">
-        <BackButton
-          onClick={onBack}
-          text="Mavzular"
-        />
-
-        <EmptyState
-          icon="⚠️"
-          title="Mavzu topilmadi"
-          text="Tanlangan mavzu mavjud emas."
-        />
+        <BackButton onClick={onBack} text="Mavzular" />
+        <EmptyState icon="⚠️" title="Mavzu topilmadi" text="Tanlangan mavzu mavjud emas." />
       </section>
     )
   }
@@ -2819,62 +2218,16 @@ function LevelScreen({
     description: string
     questions: number
   }> = [
-    {
-      id: 'easy',
-      icon: '🟢',
-      title: 'Oson',
-      description:
-        'Asosiy tushunchalar va bilimlar.',
-      questions:
-        topic.levels.easy.length,
-    },
-
-    {
-      id: 'medium',
-      icon: '🟡',
-      title: 'O‘rta',
-      description:
-        'Amaliy qo‘llash va vaziyatlar.',
-      questions:
-        topic.levels.medium.length,
-    },
-
-    {
-      id: 'hard',
-      icon: '🔴',
-      title: 'Qiyin',
-      description:
-        'Tahliliy va murakkab savollar.',
-      questions:
-        topic.levels.hard.length,
-    },
-
-    {
-      id: 'case',
-      icon: '🔵',
-      title: 'Keys',
-      description:
-        'Real boshqaruv vaziyatlari.',
-      questions:
-        topic.levels.case.length,
-    },
-
-    {
-      id: 'mixed',
-      icon: '🟣',
-      title: 'Aralash test',
-      description:
-        'Barcha darajadagi savollardan.',
-      questions: 30,
-    },
+    { id: 'easy', icon: '🟢', title: 'Oson', description: 'Asosiy tushunchalar va bilimlar.', questions: topic.levels.easy.length },
+    { id: 'medium', icon: '🟡', title: 'O‘rta', description: 'Amaliy qo‘llash va vaziyatlar.', questions: topic.levels.medium.length },
+    { id: 'hard', icon: '🔴', title: 'Qiyin', description: 'Tahliliy va murakkab savollar.', questions: topic.levels.hard.length },
+    { id: 'case', icon: '🔵', title: 'Keys', description: 'Real boshqaruv vaziyatlari.', questions: topic.levels.case.length },
+    { id: 'mixed', icon: '🟣', title: 'Aralash test', description: 'Barcha darajadagi savollardan.', questions: 30 },
   ]
 
   return (
     <section className="flex flex-col gap-6">
-      <BackButton
-        onClick={onBack}
-        text="Mavzular"
-      />
+      <BackButton onClick={onBack} text="Mavzular" />
 
       <PageHeading
         eyebrow="TEST TURINI TANLANG"
@@ -2883,95 +2236,50 @@ function LevelScreen({
       />
 
       <div className="flex flex-col gap-3">
-        {levels.map(
-          level => (
-            <button
-              key={
-                level.id
-              }
-              type="button"
-              onClick={() =>
-                onSelect(
-                  level.id,
-                )
-              }
-              disabled={
-                level.questions ===
-                  0 &&
-                level.id !==
-                  'mixed'
-              }
-              className="
-                group
-                flex
-                items-center
-                gap-4
-                rounded-[23px]
-                border
-                bg-card
-                p-5
-                text-left
-                shadow-sm
-                transition-all
-                hover:-translate-y-0.5
-                hover:shadow-lg
-                active:scale-[0.99]
-                disabled:cursor-not-allowed
-                disabled:opacity-50
-              "
-            >
-              <div
-                className="
-                  flex
-                  size-14
-                  shrink-0
-                  items-center
-                  justify-center
-                  rounded-[18px]
-                  bg-muted
-                  text-2xl
-                "
-              >
-                {
-                  level.icon
-                }
+        {levels.map(level => (
+          <button
+            key={level.id}
+            type="button"
+            onClick={() => onSelect(level.id)}
+            disabled={level.questions === 0 && level.id !== 'mixed'}
+            className="
+              group
+              flex
+              items-center
+              gap-4
+              rounded-[23px]
+              border
+              bg-card
+              p-5
+              text-left
+              shadow-sm
+              transition-all
+              hover:-translate-y-0.5
+              hover:shadow-lg
+              active:scale-[0.99]
+              disabled:cursor-not-allowed
+              disabled:opacity-50
+            "
+          >
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-[18px] bg-muted text-2xl">
+              {level.icon}
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm font-black">{level.title}</h2>
+                <span className="rounded-full bg-muted px-2 py-0.5 text-[9px] font-bold">
+                  {level.questions}
+                </span>
               </div>
+              <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
+                {level.description}
+              </p>
+            </div>
 
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-sm font-black">
-                    {
-                      level.title
-                    }
-                  </h2>
-
-                  <span
-                    className="
-                      rounded-full
-                      bg-muted
-                      px-2
-                      py-0.5
-                      text-[9px]
-                      font-bold
-                    "
-                  >
-                    {
-                      level.questions
-                    }
-                  </span>
-                </div>
-
-                <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
-                  {
-                    level.description
-                  }
-                </p>
-              </div>
-
-              <Arrow />
-            </button>
-          ),
-        )}
+            <Arrow />
+          </button>
+        ))}
       </div>
 
       <InfoCard
@@ -2998,17 +2306,9 @@ function PageHeading({
 }) {
   return (
     <div>
-      <Eyebrow>
-        {eyebrow}
-      </Eyebrow>
-
-      <h1 className="mt-2 text-[29px] font-black tracking-tight">
-        {title}
-      </h1>
-
-      <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
-        {description}
-      </p>
+      <Eyebrow>{eyebrow}</Eyebrow>
+      <h1 className="mt-2 text-[29px] font-black tracking-tight">{title}</h1>
+      <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">{description}</p>
     </div>
   )
 }
@@ -3043,16 +2343,7 @@ function BackButton({
         hover:text-blue-700
       "
     >
-      <span
-        className="
-          text-base
-          transition-transform
-          group-hover:-translate-x-0.5
-        "
-      >
-        ←
-      </span>
-
+      <span className="text-base transition-transform group-hover:-translate-x-0.5">←</span>
       {text}
     </button>
   )
@@ -3062,21 +2353,9 @@ function BackButton({
    EYEBROW
 ========================================================= */
 
-function Eyebrow({
-  children,
-}: {
-  children: ReactNode
-}) {
+function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <p
-      className="
-        text-[10px]
-        font-black
-        uppercase
-        tracking-[0.18em]
-        text-blue-700
-      "
-    >
+    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-blue-700">
       {children}
     </p>
   )
@@ -3113,11 +2392,7 @@ function Arrow() {
    MINI BADGE
 ========================================================= */
 
-function MiniBadge({
-  children,
-}: {
-  children: ReactNode
-}) {
+function MiniBadge({ children }: { children: ReactNode }) {
   return (
     <span
       className="
@@ -3140,11 +2415,7 @@ function MiniBadge({
    DARK PILL
 ========================================================= */
 
-function DarkPill({
-  children,
-}: {
-  children: ReactNode
-}) {
+function DarkPill({ children }: { children: ReactNode }) {
   return (
     <span
       className="
@@ -3190,31 +2461,12 @@ function InfoCard({
       "
     >
       <div className="flex items-start gap-3">
-        <div
-          className="
-            flex
-            size-10
-            shrink-0
-            items-center
-            justify-center
-            rounded-xl
-            bg-white
-            text-lg
-            shadow-sm
-            dark:bg-card
-          "
-        >
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-lg shadow-sm dark:bg-card">
           {icon}
         </div>
-
         <div>
-          <p className="text-sm font-black">
-            {title}
-          </p>
-
-          <p className="mt-1 text-[11px] leading-5 text-muted-foreground">
-            {text}
-          </p>
+          <p className="text-sm font-black">{title}</p>
+          <p className="mt-1 text-[11px] leading-5 text-muted-foreground">{text}</p>
         </div>
       </div>
     </div>
@@ -3237,13 +2489,10 @@ function EducationCardNew({
   title: string
   subtitle: string
   description: string
-  accent:
-    | 'blue'
-    | 'gold'
+  accent: 'blue' | 'gold'
   onClick: () => void
 }) {
-  const gold =
-    accent === 'gold'
+  const gold = accent === 'gold'
 
   return (
     <button
@@ -3278,11 +2527,7 @@ function EducationCardNew({
           -top-10
           size-36
           rounded-full
-          ${
-            gold
-              ? 'bg-amber-400/5'
-              : 'bg-blue-500/5'
-          }
+          ${gold ? 'bg-amber-400/5' : 'bg-blue-500/5'}
           transition-transform
           group-hover:scale-125
         `}
@@ -3328,13 +2573,8 @@ function EducationCardNew({
           {subtitle}
         </span>
 
-        <h2 className="mt-3 text-xl font-black tracking-tight">
-          {title}
-        </h2>
-
-        <p className="mt-2 text-[11px] leading-5 text-muted-foreground">
-          {description}
-        </p>
+        <h2 className="mt-3 text-xl font-black tracking-tight">{title}</h2>
+        <p className="mt-2 text-[11px] leading-5 text-muted-foreground">{description}</p>
 
         <div
           className={`
@@ -3344,25 +2584,11 @@ function EducationCardNew({
             justify-between
             text-[11px]
             font-black
-            ${
-              gold
-                ? 'text-amber-700'
-                : 'text-blue-700'
-            }
+            ${gold ? 'text-amber-700' : 'text-blue-700'}
           `}
         >
-          <span>
-            Boshlash
-          </span>
-
-          <span
-            className="
-              transition-transform
-              group-hover:translate-x-1
-            "
-          >
-            →
-          </span>
+          <span>Boshlash</span>
+          <span className="transition-transform group-hover:translate-x-1">→</span>
         </div>
       </div>
     </button>
@@ -3373,34 +2599,14 @@ function EducationCardNew({
    MODULE ICON
 ========================================================= */
 
-function getModuleIcon(
-  category: Category,
-  index: number,
-) {
-  const icons = [
-    '🎯',
-    '📚',
-    '👨‍💼',
-    '👥',
-    '📊',
-    '⚖️',
-    '💡',
-    '🏫',
-    '🌐',
-    '🚀',
-  ]
+function getModuleIcon(category: Category, index: number) {
+  const icons = ['🎯', '📚', '👨‍💼', '👥', '📊', '⚖️', '💡', '🏫', '🌐', '🚀']
 
-  if (
-    'icon' in category &&
-    category.icon
-  ) {
+  if ('icon' in category && category.icon) {
     return category.icon
   }
 
-  return icons[
-    index %
-      icons.length
-  ]
+  return icons[index % icons.length]
 }
 
 /* =========================================================
@@ -3432,27 +2638,11 @@ function EmptyState({
         shadow-sm
       "
     >
-      <div
-        className="
-          flex
-          size-16
-          items-center
-          justify-center
-          rounded-[20px]
-          bg-muted
-          text-3xl
-        "
-      >
+      <div className="flex size-16 items-center justify-center rounded-[20px] bg-muted text-3xl">
         {icon}
       </div>
-
-      <h2 className="mt-4 text-lg font-black">
-        {title}
-      </h2>
-
-      <p className="mt-2 max-w-sm text-[11px] leading-5 text-muted-foreground">
-        {text}
-      </p>
+      <h2 className="mt-4 text-lg font-black">{title}</h2>
+      <p className="mt-2 max-w-sm text-[11px] leading-5 text-muted-foreground">{text}</p>
     </div>
   )
 }
