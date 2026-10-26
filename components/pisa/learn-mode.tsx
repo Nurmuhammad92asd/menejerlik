@@ -97,4 +97,45 @@ function StepView({ step, onNext }: { step: LessonStep; onNext: () => void }) {
         <p className="mt-2 text-sm font-black">{step.problem}</p>
         <ol className="mt-4 space-y-2">
           {step.steps.map((s, i) => (
-            <li key={i
+            <li key={i} className="rounded-xl bg-muted/60 p-3 text-[12px] leading-6">{s}</li>
+          ))}
+        </ol>
+        <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-[12px] font-black text-emerald-700 dark:border-emerald-900/30 dark:bg-emerald-950/20">
+          ✓ Javob: {step.answer}
+        </div>
+        <button onClick={onNext} className="mt-6 w-full rounded-[20px] bg-gradient-to-r from-blue-700 to-cyan-600 py-4 text-sm font-black text-white">Keyingi →</button>
+      </div>
+    )
+  }
+
+  const isCorrect = checked && selected === step.correct
+  return (
+    <div className="rounded-[28px] border bg-card p-6 shadow-sm">
+      <p className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-700">TEKSHIRISH</p>
+      <p className="mt-2 text-sm font-black">{step.question}</p>
+      <div className="mt-4 space-y-2">
+        {step.options.map((opt, i) => (
+          <button key={i} onClick={() => !checked && setSelected(i)} disabled={checked}
+            className={`w-full rounded-xl border p-3 text-left text-[12px] font-semibold ${
+              checked && i === step.correct ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/20'
+              : checked && i === selected ? 'border-red-500 bg-red-50 dark:bg-red-950/20'
+              : selected === i ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20'
+              : 'hover:bg-muted/40'
+            }`}>
+            {opt}
+          </button>
+        ))}
+      </div>
+      {!checked ? (
+        <button onClick={() => setChecked(true)} disabled={selected === null} className="mt-4 w-full rounded-[20px] bg-gradient-to-r from-blue-700 to-cyan-600 py-4 text-sm font-black text-white disabled:opacity-40">Tekshirish</button>
+      ) : (
+        <>
+          <div className={`mt-4 rounded-xl border p-3 text-[12px] ${isCorrect ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20' : 'border-red-200 bg-red-50 text-red-700 dark:bg-red-950/20'}`}>
+            {isCorrect ? '✓ To\'g\'ri!' : '✗ Xato.'} {step.explanation}
+          </div>
+          <button onClick={onNext} className="mt-4 w-full rounded-[20px] bg-gradient-to-r from-blue-700 to-cyan-600 py-4 text-sm font-black text-white">{isCorrect ? 'Davom etish →' : 'Tushundim →'}</button>
+        </>
+      )}
+    </div>
+  )
+}
