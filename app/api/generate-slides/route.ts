@@ -41,7 +41,7 @@ export async function POST(req: Request) {
       }
     `
 
-    // Groq API ga so'rov yuborish
+    // Groq API ga so'rov yuborish (Model yangilandi!)
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -49,9 +49,9 @@ export async function POST(req: Request) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: "llama3-70b-8192",
+        model: "llama-3.3-70b-versatile", // 👈 YANGI VA ISHLAYOTGAN MODEL
         messages: [
-          { role: "system", content: "Siz faqat toza JSON qaytaradigan yordamchisiz." },
+          { role: "system", content: "Siz faqat toza JSON qaytaradigan yordamchisiz. Javobingizda hech qanday qo'shimcha matn (masalan, ```json) bo'lmasligi kerak." },
           { role: "user", content: prompt }
         ],
         temperature: 0.7,
@@ -61,12 +61,17 @@ export async function POST(req: Request) {
 
     const data = await response.json()
     
+    // Agar Groq API xato qaytarsa, konsolga aniq yozamiz
     if (!response.ok) {
+      console.error("GROQ API XATOSI:", data)
       throw new Error(data.error?.message || "AI xatolik berdi")
     }
 
     const generatedText = data.choices[0].message.content
-    const parsedData = JSON.parse(generatedText)
+    
+    // Ba'zi modellar JSON ni ```json ... ``` ichida qaytarishi mumkin. Uni tozalaymiz.
+    const cleanJson = generatedText.replace(/```json/g, '').replace(/```/g, '').trim()
+    const parsedData = JSON.parse(cleanJson)
 
     // Rasmlarni qo'shish
     const finalPresentation = {
@@ -89,7 +94,7 @@ export async function POST(req: Request) {
     return NextResponse.json(finalPresentation)
 
   } catch (error: any) {
-    console.error("AI Error:", error)
+    console.error("AI Error:", error.message)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
