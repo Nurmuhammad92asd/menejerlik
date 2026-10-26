@@ -6,6 +6,9 @@ import { TitleSlide, ContentSlide } from './slide-renderer'
 
 export default function SlideViewer({ data, onBack }: { data: PresentationData, onBack: () => void }) {
   const [current, setCurrent] = useState(0)
+  // 🎨 Tanlangan dizaynni saqlash (Standart - birinchisi)
+  const [activeDesign, setActiveDesign] = useState(data.designOptions?.[0] || data.design)
+  
   const slide = data.slides[current]
 
   return (
@@ -16,8 +19,29 @@ export default function SlideViewer({ data, onBack }: { data: PresentationData, 
         <div className="bg-slate-200 px-3 py-1 rounded-full text-xs font-bold">{current + 1} / 12</div>
       </div>
 
+      {/* 🎨 DIZAYN TANLASH TUGMALARI */}
+      <div className="flex justify-center gap-2">
+        {data.designOptions?.map((opt, idx) => (
+          <button
+            key={idx}
+            onClick={() => setActiveDesign(opt)}
+            className={`px-4 py-2 rounded-lg text-xs font-bold border-2 transition ${
+              activeDesign.name === opt.name 
+                ? 'border-blue-600 bg-blue-50 text-blue-700' 
+                : 'border-transparent bg-white text-slate-600 hover:bg-slate-50'
+            }`}
+          >
+            {opt.name}
+          </button>
+        ))}
+      </div>
+
       <div className="flex-1 overflow-hidden rounded-2xl shadow-2xl bg-white aspect-video mx-auto w-full max-w-5xl">
-        {slide.type === 'title' ? <TitleSlide data={data} /> : <ContentSlide slide={slide} design={data.design} />}
+        {slide.type === 'title' ? (
+          <TitleSlide data={{ ...data, design: activeDesign }} />
+        ) : (
+          <ContentSlide slide={slide} design={activeDesign} />
+        )}
       </div>
 
       <div className="flex justify-center gap-4">
