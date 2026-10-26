@@ -41,7 +41,7 @@ export async function POST(req: Request) {
       }
     `
 
-    // Groq API ga so'rov yuborish (Model yangilandi!)
+    // Groq API ga so'rov yuborish
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -49,7 +49,8 @@ export async function POST(req: Request) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile", // 👈 YANGI VA ISHLAYOTGAN MODEL
+        // 🚀 ENG SO'NGGI VA ISHLAYOTGAN MODEL
+        model: "openai/gpt-oss-120b", 
         messages: [
           { role: "system", content: "Siz faqat toza JSON qaytaradigan yordamchisiz. Javobingizda hech qanday qo'shimcha matn (masalan, ```json) bo'lmasligi kerak." },
           { role: "user", content: prompt }
@@ -61,7 +62,7 @@ export async function POST(req: Request) {
 
     const data = await response.json()
     
-    // Agar Groq API xato qaytarsa, konsolga aniq yozamiz
+    // Agar Groq API xato qaytarsa, Vercel logiga yozamiz
     if (!response.ok) {
       console.error("GROQ API XATOSI:", data)
       throw new Error(data.error?.message || "AI xatolik berdi")
