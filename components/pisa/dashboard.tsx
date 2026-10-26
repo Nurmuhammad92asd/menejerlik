@@ -6,11 +6,18 @@ import { DOMAIN_META, DIFFICULTY_META } from './data'
 import { BackButton, HeroStat, SkillBar } from './ui'
 
 export default function Dashboard({
-  onBack, onLearn, onTest, skills, totalXp, bestLevel,
+  onBack,
+  onLearn,
+  onTest,
+  onLeaderboard,
+  skills,
+  totalXp,
+  bestLevel,
 }: {
   onBack: () => void
   onLearn: (d: Domain) => void
   onTest: (d: Domain | null) => void
+  onLeaderboard: () => void
   skills: SkillState
   totalXp: number
   bestLevel: Difficulty
@@ -44,6 +51,30 @@ export default function Dashboard({
           </div>
         </div>
       </div>
+
+      {/* LEADERBOARD — YANGI */}
+      <button
+        onClick={onLeaderboard}
+        className="group relative overflow-hidden rounded-[28px] bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 p-5 text-left text-white shadow-xl shadow-orange-900/20 transition-all hover:-translate-y-1"
+      >
+        <div className="pointer-events-none absolute -right-10 -top-10 size-36 rounded-full bg-white/10" />
+        <div className="pointer-events-none absolute -bottom-10 -left-10 size-32 rounded-full bg-white/5" />
+        <div className="relative flex items-center gap-4">
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-[19px] border border-white/10 bg-white/10 text-2xl">
+            🏆
+          </div>
+          <div className="flex-1">
+            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-yellow-100">
+              PISA LEADERBOARD
+            </p>
+            <h2 className="mt-1 text-lg font-black">Umumiy reyting</h2>
+            <p className="mt-1 text-[10px] leading-5 text-white/70">
+              Eng ko'p XP to'plagan o'quvchilar bilan raqobatlashing
+            </p>
+          </div>
+          <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
+        </div>
+      </button>
 
       {/* DOMAINS */}
       <div>
