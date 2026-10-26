@@ -81,6 +81,7 @@ type TestQuestion = {
 type Props = {
   onBack?: () => void;
   onPisa?: () => void;
+  onLogic?: () => void;
 };
 
 const STORAGE_KEY = "menejerlik-foundation-progress-v4";
@@ -360,7 +361,7 @@ const styles = `
    MAIN COMPONENT
 ========================================================= */
 
-export default function StudentAcademy({ onBack, onPisa }: Props) {
+export default function StudentAcademy({ onBack, onPisa, onLogic }: Props) {
   const [screen, setScreen] = useState<Screen>("academy");
   const [progress, setProgress] = useState<FoundationProgress>(DEFAULT_PROGRESS);
   const [selectedLessonId, setSelectedLessonId] = useState("foundation-01");
@@ -408,6 +409,10 @@ export default function StudentAcademy({ onBack, onPisa }: Props) {
     }
     if (id === "english") {
       setScreen("english");
+      return;
+    }
+    if (id === "logic") {
+      onLogic?.();
       return;
     }
     // Other tracks are shown as roadmap cards until their modules are connected.
@@ -509,7 +514,8 @@ export default function StudentAcademy({ onBack, onPisa }: Props) {
   function backToAcademy() {
     setScreen("academy");
   }
-    /* ACADEMY HOME */
+
+  /* ACADEMY HOME */
   if (screen === "academy") {
     return (
       <>
@@ -776,6 +782,7 @@ export default function StudentAcademy({ onBack, onPisa }: Props) {
 
   return null;
 }
+
 /* =========================================================
    LESSON CONTENT AND SHARED UI
 ========================================================= */
