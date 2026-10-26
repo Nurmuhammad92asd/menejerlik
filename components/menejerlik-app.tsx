@@ -15,6 +15,7 @@ import { RankingScreen } from '@/components/ranking-screen'
 import StudentAcademy from '@/components/student-academy'
 import PisaAcademy from '@/components/pisa/pisa-academy'
 import LogicAcademy from '@/components/logic/logic-academy'
+import PresidentAcademy from '@/components/president/president-academy'
 
 import {
   createModuleSession,
@@ -71,6 +72,7 @@ type Screen =
   | 'student-academy'
   | 'pisa'
   | 'logic'
+  | 'president'
   | 'education'
   | 'roles'
   | 'subjects'
@@ -450,6 +452,23 @@ export function MenejerlikApp() {
     )
 
     setScreen('logic')
+
+    scrollToTop()
+  }
+
+  /* =======================================================
+     PRESIDENT ACADEMY
+  ======================================================= */
+
+  const openPresidentAcademy = () => {
+    setQuizSession(null)
+    setQuizResult(null)
+
+    setNavigation(
+      INITIAL_NAVIGATION,
+    )
+
+    setScreen('president')
 
     scrollToTop()
   }
@@ -1098,6 +1117,15 @@ export function MenejerlikApp() {
 
         return
 
+      case 'president':
+        setScreen(
+          'student-academy',
+        )
+
+        scrollToTop()
+
+        return
+
       case 'student-academy':
         goHome()
 
@@ -1469,6 +1497,9 @@ export function MenejerlikApp() {
             onLogic={
               openLogicAcademy
             }
+            onPresident={
+              openPresidentAcademy
+            }
           />
         )}
 
@@ -1488,6 +1519,16 @@ export function MenejerlikApp() {
 
         {screen === 'logic' && (
           <LogicAcademy
+            onBack={goBack}
+          />
+        )}
+
+        {/* =================================================
+            PRESIDENT ACADEMY
+        ================================================= */}
+
+        {screen === 'president' && (
+          <PresidentAcademy
             onBack={goBack}
           />
         )}
