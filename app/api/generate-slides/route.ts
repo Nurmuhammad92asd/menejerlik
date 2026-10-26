@@ -9,17 +9,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Mavzu kiritilmadi" }, { status: 400 })
     }
 
-    // 🧠 BUYRUQ (PROMPT) TO'LIQ YANGILANDI - Batafsil yozish uchun
-    const prompt = `
-      Siz professional taqdimot (slayd) yaratuvchi tizimsiz.
-      Foydalanuvchi quyidagi mavzuni kiritdi: "${topic}".
+    const apiKey = process.env.GROQ_API_KEY
+
+    // 🧠 1-QISM: 1-dan 6-gacha slaydlar
+    const prompt1 = `
+      Siz professional taqdimot yaratuvchisiz. Mavzu: "${topic}".
+      Menga 1-dan 6-gacha bo'lgan slaydlarni FAQAT JSON formatida qaytaring.
+      Matnlarni juda batafsil, 4-5 ta gapdan iborat qilib yozing.
       
-      Menga aynan 12 ta slayd uchun ma'lumotlarni FAQAT JSON formatida qaytaring.
-      Javobingizda "slides" degan massiv (array) bo'lishi shart.
-      
-      MUHIM QOIDA: Matnlarni juda batafsil yozing! Hech bo'lmaganda har bir slaydga 3-4 tadan to'liq gaplar kiriting. Ro'yxatlar (bullets) kamida 4-5 ta banddan iborat bo'lsin.
-      
-      JSON formati:
+      Format:
       {
         "designOptions": [
           { "name": "Klassik ko'k", "primary": "#1e3a8a", "secondary": "#eff6ff", "accent": "#3b82f6", "textColor": "#1e293b" },
@@ -27,141 +25,68 @@ export async function POST(req: Request) {
           { "name": "Tarixiy jigarrang", "primary": "#78350f", "secondary": "#fef3c7", "accent": "#d97706", "textColor": "#451a03" }
         ],
         "slides": [
-          { 
-            "type": "title", 
-            "title": "${topic}", 
-            "content": "" 
-          },
-          { 
-            "type": "relevance", 
-            "title": "Mavzuning dolzarbligi", 
-            "content": "Bu yerga mavzuning nega muhimligi haqida 4-5 ta gapdan iborat juda batafsil va ilmiy asoslangan matn yozing. Jamiyat, ta'lim tizimi va davlat siyosati uchun ahamiyatini yoritib bering." 
-          },
-          { 
-            "type": "legal", 
-            "title": "Me'yoriy-huquqiy hujjatlar", 
-            "bullets": [
-              "O'zbekiston Respublikasining 'Ta'lim to'g'risida'gi Qonuni (2020-yil).",
-              "Prezidentning ta'lim sohasidagi Farmonlari va Qarorlari.",
-              "Vazirlar Mahkamasining tegishli qarorlari.",
-              "Xalqaro standartlar va tavsiyalar (UNESCO, OECD).",
-              "Sohaga oid ichki nizom va yo'riqnomalar."
-            ] 
-          },
-          { 
-            "type": "literature", 
-            "title": "Foydalanilgan adabiyotlar", 
-            "bullets": [
-              "Mahalliy mualliflarning ilmiy maqolalari va darsliklari.",
-              "Davlat statistika qo'mitasining hisobotlari.",
-              "Xorijiy mualliflarning monografiyalari.",
-              "Xalqaro konferensiyalar to'plamlari.",
-              "Internet manbalari va elektron qo'llanmalar."
-            ] 
-          },
-          { 
-            "type": "goal", 
-            "title": "Mavzuning maqsadi", 
-            "content": "Ushbu taqdimotning asosiy maqsadi - mavzuga oid mavjud muammolarni har tomonlama tahlil qilish, ilg'or xorijiy tajribalarni o'rganish asosida amaldagi holatni yaxshilash bo'yicha aniq va samarali takliflar ishlab chiqishdan iborat." 
-          },
-          { 
-            "type": "tasks", 
-            "title": "Vazifalar", 
-            "bullets": [
-              "Mavzuga oid nazariy manbalar va ilmiy adabiyotlarni chuqur o'rganish.",
-              "Sohadagi mavjud muammolarni aniqlash va ularni tizimlashtirish.",
-              "Rivojlangan xorijiy davlatlarning ilg'or tajribalarini tahlil qilish.",
-              "O'zbekiston sharoitiga mos keladigan amaliy yechimlarni taklif qilish.",
-              "Takliflarni amalga oshirishning aniq chora-tadbirlar rejasini tuzish."
-            ] 
-          },
-          { 
-            "type": "foreign", 
-            "title": "Xorijiy tajribalar", 
-            "foreignData": [
-              {"country": "Finlandiya", "flag": "🇫🇮", "text": "Ta'lim tizimida pedagoglarning kasbiy salohiyatini oshirishga va mustaqil qaror qabul qilishiga katta e'tibor qaratiladi. Resurslardan oqilona foydalanish orqali yuqori natijalarga erishilgan."}, 
-              {"country": "Singapur", "flag": "🇸🇬", "text": "Boshqaruvda moliyaviy rejalashtirish va resurslarni to'g'ri taqsimlash vakolatlari rahbarlarga berilgan. Raqamli texnologiyalar jarayonlarga chuqur integratsiya qilingan."},
-              {"country": "Yaponiya", "flag": "🇯🇵", "text": "Raqamli texnologiyalarni joriy etish hamda uzluksiz monitoring qilish tizimi yo'lga qo'yilgan. Har bir xodimning mas'uliyati aniq belgilangan."}
-            ] 
-          },
-          { 
-            "type": "comparison", 
-            "title": "Qiyosiy tahlil", 
-            "tableData": { 
-              "headers": ["Amaldagi holat (O'zbekistonda)", "Amaldagi holat (Xorijda)", "Taklif"], 
-              "rows": [
-                ["Tizimli yondashuv yetarli emas.", "Finlandiyada tizimli va amaliy yondashuv kuchli.", "Individual rivojlanish rejasini ishlab chiqish."],
-                ["Moliyaviy resurslar cheklangan.", "Singapurda moliyaviy rejalashtirish erkin.", "Xarajatlarni ustuvor yo'nalishlar asosida rejalashtirish."],
-                ["Raqamli integratsiya to'liq emas.", "Yaponiyada yagona raqamli monitoring tizimi bor.", "Yagona elektron monitoring tizimini yo'lga qo'yish."]
-              ] 
-            } 
-          },
-          { 
-            "type": "conclusion", 
-            "title": "Xulosa", 
-            "content": "O'tkazilgan tahlillar va o'rganilgan xorijiy tajribalar asosida shuni xulosa qilish mumkinki, mavjud muammolarni hal qilish uchun tizimli yondashuv talab etiladi. Buning uchun inson kapitalini rivojlantirish, moddiy-texnik bazani yangilash va raqamli texnologiyalarni keng joriy etish zarur." 
-          },
-          { 
-            "type": "proposal", 
-            "title": "Takliflar", 
-            "bullets": [
-              "Sohadagi mavjud resurslarni xatlovdan o'tkazish va yillik rivojlanish strategiyasini ishlab chiqish.",
-              "Xodimlar malakasini oshirishning yangicha, amaliyotga yo'naltirilgan tizimini joriy etish.",
-              "Ortiqcha va samarasiz xarajatlarni qisqartirish, qo'shimcha grantlarni jalb qilish.",
-              "Boshqaruv va ta'lim jarayoniga zamonaviy raqamli texnologiyalarni keng joriy etish."
-            ] 
-          },
-          { 
-            "type": "action_plan", 
-            "title": "Chora-tadbirlar dasturi", 
-            "tableData": { 
-              "headers": ["№", "Muammo", "Amalga oshirish mexanizmi", "Mas'ullar", "Muddati", "Natija"], 
-              "rows": [
-                ["1", "Resurslardan to'liq foydalanilmagan.", "Resurslarni tahlil qilish, mentor biriktirish, monitoring qilish.", "Direktor, O'quv bo'yicha o'rinbosar", "2026-yil noyabr", "Ustuvor yo'nalishlar belgilanadi."],
-                ["2", "Moliyaviy resurslar yetarli emas.", "Xarajatlarni optimallashtirish, grant va homiylik jalb qilish.", "Direktor, Buxgalter", "2026-yil noyabrdan", "Samarasiz xarajatlar qisqaradi."],
-                ["3", "Raqamli texnologiyalar sust.", "Elektron hujjat aylanishi va monitoring tizimini yo'lga qo'yish.", "Direktor, IT mutaxassisi", "Har chorakda", "Boshqaruv qarorlari tezlashadi."]
-              ] 
-            } 
-          },
-          { 
-            "type": "final", 
-            "title": "E'tiboringiz uchun rahmat!", 
-            "content": "" 
-          }
+          { "type": "title", "title": "${topic}", "content": "" },
+          { "type": "relevance", "title": "Mavzuning dolzarbligi", "content": "Batafsil matn (kamida 4 gap)..." },
+          { "type": "legal", "title": "Me'yoriy-huquqiy hujjatlar", "bullets": ["Qonun 1", "Farmon 2", "Qaror 3", "Xalqaro standartlar"] },
+          { "type": "literature", "title": "Foydalanilgan adabiyotlar", "bullets": ["Mahalliy adabiyot 1", "Mahalliy adabiyot 2", "Xorijiy adabiyot 1", "Xorijiy adabiyot 2"] },
+          { "type": "goal", "title": "Mavzuning maqsadi", "content": "Batafsil maqsad matni..." },
+          { "type": "tasks", "title": "Vazifalar", "bullets": ["Vazifa 1", "Vazifa 2", "Vazifa 3", "Vazifa 4", "Vazifa 5"] }
         ]
       }
     `
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    // 🧠 2-QISM: 7-dan 12-gacha slaydlar
+    const prompt2 = `
+      Siz professional taqdimot yaratuvchisiz. Mavzu: "${topic}".
+      Menga 7-dan 12-gacha bo'lgan slaydlarni FAQAT JSON formatida qaytaring.
+      Matnlarni juda batafsil, 4-5 ta gapdan iborat qilib yozing.
+      
+      Format:
+      {
+        "slides": [
+          { "type": "foreign", "title": "Xorijiy tajribalar", "foreignData": [{"country": "Finlandiya", "flag": "🇫🇮", "text": "Batafsil matn..."}, {"country": "Singapur", "flag": "🇸🇬", "text": "Batafsil matn..."}, {"country": "Yaponiya", "flag": "🇯🇵", "text": "Batafsil matn..."}] },
+          { "type": "comparison", "title": "Qiyosiy tahlil", "tableData": { "headers": ["O'zbekiston", "Xorij", "Taklif"], "rows": [["Bizda 1", "Ularda 1", "Taklif 1"], ["Bizda 2", "Ularda 2", "Taklif 2"], ["Bizda 3", "Ularda 3", "Taklif 3"]] } },
+          { "type": "conclusion", "title": "Xulosa", "content": "Batafsil xulosa matni..." },
+          { "type": "proposal", "title": "Takliflar", "bullets": ["Taklif 1", "Taklif 2", "Taklif 3", "Taklif 4"] },
+          { "type": "action_plan", "title": "Chora-tadbirlar rejasi", "tableData": { "headers": ["№", "Muammo", "Mexanizm", "Mas'ullar", "Muddati", "Natija"], "rows": [["1", "Muammo 1", "Yechim 1", "Direktor", "2026-yil", "Natija 1"], ["2", "Muammo 2", "Yechim 2", "Buxgalter", "2026-yil", "Natija 2"], ["3", "Muammo 3", "Yechim 3", "IT mutaxassisi", "2026-yil", "Natija 3"]] } },
+          { "type": "final", "title": "E'tiboringiz uchun rahmat!", "content": "" }
+        ]
+      }
+    `
+
+    // 1-so'rovni yuborish
+    const res1 = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: "openai/gpt-oss-120b", 
-        messages: [
-          { role: "system", content: "Siz faqat toza JSON qaytaradigan yordamchisiz. Berilgan shablon bo'yicha to'liq va batafsil ma'lumot yozishingiz shart." },
-          { role: "user", content: prompt }
-        ],
+        model: "openai/gpt-oss-120b",
+        messages: [{ role: "system", content: "Faqat toza JSON qaytar." }, { role: "user", content: prompt1 }],
         temperature: 0.6,
         response_format: { type: "json_object" }
       })
     })
+    const data1 = await res1.json()
+    if (!res1.ok) throw new Error(data1.error?.message || "1-qismda xato")
+    const parsed1 = JSON.parse(data1.choices[0].message.content.replace(/```json/g, '').replace(/```/g, '').trim())
 
-    const data = await response.json()
-    
-    if (!response.ok) {
-      console.error("GROQ XATOSI:", data)
-      throw new Error(data.error?.message || "AI xatolik berdi")
-    }
+    // 2-so'rovni yuborish
+    const res2 = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: "openai/gpt-oss-120b",
+        messages: [{ role: "system", content: "Faqat toza JSON qaytar." }, { role: "user", content: prompt2 }],
+        temperature: 0.6,
+        response_format: { type: "json_object" }
+      })
+    })
+    const data2 = await res2.json()
+    if (!res2.ok) throw new Error(data2.error?.message || "2-qismda xato")
+    const parsed2 = JSON.parse(data2.choices[0].message.content.replace(/```json/g, '').replace(/```/g, '').trim())
 
-    const generatedText = data.choices[0].message.content
-    const cleanJson = generatedText.replace(/```json/g, '').replace(/```/g, '').trim()
-    const parsedData = JSON.parse(cleanJson)
-
-    const slidesArray = (parsedData.slides && Array.isArray(parsedData.slides)) ? parsedData.slides : []
-    const designOptions = parsedData.designOptions || [
+    // Ikkala qismni birlashtirish
+    const allSlides = [...(parsed1.slides || []), ...(parsed2.slides || [])]
+    const designOptions = parsed1.designOptions || [
       { name: "Klassik ko'k", primary: "#1e3a8a", secondary: "#eff6ff", accent: "#3b82f6", textColor: "#1e293b" }
     ]
 
@@ -172,8 +97,8 @@ export async function POST(req: Request) {
       group,
       year: '2026',
       city: 'TOSHKENT',
-      designOptions: designOptions, // 🎨 Dizayn variantlari
-      slides: slidesArray.map((s: any, i: number) => ({
+      designOptions: designOptions,
+      slides: allSlides.map((s: any, i: number) => ({
         id: String(i + 1),
         ...s,
         imageUrl: s.type === 'title' ? 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop' 
