@@ -17,16 +17,26 @@ export async function POST(req: Request) {
     const adminId = process.env.TELEGRAM_ADMIN_ID
 
     if (!botToken || !adminId) {
+      console.error("XATO: Bot token yoki Admin ID Vercel'da sozlanmagan!")
       return NextResponse.json({ error: "Bot sozlanmagan" }, { status: 500 })
     }
 
-    // RASMNI TELEGRAMGA YUBORISH UCHUN ENG SODDA VA ISHONCHLI USUL
+    // 1. Rasmni Base64 formatiga o'girish
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+    const base64Image = buffer.toString('base64')
+    
+    // 2. Data URL yaratish (Telegram buni tushunadi)
+    const imageUrl = `data:${file.type || 'image/jpeg'};base64,${base64Image}`
+
+    // 3. Telegramga yuborish uchun FormData
     const tgFormData = new FormData()
     tgFormData.append('chat_id', adminId)
-    tgFormData.append('photo', file) // Rasmni to'g'ridan-to'g'ri qo'shamiz
-    tgFormData.append('caption', `💳 **YANGI TO'LOV (300 000 so'm)**\n\n👤 Muallif: ${author}\n📚 Mavzu: ${topic}\n🆔 User ID: ${userId}\n\nTo'lovni tasdiqlaysizmi?`)
+    
+    // Rasm o'rniga to'g'ridan-to'g'ri Base64 string yuboramiz
+    tgFormData.append('photo', imageUrl) 
+    tgFormData.append('caption', `💳 **YANGI TO'LOV**\n\n👤 Muallif: ${author}\n📚 Mavzu: ${topic}\n🆔 User ID: ${userId}`)
 
-    // Tugmalar
     const inlineKeyboard = {
       inline_keyboard: [
         [
@@ -37,16 +47,15 @@ export async function POST(req: Request) {
     }
     tgFormData.append('reply_markup', JSON.stringify(inlineKeyboard))
 
-    // Telegram API'ga so'rov yuborish
+    // 4. So'rov yuborish
     const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
       method: 'POST',
       body: tgFormData
     })
 
-    // Agar Telegram xato qaytarsa, aniq xatoni Vercel logiga chiqaramiz
     if (!tgRes.ok) {
       const errorData = await tgRes.json()
-      console.error("TELEGRAM API XATOSI:", errorData)
+      console.error("TELEGRAM XATOSI:", errorData)
       throw new Error(errorData.description || "Telegramga yuborishda xatolik")
     }
 
