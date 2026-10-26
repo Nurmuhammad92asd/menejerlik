@@ -1,0 +1,88 @@
+// components/slides/slide-designer.ts
+
+export type SlideDesign = {
+  primary: string
+  secondary: string
+  accent: string
+  textColor: string
+  fontFamily: string
+  bgStyle: 'clean' | 'pattern' | 'gradient'
+  borderRadius: 'rounded' | 'sharp'
+  hasShadow: boolean
+}
+
+// 🎨 50 xil ranglar palitrasi (Mavzularga qarab)
+const PALETTES = [
+  // 1-5: Ta'lim va Maktab (Klassik ko'k)
+  { primary: '#1e3a8a', secondary: '#eff6ff', accent: '#3b82f6', textColor: '#1e293b' },
+  { primary: '#1e40af', secondary: '#e0e7ff', accent: '#6366f1', textColor: '#1e293b' },
+  { primary: '#3730a3', secondary: '#eef2ff', accent: '#818cf8', textColor: '#1e293b' },
+  // 6-10: Tarix va Madaniyat (Jigarrang/Sariq)
+  { primary: '#78350f', secondary: '#fef3c7', accent: '#d97706', textColor: '#451a03' },
+  { primary: '#854d0e', secondary: '#fef9c3', accent: '#eab308', textColor: '#422006' },
+  // 11-15: Texnologiya va IT (Yashil/Neon)
+  { primary: '#064e3b', secondary: '#ecfdf5', accent: '#10b981', textColor: '#064e3b' },
+  { primary: '#0f172a', secondary: '#f1f5f9', accent: '#06b6d4', textColor: '#0f172a' },
+  // 16-20: Moliya va Iqtisod (To'q yashil/Oltin)
+  { primary: '#065f46', secondary: '#fefce8', accent: '#eab308', textColor: '#1e293b' },
+  // ... (Bu yerga yana 30 ta palitra qo'shishingiz mumkin)
+]
+
+// 🔤 10 xil shriftlar
+const FONTS = [
+  '"Inter", sans-serif',      // Zamonaviy
+  '"Georgia", serif',         // Klassik
+  '"Montserrat", sans-serif', // Jiddiy
+  '"Nunito", sans-serif',     // Yumshoq (bolalar uchun)
+  '"Roboto", sans-serif',     // Toza
+  '"Times New Roman", serif', // Akademik
+  '"Poppins", sans-serif',    // Startap
+  '"Merriweather", serif',    // Kitobiy
+  '"Open Sans", sans-serif',  // Universal
+  '"Playfair Display", serif' // Hashamatli
+]
+
+export function getDesignByTopic(topic: string): SlideDesign {
+  const t = topic.toLowerCase()
+  
+  // 1. Palitrani tanlash (Mavzuga qarab)
+  let palette = PALETTES[0] // Standart
+  
+  if (t.includes('tarix') || t.includes('urush')) {
+    palette = PALETTES[3] // Jigarrang
+  } else if (t.includes('texnologiya') || t.includes('sun\'iy') || t.includes('kompyuter')) {
+    palette = PALETTES[5] // Yashil/Kulrang
+  } else if (t.includes('moliya') || t.includes('iqtisod') || t.includes('budjet')) {
+    palette = PALETTES[8] // Yashil/Oltin
+  } else if (t.includes('bog\'cha') || t.includes('maktabgacha')) {
+    palette = PALETTES[1] // Yorqinroq ko'k
+  }
+
+  // 2. Shriftni tanlash (Mavzuga qarab)
+  let font = FONTS[0] // Standart Inter
+  
+  if (t.includes('bog\'cha') || t.includes('bolalar')) {
+    font = FONTS[3] // Nunito (yumshoq)
+  } else if (t.includes('tarix') || t.includes('adabiyot')) {
+    font = FONTS[1] // Georgia (klassik)
+  } else if (t.includes('akademik') || t.includes('ilmiy')) {
+    font = FONTS[5] // Times New Roman
+  }
+
+  // 3. Fon uslubi (Random tanlov - har safar har xil chiqishi uchun)
+  const bgStyle = Math.random() > 0.5 ? 'clean' : (Math.random() > 0.5 ? 'pattern' : 'gradient')
+  
+  // 4. Shakllar (Maktab uchun o'tkir, bog'cha uchun yumaloq)
+  const borderRadius = t.includes('bog\'cha') || t.includes('bolalar') ? 'rounded' : 'sharp'
+  
+  // 5. Soya
+  const hasShadow = Math.random() > 0.3 // 70% ehtimol bilan soya bo'ladi
+
+  return {
+    ...palette,
+    fontFamily: font,
+    bgStyle,
+    borderRadius,
+    hasShadow
+  }
+}
