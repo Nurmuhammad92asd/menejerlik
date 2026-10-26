@@ -14,6 +14,7 @@ import ResultScreen from '@/components/result-screen'
 import { RankingScreen } from '@/components/ranking-screen'
 import StudentAcademy from '@/components/student-academy'
 import PisaAcademy from '@/components/pisa/pisa-academy'
+import LogicAcademy from '@/components/logic/logic-academy'
 
 import {
   createModuleSession,
@@ -69,6 +70,7 @@ type Screen =
   | 'home'
   | 'student-academy'
   | 'pisa'
+  | 'logic'
   | 'education'
   | 'roles'
   | 'subjects'
@@ -436,6 +438,23 @@ export function MenejerlikApp() {
   }
 
   /* =======================================================
+     LOGIC ACADEMY — YANGI
+  ======================================================= */
+
+  const openLogicAcademy = () => {
+    setQuizSession(null)
+    setQuizResult(null)
+
+    setNavigation(
+      INITIAL_NAVIGATION,
+    )
+
+    setScreen('logic')
+
+    scrollToTop()
+  }
+
+  /* =======================================================
      RANKING
   ======================================================= */
 
@@ -529,9 +548,6 @@ export function MenejerlikApp() {
 
   /* =======================================================
      SUBJECT
-     
-     MUHIM:
-     FANLAR → MATEMATIKA → MAVZULAR
   ======================================================= */
 
   const selectSubject = (
@@ -543,11 +559,6 @@ export function MenejerlikApp() {
 
         subjectId,
 
-        /*
-         * Matematika fani quiz-data.ts
-         * ichidagi "matematika" category
-         * bilan bog‘lanadi.
-         */
         moduleId:
           subjectId === 'matematika'
             ? 'matematika'
@@ -558,13 +569,6 @@ export function MenejerlikApp() {
       }),
     )
 
-    /*
-     * Hozircha real test bazasi mavjud
-     * bo‘lgan fan — MATEMATIKA.
-     *
-     * Boshqa fanlar keyinchalik
-     * shu tizimga ulanadi.
-     */
     if (
       subjectId === 'matematika'
     ) {
@@ -1085,6 +1089,11 @@ export function MenejerlikApp() {
 
         return
 
+      case 'logic':
+        goHome()
+
+        return
+
       case 'student-academy':
         goHome()
 
@@ -1119,13 +1128,6 @@ export function MenejerlikApp() {
         return
 
       case 'topics':
-        /*
-         * FANLAR → MATEMATIKA → MAVZULAR
-         *
-         * Matematika orqali kirilgan bo‘lsa,
-         * orqaga qaytganda MODULLAR emas,
-         * FANLAR oynasiga qaytamiz.
-         */
         if (
           navigation.subjectId ===
           'matematika'
@@ -1442,6 +1444,9 @@ export function MenejerlikApp() {
             onStudentAcademy={
               openStudentAcademy
             }
+            onLogic={
+              openLogicAcademy
+            }
             onAI={openAI}
             onRanking={
               openRanking
@@ -1469,6 +1474,16 @@ export function MenejerlikApp() {
 
         {screen === 'pisa' && (
           <PisaAcademy
+            onBack={goBack}
+          />
+        )}
+
+        {/* =================================================
+            LOGIC ACADEMY — YANGI
+        ================================================= */}
+
+        {screen === 'logic' && (
+          <LogicAcademy
             onBack={goBack}
           />
         )}
