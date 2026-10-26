@@ -18,6 +18,7 @@ import {
   Trophy,
   Users,
   Zap,
+  FileText, // 🎨 YANGI: Slayd uchun ikonka
 } from 'lucide-react'
 
 import type { Attempt } from '@/hooks/use-history'
@@ -49,6 +50,11 @@ type Props = {
    * O'quvchi Akademiyasi uchun.
    */
   onStudentAcademy?: () => void
+
+  /**
+   * Slayd Yaratish uchun (YANGI).
+   */
+  onSlides?: () => void
 }
 
 export function HomeScreen({
@@ -60,6 +66,7 @@ export function HomeScreen({
   onAI,
   onRanking,
   onStudentAcademy,
+  onSlides, // 🎨 YANGI
 }: Props) {
   const safeHistory = Array.isArray(history)
     ? history
@@ -386,6 +393,59 @@ export function HomeScreen({
         </div>
 
       </section>
+
+
+      {/* =====================================================
+          🎨 SLAY D YARATISH (YANGI)
+      ===================================================== */}
+
+      {onSlides && (
+        <section className="relative overflow-hidden rounded-[29px] bg-gradient-to-br from-fuchsia-700 via-purple-700 to-indigo-800 p-6 text-white shadow-xl shadow-purple-900/20">
+          <div className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full border border-white/10 bg-white/[0.035]" />
+          <div className="pointer-events-none absolute -bottom-16 -left-10 size-48 rounded-full bg-fuchsia-300/10 blur-3xl" />
+          
+          <div className="relative">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex size-14 shrink-0 items-center justify-center rounded-[19px] bg-white/10 text-2xl shadow-inner backdrop-blur-md">
+                  🎨
+                </div>
+                <div>
+                  <p className="text-[9px] font-black uppercase tracking-[0.18em] text-fuchsia-200">
+                    Maxsus bo'lim
+                  </p>
+                  <h2 className="mt-1 text-[20px] font-black tracking-tight">
+                    Slayd Yaratish
+                  </h2>
+                </div>
+              </div>
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/20 text-white shadow-lg backdrop-blur-md">
+                <FileText className="size-5" />
+              </div>
+            </div>
+
+            <p className="mt-5 max-w-[400px] text-[12px] leading-5 text-white/80">
+              Maktab direktorlari va bog'cha mudiralari uchun. Mavzuni yozing, tizim 12 ta slaydni rasmlar va jadvallar bilan o'zi tayyorlab beradi.
+            </p>
+
+            <button
+              type="button"
+              onClick={onSlides}
+              className="group mt-5 flex w-full items-center justify-between rounded-2xl bg-white px-4 py-3.5 text-left text-sm font-black text-slate-950 shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.99]"
+            >
+              <span className="flex items-center gap-2.5">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-fuchsia-50 text-lg">
+                  ✨
+                </span>
+                Slayd yaratishni boshlash
+              </span>
+              <span className="flex size-8 items-center justify-center rounded-xl bg-slate-100 transition-transform group-hover:translate-x-1">
+                <ArrowRight className="size-4" />
+              </span>
+            </button>
+          </div>
+        </section>
+      )}
 
 
       {/* =====================================================
