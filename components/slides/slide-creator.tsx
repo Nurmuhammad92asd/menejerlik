@@ -4,7 +4,6 @@
 import { useState } from 'react'
 import type { PresentationData } from './slide-types'
 import SlideViewer from './slide-viewer'
-import pptxgen from 'pptxgenjs'
 
 export default function SlideCreator({ onBack }: { onBack: () => void }) {
   const [topic, setTopic] = useState('')
@@ -14,7 +13,7 @@ export default function SlideCreator({ onBack }: { onBack: () => void }) {
   const [isGenerating, setIsGenerating] = useState(false)
   const [presentation, setPresentation] = useState<PresentationData | null>(null)
 
-  // 🧠 To'g'ridan-to'g'ri AI orqali yaratish (To'lovsiz)
+  // 🧠 AI orqali yaratish
   const handleGenerate = async () => {
     if (!topic || !author || !group) {
       alert("Iltimos, mavzu, ism va guruhni to'ldiring!")
@@ -43,35 +42,11 @@ export default function SlideCreator({ onBack }: { onBack: () => void }) {
     }
   }
 
-  // PPT yuklash
-  const handleDownloadPPT = async () => {
-    if (!presentation) return
-    const pptx = new pptxgen()
-    pptx.layout = 'LAYOUT_16x9'
-    
-    presentation.slides.forEach((s) => {
-      const slide = pptx.addSlide()
-      if (s.type === 'title') {
-        slide.addText(presentation.topic, { x: 1, y: 3, w: 8, h: 2, fontSize: 32, bold: true, align: 'center' })
-        slide.addText(presentation.author, { x: 1, y: 5, w: 8, h: 1, fontSize: 18, align: 'center' })
-      } else {
-        slide.addText(s.title || '', { x: 0.5, y: 0.5, w: 9, fontSize: 24, bold: true })
-        if (s.content) slide.addText(s.content, { x: 0.5, y: 1.5, w: 9, fontSize: 14 })
-        if (s.bullets) slide.addText(s.bullets.map(b => ({ text: `• ${b}`, options: { breakLine: true } })), { x: 0.5, y: 1.5, w: 9 })
-      }
-    })
-    
-    await pptx.writeFile({ fileName: `${presentation.author}.pptx` })
-  }
-
   // Slayd tayyor bo'lsa ko'rsatish
   if (presentation) {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-center gap-4 py-4">
-          <button onClick={handleDownloadPPT} className="rounded-xl bg-green-600 px-8 py-3 text-sm font-black text-white shadow-lg hover:bg-green-700 transition">
-            ⬇️ PowerPoint (.pptx) yuklab olish
-          </button>
           <button onClick={() => setPresentation(null)} className="rounded-xl border px-8 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 transition">
             ← Yangi slayd yaratish
           </button>
