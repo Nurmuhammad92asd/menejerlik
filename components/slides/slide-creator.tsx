@@ -3,133 +3,116 @@
 
 import { useState } from 'react'
 import type { PresentationData } from './slide-types'
-// import pptxgen from 'pptxgenjs' // PPT uchun
-
-const PAYMENT_CARD = '4073 4200 4205 8275'
-const PRICE = '300 000'
+import SlideViewer from './slide-viewer'
+import pptxgen from 'pptxgenjs'
 
 export default function SlideCreator({ onBack }: { onBack: () => void }) {
   const [topic, setTopic] = useState('')
   const [author, setAuthor] = useState('')
   const [group, setGroup] = useState('')
-  const [screenshot, setScreenshot] = useState<File | null>(null)
   
-  const [isSending, setIsSending] = useState(false)
-  const [isWaiting, setIsWaiting] = useState(false)
-  const [isApproved, setIsApproved] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(false)
   const [presentation, setPresentation] = useState<PresentationData | null>(null)
-  
-  // Foydalanuvchining unikal ID'si
-  const [userId] = useState(() => Math.random().toString(36).substring(2, 15))
 
-  const handleSendPayment = async () => {
-    if (!screenshot || !topic || !author) {
-      alert("Barcha maydonlarni to'ldiring va to'lov chekini (skrinshot) yuklang!")
+  // 🧠 To'g'ridan-to'g'ri AI orqali yaratish (To'lovsiz)
+  const handleGenerate = async () => {
+    if (!topic || !author || !group) {
+      alert("Iltimos, mavzu, ism va guruhni to'ldiring!")
       return
     }
     
-    setIsSending(true)
-    const formData = new FormData()
-    formData.append('screenshot', screenshot)
-    formData.append('topic', topic)
-    formData.append('author', author)
-    formData.append('userId', userId)
-
+    setIsGenerating(true)
     try {
-      const res = await fetch('/api/payment', { method: 'POST', body: formData })
-      if (res.ok) {
-        setIsWaiting(true)
-        checkApproval()
-      } else {
-        alert("Xatolik yuz berdi. Qaytadan urinib ko'ring.")
+      const res = await fetch('/api/generate-slides', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic, author, group })
+      })
+      
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.error || "AI bilan bog'lanishda xatolik")
       }
-    } catch (error) {
-      alert("Tarmoq xatosi.")
+      
+      const data = await res.json()
+      setPresentation(data)
+    } catch (error: any) {
+      alert("Xatolik yuz berdi: " + error.message)
     } finally {
-      setIsSending(false)
+      setIsGenerating(false)
     }
   }
 
-  const checkApproval = () => {
-    const interval = setInterval(async () => {
-      const res = await fetch(`/api/telegram-webhook?userId=${userId}`)
-      const data = await res.json()
-      if (data.isApproved) {
-        clearInterval(interval)
-        setIsApproved(true)
-        setIsWaiting(false)
-        alert("✅ Admin to'lovni tasdiqladi! Endi slaydni yaratishingiz mumkin.")
+  // PPT yuklash
+  const handleDownloadPPT = async () => {
+    if (!presentation) return
+    const pptx = new pptxgen()
+    pptx.layout = 'LAYOUT_16x9'
+    
+    presentation.slides.forEach((s) => {
+      const slide = pptx.addSlide()
+      if (s.type === 'title') {
+        slide.addText(presentation.topic, { x: 1, y: 3, w: 8, h: 2, fontSize: 32, bold: true, align: 'center' })
+        slide.addText(presentation.author, { x: 1, y: 5, w: 8, h: 1, fontSize: 18, align: 'center' })
+      } else {
+        slide.addText(s.title || '', { x: 0.5, y: 0.5, w: 9, fontSize: 24, bold: true })
+        if (s.content) slide.addText(s.content, { x: 0.5, y: 1.5, w: 9, fontSize: 14 })
+        if (s.bullets) slide.addText(s.bullets.map(b => ({ text: `• ${b}`, options: { breakLine: true } })), { x: 0.5, y: 1.5, w: 9 })
       }
-    }, 3000) // Har 3 soniyada tekshiradi
+    })
+    
+    await pptx.writeFile({ fileName: `${presentation.author}.pptx` })
   }
 
-  // ... AI orqali slayd yaratish kodi (oldingidek qoladi)
-
+  // Slayd tayyor bo'lsa ko'rsatish
   if (presentation) {
-    return ( /* Slaydni ko'rish qismi */ <div>Slayd tayyor!</div> )
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-center gap-4 py-4">
+          <button onClick={handleDownloadPPT} className="rounded-xl bg-green-600 px-8 py-3 text-sm font-black text-white shadow-lg hover:bg-green-700 transition">
+            ⬇️ PowerPoint (.pptx) yuklab olish
+          </button>
+          <button onClick={() => setPresentation(null)} className="rounded-xl border px-8 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 transition">
+            ← Yangi slayd yaratish
+          </button>
+        </div>
+        <SlideViewer data={presentation} onBack={() => setPresentation(null)} />
+      </div>
+    )
   }
 
+  // Forma qismi
   return (
     <section className="mx-auto max-w-2xl p-6">
       <button onClick={onBack} className="mb-6 text-sm font-bold text-blue-600">← Orqaga</button>
 
       <div className="rounded-3xl border bg-card p-8 shadow-xl">
-        <h1 className="text-2xl font-black mb-2">🎨 Aqlli Slayd Yaratish</h1>
+        <h1 className="text-2xl font-black mb-2">🎨 Aqlli Slayd Yaratish (Bepul Test)</h1>
         <p className="text-sm text-muted-foreground mb-8">
-          Narxi: <strong>{PRICE} so'm</strong>. Pulni o'tkazib, chekni (skrinshotni) yuklang.
+          Mavzuni kiriting, Sun'iy Intellekt sizga 12 ta professional slaydni tayyorlab beradi.
         </p>
 
         <div className="space-y-5">
-          {/* Mavzu va ism */}
-          <input type="text" value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="Mavzu..." className="w-full rounded-xl border p-3" />
-          <input type="text" value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="Muallif..." className="w-full rounded-xl border p-3" />
-          
-          {/* Karta raqami */}
-          <div className="rounded-xl border-2 border-amber-500 bg-amber-50 p-4 mt-6">
-            <p className="font-bold text-sm mb-2 text-amber-900">💳 Karta raqami:</p>
-            <div className="bg-white p-3 rounded-lg border text-center font-mono text-lg font-bold tracking-wider text-blue-900">
-              {PAYMENT_CARD}
-            </div>
-            <p className="text-xs text-center text-muted-foreground mt-2">TALATBEKOV NURMUHAMMAD</p>
+          <div>
+            <label className="text-sm font-bold mb-2 block">Mavzu nomi</label>
+            <input type="text" value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="Masalan: Maktab maslahatchisini baholash diagnostika qilish" className="w-full rounded-xl border p-3 outline-none focus:border-blue-500" />
+          </div>
+          <div>
+            <label className="text-sm font-bold mb-2 block">Muallif (Ism-familiya)</label>
+            <input type="text" value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="Masalan: TALATBEKOV NURMUHAMMAD" className="w-full rounded-xl border p-3 outline-none focus:border-blue-500" />
+          </div>
+          <div>
+            <label className="text-sm font-bold mb-2 block">Guruh / Kurs</label>
+            <input type="text" value={group} onChange={(e) => setGroup(e.target.value)} placeholder="Masalan: Menejerlik 2-kurs" className="w-full rounded-xl border p-3 outline-none focus:border-blue-500" />
           </div>
 
-          {/* Rasm yuklash */}
-          <div className="rounded-xl border-2 border-dashed border-blue-300 bg-blue-50 p-6 text-center">
-            <p className="font-bold text-sm mb-2">📸 To'lov chekini (skrinshot) yuklang:</p>
-            <input 
-              type="file" 
-              accept="image/*"
-              onChange={(e) => setScreenshot(e.target.files?.[0] || null)}
-              className="w-full text-sm" 
-            />
-          </div>
-
-          {/* Yuborish yoki kutish */}
-          {!isWaiting && !isApproved && (
-            <button
-              onClick={handleSendPayment}
-              disabled={!screenshot || !topic || !author || isSending}
-              className="w-full rounded-xl bg-blue-600 py-4 text-sm font-black text-white disabled:opacity-50 mt-4"
-            >
-              {isSending ? '⏳ Yuborilmoqda...' : '📤 Chekni adminga yuborish'}
-            </button>
-          )}
-
-          {isWaiting && (
-            <div className="text-center p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
-              <p className="font-bold text-yellow-700">⏳ Admin tasdiqlashini kuting...</p>
-              <p className="text-xs text-yellow-600 mt-1">Rasm Telegram botingizga yuborildi. Iltimos, 1-2 daqiqa kuting.</p>
-            </div>
-          )}
-
-          {isApproved && (
-            <button
-              onClick={() => { /* AI generatsiya */ }}
-              className="w-full rounded-xl bg-green-600 py-4 text-sm font-black text-white mt-4"
-            >
-              ✨ Endi slaydni yaratish
-            </button>
-          )}
+          <button
+            onClick={handleGenerate}
+            disabled={!topic || !author || !group || isGenerating}
+            className="w-full rounded-xl bg-blue-600 py-4 text-sm font-black text-white disabled:opacity-50 mt-4 hover:bg-blue-700 transition"
+          >
+            {isGenerating ? '⏳ Sun\'iy intellekt yozmoqda...' : '✨ Slaydni yaratish'}
+          </button>
         </div>
       </div>
     </section>
