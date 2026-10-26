@@ -13,8 +13,8 @@ export async function POST(req: Request) {
       Siz professional taqdimot (slayd) yaratuvchi tizimsiz.
       Foydalanuvchi quyidagi mavzuni kiritdi: "${topic}".
       
-      Menga aynan 12 ta slayd uchun ma'lumotlarni JSON formatida qaytaring.
-      Javobingiz faqat toza JSON bo'lishi shart, hech qanday qo'shimcha matn yozmang.
+      Menga aynan 12 ta slayd uchun ma'lumotlarni FAQAT JSON formatida qaytaring.
+      Javobingizda "slides" degan massiv (array) bo'lishi shart.
       
       JSON formati:
       {
@@ -41,7 +41,6 @@ export async function POST(req: Request) {
       }
     `
 
-    // Groq API ga so'rov yuborish
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -49,10 +48,9 @@ export async function POST(req: Request) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        // 🚀 ENG SO'NGGI VA ISHLAYOTGAN MODEL
         model: "openai/gpt-oss-120b", 
         messages: [
-          { role: "system", content: "Siz faqat toza JSON qaytaradigan yordamchisiz. Javobingizda hech qanday qo'shimcha matn (masalan, ```json) bo'lmasligi kerak." },
+          { role: "system", content: "Siz faqat toza JSON qaytaradigan yordamchisiz. Javobingizda hech qanday qo'shimcha matn bo'lmasligi kerak." },
           { role: "user", content: prompt }
         ],
         temperature: 0.7,
@@ -62,19 +60,24 @@ export async function POST(req: Request) {
 
     const data = await response.json()
     
-    // Agar Groq API xato qaytarsa, Vercel logiga yozamiz
     if (!response.ok) {
       console.error("GROQ API XATOSI:", data)
       throw new Error(data.error?.message || "AI xatolik berdi")
     }
 
     const generatedText = data.choices[0].message.content
-    
-    // Ba'zi modellar JSON ni ```json ... ``` ichida qaytarishi mumkin. Uni tozalaymiz.
     const cleanJson = generatedText.replace(/```json/g, '').replace(/```/g, '').trim()
     const parsedData = JSON.parse(cleanJson)
 
-    // Rasmlarni qo'shish
+    // 🚨 ENG MUHIM TUZATISH: AI noto'g'ri javob qaytarsa, o'zimiz to'ldiramiz
+    const slidesArray = parsedData.slides && Array.isArray(parsedData.slides) 
+      ? parsedData.slides 
+      : [
+          { type: 'title', title: topic, content: '' },
+          { type: 'relevance', title: 'Dolzarblik', content: 'Mavzuning dolzarbligi...' },
+          { type: 'final', title: "E'tiboringiz uchun rahmat!", content: '' }
+        ]
+
     const finalPresentation = {
       id: crypto.randomUUID(),
       topic,
@@ -82,8 +85,10 @@ export async function POST(req: Request) {
       group,
       year: '2026',
       city: 'TOSHKENT',
-      design: parsedData.design,
-      slides: parsedData.slides.map((s: any, i: number) => ({
+      design: parsedData.design || {
+        primary: '#1e3a8a', secondary: '#eff6ff', accent: '#3b82f6', textColor: '#1e293b'
+      },
+      slides: slidesArray.map((s: any, i: number) => ({
         id: String(i + 1),
         ...s,
         imageUrl: s.type === 'title' ? 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop' 
@@ -96,6 +101,6 @@ export async function POST(req: Request) {
 
   } catch (error: any) {
     console.error("AI Error:", error.message)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: "AI tizimida xatolik yuz berdi. Qayta urinib ko'ring." }, { status: 500 })
   }
 }
