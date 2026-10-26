@@ -11,7 +11,7 @@ async function callGroq(apiKey: string, prompt: string) {
         body: JSON.stringify({
           model: "openai/gpt-oss-120b",
           messages: [
-            { role: "system", content: "Siz O'zbekiston ta'lim tizimi va qonunchiligini juda yaxshi biladigan mutaxassissiz. Faqat toza JSON formatida javob qaytaring. Hech qachon shablondagi so'zlarni ko'chirmang, har doim o'zingizdan mazmunli matn yozing." },
+            { role: "system", content: "Siz O'zbekiston ta'lim tizimi va qonunchiligini juda yaxshi biladigan mutaxassissiz. Faqat toza JSON formatida javob qaytaring. Hech qachon 'Batafsil matn' deb yozmang, har doim o'zingizdan mazmunli gaplar yozing." },
             { role: "user", content: prompt }
           ],
           temperature: 0.6,
@@ -39,21 +39,18 @@ export async function POST(req: Request) {
     const apiKey = process.env.GROQ_API_KEY
     if (!apiKey) return NextResponse.json({ error: "API kalit topilmadi" }, { status: 500 })
 
-    // 🚨 1-QISM: 1-6 slaydlar
+    // 🚨 1-QISM: 1-6 slaydlar (Barcha matnlar tayyor qilib yozilgan)
     const prompt1 = `
       Mavzu: "${topic}".
       1-dan 6-gacha slaydlarni FAQAT JSON formatida qaytaring.
       
-      JUDA MUHIM QOIDALAR:
-      1. 3-slaydda (Me'yoriy hujjatlar) albatta O'zbekiston Respublikasining ushbu mavzuga tegishli ANIQ Qonunlari, Prezident Farmonlari va Vazirlar Mahkamasi qarorlarini sanasi va raqami bilan yozing. (Masalan: "O'zbekiston Respublikasining 'Ta'lim to'g'risida'gi Qonuni (2020-yil 23-sentabr, O'RQ-637-son)").
-      2. 4-slaydda 2 ta mahalliy va 2 ta xorijiy ANIQ adabiyotlarni (muallif, kitob nomi, yili) yozing.
-      3. Hech qachon "Matn...", "Batafsil..." deb yozmang! Har doim o'zingizdan mazmunli gaplar o'ylab toping.
+      JUDA MUHIM: Shablonga qarab qolmang, mavzuga oid o'zingizdan haqiqiy va batafsil ma'lumot yozing! 
       
       Format:
       {
         "slides": [
           { "type": "title", "title": "${topic}", "content": "" },
-          { "type": "relevance", "title": "Mavzuning dolzarbligi", "content": "Bu yerga 4-5 ta gapdan iborat juda batafsil va ilmiy asoslangan matn yozing..." },
+          { "type": "relevance", "title": "Mavzuning dolzarbligi", "content": "Hozirgi kunda ushbu mavzu davlat siyosatining ustuvor yo'nalishlaridan biridir. Jamiyat taraqqiyoti va kelajak avlod tarbiyasi bevosita ushbu sohaning qay darajada to'g'ri yo'lga qo'yilganligiga bog'liq." },
           { 
             "type": "legal", 
             "title": "Me'yoriy-huquqiy hujjatlar", 
@@ -74,20 +71,18 @@ export async function POST(req: Request) {
               "Xorijiy: OECD. 'New School Management Approaches'. OECD Publishing, 2001."
             ] 
           },
-          { "type": "goal", "title": "Mavzuning maqsadi", "content": "Bitta aniq va batafsil maqsadni yozing..." },
-          { "type": "tasks", "title": "Vazifalar", "bullets": ["Vazifa 1", "Vazifa 2", "Vazifa 3", "Vazifa 4", "Vazifa 5"] }
+          { "type": "goal", "title": "Mavzuning maqsadi", "content": "Ushbu taqdimotning asosiy maqsadi - mavzuga oid mavjud muammolarni tahlil qilish va uni yechish bo'yicha amaliy takliflar ishlab chiqishdir." },
+          { "type": "tasks", "title": "Vazifalar", "bullets": ["Mavzuga oid nazariy manbalarni o'rganish", "Sohadagi mavjud muammolarni aniqlash", "Xorijiy tajribalarni tahlil qilish", "Amaliy yechimlarni taklif qilish", "Chora-tadbirlar rejasini tuzish"] }
         ]
       }
     `
 
-    // 🚨 2-QISM: 7-12 slaydlar (BATAFSIL XORIJIY TAJRIBALAR)
+    // 🚨 2-QISM: 7-12 slaydlar (Qiyosiy tahlil va xorijiy tajribalar to'liq yozilgan)
     const prompt2 = `
       Mavzu: "${topic}".
       7-dan 12-gacha slaydlarni FAQAT JSON formatida qaytaring.
       
-      JUDA MUHIM QOIDA: 
-      7-slaydda (Xorijiy tajribalar) Finlandiya, Singapur, Yaponiya davlatlarining ushbu mavzu bo'yicha ANIQ qanday ish qilishini, qanday tizimlari borligini 3-4 tadan gap bilan batafsil yozing. 
-      ASLO "Batafsil matn" yoki "Matn..." deb yozmang! O'zingizdan haqiqiy, mazmunli gaplar yozing.
+      JUDA MUHIM: 7-slaydda va 8-slaydda shunchaki "Batafsil matn" deb yozmang! Har bir katakka haqiqiy, mazmunli va uzun gaplar yozing.
       
       Format:
       {
@@ -101,7 +96,30 @@ export async function POST(req: Request) {
               {"country": "Yaponiya", "flag": "🇯🇵", "text": "Yaponiyada raqamli texnologiyalarni joriy etish va monitoring qilish tizimi juda rivojlangan. Har bir xodimning mas'uliyati aniq belgilangan."}
             ] 
           },
-          { "type": "comparison", "title": "Qiyosiy tahlil", "tableData": { "headers": ["O'zbekiston", "Xorij", "Taklif"], "rows": [["Tizimli yondashuv yetarli emas", "Finlandiyada tizimli yondashuv kuchli", "Individual rivojlanish rejasini ishlab chiqish"], ["Moliyaviy resurslar cheklangan", "Singapurda moliyaviy erkinlik bor", "Xarajatlarni optimallashtirish"], ["Raqamli integratsiya to'liq emas", "Yaponiyada yagona monitoring tizimi bor", "Yagona elektron tizimni yo'lga qo'yish"]] } },
+          { 
+            "type": "comparison", 
+            "title": "Qiyosiy tahlil", 
+            "tableData": { 
+              "headers": ["Amaldagi holat (O'zbekistonda)", "Amaldagi holat (Xorijiy davlatlarda)", "Taklif"], 
+              "rows": [
+                [
+                  "Rahbarlar malaka oshirish kurslarida bilim oladilar, lekin amaliyotga tatbiq etish sust.", 
+                  "Finlandiyada rahbarlar individual rivojlanish rejasiga ega va doimiy amaliyotda bo'ladi.", 
+                  "Rahbarlar uchun individual rivojlanish rejasini (IDP) ishlab chiqish va amaliyotga yo'naltirish."
+                ], 
+                [
+                  "Budjet mablag'lari qat'iy taqsimlanadi, lekin moliyaviy mustaqillik yetarli emas.", 
+                  "Singapurda maktab rahbarlariga moliyaviy resurslarni boshqarishda keng vakolat berilgan.", 
+                  "Xarajatlarni ustuvor yo'nalishlar asosida rejalashtirish va moliyaviy vakolatlarni kengaytirish."
+                ], 
+                [
+                  "Elektron platformalar joriy etilmoqda, lekin yagona tizimga birlashtirilmagan.", 
+                  "Yaponiyada barcha maktablar yagona raqamli monitoring tizimiga ulangan.", 
+                  "Yagona elektron monitoring tizimini yo'lga qo'yish va xodimlar raqamli savodxonligini oshirish."
+                ]
+              ] 
+            } 
+          },
           { "type": "conclusion", "title": "Xulosa", "content": "O'tkazilgan tahlillar asosida shuni xulosa qilish mumkinki, mavjud muammolarni hal qilish uchun tizimli yondashuv talab etiladi. Inson kapitalini rivojlantirish va raqamli texnologiyalarni joriy etish zarur." },
           { "type": "proposal", "title": "Takliflar", "bullets": ["Resurslarni xatlovdan o'tkazish va strategiya ishlab chiqish", "Xodimlar malakasini oshirish tizimini joriy etish", "Ortiqcha xarajatlarni qisqartirish va grantlarni jalb qilish", "Raqamli texnologiyalarni keng joriy etish"] },
           { "type": "action_plan", "title": "Chora-tadbirlar rejasi", "tableData": { "headers": ["№", "Muammo", "Mexanizm", "Mas'ullar", "Muddati", "Natija"], "rows": [["1", "Resurslardan to'liq foydalanilmagan", "Resurslarni tahlil qilish, mentor biriktirish", "Direktor, O'quv bo'yicha o'rinbosar", "2026-yil noyabr", "Ustuvor yo'nalishlar belgilanadi"], ["2", "Moliyaviy resurslar yetarli emas", "Xarajatlarni optimallashtirish, grant jalb qilish", "Direktor, Buxgalter", "2026-yil noyabrdan", "Samarasiz xarajatlar qisqaradi"], ["3", "Raqamli texnologiyalar sust", "Elektron hujjat aylanishi va monitoring tizimini yo'lga qo'yish", "Direktor, IT mutaxassisi", "Har chorakda", "Boshqaruv qarorlari tezlashadi"]] } },
