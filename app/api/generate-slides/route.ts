@@ -1,44 +1,31 @@
 // app/api/generate-slides/route.ts
 import { NextResponse } from 'next/server'
 
-// Yordamchi funksiya: Groq API'ga so'rov yuborish va xato bo'lsa qayta urinish
 async function callGroq(apiKey: string, prompt: string) {
   const maxRetries = 3;
   for (let i = 0; i < maxRetries; i++) {
     try {
       const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: "openai/gpt-oss-120b",
           messages: [
-            // Groq qoidasi: JSON so'zi albatta promptda bo'lishi shart
-            { role: "system", content: "Siz faqat toza JSON formatida javob qaytaradigan yordamchisiz. Javobingizda hech qanday qo'shimcha matn bo'lmasligi kerak." },
+            { role: "system", content: "Siz O'zbekiston Respublikasi qonunchiligini juda yaxshi biladigan ekspertsiz. Faqat toza JSON formatida javob qaytaring." },
             { role: "user", content: prompt }
           ],
-          temperature: 0.5, // Har xillikni kamaytirish uchun
+          temperature: 0.5,
           response_format: { type: "json_object" }
         })
       })
-
       const data = await response.json()
-      
       if (!response.ok) {
-        console.warn(`Groq xatosi (urinish ${i + 1}/${maxRetries}):`, data.error?.message)
-        // Agar xato JSON bilan bog'liq bo'lsa yoki 400 bo'lsa, qayta urinamiz
-        if (data.error?.code === 'json_validate_failed' || response.status === 400) {
-          continue; // Keyingi urinishga o'tish
-        }
+        if (data.error?.code === 'json_validate_failed' || response.status === 400) continue;
         throw new Error(data.error?.message || "AI xatolik berdi")
       }
-
       return data.choices[0].message.content
     } catch (error: any) {
-      if (i === maxRetries - 1) throw error; // Oxirgi urinishda xato bo'lsa, tashlaymiz
-      console.log(`Qayta urinilmoqda... (${i + 1})`)
+      if (i === maxRetries - 1) throw error;
     }
   }
   throw new Error("AI javob qaytarishda muvaffaqiyatsiz bo'ldi")
@@ -47,21 +34,18 @@ async function callGroq(apiKey: string, prompt: string) {
 export async function POST(req: Request) {
   try {
     const { topic, author, group } = await req.json()
-
-    if (!topic) {
-      return NextResponse.json({ error: "Mavzu kiritilmadi" }, { status: 400 })
-    }
+    if (!topic) return NextResponse.json({ error: "Mavzu kiritilmadi" }, { status: 400 })
 
     const apiKey = process.env.GROQ_API_KEY
-    if (!apiKey) {
-      return NextResponse.json({ error: "API kalit topilmadi" }, { status: 500 })
-    }
+    if (!apiKey) return NextResponse.json({ error: "API kalit topilmadi" }, { status: 500 })
 
-    // 1-QISM: 1-6 slaydlar
+    // 🚨 ANIQ QONUNLAR UCHUN QAT'IY PROMPT
     const prompt1 = `
-      Siz professional taqdimot yaratuvchisiz. Mavzu: "${topic}".
-      Menga 1-dan 6-gacha bo'lgan slaydlarni FAQAT JSON formatida qaytaring.
-      Matnlarni juda batafsil, 4-5 ta gapdan iborat qilib yozing.
+      Mavzu: "${topic}".
+      1-dan 6-gacha slaydlarni FAQAT JSON formatida qaytaring.
+      
+      MUHIM QOIDA: 3-slaydda (Me'yoriy hujjatlar) albatta O'zbekiston Respublikasining ushbu mavzuga tegishli ANIQ Qonunlari, Prezident Farmonlari va Vazirlar Mahkamasi qarorlarini sanasi va raqami bilan yozing. Umumiy gaplar yozmang!
+      4-slaydda 2 ta mahalliy va 2 ta xorijiy ANIQ adabiyotlarni (muallif, kitob nomi, yili) yozing.
       
       Format:
       {
@@ -72,20 +56,36 @@ export async function POST(req: Request) {
         ],
         "slides": [
           { "type": "title", "title": "${topic}", "content": "" },
-          { "type": "relevance", "title": "Mavzuning dolzarbligi", "content": "Batafsil matn (kamida 4 gap)..." },
-          { "type": "legal", "title": "Me'yoriy-huquqiy hujjatlar", "bullets": ["Qonun 1", "Farmon 2", "Qaror 3", "Xalqaro standartlar"] },
-          { "type": "literature", "title": "Foydalanilgan adabiyotlar", "bullets": ["Mahalliy adabiyot 1", "Mahalliy adabiyot 2", "Xorijiy adabiyot 1", "Xorijiy adabiyot 2"] },
+          { "type": "relevance", "title": "Mavzuning dolzarbligi", "content": "4-5 ta gapdan iborat juda batafsil va ilmiy asoslangan matn..." },
+          { 
+            "type": "legal", 
+            "title": "Me'yoriy-huquqiy hujjatlar", 
+            "bullets": [
+              "O'zbekiston Respublikasining 'Ta'lim to'g'risida'gi Qonuni (2020-yil 23-sentabr, O'RQ-637-son).",
+              "O'zbekiston Respublikasi Prezidentining 2022-yil 11-maydagi '2022-2026-yillarda xalq ta'limini rivojlantirish bo'yicha milliy dasturni tasdiqlash to'g'risida'gi PF-134-son Farmoni.",
+              "Vazirlar Mahkamasining 2021-yil 2-fevraldagi 'Umumiy o'rta ta'lim muassasalari faoliyatini yanada takomillashtirish chora-tadbirlari to'g'risida'gi 42-son Qarori.",
+              "Vazirlar Mahkamasining 2025-yil 21-oktabrdagi 662-son qarori (Rahbarlarni KPI bo'yicha baholash tartibi)."
+            ] 
+          },
+          { 
+            "type": "literature", 
+            "title": "Foydalanilgan adabiyotlar", 
+            "bullets": [
+              "Mahalliy: Qurbonov Sh., Seytaliev O. 'Ta'lim sifatini boshqarish'. Toshkent: Turon-Iqbol, 2006.",
+              "Mahalliy: Turg'unov S.T. 'Ta'lim menejmenti asoslari'. Toshkent, 2006.",
+              "Xorijiy: Pont B., Nusche D., Moorman H. 'Improving School Leadership'. OECD Publishing, 2008.",
+              "Xorijiy: OECD. 'New School Management Approaches'. OECD Publishing, 2001."
+            ] 
+          },
           { "type": "goal", "title": "Mavzuning maqsadi", "content": "Batafsil maqsad matni..." },
           { "type": "tasks", "title": "Vazifalar", "bullets": ["Vazifa 1", "Vazifa 2", "Vazifa 3", "Vazifa 4", "Vazifa 5"] }
         ]
       }
     `
 
-    // 2-QISM: 7-12 slaydlar
     const prompt2 = `
-      Siz professional taqdimot yaratuvchisiz. Mavzu: "${topic}".
-      Menga 7-dan 12-gacha bo'lgan slaydlarni FAQAT JSON formatida qaytaring.
-      Matnlarni juda batafsil, 4-5 ta gapdan iborat qilib yozing.
+      Mavzu: "${topic}".
+      7-dan 12-gacha slaydlarni FAQAT JSON formatida qaytaring.
       
       Format:
       {
@@ -94,49 +94,32 @@ export async function POST(req: Request) {
           { "type": "comparison", "title": "Qiyosiy tahlil", "tableData": { "headers": ["O'zbekiston", "Xorij", "Taklif"], "rows": [["Bizda 1", "Ularda 1", "Taklif 1"], ["Bizda 2", "Ularda 2", "Taklif 2"], ["Bizda 3", "Ularda 3", "Taklif 3"]] } },
           { "type": "conclusion", "title": "Xulosa", "content": "Batafsil xulosa matni..." },
           { "type": "proposal", "title": "Takliflar", "bullets": ["Taklif 1", "Taklif 2", "Taklif 3", "Taklif 4"] },
-          { "type": "action_plan", "title": "Chora-tadbirlar rejasi", "tableData": { "headers": ["№", "Muammo", "Mexanizm", "Mas'ullar", "Muddati", "Natija"], "rows": [["1", "Muammo 1", "Yechim 1", "Direktor", "2026-yil", "Natija 1"], ["2", "Muammo 2", "Yechim 2", "Buxgalter", "2026-yil", "Natija 2"], ["3", "Muammo 3", "Yechim 3", "IT mutaxassisi", "2026-yil", "Natija 3"]] } },
+          { "type": "action_plan", "title": "Chora-tadbirlar rejasi", "tableData": { "headers": ["№", "Muammo", "Mexanizm", "Mas'ullar", "Muddati", "Natija"], "rows": [["1", "Muammo 1", "Yechim 1", "Direktor", "2026-yil", "Natija 1"], ["2", "Muammo 2", "Yechim 2", "Buxgalter", "2026-yil", "Natija 2"]] } },
           { "type": "final", "title": "E'tiboringiz uchun rahmat!", "content": "" }
         ]
       }
     `
 
-    // Ikkala qismni ham yuborish (xato bo'lsa qayta urinadi)
     const text1 = await callGroq(apiKey, prompt1)
     const text2 = await callGroq(apiKey, prompt2)
 
-    // JSONni tozalash va o'qish
-    const clean1 = text1.replace(/```json/g, '').replace(/```/g, '').trim()
-    const clean2 = text2.replace(/```json/g, '').replace(/```/g, '').trim()
-    
-    const parsed1 = JSON.parse(clean1)
-    const parsed2 = JSON.parse(clean2)
+    const parsed1 = JSON.parse(text1.replace(/```json/g, '').replace(/```/g, '').trim())
+    const parsed2 = JSON.parse(text2.replace(/```json/g, '').replace(/```/g, '').trim())
 
     const allSlides = [...(parsed1.slides || []), ...(parsed2.slides || [])]
-    const designOptions = parsed1.designOptions || [
-      { name: "Klassik ko'k", primary: "#1e3a8a", secondary: "#eff6ff", accent: "#3b82f6", textColor: "#1e293b" }
-    ]
 
-    const finalPresentation = {
+    return NextResponse.json({
       id: crypto.randomUUID(),
-      topic,
-      author,
-      group,
-      year: '2026',
-      city: 'TOSHKENT',
-      designOptions: designOptions,
+      topic, author, group, year: '2026', city: 'TOSHKENT',
+      designOptions: parsed1.designOptions,
       slides: allSlides.map((s: any, i: number) => ({
-        id: String(i + 1),
-        ...s,
+        id: String(i + 1), ...s,
         imageUrl: s.type === 'title' ? 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop' 
-                 : s.type === 'final' ? 'https://images.unsplash.com/photo-1519832986547-1f5d4bc3ba4c?q=80&w=1000&auto=format&fit=crop' 
-                 : undefined
+                 : s.type === 'final' ? 'https://images.unsplash.com/photo-1519832986547-1f5d4bc3ba4c?q=80&w=1000&auto=format&fit=crop' : undefined
       }))
-    }
-
-    return NextResponse.json(finalPresentation)
+    })
 
   } catch (error: any) {
-    console.error("AI Error:", error.message)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
