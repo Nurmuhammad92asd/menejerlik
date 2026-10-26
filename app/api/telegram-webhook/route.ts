@@ -1,13 +1,16 @@
 // app/api/telegram-webhook/route.ts
 import { NextResponse } from 'next/server'
 
+// Foydalanuvchilar holatini saqlash uchun (Vercel KV yoki oddiy xotira)
+// Hozircha oddiy Map ishlatamiz (Server qayta ishga tushsa o'chib ketadi, lekin test uchun yetarli)
+const approvedUsers = new Map<string, boolean>()
+
 export async function POST(req: Request) {
   try {
     const body = await req.json()
 
-    // Telegramdan kelgan xabar (Tugma bosilganda)
     if (body.callback_query) {
-      const { data, message } = body.callback_query
+      const { data, message, id } = body.callback_query
       const chatId = message.chat.id
       const messageId = message.message_id
       const botToken = process.env.TELEGRAM_BOT_TOKEN
@@ -15,20 +18,20 @@ export async function POST(req: Request) {
       if (data.startsWith('approve_')) {
         const userId = data.replace('approve_', '')
         
-        // TODO: Bazaga yozish (Hozircha localStorage ishlatamiz, lekin bu xavfli)
-        // Foydalanuvchiga ruxsat berilganini bildirish uchun javob qaytaramiz.
-        
-        // Adminga javob
+        // Foydalanuvchini tasdiqlanganlar ro'yxatiga qo'shamiz
+        approvedUsers.set(userId, true)
+
+        // Adminga javob qaytaramiz (Tasdiqlandi)
         await fetch(`https://api.telegram.org/bot${botToken}/answerCallbackQuery`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            callback_query_id: body.callback_query.id,
+            callback_query_id: id,
             text: "✅ To'lov tasdiqlandi! Foydalanuvchi slayd yaratishi mumkin."
           })
         })
 
-        // Xabarni tahrirlash (Tasdiqlandi deb)
+        // Rasm tagidagi yozuvni o'zgartiramiz
         await fetch(`https://api.telegram.org/bot${botToken}/editMessageCaption`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -38,9 +41,20 @@ export async function POST(req: Request) {
             caption: message.caption + "\n\n✅ **TASDIQLANDI**"
           })
         })
+      }
 
-        // Bu yerda biz userId ni ma'lumotlar bazasiga "isPaid: true" qilib yozishimiz kerak.
-        // Hozircha buni localStorage yoki boshqa usulda qilamiz.
+      if (data.startsWith('reject_')) {
+        const userId = data.replace('reject_', '')
+        approvedUsers.set(userId, false)
+        
+        await fetch(`https://api.telegram.org/bot${botToken}/answerCallbackQuery`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            callback_query_id: id,
+            text: "❌ To'lov rad etildi."
+          })
+        })
       }
     }
 
@@ -48,4 +62,14 @@ export async function POST(req: Request) {
   } catch (error) {
     return NextResponse.json({ ok: false })
   }
+}
+
+// Foydalanuvchi tasdiqlanganini tekshirish uchun alohida funksiya
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url)
+  const userId = searchParams.get('userId')
+  if (!userId) return NextResponse.json({ isApproved: false })
+  
+  const isApproved = approvedUsers.get(userId) === true
+  return NextResponse.json({ isApproved })
 }
