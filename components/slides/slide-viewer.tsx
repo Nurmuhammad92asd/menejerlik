@@ -21,7 +21,7 @@ export default function SlideViewer({ data, onBack }: { data: PresentationData, 
         <div className="bg-slate-200 px-3 py-1 rounded-full text-xs font-bold">{current + 1} / 12</div>
       </div>
 
-      {/* 🎨 DIZAYN TANLASH QISMI (Gorizontal skroll) */}
+      {/* 🎨 DIZAYN TANLASH QISMI (50 ta rang) */}
       <div className="bg-white p-2 rounded-xl shadow-sm">
         <p className="text-[10px] font-black text-slate-400 mb-2 px-2 uppercase tracking-wider">Dizaynni tanlang:</p>
         <div className="flex gap-2 overflow-x-auto pb-2 px-2 custom-scrollbar">
@@ -29,13 +29,13 @@ export default function SlideViewer({ data, onBack }: { data: PresentationData, 
             <button
               key={idx}
               onClick={() => setActiveDesign(opt)}
-              className={`shrink-0 w-12 h-12 rounded-full border-4 transition-all flex items-center justify-center ${
+              className={`shrink-0 w-10 h-10 rounded-full border-4 transition-all flex items-center justify-center ${
                 activeDesign.name === opt.name ? 'border-blue-600 scale-110 shadow-md' : 'border-transparent hover:scale-105'
               }`}
               style={{ backgroundColor: opt.primary }}
               title={opt.name}
             >
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: opt.accent }} />
+              <div className="w-3 h-3 rounded-full" style={{ backgroundColor: opt.accent }} />
             </button>
           ))}
         </div>
