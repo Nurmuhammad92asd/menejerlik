@@ -1,125 +1,60 @@
-// app/api/generate-slides/route.ts
-import { NextResponse } from 'next/server'
+// components/slides/slide-viewer.tsx
+'use client'
+import { useState } from 'react'
+import type { PresentationData } from './slide-types'
+import { PALETTES } from './slide-types' // 🎨 50 ta palitra
+import { TitleSlide, ContentSlide } from './slide-renderer'
 
-async function callGroq(apiKey: string, prompt: string) {
-  const maxRetries = 3;
-  for (let i = 0; i < maxRetries; i++) {
-    try {
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: "openai/gpt-oss-120b",
-          messages: [
-            { role: "system", content: "Siz O'zbekiston Respublikasi qonunchiligini juda yaxshi biladigan ekspertsiz. Faqat toza JSON formatida javob qaytaring." },
-            { role: "user", content: prompt }
-          ],
-          temperature: 0.5,
-          response_format: { type: "json_object" }
-        })
-      })
-      const data = await response.json()
-      if (!response.ok) {
-        if (data.error?.code === 'json_validate_failed' || response.status === 400) continue;
-        throw new Error(data.error?.message || "AI xatolik berdi")
-      }
-      return data.choices[0].message.content
-    } catch (error: any) {
-      if (i === maxRetries - 1) throw error;
-    }
-  }
-  throw new Error("AI javob qaytarishda muvaffaqiyatsiz bo'ldi")
-}
+export default function SlideViewer({ data, onBack }: { data: PresentationData, onBack: () => void }) {
+  const [current, setCurrent] = useState(0)
+  // Standart dizayn - birinchi palitra
+  const [activeDesign, setActiveDesign] = useState(PALETTES[0])
+  
+  const slide = data.slides[current]
 
-export async function POST(req: Request) {
-  try {
-    const { topic, author, group } = await req.json()
-    if (!topic) return NextResponse.json({ error: "Mavzu kiritilmadi" }, { status: 400 })
+  return (
+    <section className="flex flex-col gap-4 h-[90vh] p-4 bg-slate-100">
+      {/* Header */}
+      <div className="flex justify-between items-center bg-white p-3 rounded-xl shadow-sm">
+        <button onClick={onBack} className="text-sm font-bold text-blue-600">← Yangi yaratish</button>
+        <p className="text-sm font-bold">{data.topic}</p>
+        <div className="bg-slate-200 px-3 py-1 rounded-full text-xs font-bold">{current + 1} / 12</div>
+      </div>
 
-    const apiKey = process.env.GROQ_API_KEY
-    if (!apiKey) return NextResponse.json({ error: "API kalit topilmadi" }, { status: 500 })
+      {/* 🎨 DIZAYN TANLASH QISMI (50 ta rang) */}
+      <div className="bg-white p-2 rounded-xl shadow-sm">
+        <p className="text-[10px] font-black text-slate-400 mb-2 px-2 uppercase tracking-wider">Dizaynni tanlang:</p>
+        <div className="flex gap-2 overflow-x-auto pb-2 px-2 custom-scrollbar">
+          {PALETTES.map((opt, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveDesign(opt)}
+              className={`shrink-0 w-10 h-10 rounded-full border-4 transition-all flex items-center justify-center ${
+                activeDesign.name === opt.name ? 'border-blue-600 scale-110 shadow-md' : 'border-transparent hover:scale-105'
+              }`}
+              style={{ backgroundColor: opt.primary }}
+              title={opt.name}
+            >
+              <div className="w-3 h-3 rounded-full" style={{ backgroundColor: opt.accent }} />
+            </button>
+          ))}
+        </div>
+      </div>
 
-    // 🚨 ANIQ QONUNLAR UCHUN QAT'IY PROMPT
-    const prompt1 = `
-      Mavzu: "${topic}".
-      1-dan 6-gacha slaydlarni FAQAT JSON formatida qaytaring.
-      
-      MUHIM QOIDA: 3-slaydda (Me'yoriy hujjatlar) albatta O'zbekiston Respublikasining ushbu mavzuga tegishli ANIQ Qonunlari, Prezident Farmonlari va Vazirlar Mahkamasi qarorlarini sanasi va raqami bilan yozing. Umumiy gaplar yozmang!
-      4-slaydda 2 ta mahalliy va 2 ta xorijiy ANIQ adabiyotlarni (muallif, kitob nomi, yili) yozing.
-      
-      Format:
-      {
-        "designOptions": [
-          { "name": "Klassik ko'k", "primary": "#1e3a8a", "secondary": "#eff6ff", "accent": "#3b82f6", "textColor": "#1e293b" },
-          { "name": "Zamonaviy yashil", "primary": "#065f46", "secondary": "#f0fdf4", "accent": "#22c55e", "textColor": "#064e3b" },
-          { "name": "Tarixiy jigarrang", "primary": "#78350f", "secondary": "#fef3c7", "accent": "#d97706", "textColor": "#451a03" }
-        ],
-        "slides": [
-          { "type": "title", "title": "${topic}", "content": "" },
-          { "type": "relevance", "title": "Mavzuning dolzarbligi", "content": "4-5 ta gapdan iborat juda batafsil va ilmiy asoslangan matn..." },
-          { 
-            "type": "legal", 
-            "title": "Me'yoriy-huquqiy hujjatlar", 
-            "bullets": [
-              "O'zbekiston Respublikasining 'Ta'lim to'g'risida'gi Qonuni (2020-yil 23-sentabr, O'RQ-637-son).",
-              "O'zbekiston Respublikasi Prezidentining 2022-yil 11-maydagi '2022-2026-yillarda xalq ta'limini rivojlantirish bo'yicha milliy dasturni tasdiqlash to'g'risida'gi PF-134-son Farmoni.",
-              "Vazirlar Mahkamasining 2021-yil 2-fevraldagi 'Umumiy o'rta ta'lim muassasalari faoliyatini yanada takomillashtirish chora-tadbirlari to'g'risida'gi 42-son Qarori.",
-              "Vazirlar Mahkamasining 2025-yil 21-oktabrdagi 662-son qarori (Rahbarlarni KPI bo'yicha baholash tartibi)."
-            ] 
-          },
-          { 
-            "type": "literature", 
-            "title": "Foydalanilgan adabiyotlar", 
-            "bullets": [
-              "Mahalliy: Qurbonov Sh., Seytaliev O. 'Ta'lim sifatini boshqarish'. Toshkent: Turon-Iqbol, 2006.",
-              "Mahalliy: Turg'unov S.T. 'Ta'lim menejmenti asoslari'. Toshkent, 2006.",
-              "Xorijiy: Pont B., Nusche D., Moorman H. 'Improving School Leadership'. OECD Publishing, 2008.",
-              "Xorijiy: OECD. 'New School Management Approaches'. OECD Publishing, 2001."
-            ] 
-          },
-          { "type": "goal", "title": "Mavzuning maqsadi", "content": "Batafsil maqsad matni..." },
-          { "type": "tasks", "title": "Vazifalar", "bullets": ["Vazifa 1", "Vazifa 2", "Vazifa 3", "Vazifa 4", "Vazifa 5"] }
-        ]
-      }
-    `
+      {/* Slayd ekrani */}
+      <div className="flex-1 overflow-hidden rounded-2xl shadow-2xl bg-white aspect-video mx-auto w-full max-w-5xl">
+        {slide.type === 'title' ? (
+          <TitleSlide data={{ ...data, design: activeDesign }} />
+        ) : (
+          <ContentSlide slide={slide} design={activeDesign} />
+        )}
+      </div>
 
-    const prompt2 = `
-      Mavzu: "${topic}".
-      7-dan 12-gacha slaydlarni FAQAT JSON formatida qaytaring.
-      
-      Format:
-      {
-        "slides": [
-          { "type": "foreign", "title": "Xorijiy tajribalar", "foreignData": [{"country": "Finlandiya", "flag": "🇫🇮", "text": "Batafsil matn..."}, {"country": "Singapur", "flag": "🇸🇬", "text": "Batafsil matn..."}, {"country": "Yaponiya", "flag": "🇯🇵", "text": "Batafsil matn..."}] },
-          { "type": "comparison", "title": "Qiyosiy tahlil", "tableData": { "headers": ["O'zbekiston", "Xorij", "Taklif"], "rows": [["Bizda 1", "Ularda 1", "Taklif 1"], ["Bizda 2", "Ularda 2", "Taklif 2"], ["Bizda 3", "Ularda 3", "Taklif 3"]] } },
-          { "type": "conclusion", "title": "Xulosa", "content": "Batafsil xulosa matni..." },
-          { "type": "proposal", "title": "Takliflar", "bullets": ["Taklif 1", "Taklif 2", "Taklif 3", "Taklif 4"] },
-          { "type": "action_plan", "title": "Chora-tadbirlar rejasi", "tableData": { "headers": ["№", "Muammo", "Mexanizm", "Mas'ullar", "Muddati", "Natija"], "rows": [["1", "Muammo 1", "Yechim 1", "Direktor", "2026-yil", "Natija 1"], ["2", "Muammo 2", "Yechim 2", "Buxgalter", "2026-yil", "Natija 2"]] } },
-          { "type": "final", "title": "E'tiboringiz uchun rahmat!", "content": "" }
-        ]
-      }
-    `
-
-    const text1 = await callGroq(apiKey, prompt1)
-    const text2 = await callGroq(apiKey, prompt2)
-
-    const parsed1 = JSON.parse(text1.replace(/```json/g, '').replace(/```/g, '').trim())
-    const parsed2 = JSON.parse(text2.replace(/```json/g, '').replace(/```/g, '').trim())
-
-    const allSlides = [...(parsed1.slides || []), ...(parsed2.slides || [])]
-
-    return NextResponse.json({
-      id: crypto.randomUUID(),
-      topic, author, group, year: '2026', city: 'TOSHKENT',
-      designOptions: parsed1.designOptions,
-      slides: allSlides.map((s: any, i: number) => ({
-        id: String(i + 1), ...s,
-        imageUrl: s.type === 'title' ? 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop' 
-                 : s.type === 'final' ? 'https://images.unsplash.com/photo-1519832986547-1f5d4bc3ba4c?q=80&w=1000&auto=format&fit=crop' : undefined
-      }))
-    })
-
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
+      {/* Navigatsiya */}
+      <div className="flex justify-center gap-4">
+        <button onClick={() => setCurrent(c => Math.max(0, c - 1))} disabled={current === 0} className="rounded-xl border bg-white px-6 py-2 font-bold disabled:opacity-50">← Oldingi</button>
+        <button onClick={() => setCurrent(c => Math.min(11, c + 1))} disabled={current === 11} className="rounded-xl bg-blue-600 px-6 py-2 font-bold text-white disabled:opacity-50">Keyingi →</button>
+      </div>
+    </section>
+  )
 }
