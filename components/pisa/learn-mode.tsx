@@ -3,7 +3,8 @@
 
 import { useState } from 'react'
 import type { Domain, Lesson, LessonStep } from './types'
-import { DOMAIN_META, LESSONS } from './data'
+import { DOMAIN_META } from './data'
+import { LESSONS } from './lessons'
 import { BackButton } from './ui'
 
 export default function LearnMode({
