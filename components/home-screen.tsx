@@ -46,11 +46,14 @@ type Props = {
   onRanking: () => void
 
   /**
-   * O‘quvchi Akademiyasi uchun.
-   * Hozircha optional qoldirilgan — MenejerlikApp
-   * buzilmasligi uchun.
+   * O'quvchi Akademiyasi uchun.
    */
   onStudentAcademy?: () => void
+
+  /**
+   * Mantiqiy fikrlash (Logic Academy) uchun.
+   */
+  onLogic?: () => void
 }
 
 export function HomeScreen({
@@ -62,6 +65,7 @@ export function HomeScreen({
   onAI,
   onRanking,
   onStudentAcademy,
+  onLogic,
 }: Props) {
   const safeHistory = Array.isArray(history)
     ? history
@@ -145,7 +149,7 @@ export function HomeScreen({
       <section className="px-1">
 
         <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-700">
-          Shaxsiy ta’lim markazingiz
+          Shaxsiy ta'lim markazingiz
         </p>
 
         <h2 className="mt-1.5 text-[24px] font-black tracking-tight">
@@ -276,7 +280,7 @@ export function HomeScreen({
 
         <StatCard
           icon={<Target className="size-4" />}
-          label="O‘rtacha"
+          label="O'rtacha"
           value={`${safeStats.average}%`}
         />
 
@@ -303,8 +307,6 @@ export function HomeScreen({
 
         <div className="relative">
 
-          {/* heading */}
-
           <div className="flex items-start justify-between gap-4">
 
             <div className="flex items-center gap-3">
@@ -320,7 +322,7 @@ export function HomeScreen({
                 </p>
 
                 <h2 className="mt-1 text-[20px] font-black tracking-tight">
-                  O‘quvchi Akademiyasi
+                  O'quvchi Akademiyasi
                 </h2>
 
               </div>
@@ -335,14 +337,12 @@ export function HomeScreen({
 
 
           <p className="mt-5 max-w-[400px] text-[12px] leading-5 text-blue-50/80">
-            O‘quvchilar uchun mantiqiy fikrlash,
+            O'quvchilar uchun mantiqiy fikrlash,
             fanlar, Prezident maktabi,
             ixtisoslashtirilgan maktablar va
             olimpiadalarga tayyorgarlik platformasi.
           </p>
 
-
-          {/* academy directions */}
 
           <div className="mt-5 grid grid-cols-3 gap-2">
 
@@ -367,8 +367,6 @@ export function HomeScreen({
           </div>
 
 
-          {/* CTA */}
-
           <button
             type="button"
             onClick={() => onStudentAcademy?.()}
@@ -381,7 +379,7 @@ export function HomeScreen({
                 🚀
               </span>
 
-              O‘quvchi Akademiyasiga kirish
+              O'quvchi Akademiyasiga kirish
 
             </span>
 
@@ -397,6 +395,115 @@ export function HomeScreen({
 
 
       {/* =====================================================
+          🧠 LOGIC ACADEMY — YANGI
+      ===================================================== */}
+
+      {onLogic && (
+        <section className="relative overflow-hidden rounded-[29px] bg-gradient-to-br from-fuchsia-700 via-purple-700 to-indigo-800 p-6 text-white shadow-xl shadow-purple-900/20">
+
+          <div className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full border border-white/10 bg-white/[0.035]" />
+
+          <div className="pointer-events-none absolute -bottom-16 -left-10 size-48 rounded-full bg-fuchsia-300/10 blur-3xl" />
+
+          <div className="pointer-events-none absolute right-10 top-10 size-1.5 rounded-full bg-fuchsia-200" />
+
+          <div className="relative">
+
+            <div className="flex items-start justify-between gap-4">
+
+              <div className="flex items-center gap-3">
+
+                <div className="flex size-14 shrink-0 items-center justify-center rounded-[19px] bg-white/10 text-2xl shadow-inner backdrop-blur-md">
+                  🧠
+                </div>
+
+                <div>
+
+                  <p className="text-[9px] font-black uppercase tracking-[0.18em] text-fuchsia-200">
+                    Logic Playground
+                  </p>
+
+                  <h2 className="mt-1 text-[20px] font-black tracking-tight">
+                    Mantiqiy fikrlash
+                  </h2>
+
+                </div>
+
+              </div>
+
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-fuchsia-400 text-slate-950 shadow-lg shadow-fuchsia-400/20">
+                <BrainCircuit className="size-5" />
+              </div>
+
+            </div>
+
+
+            <p className="mt-5 max-w-[400px] text-[12px] leading-5 text-white/80">
+              Fallacy Hunter, Real yoki Soxta,
+              Mantiqiy Qulf va Argument Zanjiri —
+              o'yinlar orqali miyani charxlang.
+              Dunyoning eng zor mantiqiy tizimi!
+            </p>
+
+
+            <div className="mt-5 grid grid-cols-4 gap-2">
+
+              <AcademyMiniCard
+                icon="🔍"
+                title="Fallacy"
+                subtitle="10 ta"
+              />
+
+              <AcademyMiniCard
+                icon="📱"
+                title="Real/Fake"
+                subtitle="20 ta"
+              />
+
+              <AcademyMiniCard
+                icon="🔒"
+                title="Lock"
+                subtitle="8 ta"
+              />
+
+              <AcademyMiniCard
+                icon="🔗"
+                title="Chain"
+                subtitle="6 ta"
+              />
+
+            </div>
+
+
+            <button
+              type="button"
+              onClick={onLogic}
+              className="group mt-5 flex w-full items-center justify-between rounded-2xl bg-white px-4 py-3.5 text-left text-sm font-black text-slate-950 shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.99]"
+            >
+
+              <span className="flex items-center gap-2.5">
+
+                <span className="flex size-9 items-center justify-center rounded-xl bg-fuchsia-50 text-lg">
+                  🎮
+                </span>
+
+                Logic Academy'ga kirish
+
+              </span>
+
+              <span className="flex size-8 items-center justify-center rounded-xl bg-slate-100 transition-transform group-hover:translate-x-1">
+                <ArrowRight className="size-4" />
+              </span>
+
+            </button>
+
+          </div>
+
+        </section>
+      )}
+
+
+      {/* =====================================================
           ACADEMY PREVIEW
       ===================================================== */}
 
@@ -407,11 +514,11 @@ export function HomeScreen({
           <div>
 
             <p className="text-[10px] font-black uppercase tracking-[0.18em] text-indigo-600">
-              O‘quvchilar uchun
+              O'quvchilar uchun
             </p>
 
             <h2 className="mt-1 text-[20px] font-black tracking-tight">
-              Kelajak yo‘nalishlari
+              Kelajak yo'nalishlari
             </h2>
 
           </div>
@@ -435,7 +542,7 @@ export function HomeScreen({
           <AcademyDirectionCard
             icon="📐"
             title="Matematika"
-            text="Sinf darajasi va murakkablik bo‘yicha"
+            text="Sinf darajasi va murakkablik bo'yicha"
             accent="blue"
           />
 
@@ -488,8 +595,8 @@ export function HomeScreen({
         <EducationCard
           icon="🏫"
           title="MAKTAB"
-          badge="UMUMIY O‘RTA TA’LIM"
-          description="Direktor, direktor o‘rinbosari va fan o‘qituvchilari uchun professional tayyorgarlik."
+          badge="UMUMIY O'RTA TA'LIM"
+          description="Direktor, direktor o'rinbosari va fan o'qituvchilari uchun professional tayyorgarlik."
           accent="blue"
           onClick={() =>
             onSelectEducation('school')
@@ -499,8 +606,8 @@ export function HomeScreen({
 
         <EducationCard
           icon="🧸"
-          title="MAKTABGACHA TA’LIM"
-          badge="MAKTABGACHA TA’LIM"
+          title="MAKTABGACHA TA'LIM"
+          badge="MAKTABGACHA TA'LIM"
           description="Rahbarlar va pedagoglar uchun attestatsiya hamda professional rivojlanish."
           accent="gold"
           onClick={() =>
@@ -550,7 +657,7 @@ export function HomeScreen({
             <p className="mt-2 text-[12px] leading-5 text-muted-foreground">
               Nazariy bilimlarni amaliy vaziyatlar,
               tahlil va samarali qaror qabul qilish
-              bilan bog‘lab rivojlaning.
+              bilan bog'lab rivojlaning.
             </p>
 
           </div>
@@ -590,7 +697,7 @@ export function HomeScreen({
 
             <p className="mt-1 text-[12px] leading-5 text-muted-foreground">
               Menejerlar va ishtirokchilar orasidagi
-              o‘rningizni kuzating.
+              o'rningizni kuzating.
             </p>
 
           </div>
@@ -626,7 +733,7 @@ export function HomeScreen({
             <div className="min-w-0 flex-1">
 
               <p className="text-[10px] font-black uppercase tracking-[0.17em] text-blue-700">
-                Sun’iy intellekt
+                Sun'iy intellekt
               </p>
 
               <h3 className="mt-1 text-[17px] font-black">
@@ -663,12 +770,12 @@ export function HomeScreen({
           </p>
 
           <h2 className="mt-1 text-[18px] font-black tracking-tight">
-            Bir platformada ikki akademiya
+            Bir platformada uch akademiya
           </h2>
 
           <p className="mt-1.5 text-[11px] leading-5 text-muted-foreground">
             Rahbarlar va pedagoglar uchun professional
-            rivojlanish. O‘quvchilar uchun bilim,
+            rivojlanish. O'quvchilar uchun bilim,
             mantiq va kelajak imtihonlariga tayyorgarlik.
           </p>
 
@@ -684,7 +791,7 @@ export function HomeScreen({
 
           <Feature
             icon="🎓"
-            title="O‘quvchi"
+            title="O'quvchi"
             text="1–11 sinf"
           />
 
@@ -727,7 +834,7 @@ export function HomeScreen({
                 </p>
 
                 <h2 className="text-sm font-bold">
-                  So‘nggi natijalar
+                  So'nggi natijalar
                 </h2>
 
               </div>
@@ -835,11 +942,11 @@ export function HomeScreen({
           </p>
 
           <p className="mt-2 text-sm font-bold leading-5">
-            Ta’lim menejmenti,
+            Ta'lim menejmenti,
             <br />
             professional rivojlanish
             <br />
-            va yangi avlod ta’limi.
+            va yangi avlod ta'limi.
           </p>
 
           <div className="mx-auto my-4 flex items-center justify-center gap-2">
