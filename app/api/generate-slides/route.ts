@@ -39,12 +39,12 @@ export async function POST(req: Request) {
     const apiKey = process.env.GROQ_API_KEY
     if (!apiKey) return NextResponse.json({ error: "API kalit topilmadi" }, { status: 500 })
 
-    // 🚨 1-QISM: 1-6 slaydlar (Barcha matnlar tayyor qilib yozilgan)
+    // 🚨 1-QISM: 1-6 slaydlar
     const prompt1 = `
       Mavzu: "${topic}".
       1-dan 6-gacha slaydlarni FAQAT JSON formatida qaytaring.
       
-      JUDA MUHIM: Shablonga qarab qolmang, mavzuga oid o'zingizdan haqiqiy va batafsil ma'lumot yozing! 
+      JUDA MUHIM QOIDA: "tasks" (Vazifalar) bo'limida sun'iy intellekt o'zidan "Mavzuga oid nazariy manbalarni o'rganish" kabi quruq gaplarni yozmasin. Aynan "${topic}" mavzusiga xos bo'lgan, chuqur mazmunga ega va bir-biridan farq qiladigan ANIQ 4 TA (faqat 4 ta, 5 ta yoki 3 ta emas) amaliy vazifa yozing!
       
       Format:
       {
@@ -72,12 +72,21 @@ export async function POST(req: Request) {
             ] 
           },
           { "type": "goal", "title": "Mavzuning maqsadi", "content": "Ushbu taqdimotning asosiy maqsadi - mavzuga oid mavjud muammolarni tahlil qilish va uni yechish bo'yicha amaliy takliflar ishlab chiqishdir." },
-          { "type": "tasks", "title": "Vazifalar", "bullets": ["Mavzuga oid nazariy manbalarni o'rganish", "Sohadagi mavjud muammolarni aniqlash", "Xorijiy tajribalarni tahlil qilish", "Amaliy yechimlarni taklif qilish", "Chora-tadbirlar rejasini tuzish"] }
+          { 
+            "type": "tasks", 
+            "title": "Vazifalar", 
+            "bullets": [
+              "Aynan shu mavzuga doir 1-vazifa",
+              "Aynan shu mavzuga doir 2-vazifa",
+              "Aynan shu mavzuga doir 3-vazifa",
+              "Aynan shu mavzuga doir 4-vazifa"
+            ] 
+          }
         ]
       }
     `
 
-    // 🚨 2-QISM: 7-12 slaydlar (Qiyosiy tahlil va xorijiy tajribalar to'liq yozilgan)
+    // 🚨 2-QISM: 7-12 slaydlar
     const prompt2 = `
       Mavzu: "${topic}".
       7-dan 12-gacha slaydlarni FAQAT JSON formatida qaytaring.
@@ -139,11 +148,19 @@ export async function POST(req: Request) {
     return NextResponse.json({
       id: crypto.randomUUID(),
       topic, author, group, year: '2026', city: 'TOSHKENT',
-      slides: allSlides.map((s: any, i: number) => ({
-        id: String(i + 1), ...s,
-        imageUrl: s.type === 'title' ? 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop' 
-                 : s.type === 'final' ? 'https://images.unsplash.com/photo-1519832986547-1f5d4bc3ba4c?q=80&w=1000&auto=format&fit=crop' : undefined
-      }))
+      slides: allSlides.map((s: any, i: number) => {
+        
+        // 🚨 KAFOLATLANGAN USUL: Vazifalar massivini faqat 4 ta qilib kesish
+        if (s.type === 'tasks' && s.bullets && Array.isArray(s.bullets)) {
+          s.bullets = s.bullets.slice(0, 4);
+        }
+
+        return {
+          id: String(i + 1), ...s,
+          imageUrl: s.type === 'title' ? 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop' 
+                   : s.type === 'final' ? 'https://images.unsplash.com/photo-1519832986547-1f5d4bc3ba4c?q=80&w=1000&auto=format&fit=crop' : undefined
+        }
+      })
     })
 
   } catch (error: any) {
