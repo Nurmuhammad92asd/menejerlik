@@ -17,14 +17,11 @@ import {
   Baby,
   School,
   History,
-  Award,
   Brain,
   Zap,
-  FileText,
   Users,
   X,
   Medal,
-  ChartNoAxesCombined,
 } from 'lucide-react'
 
 import type { Attempt } from '@/hooks/use-history'
@@ -58,6 +55,7 @@ type ServiceCardProps = {
   color: string
   bg: string
   onClick: () => void
+  disabled?: boolean
 }
 
 export function HomeScreen({
@@ -107,7 +105,7 @@ export function HomeScreen({
       onClick: () => onSelectEducation('preschool'),
     },
     {
-      title: 'Öquvchi akademiyasi',
+      title: 'O‘quvchi akademiyasi',
       description: '1–11-sinf, fanlar, IQ va olimpiadalar',
       keywords: 'oquvchi akademiya matematika mantiq olimpiada',
       icon: <GraduationCap className="size-6" />,
@@ -157,7 +155,14 @@ export function HomeScreen({
         .toLowerCase()
         .includes(query),
     )
-  }, [search, onAI, onSlides, onStudentAcademy, onRanking, onSelectEducation])
+  }, [
+    search,
+    onAI,
+    onSlides,
+    onStudentAcademy,
+    onRanking,
+    onSelectEducation,
+  ])
 
   return (
     <main className="relative mx-auto flex w-full max-w-3xl flex-col gap-6 overflow-hidden pb-8">
@@ -165,9 +170,7 @@ export function HomeScreen({
       {/* HEADER */}
 
       <header className="flex items-center justify-between pt-2">
-
         <div className="flex min-w-0 items-center gap-3">
-
           <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-700 to-slate-950 text-white shadow-lg">
             <GraduationCap className="size-7" />
           </div>
@@ -184,7 +187,6 @@ export function HomeScreen({
               </span>
             </h1>
           </div>
-
         </div>
 
         {onAI && (
@@ -197,14 +199,11 @@ export function HomeScreen({
             <Sparkles className="size-5 text-blue-700" />
           </button>
         )}
-
       </header>
-
 
       {/* GREETING */}
 
       <section className="space-y-1 px-1">
-
         <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-700">
           Shaxsiy ta’lim markazingiz
         </p>
@@ -217,14 +216,11 @@ export function HomeScreen({
         <p className="text-xs leading-5 text-muted-foreground">
           Bugun qanday natijaga erishamiz?
         </p>
-
       </section>
-
 
       {/* SEARCH */}
 
       <div className="relative">
-
         <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
 
         <input
@@ -246,29 +242,22 @@ export function HomeScreen({
             <X className="size-4" />
           </button>
         )}
-
       </div>
-
 
       {/* MAIN MISSION */}
 
       <section className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#081a38] via-[#10427c] to-[#087ba8] p-5 text-white shadow-xl">
-
         <div className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full border border-white/10 bg-white/5" />
-
         <div className="pointer-events-none absolute -bottom-20 -left-10 size-48 rounded-full bg-cyan-300/10 blur-3xl" />
 
         <div className="relative">
-
           <div className="flex items-center justify-between">
-
             <span className="flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider">
               <Zap className="size-3.5 text-amber-300" />
               Bugungi maqsad
             </span>
 
             <Target className="size-7 text-cyan-200" />
-
           </div>
 
           <h3 className="mt-5 text-2xl font-black tracking-tight">
@@ -280,11 +269,9 @@ export function HomeScreen({
           </p>
 
           <div className="mt-5 grid grid-cols-3 gap-2">
-
             <MissionItem icon="🧠" value="15" label="Savol" />
             <MissionItem icon="⏱️" value="10" label="Daqiqa" />
             <MissionItem icon="🏆" value="+50" label="XP" />
-
           </div>
 
           <button
@@ -299,16 +286,12 @@ export function HomeScreen({
 
             <ArrowRight className="size-5" />
           </button>
-
         </div>
-
       </section>
-
 
       {/* STATISTICS */}
 
       <section className="grid grid-cols-3 gap-2.5">
-
         <StatCard
           icon={<BookOpen />}
           value={safeStats.count}
@@ -326,16 +309,12 @@ export function HomeScreen({
           value={`${safeStats.best}%`}
           label="Rekord"
         />
-
       </section>
-
 
       {/* SERVICES */}
 
       <section id="services" className="space-y-4">
-
         <div className="flex items-end justify-between px-1">
-
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-700">
               Bosh menyu
@@ -347,15 +326,12 @@ export function HomeScreen({
           </div>
 
           <span className="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold text-blue-700 dark:bg-blue-950/40">
-            {filteredServices.filter(s => !s.disabled).length} ta xizmat
+            {filteredServices.filter((s) => !s.disabled).length} ta xizmat
           </span>
-
         </div>
 
         {filteredServices.length > 0 ? (
-
           <div className="grid grid-cols-2 gap-3">
-
             {filteredServices.map((service) => (
               <ServiceCard
                 key={service.title}
@@ -368,11 +344,8 @@ export function HomeScreen({
                 disabled={service.disabled}
               />
             ))}
-
           </div>
-
         ) : (
-
           <div className="rounded-2xl border border-dashed p-8 text-center">
             <Search className="mx-auto size-8 text-muted-foreground" />
             <p className="mt-3 text-sm font-bold">
@@ -382,18 +355,13 @@ export function HomeScreen({
               Boshqa so‘z bilan qidirib ko‘ring.
             </p>
           </div>
-
         )}
-
       </section>
-
 
       {/* STUDENT DIRECTIONS */}
 
       <section className="space-y-3">
-
         <div className="flex items-center justify-between px-1">
-
           <div>
             <p className="text-[10px] font-bold uppercase tracking-wider text-indigo-600">
               Yangi avlod uchun
@@ -405,11 +373,9 @@ export function HomeScreen({
           </div>
 
           <BrainCircuit className="size-6 text-indigo-600" />
-
         </div>
 
         <div className="grid grid-cols-2 gap-2.5">
-
           <DirectionCard
             icon="🧠"
             title="Mantiq"
@@ -433,22 +399,17 @@ export function HomeScreen({
             title="Olimpiada"
             text="Murakkab masalalar va tanlovlar"
           />
-
         </div>
-
       </section>
-
 
       {/* PROFESSIONAL PHILOSOPHY */}
 
       <section className="flex items-center gap-4 rounded-[24px] border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-4 dark:border-white/10 dark:from-blue-950/20 dark:to-card">
-
         <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-blue-700 text-white">
           <Brain className="size-6" />
         </div>
 
         <div className="min-w-0">
-
           <p className="text-[9px] font-black uppercase tracking-widest text-blue-700">
             Menejerlik falsafasi
           </p>
@@ -460,52 +421,44 @@ export function HomeScreen({
           <p className="mt-1 text-[10px] leading-4 text-muted-foreground">
             Bilimni amaliy boshqaruv va samarali qarorlar bilan bog‘lang.
           </p>
-
         </div>
-
       </section>
-
 
       {/* RECENT RESULTS */}
 
       {safeHistory.length > 0 && (
         <section className="space-y-3">
-
           <div className="flex items-center justify-between px-1">
-
             <div>
               <p className="text-[10px] font-bold uppercase tracking-wider text-blue-700">
                 Faollik
               </p>
+
               <h2 className="text-lg font-black">
                 So‘nggi natijalar
               </h2>
             </div>
 
             <History className="size-5 text-muted-foreground" />
-
           </div>
 
           <div className="overflow-hidden rounded-2xl border bg-card">
-
             {safeHistory.slice(0, 5).map((attempt) => {
-
-              const percentage = attempt.total > 0
-                ? Math.round((attempt.correct / attempt.total) * 100)
-                : 0
+              const percentage =
+                attempt.total > 0
+                  ? Math.round((attempt.correct / attempt.total) * 100)
+                  : 0
 
               return (
                 <div
                   key={attempt.id}
                   className="flex items-center gap-3 border-b p-3.5 last:border-0"
                 >
-
                   <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700 dark:bg-blue-950/40">
                     <Brain className="size-5" />
                   </div>
 
                   <div className="min-w-0 flex-1">
-
                     <p className="text-sm font-bold">
                       Test natijasi
                     </p>
@@ -518,36 +471,31 @@ export function HomeScreen({
                         minute: '2-digit',
                       })}
                     </p>
-
                   </div>
 
                   <div className="text-right">
-
-                    <p className={`text-sm font-black ${
-                      percentage >= 80
-                        ? 'text-emerald-600'
-                        : percentage >= 60
-                          ? 'text-amber-600'
-                          : 'text-red-500'
-                    }`}>
+                    <p
+                      className={`text-sm font-black ${
+                        percentage >= 80
+                          ? 'text-emerald-600'
+                          : percentage >= 60
+                            ? 'text-amber-600'
+                            : 'text-red-500'
+                      }`}
+                    >
                       {percentage}%
                     </p>
 
                     <p className="text-[10px] text-muted-foreground">
                       {attempt.correct}/{attempt.total}
                     </p>
-
                   </div>
-
                 </div>
               )
             })}
-
           </div>
-
         </section>
       )}
-
 
       {/* RANKING BANNER */}
 
@@ -556,7 +504,6 @@ export function HomeScreen({
         onClick={onRanking}
         className="group flex items-center gap-4 rounded-[24px] border bg-card p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
       >
-
         <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 dark:bg-amber-950/40">
           <Medal className="size-6" />
         </div>
@@ -565,23 +512,22 @@ export function HomeScreen({
           <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700">
             Natijalar
           </p>
+
           <h3 className="text-sm font-black">
             TOP reyting
           </h3>
+
           <p className="text-[10px] text-muted-foreground">
             O‘z natijalaringizni kuzating.
           </p>
         </div>
 
         <ChevronRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-1" />
-
       </button>
 
-
-      {/* FOOTER */}
+      {/* FOOTER — PROJECT AUTHOR */}
 
       <footer className="rounded-[25px] border bg-card px-5 py-6 text-center">
-
         <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-700 to-slate-950 text-white">
           <GraduationCap className="size-6" />
         </div>
@@ -600,22 +546,35 @@ export function HomeScreen({
           <span className="h-px w-8 bg-border" />
         </div>
 
-        <p className="text-[10px] text-muted-foreground">
-          Loyiha muallifi
+        <p className="text-[10px] font-semibold text-muted-foreground">
+          LOYIHA MUALLIFI
         </p>
 
-        <p className="mt-1 text-sm font-black">
-          Talatbekov Nurmuhammad
+        <p className="mt-2 text-base font-black text-blue-700">
+          Mashrabboyeva Robiya Ma'ruf qizi
         </p>
 
-        <p className="mt-1 text-[10px] text-muted-foreground">
-          Abdulla Avloniy nomidagi pedagogik mahorat milliy instituti magistranti
-        </p>
+        <div className="mx-auto mt-3 max-w-sm rounded-2xl bg-blue-50 px-4 py-3 dark:bg-blue-950/30">
+          <p className="text-[10px] font-medium leading-5 text-slate-700 dark:text-slate-200">
+            Namangan viloyati, To‘raqo‘rg‘on tumani,
+            54-sonli umumiy o‘rta ta’lim maktabining
+            11-sinf o‘quvchisi
+          </p>
+        </div>
 
-        <p className="mt-4 text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
+        <div className="my-4 flex items-center justify-center gap-2">
+          <span className="h-px w-8 bg-border" />
+          <GraduationCap className="size-4 text-amber-500" />
+          <span className="h-px w-8 bg-border" />
+        </div>
+
+        <p className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
           Bilim · Tahlil · Qaror · Natija
         </p>
 
+        <p className="mt-3 text-[9px] text-muted-foreground">
+          Yoshlar innovatsiyasi va raqamli ta’lim sari
+        </p>
       </footer>
 
     </main>
@@ -635,8 +594,7 @@ function ServiceCard({
   bg,
   onClick,
   disabled = false,
-}: ServiceCardProps & { disabled?: boolean }) {
-
+}: ServiceCardProps) {
   return (
     <button
       type="button"
@@ -644,7 +602,6 @@ function ServiceCard({
       disabled={disabled}
       className="group flex min-h-[155px] flex-col items-start rounded-[23px] border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45"
     >
-
       <div className={`flex size-11 items-center justify-center rounded-2xl ${bg} ${color}`}>
         {icon}
       </div>
@@ -661,7 +618,6 @@ function ServiceCard({
         Ochish
         <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
       </div>
-
     </button>
   )
 }
@@ -680,10 +636,8 @@ function StatCard({
   value: string | number
   label: string
 }) {
-
   return (
     <div className="rounded-[20px] border bg-card p-3 shadow-sm">
-
       <div className="flex items-center gap-1.5 text-blue-700">
         <span className="[&>svg]:size-4">
           {icon}
@@ -697,7 +651,6 @@ function StatCard({
       <p className="mt-2 text-xl font-black tabular-nums tracking-tight">
         {value}
       </p>
-
     </div>
   )
 }
@@ -716,10 +669,8 @@ function MissionItem({
   value: string
   label: string
 }) {
-
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.09] p-3 backdrop-blur-md">
-
       <span className="text-lg">{icon}</span>
 
       <p className="mt-1 text-base font-black">
@@ -729,7 +680,6 @@ function MissionItem({
       <p className="text-[9px] text-white/60">
         {label}
       </p>
-
     </div>
   )
 }
@@ -748,10 +698,8 @@ function DirectionCard({
   title: string
   text: string
 }) {
-
   return (
     <div className="rounded-[20px] border bg-card p-3.5 transition hover:shadow-md">
-
       <div className="flex size-9 items-center justify-center rounded-xl bg-muted text-lg">
         {icon}
       </div>
@@ -763,7 +711,6 @@ function DirectionCard({
       <p className="mt-1 text-[10px] leading-4 text-muted-foreground">
         {text}
       </p>
-
     </div>
   )
 }
